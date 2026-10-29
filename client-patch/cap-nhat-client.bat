@@ -8,7 +8,10 @@ set "CLIENT=%~1"
 if "%CLIENT%"=="" set "CLIENT=%~d0\nr-long"
 set "DLL=%CLIENT%\GameAssembly.dll"
 set "RAREXE=C:\Program Files\WinRAR\Rar.exe"
-set "OUT=C:\xampp\htdocs\download\NRO-long.rar"
+for %%I in ("%~dp0..") do set "REPO=%%~fI"
+rem File tai tren web nam trong repo (git bo qua): web\download\NRO-long.rar
+set "OUT=%REPO%\web\download\NRO-long.rar"
+if not exist "%REPO%\web\download" mkdir "%REPO%\web\download"
 
 if not exist "%DLL%" ( echo Khong thay %DLL% & goto loi )
 tasklist /FI "IMAGENAME eq DragonBoy.exe" | find /I "DragonBoy.exe" >nul && ( echo Tat game truoc da. & goto loi )

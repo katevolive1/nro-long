@@ -10,7 +10,7 @@
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
-- File tải trên web: `C:\xampp\htdocs\download\NRO-long.rar` (nén từ `D:\nr-long`), web 8081. Cập nhật client: chạy `cap-nhat-client.bat` (chạy mọi script patch rồi nén lại rar, đổi `?v=` link tải).
+- File tải trên web: `web\download\NRO-long.rar` trong repo (gitignore, nén từ `D:\nr-long`), web 8080. Cập nhật client: chạy `cap-nhat-client.bat` (chạy mọi script patch rồi nén lại rar; link tải tự đổi `?v=` theo `filemtime`).
 - Chưa có APK bản long (APK int cũ đã xóa). iOS chỉ là link TestFlight của người khác, không sửa được.
 
 ## Dump
