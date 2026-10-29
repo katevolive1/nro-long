@@ -1,7 +1,7 @@
 # Boss rơi đồ – NRO Teamobi2026
 
 Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026).
-Tên item tra từ bảng `team10.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
+Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
 - Đồ rơi thuộc về người kết liễu (`plKill.id`), trừ Khí Gas (ai nhặt cũng được).

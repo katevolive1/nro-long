@@ -5,16 +5,16 @@
 ## Thư mục và bản
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
-| `D:\nr` | int (gốc) | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long`, `D:\nr-long-exe` | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) | `C574914AE2B0AC8895169C2212B440BF` |
+| `D:\nr-dump\goc` | chỉ giữ `GameAssembly.dll` + `global-metadata.dat` gốc của client int (bản int đã xóa 29/10/2026); chép đè vào client rồi chạy lại mọi script patch là ra bản long | `984E6FD75A748B1158C2330DD863BA8C` |
+| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) | `C574914AE2B0AC8895169C2212B440BF` |
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
-- File tải trên web: `C:\xampp\htdocs\download\NRO.rar` (int), `NRO-long.rar` (long, nén từ `D:\nr-long`). Web 8080 trỏ bản int, web 8081 trỏ bản long.
-- APK (`NRO.apk`) vẫn là int, chưa patch (lib ARM, metadata khác bản PC). iOS chỉ là link TestFlight của người khác, không sửa được.
+- File tải trên web: `C:\xampp\htdocs\download\NRO-long.rar` (nén từ `D:\nr-long`), web 8081. Cập nhật client: chạy `cap-nhat-client.bat` (chạy mọi script patch rồi nén lại rar, đổi `?v=` link tải).
+- Chưa có APK bản long (APK int cũ đã xóa). iOS chỉ là link TestFlight của người khác, không sửa được.
 
 ## Dump
-- Il2CppDumper (metadata v31), dump từ `D:\nr\GameAssembly.dll`, nằm ở `D:\nr\dump`:
+- Il2CppDumper (metadata v31), dump từ `GameAssembly.dll` gốc (`D:\nr-dump\goc`), nằm ở `D:\nr-dump` (ngoài repo, máy khác phải chép theo). RVA giống hệt bản long đã patch:
   - `dump.cs`: khai báo class/hàm kèm `RVA` và `Offset`.
   - `script.json`: `ScriptMethod` (Address = RVA, Name = `Game1.Class$$Method`).
   - `stringliteral.json`: chuỗi trong code và địa chỉ ô chứa chuỗi (RVA).
@@ -25,9 +25,9 @@
 ```powershell
 Add-Type -Path D:\AILinhTinh\nro-long\client-patch\tools\xref.cs
 # Hàm nào dùng chuỗi/ô dữ liệu này (địa chỉ lấy từ stringliteral.json)
-[Xref]::Find('D:\nr\GameAssembly.dll','D:\nr\dump\script.json',[long[]]@(0xC991E8))
+[Xref]::Find('D:\nr-long\GameAssembly.dll','D:\nr-dump\script.json',[long[]]@(0xC991E8))
 # Liệt kê lệnh call và chuỗi được nạp trong một khoảng RVA (vd từ đầu hàm tới hàm kế tiếp)
-[Xref]::Calls('D:\nr\GameAssembly.dll','D:\nr\dump\script.json','D:\nr\dump\stringliteral.json',0x3E0550,0x3E0C40)
+[Xref]::Calls('D:\nr-long\GameAssembly.dll','D:\nr-dump\script.json','D:\nr-dump\stringliteral.json',0x3E0550,0x3E0C40)
 ```
 Cách tìm nhanh một chữ hiện trên màn hình: tìm chuỗi trong `stringliteral.json` → lấy `address` → `Find` ra tên hàm → `Calls` để xem thứ tự vẽ.
 
@@ -36,7 +36,7 @@ Máy không có Python/objdump. Tải Iced 1.21.0 từ NuGet (`https://api.nuget
 ```powershell
 Add-Type -Path <thư mục>\Iced.dll
 Add-Type -Path D:\AILinhTinh\nro-long\client-patch\tools\dis.cs -ReferencedAssemblies <thư mục>\Iced.dll,netstandard
-[Dis]::Run('D:\nr-long\GameAssembly.dll','D:\nr\dump\script.json',0x3E0838,0x3E0AA0)   # có chú thích tên hàm/chuỗi/TypeInfo
+[Dis]::Run('D:\nr-long\GameAssembly.dll','D:\nr-dump\script.json',0x3E0838,0x3E0AA0)   # có chú thích tên hàm/chuỗi/TypeInfo
 ```
 Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằng `lea rcx,[ô chuỗi]; call 0x99030`; dùng chuỗi ở hàm khác thì phải tự gọi `0x99030` trước. Static field: `mov rcx,[X_TypeInfo]; mov rcx,[rcx+0B8h]` rồi cộng offset trong `dump.cs`. Hàm IL2CPP nhận thêm `MethodInfo*` cuối (đặt 0). Trong `ModFunc.Paint`, `r13` luôn = 0.
 - Section `il2cpp` (code game): VA `0x17E000`, raw `0x17C800` (cũng là offset = RVA − 0x1800). Vùng trống cuối section: RVA `0xA52C3E`–`0xA52E00`; đã dùng `0xA52C40`–`0xA52DC2`.

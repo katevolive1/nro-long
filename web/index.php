@@ -96,7 +96,7 @@ var url;
 </script>
 <div id="columns" style="text-align:center; display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">						
 	<figure>
-    <a href="/download/NRO-long.rar?v=20260213-1348" download title="CHÚ BÉ RỒNG ONLINE - JAVA"><img height="35"
+    <a href="/download/NRO-long.rar?v=<?php echo @filemtime('C:/xampp/htdocs/download/NRO-long.rar'); ?>" download title="CHÚ BÉ RỒNG ONLINE - JAVA"><img height="35"
              src="/images/jar.png"
              alt="CHÚ BÉ RỒNG ONLINE">
     </a>
@@ -120,7 +120,7 @@ var url;
 	</figure>
 	
 	<figure>
-	  <a href="/download/NRO-long.rar?v=20260610-2022" title="CHÚ BÉ RỒNG ONLINE">
+	  <a href="/download/NRO-long.rar?v=<?php echo @filemtime('C:/xampp/htdocs/download/NRO-long.rar'); ?>" title="CHÚ BÉ RỒNG ONLINE">
 		<img height="35" src="/images/pc.png" alt="CHÚ BÉ RỒNG ONLINE">
 		</a>
 	  <!-- <figcaption><span style="color:rgb(209, 9, 50);">246</span> -->

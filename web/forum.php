@@ -209,7 +209,7 @@ $conn->close();
                                 <div id="box_login_ads">
     <div id="columns" style="text-align:center">
         <figure>
-            <a href="/download/NRO-long.rar?v=20260213-1348" download> <img height="35" src="/images/jar.png" alt="CHÚ BÉ RỒNG ONLINE"></a>
+            <a href="/download/NRO-long.rar?v=<?php echo @filemtime('C:/xampp/htdocs/download/NRO-long.rar'); ?>" download> <img height="35" src="/images/jar.png" alt="CHÚ BÉ RỒNG ONLINE"></a>
             <br>
             </a>
             <figcaption>
@@ -239,7 +239,7 @@ $conn->close();
         </figure>
 
         <figure>
-            <a href="/download/NRO-long.rar?v=20260610-2022" title="CHÚ BÉ RỒNG ONLINE">
+            <a href="/download/NRO-long.rar?v=<?php echo @filemtime('C:/xampp/htdocs/download/NRO-long.rar'); ?>" title="CHÚ BÉ RỒNG ONLINE">
                 <img height="35" src="/images/pc.png" alt="CHÚ BÉ RỒNG ONLINE">
             </a>
             <figcaption><span style="color:rgb(209, 9, 50);">244</span>
