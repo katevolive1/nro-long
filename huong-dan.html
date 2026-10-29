@@ -1,0 +1,67 @@
+<title>NRO bản Long</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: một cột hẹp, các khối lệnh dạng terminal */
+:root{--bg:#f3f5f7;--fg:#1d2430;--muted:#5b6575;--line:#d5dbe3;--accent:#c4501b;--code:#e6eaf0;
+--display:"Barlow Condensed",system-ui,sans-serif;--body:"Barlow",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14181f;--fg:#e4e8ee;--muted:#9aa4b3;--line:#2b323d;--accent:#f0824a;--code:#1f252e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14181f;--fg:#e4e8ee;--muted:#9aa4b3;--line:#2b323d;--accent:#f0824a;--code:#1f252e;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px}
+main{max-width:720px;margin:0 auto;display:grid;gap:28px}
+h1{font:600 2.4rem/1.1 var(--display);margin:0;text-wrap:balance}
+h1 span{color:var(--accent)}
+h2{font:600 1.35rem/1.2 var(--display);margin:0 0 8px;letter-spacing:.02em;text-transform:uppercase}
+p,li{margin:0;color:var(--fg)}
+.sub{color:var(--muted)}
+ul,ol{margin:0;padding-left:1.2em;display:grid;gap:4px}
+code,pre{font-family:var(--mono);font-size:.86rem;background:var(--code);border-radius:4px}
+code{padding:1px 5px}
+pre{padding:12px 14px;overflow-x:auto;margin:8px 0 0}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+td,th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{font-family:var(--display);font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+.warn{border-left:3px solid var(--accent);padding:4px 0 4px 12px}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Barlow+Condensed:wght@600&family=JetBrains+Mono&display=swap">
+<main>
+<header>
+<h1>NRO bản <span>Long</span></h1>
+<p class="sub">HP và KI không còn giới hạn 2.147.483.647. Trần mới là 100 nghìn tỷ.</p>
+</header>
+
+<section>
+<h2>Thư mục</h2>
+<table>
+<tr><th>Phần</th><th>Bản long</th><th>Bản gốc (int)</th></tr>
+<tr><td>Server</td><td><code>D:\AILinhTinh\nro-long\Teamobi2026</code></td><td><code>D:\AILinhTinh\nro\Teamobi2026</code></td></tr>
+<tr><td>Client PC</td><td><code>D:\nr-long</code></td><td><code>D:\nr</code></td></tr>
+</table>
+</section>
+
+<section>
+<h2>Chạy</h2>
+<ol>
+<li>Tắt server gốc nếu đang chạy, vì hai bản dùng chung port 14445 và database <code>team10</code>.</li>
+<li>Chạy <code>run.bat</code> trong <code>nro-long\Teamobi2026</code>.</li>
+<li>Mở <code>D:\nr-long\DragonBoy.exe</code>.</li>
+</ol>
+</section>
+
+<section>
+<h2>Đặt máu boss trên 2,1 tỷ</h2>
+<p>Trong <code>BossesData.java</code>, đổi mảng máu của boss từ <code>new int[]</code> sang <code>new long[]</code>:</p>
+<pre>new int[]{2_000_000_000},          // trước
+new long[]{10_000_000_000L},       // sau: 10 tỷ</pre>
+<p>Sau đó build lại jar: biên dịch bằng javac với <code>-cp "lib/*"</code>, rồi chạy <code>jar uf Teamobi2026.jar</code> cho hai thư mục <code>nro</code> và <code>models</code>.</p>
+</section>
+
+<section>
+<h2>Lưu ý</h2>
+<ul>
+<li class="warn">Client cũ (<code>D:\nr</code>) sẽ lỗi khi vào server long. Mọi người chơi phải dùng <code>D:\nr-long</code>.</li>
+<li>Sát thương và giáp vẫn tối đa 2,1 tỷ mỗi đòn.</li>
+<li>Bản điện thoại (<code>NRO.apk</code>) chưa sửa nên chưa chơi được với server long.</li>
+<li>Muốn quay về bản int cho server long: đổi tên <code>Teamobi2026-int-backup.jar</code> thành <code>Teamobi2026.jar</code>.</li>
+</ul>
+</section>
+</main>

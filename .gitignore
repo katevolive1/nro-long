@@ -1,0 +1,20 @@
+# Build (build.bat / NetBeans tự tạo lại)
+Teamobi2026/build/
+Teamobi2026/dist/
+Teamobi2026/nbproject/private/
+Teamobi2026/Teamobi2026-int-backup.jar
+
+# Log và file chạy sinh ra
+Logs/
+**/Logs/
+*.log
+web/counter.json
+
+# File nén, sao lưu, file tạm
+*.rar
+*.zip
+*.int-backup
+*.bak
+*.tmp
+Thumbs.db
+desktop.ini

@@ -1,0 +1,41 @@
+.snowEffect {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.cherry-petal {
+    position: absolute;
+    top: -12vh;
+    display: block;
+    height: auto;
+    user-select: none;
+    pointer-events: none;
+    will-change: transform;
+    animation-name: cherry-petal-fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes cherry-petal-fall {
+    0% {
+        transform: translate3d(0, -12vh, 0) rotate(0deg);
+    }
+
+    50% {
+        transform: translate3d(var(--drift-half), 50vh, 0)
+            rotate(var(--spin-half));
+    }
+
+    100% {
+        transform: translate3d(var(--drift), 115vh, 0) rotate(var(--spin));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cherry-petal {
+        animation-duration: 18s !important;
+    }
+}
