@@ -1,11 +1,11 @@
 @ECHO OFF
 rem Cap nhat client long: chay moi script patch len client roi nen lai file tai tren web.
 rem Script nao da ap roi thi tu bao "Da sua tu truoc" va bo qua, chay lai bao nhieu lan cung duoc.
-rem Cach dung: bam dup (client mac dinh D:\nr-long) hoac: cap-nhat-client.bat "<thu muc client>"
+rem Cach dung: bam dup (client mac dinh <o chua repo>:\nr-long, vd D:\nr-long, F:\nr-long) hoac: cap-nhat-client.bat "<thu muc client>"
 setlocal
 cd /d "%~dp0"
 set "CLIENT=%~1"
-if "%CLIENT%"=="" set "CLIENT=D:\nr-long"
+if "%CLIENT%"=="" set "CLIENT=%~d0\nr-long"
 set "DLL=%CLIENT%\GameAssembly.dll"
 set "RAREXE=C:\Program Files\WinRAR\Rar.exe"
 set "OUT=C:\xampp\htdocs\download\NRO-long.rar"
