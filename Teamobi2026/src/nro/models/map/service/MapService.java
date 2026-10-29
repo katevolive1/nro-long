@@ -298,13 +298,17 @@ public class MapService {
             return null;
         }
 
-        int z = Util.nextInt(0, map.zones.size() - 1);
-        //  int z = 0;
-        while (map.zones.get(z).getNumOfPlayers() >= map.zones.get(z).maxPlayer) {
-            z = Util.nextInt(0, map.zones.size() - 1);
-            //    z++;
+        // Vào khu chưa đầy có số nhỏ nhất; mọi khu đều đầy thì vào khu ít người nhất
+        Zone leastFull = null;
+        for (Zone zone : map.zones) {
+            if (zone.getNumOfPlayers() < zone.maxPlayer) {
+                return zone;
+            }
+            if (leastFull == null || zone.getNumOfPlayers() < leastFull.getNumOfPlayers()) {
+                leastFull = zone;
+            }
         }
-        return map.zones.get(z);
+        return leastFull;
     }
 
     public Zone getZoneByMapIDAndZoneID(int mapId, int zoneId) {

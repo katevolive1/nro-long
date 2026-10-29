@@ -48,7 +48,7 @@ public class ItemData {
                 Template.ItemTemplate itemTemplate = Manager.ITEM_TEMPLATES.get(i);
                 msg.writer().writeByte(itemTemplate.type);
                 msg.writer().writeByte(itemTemplate.gender);
-                msg.writer().writeUTF(itemTemplate.name);
+                msg.writer().writeUTF(nameWithId(itemTemplate));
                 msg.writer().writeUTF(itemTemplate.description);
                 msg.writer().writeByte(itemTemplate.level);
                 msg.writer().writeInt(itemTemplate.strRequire);
@@ -77,7 +77,7 @@ public class ItemData {
 //                System.out.println("start: " + start + " -> " + end + " id " + Manager.ITEM_TEMPLATES.get(i).id);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).type);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).gender);
-                msg.writer().writeUTF(Manager.ITEM_TEMPLATES.get(i).name);
+                msg.writer().writeUTF(nameWithId(Manager.ITEM_TEMPLATES.get(i)));
                 msg.writer().writeUTF(Manager.ITEM_TEMPLATES.get(i).description);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).level);
                 msg.writer().writeInt(Manager.ITEM_TEMPLATES.get(i).strRequire);
@@ -90,6 +90,11 @@ public class ItemData {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Tên gửi cho client kèm [id] để dễ tra vật phẩm; tên phía server giữ nguyên
+    private static String nameWithId(Template.ItemTemplate itemTemplate) {
+        return "[" + itemTemplate.id + "] " + itemTemplate.name;
     }
 
     private static void updateItemArrHead2FTemplate(MySession session) {

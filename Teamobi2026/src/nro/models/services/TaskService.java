@@ -122,6 +122,20 @@ public class TaskService {
                 + player.playerTask.taskMain.subTasks.get(player.playerTask.taskMain.index).name);
     }
 
+    // Vé hoàn thành nhiệm vụ (item 1835): xong cả nhiệm vụ chính hiện tại, nhận thưởng như làm thật
+    public boolean skipTaskMain(Player player) {
+        if (player.playerTask == null || player.playerTask.taskMain == null) {
+            return false;
+        }
+        int currentId = player.playerTask.taskMain.id;
+        boolean hasNext = Manager.TASKS.stream().anyMatch(tm -> tm.id > currentId);
+        if (!hasNext) {
+            return false;
+        }
+        sendNextTaskMain(player);
+        return true;
+    }
+
     public void sendUpdateCountSubTask(Player player) {
         Message msg = null;
         try {

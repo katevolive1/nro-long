@@ -261,7 +261,7 @@ if(isset($_POST['exec_reset']) && $isAdmin) {
     <div class="<?php echo !$isLogin ? 'panel-blur' : ''; ?>">
         <div class="header">
             <div class="logo-text">
-                <span style="color:var(--blue)">CON CHÓ,</span> 
+                <span style="color:var(--blue)">ADMIN,</span> 
                 <span style="color:var(--red)">THẬT</span> 
                 <span style="color:var(--green)">ĐÁNG YÊU</span>
             </div>

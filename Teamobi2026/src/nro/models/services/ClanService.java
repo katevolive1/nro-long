@@ -973,7 +973,7 @@ public class ClanService {
     }
 
     private void checkDoneTaskJoinClan(Clan clan) {
-        if (clan.getMembers().size() >= 2) {
+        if (clan.getMembers().size() >= 1) {
             for (Player player : clan.membersInGame) {
                 TaskService.gI().checkDoneTaskJoinClan(player);
             }

@@ -878,13 +878,13 @@ color:#22c55e;
     <i class="fa-solid fa-download"></i>
 </a>
 
-<a class="download-btn android" href="download/NRO.apk" download>
+<a style="display:none" class="download-btn android" href="download/NRO.apk" download>
     <i class="fa-brands fa-android"></i>
     APK
     <i class="fa-solid fa-download"></i>
 </a>
 
-<a class="download-btn ios" href="https://www.youtube.com/@sourcenrogoc" target="_blank">
+<a style="display:none" class="download-btn ios" href="https://www.youtube.com/@sourcenrogoc" target="_blank">
     <i class="fa-brands fa-apple"></i>
     iOS
     <i class="fa-solid fa-link"></i>

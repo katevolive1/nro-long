@@ -186,7 +186,6 @@ public class ChangeMapService {
             }
         }
         if (pl.isAdmin() || pl.isBoss || Util.canDoWithTime(pl.idMark.getLastTimeChangeZone(), 5000)) {
-            pl.idMark.setLastTimeChangeZone(System.currentTimeMillis());
             Map map = pl.zone.map;
             if (zoneId >= 0 && zoneId <= map.zones.size() - 1) {
                 Zone zoneJoin = map.zones.get(zoneId);
@@ -195,6 +194,8 @@ public class ChangeMapService {
                     return;
                 }
                 if (zoneJoin != null) {
+                    // Chỉ tính thời gian chờ khi đổi khu thành công
+                    pl.idMark.setLastTimeChangeZone(System.currentTimeMillis());
                     changeMap(pl, zoneJoin, -1, -1, pl.location.x, pl.location.y, NON_SPACE_SHIP);
                 }
             } else {
@@ -202,7 +203,7 @@ public class ChangeMapService {
             }
         } else {
             NpcService.gI().createTutorial(pl, -1, "Chưa thể chuyển khu vực lúc này vui lòng chờ "
-                    + TimeUtil.getTimeLeft(pl.idMark.getLastTimeChangeZone(), 10) + " nữa");
+                    + TimeUtil.getTimeLeft(pl.idMark.getLastTimeChangeZone(), 5) + " nữa");
         }
     }
 

@@ -229,7 +229,7 @@ $conn->close();
             </figcaption>
         </figure> -->
 
-        <figure>
+        <figure style="display:none"><!-- an tren web long: APK chua co ban long -->
             <a href="/download/NRO.apk?v=20260603-2358" title="CHÚ BÉ RỒNG ONLINE">
                 <img height="35" src="/images/play.png" alt="CHÚ BÉ RỒNG ONLINE">
             </a>
@@ -247,7 +247,7 @@ $conn->close();
             </figcaption>
         </figure>
 
-        <figure>
+        <figure style="display:none"><!-- an tren web long: iOS -->
             <a href="<?php echo htmlspecialchars($testflight_url ?? 'https://testflight.apple.com/join/FWEJoZEB'); ?>" title="CHÚ BÉ RỒNG ONLINE">
                 <img style="margin-bottom:0px" height="35" src="/images/ip.png" alt="CHÚ BÉ RỒNG ONLINE">
             </a>
