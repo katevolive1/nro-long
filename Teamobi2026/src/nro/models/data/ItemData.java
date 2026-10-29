@@ -12,8 +12,22 @@ public class ItemData {
     public static void updateItem(MySession session) {
         updateItemOptionItemplate(session);
         updateItemArrHead2FTemplate(session);
-        updateItemTemplate(session, 750);
-        updateItemTemplate(session, 750, Manager.ITEM_TEMPLATES.size());
+        // Gói -28 ghi độ dài 2 byte (tối đa 65535). Client chỉ chịu đúng 1 gói loại 1 + 1 gói loại 2
+        // (gói loại 2 ghi đè cache NRitem2 và gọi clientOk), nên tìm điểm chia để cả hai gói vừa giới hạn
+        int total = Manager.ITEM_TEMPLATES.size();
+        int split = 0, bytes = 0;
+        while (split < total && bytes + itemSize(Manager.ITEM_TEMPLATES.get(split)) <= MAX_ITEM_BYTES) {
+            bytes += itemSize(Manager.ITEM_TEMPLATES.get(split++));
+        }
+        updateItemTemplate(session, split);
+        updateItemTemplate(session, split, total);
+    }
+
+    private static final int MAX_ITEM_BYTES = 64000;
+
+    private static int itemSize(Template.ItemTemplate t) {
+        return 16 + t.name.getBytes(java.nio.charset.StandardCharsets.UTF_8).length
+                + t.description.getBytes(java.nio.charset.StandardCharsets.UTF_8).length;
     }
 
     private static void updateItemOptionItemplate(MySession session) {
@@ -48,7 +62,7 @@ public class ItemData {
                 Template.ItemTemplate itemTemplate = Manager.ITEM_TEMPLATES.get(i);
                 msg.writer().writeByte(itemTemplate.type);
                 msg.writer().writeByte(itemTemplate.gender);
-                msg.writer().writeUTF(nameWithId(itemTemplate));
+                msg.writer().writeUTF(itemTemplate.name);
                 msg.writer().writeUTF(itemTemplate.description);
                 msg.writer().writeByte(itemTemplate.level);
                 msg.writer().writeInt(itemTemplate.strRequire);
@@ -77,7 +91,7 @@ public class ItemData {
 //                System.out.println("start: " + start + " -> " + end + " id " + Manager.ITEM_TEMPLATES.get(i).id);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).type);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).gender);
-                msg.writer().writeUTF(nameWithId(Manager.ITEM_TEMPLATES.get(i)));
+                msg.writer().writeUTF(Manager.ITEM_TEMPLATES.get(i).name);
                 msg.writer().writeUTF(Manager.ITEM_TEMPLATES.get(i).description);
                 msg.writer().writeByte(Manager.ITEM_TEMPLATES.get(i).level);
                 msg.writer().writeInt(Manager.ITEM_TEMPLATES.get(i).strRequire);
@@ -90,11 +104,6 @@ public class ItemData {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // Tên gửi cho client kèm [id] để dễ tra vật phẩm; tên phía server giữ nguyên
-    private static String nameWithId(Template.ItemTemplate itemTemplate) {
-        return "[" + itemTemplate.id + "] " + itemTemplate.name;
     }
 
     private static void updateItemArrHead2FTemplate(MySession session) {

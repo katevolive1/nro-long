@@ -6,8 +6,9 @@
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
 | `D:\nr` | int (gốc) | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long` | long + tên map K(khu) | `37BA093DA6982640A5180E1844B9972D` (chỉ long: `BC2BD49AE412E904FF835FE83DFD40AC`) |
-| `D:\nr-long-exe` | int (user chép nhầm, chưa patch) | như bản gốc |
+| `D:\nr-long`, `D:\nr-long-exe` | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) | `849D7D167DE9DE357B0B9D0157954654` |
+
+`BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
 - File tải trên web: `C:\xampp\htdocs\download\NRO.rar` (int), `NRO-long.rar` (long, nén từ `D:\nr-long`). Web 8080 trỏ bản int, web 8081 trỏ bản long.
 - APK (`NRO.apk`) vẫn là int, chưa patch (lib ARM, metadata khác bản PC). iOS chỉ là link TestFlight của người khác, không sửa được.
@@ -38,14 +39,18 @@ Add-Type -Path D:\AILinhTinh\nro-long\client-patch\tools\dis.cs -ReferencedAssem
 [Dis]::Run('D:\nr-long\GameAssembly.dll','D:\nr\dump\script.json',0x3E0838,0x3E0AA0)   # có chú thích tên hàm/chuỗi/TypeInfo
 ```
 Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằng `lea rcx,[ô chuỗi]; call 0x99030`; dùng chuỗi ở hàm khác thì phải tự gọi `0x99030` trước. Static field: `mov rcx,[X_TypeInfo]; mov rcx,[rcx+0B8h]` rồi cộng offset trong `dump.cs`. Hàm IL2CPP nhận thêm `MethodInfo*` cuối (đặt 0). Trong `ModFunc.Paint`, `r13` luôn = 0.
-- Section `il2cpp` (code game): VA `0x17E000`, raw `0x17C800` (cũng là offset = RVA − 0x1800). Vùng trống cuối section: RVA `0xA52C3E`–`0xA52E00`; đã dùng `0xA52C40`–`0xA52D8F`.
+- Section `il2cpp` (code game): VA `0x17E000`, raw `0x17C800` (cũng là offset = RVA − 0x1800). Vùng trống cuối section: RVA `0xA52C3E`–`0xA52E00`; đã dùng `0xA52C40`–`0xA52DC2`.
 - Hàm hay dùng: `Int32.ToString` `0x8C99F0`, `String.Concat(s,s)` `0x786730`, `String.Concat(s,s,s,s)` `0x785FB0`, `Char.myCharz` (Game1) `0x2B91B0`, `mFont.drawStringBorder` (Game1) `0x3CAEB0`.
 - Ô chuỗi có sẵn: `" "` `0xCA8F30`, `"K"` `0xCA54C8`, `"("` `0xCAB660`, `")"` `0xCABC28`, `" ("` `0xCA9138`.
 
 ## Đã sửa
 - **HP/KI kiểu long**: `myReader.readIntToLongDQT()` đọc 4 byte nếu `ModFunc.isReadInt` (static, ô `0x12`) = true, 8 byte nếu cả `isReadInt` lẫn `isReadDouble` (`0x13`) = false. `ModFunc..cctor` gán `isReadInt = true` bằng lệnh `C6 41 12 01`; đổi byte cuối thành `00` ở offset **`0x3E6298`** (Game1) và **`0x59D538`** (Game2). Script: `patch.ps1`. Hàm đọc này có 64 chỗ gọi; danh sách gói tin server phải `writeLong` ghi ở `nro-long\CLAUDE.md`.
+  - **Cờ `isReadInt` còn đổi hành vi các hàm khác của `myReader`** (quét mọi chỗ đọc `ModFunc` static `+12h/+13h`): `ReadParamDQT` (param option: true → 2 byte, false → **4 byte**), `DefShotToLong` (true → short, false → long; Game1 không ai gọi), `readByteToInt` (true → sbyte, false → int; không ai gọi). Server gửi param option bằng `writeShort` nên `patch.ps1` đổi `jne`→`jmp` trong `ReadParamDQT` (RVA `0x4043E6` Game1 / `0x1D0D16` Game2, `75 3C`→`EB 3C`) để luôn đọc 2 byte. `readShortOptionTemp` dùng cờ khác (`+128h`), không bị ảnh hưởng.
+  - Runtime dùng **Game1** (log Unity ghi `Game1.Controller...`). Log client: `%USERPROFILE%\AppData\LocalLow\DefaultCompany\DragonBoy\Player.log`; cache dữ liệu (RMS) cũng ở thư mục đó, dùng chung cho mọi client.
 - **Tên map + K(khu)** (`patch-khu-map.ps1`): dòng `"Khu: " + TileMap.zoneID` (ngay trên dòng tọa độ) thành `TileMap.mapName + " K(" + zoneID + ")"`. Hook `jmp` tại RVA `0x3E094C` (Game1) / `0x597BEC` (Game2), phần còn lại tới `0x3E0973` / `0x597C13` thành NOP; mã mới ở `0xA52C40` / `0xA52CF0` (2 lần `Concat4`), xong `jmp` về. Script cũng nới VirtualSize của section `il2cpp` bằng RawSize. Sao lưu: `GameAssembly.dll.truoc-khu-map`.
-- **[id] vật phẩm**: làm ở server, không sửa client (`ItemData.nameWithId`, `DataGame.vsItem` = 10 để client tải lại tên).
+- **Port mặc định 14446 + bỏ dòng "Mod INT free by Srcnrofree.online"** (`patch-port.ps1 <thư mục client>`): `GameMidlet..cctor` gán `GameMidlet.PORT` (static `+0x8`) bằng `C7 41 08 6D 38 00 00`; đổi `6D`→`6E` ở offset file `0x3A4329` (Game1) / `0x55B929` (Game2). Chuỗi khung nhập IP/PORT (ô `0xCA8AE0`, dùng trong `ServerListScreen.ShowInputServer`) sửa trực tiếp trong `global-metadata.dat`: bảng string literal v31 ở header `+8` (offset bảng), `+12` (size), `+16` (offset data); mỗi mục `{int len, int dataIndex}` → ghi chuỗi mới ngắn hơn đè lên và giảm `len`. Script .ps1 có chuỗi tiếng Việt phải lưu UTF-8 **có BOM** (PowerShell 5.1). Sao lưu: `*.truoc-port`.
+- **[id] vật phẩm**: đã bỏ (vsItem 14) vì client có sẵn ô "Hiện ID Item/NPC" (`ModFunc.isShowID`).
+  - Gói `-28` sub 8 (`Controller.loadItemNew`): loại 1 = danh sách đầu, lưu `NRitem1`; loại 2 = phần còn lại, **ghi đè** `NRitem2`, rồi đọc dart/effect/arrow/skill và gọi `Service.clientOk`. Nên chỉ được gửi **đúng 1 gói loại 1 + 1 gói loại 2**, mỗi gói ≤ 65535 byte (độ dài ghi 2 byte). Chia nhiều gói loại 2 thì cache chỉ còn gói cuối, lần sau vào game bị treo ở "Xin chờ".
 
 ## Bản đồ đã dò
 ### `ModFunc.Paint(mGraphics g)`: chữ dưới thanh máu
@@ -56,3 +61,26 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 
 ### `ModFunc.perform`
 - Dùng chuỗi `"Tọa độ X: "` (ô `0xC991E8`) ở RVA `0x3E9F59`, `0x3EB248` (Game1); `0x5A11F9`, `0x5A24E8` (Game2). Không phải dòng dưới thanh máu, có lẽ là thông báo khi bấm mục trong menu mod.
+
+### Ô tích menu mod (`ModFunc`, nút menu → Chức năng / Tự động / Hiển thị / Cài đặt)
+| Ô | Field | Lưu RMS? | Mặc định |
+|---|---|---|---|
+| FPS Cao | `isHighFps` (+162h) | `isHighFps`, `!= 0` | bật |
+| Cập Nhật Khu | `isUpdateZones` (+0D2h) | không | bật (patch) |
+| Nhân Vật Trong Khu | `showCharsInMap` (+0D0h) | không | bật |
+| Thông Tin Bản Thân | `showInfoMe` (+150h) | không | tắt |
+| Tự Động Pha Lê Hóa / VQMM | `isAutoPhaLe` (+38h) / `isAutoVQMM` (+39h) | không | tắt |
+| Tự Động Hồi Sinh | `autoWakeUp` (+29h) | `autoWakeUp`, `!= 0` (patch, gốc `== 1`) | bật |
+| Tự Động Đăng Nhập | static `isAutoLogin` (+68h) | | tắt |
+| Ẩn Player | static `AnPlayer` (+0EDh) | `anplayer`, `== 1` | tắt |
+| Hiện ID Item/NPC | static `isShowID` (+0EEh) | chỉ ghi `showid`, không đọc | bật (patch) |
+| Hiện Hành Trang Lưới | static `isInventory` (+0E8h) | `LoadGame` luôn gán 1 | bật |
+| Giảm Dung Lượng | static `GiamDungLuong` (+0ECh) | `background`, `== 1` | tắt |
+| Gõ Tiếng Việt | static `isVietnamese` (+17h) | không | bật (patch) |
+
+`Rms.loadRMSInt` trả `-1` khi chưa có. Field instance nằm trên `ModFunc` (đặt trong `.ctor` `0x3E8FB0`), static đặt trong `.cctor` `0x3E76C0`, đọc RMS trong `LoadGame` `0x3DA260`. Game2 = Game1 + `0x1B72A0` (riêng `ModFunc`). Script: `patch-mac-dinh.ps1` (cctor: `+17h`=1 và ghi thêm `+0EEh`=1 vào chỗ 2 lệnh nạp lại rcx; LoadGame `cmp eax,1/sete` → `cmp eax,0/setne`; ctor `mov [rdi+0D0h],1` → jmp cave `0xA52D90`/`0xA52DB0` ghi thêm `+0D2h`=1). Sao lưu: `*.truoc-mac-dinh`.
+
+### Hành trang nhảy lên đầu khi cất đồ vào rương (đã sửa ở server)
+- Nguyên nhân: `InventoryService.sendItemBox` luôn gửi kèm `-35` loại 1 (`openBox`) → client `Panel.setTypeBox` + `show` dựng lại khung, cuộn về đầu. Khi cất/lấy đồ (rương đang mở) gọi `sendItemBox(player, false)` để chỉ gửi dữ liệu. Lấy đồ ra vẫn phải gửi `-35` loại 0, không thì rương còn hiện món đã lấy.
+- Cất hết 1 món: món cuối hành trang chuyển vào ô trống rồi gửi cả hành trang (`-36` loại 0, client không đụng tới khung); cất một phần: `-36` loại 2 (`sendItemBagSlot`: index + số lượng, 0 = xóa ô).
+- **Đừng NOP lệnh reset cuộn trong `Panel.setTabInventory`** (Game1 `0x4559E0`, nhánh lưới `mov [rbx+30h],rax` ở RVA `0x455AFA`, Game2 `0x222DEA`): đã thử, làm phần lưới bên dưới ẩn chậm khi bấm X (hiệu ứng đóng `Panel.hide` → `moveCamera` trượt `cmx`), nên đã hoàn tác.

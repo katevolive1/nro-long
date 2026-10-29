@@ -512,6 +512,8 @@ public class InventoryService {
                     sendItemBags(player);
                 }
             }
+            // Gửi lại rương, không thì client vẫn hiện món vừa lấy ra trong rương
+            sendItemBox(player, false);
         }
     }
 
@@ -531,12 +533,22 @@ public class InventoryService {
 
             if (added) {
                 if (item.quantity == 0) {
-                    Item sItem = ItemService.gI().createItemNull();
-                    player.inventory.itemsBag.set(index, sItem);
+                    // Cất hết món: món cuối cùng trong hành trang chuyển vào ô vừa trống, các món khác đứng yên
+                    List<Item> bag = player.inventory.itemsBag;
+                    int last = bag.size() - 1;
+                    while (last > index && !bag.get(last).isNotNullItem()) {
+                        last--;
+                    }
+                    bag.set(index, last > index ? bag.get(last) : ItemService.gI().createItemNull());
+                    if (last > index) {
+                        bag.set(last, ItemService.gI().createItemNull());
+                    }
+                    sendItemBags(player);
+                } else {
+                    // Cất một phần: chỉ cập nhật số lượng ô đó
+                    sendItemBagSlot(player, index);
                 }
-                sortItems(player.inventory.itemsBag);
-                sendItemBags(player);
-                sendItemBox(player);
+                sendItemBox(player, false);
             }
         }
     }
@@ -548,7 +560,7 @@ public class InventoryService {
                 player.inventory.itemsBody.set(index, putItemBox(player, item));
                 sortItems(player.inventory.itemsBag);
                 sendItemBody(player);
-                sendItemBox(player);
+                sendItemBox(player, false);
                 Service.gI().point(player);
                 Service.gI().Send_Caitrang(player);
             }
@@ -557,6 +569,21 @@ public class InventoryService {
 
     private void __________________Gửi_danh_sách_item_cho_người_chơi________() {
         //**********************************************************************
+    }
+
+    // Gói -36 loại 2: client đặt lại số lượng ô index, số lượng 0 thì xóa ô đó
+    public void sendItemBagSlot(Player player, int index) {
+        Item item = player.inventory.itemsBag.get(index);
+        Message msg;
+        try {
+            msg = new Message(-36);
+            msg.writer().writeByte(2);
+            msg.writer().writeByte(index);
+            msg.writer().writeInt(item.isNotNullItem() ? item.quantity : 0);
+            player.sendMessage(msg);
+            msg.cleanup();
+        } catch (Exception e) {
+        }
     }
 
     public void sendItemBags(Player player) {
@@ -569,6 +596,7 @@ public class InventoryService {
             for (int i = 0; i < player.inventory.itemsBag.size(); i++) {
                 Item item = player.inventory.itemsBag.get(i);
                 if (!item.isNotNullItem()) {
+                    msg.writer().writeShort(-1); // client bỏ qua ô trống
                     continue;
                 }
                 msg.writer().writeShort(item.template.id);
@@ -647,6 +675,12 @@ public class InventoryService {
     }
 
     public void sendItemBox(Player player) {
+        sendItemBox(player, true);
+    }
+
+    // open = false: chỉ cập nhật đồ trong rương đang mở. Gói mở rương (-35 loại 1) làm client dựng lại khung,
+    // hành trang cuộn về đầu, nên khi cất/lấy đồ không gửi nó
+    public void sendItemBox(Player player, boolean open) {
         Message msg;
         try {
             msg = new Message(-35);
@@ -683,7 +717,9 @@ public class InventoryService {
             msg.cleanup();
         } catch (Exception e) {
         }
-        this.openBox(player);
+        if (open) {
+            this.openBox(player);
+        }
     }
 
     public void openBox(Player player) {

@@ -34,7 +34,7 @@ public class DataGame {
     public static byte vsData = 9;
     public static byte vsMap = 2;
     public static byte vsSkill = 1;
-    public static byte vsItem = 11; // tăng khi đổi dữ liệu vật phẩm gửi client (10: tên kèm [id], 11: vé hoàn thành nhiệm vụ 1835)
+    public static byte vsItem = 14; // tăng khi đổi dữ liệu vật phẩm gửi client (10: tên kèm [id], 11: vé 1835, 13: chia 2 gói theo số byte, 14: bỏ [id] vì client có sẵn "Hiện ID Item/NPC")
     public static int vsRes = 1;
     public static short maxSmallVersion = 32767;
 
