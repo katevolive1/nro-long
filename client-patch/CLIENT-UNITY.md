@@ -6,7 +6,7 @@
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
 | `D:\nr` | int (gốc) | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long`, `D:\nr-long-exe` | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) | `849D7D167DE9DE357B0B9D0157954654` |
+| `D:\nr-long`, `D:\nr-long-exe` | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) | `C574914AE2B0AC8895169C2212B440BF` |
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
@@ -84,3 +84,16 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 - Nguyên nhân: `InventoryService.sendItemBox` luôn gửi kèm `-35` loại 1 (`openBox`) → client `Panel.setTypeBox` + `show` dựng lại khung, cuộn về đầu. Khi cất/lấy đồ (rương đang mở) gọi `sendItemBox(player, false)` để chỉ gửi dữ liệu. Lấy đồ ra vẫn phải gửi `-35` loại 0, không thì rương còn hiện món đã lấy.
 - Cất hết 1 món: món cuối hành trang chuyển vào ô trống rồi gửi cả hành trang (`-36` loại 0, client không đụng tới khung); cất một phần: `-36` loại 2 (`sendItemBagSlot`: index + số lượng, 0 = xóa ô).
 - **Đừng NOP lệnh reset cuộn trong `Panel.setTabInventory`** (Game1 `0x4559E0`, nhánh lưới `mov [rbx+30h],rax` ở RVA `0x455AFA`, Game2 `0x222DEA`): đã thử, làm phần lưới bên dưới ẩn chậm khi bấm X (hiệu ứng đóng `Panel.hide` → `moveCamera` trượt `cmx`), nên đã hoàn tác.
+
+### Khung nhập của server bị khung cửa hàng/hành trang đè (`patch-khung-nhap.ps1`, chỉ Game1)
+- `GameCanvas.paint` (Game1 `0x39F4D0`): `currentScreen.paint` (`0x39F67B`) → `Panel.paint` ×2 → `ChatTextField.paint` → `0x39F9D8` → `InfoDlg.paint` → `Menu.paintMenu`… `g` = `[rdi+10h]`, `r15` = 0, static `currentScreen` = `+0C8h`, `panel` `+0D8h`, `panel2` `+0E0h`. Nhánh không vẽ khung nhảy thẳng tới `0x39F9D8`.
+- `ClientInput` (Game1 namespace `Game1.Assets.src.g`, TypeInfo `0xCA5528`) là `mScreen`; `paint` `0x4E5A40`: `GameScr.paint` (`call r9` `0x4E5AEE`) → hộp `PopUp.paintPopUp` + tiêu đề + `TField.paint` → tail `mScreen.paint` (nút Đóng/OK).
+- Patch: `0x4E5AF1` trả về ngay sau `GameScr.paint`; cave B (.text `0x17D378`) dựng lại frame rồi nhảy `0x4E5AFB` để vẽ hộp; cave C (.text `0x17D3B8`) móc ở `0x39F9D8`: nếu `[currentScreen] == ClientInput_TypeInfo` thì gọi cave B. Phần dư cuối `.text` (RVA `0x17D374`–`0x17D400`, offset = RVA − `0xC00`) giờ đã dùng hết; script nới VirtualSize `.text`.
+
+### Số thỏi vàng ở thanh dưới khung (`patch-thoi-vang.ps1`, chỉ Game1)
+- `Panel.paintBottomMoneyInfo` Game1 `0x429C10`: vòng lặp `0x429ED4`–`0x429F31` tìm món 457 (`1C9h`, so `template+10h`) đầu tiên trong `arrItemBag` rồi lấy `quantity` (`item+38h`) → `NinjaUtil.getMoneys(double)` `0x3F5280` → `rsi`. Patch viết lại tại chỗ để cộng mọi chồng 457 (chồng khóa giao dịch và chồng giao dịch được có option khác nhau nên server không gộp).
+
+### Thông báo boss lúc vào game không chạy chữ (`patch-thong-bao-boss.ps1`, chỉ Game1)
+- Gói 93 → `GameScr.chatVip` Game1 `0x35F400`: đoạn `0x35F468`–`0x35F567` là chữ chạy dưới màn hình (khởi động khi `[rdi+2A4h]`=0, thêm vào vector static `+580h`), sau đó gọi `BossCustom.addBoss` `0x4E45E0` (tab Thông báo của mod, `Panel.setTabInfoBoss`/`setTabBossNotification`) và `ShowBoss.HandleChatVip` `0x4CFD10` (khung góc phải).
+- Mod chỉ nhận câu `BOSS <tên> vừa xuất hiện tại <tên map>` (`getBossXuatHien` cắt chữ đầu tới dấu cách, thay " vừa xuất hiện tại " bằng `|`, tách tên/map; mapId tra `TileMap.mapNames`, giờ xuất hiện = lúc nhận). Câu giết: `<người>: Đã tiêu diệt được <boss> mọi người đều ngưỡng mộ.`
+- Patch: `0x35F468` → `jmp` cave `0xA52DC8`; chuỗi có ký tự đầu `\t` (`[rbx+14h]`=9) thì nhảy thẳng `0x35F568`. Server gửi `\t` + câu xuất hiện cho người vừa đăng nhập (`BossManager.sendBossAlive`).

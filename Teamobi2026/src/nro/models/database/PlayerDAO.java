@@ -37,8 +37,8 @@ public class PlayerDAO {
     public static boolean createNewPlayer(int userId, String name, byte gender, int hair) {
         try {
             JSONArray dataArray = new JSONArray();
-            int greenGem = (Manager.TEST) ? 1000000000 : 10000;
-            dataArray.add(2000); //vàng
+            int greenGem = (Manager.TEST) ? 1000000000 : 100000;
+            dataArray.add(500000000L); //vàng
             dataArray.add(greenGem); //ngọc xanh
             dataArray.add(0); //hồng ngọc
             dataArray.add(0); //point
@@ -133,6 +133,9 @@ public class PlayerDAO {
                     item.add(10); //số lượng
                     options.add(opt.toJSONString());
                     opt.clear();
+                } else if (i == 1) { //10.000 thỏi vàng khởi đầu
+                    item.add(457); //id item
+                    item.add(10000); //số lượng
                 } else {
                     item.add(-1); //id item
                     item.add(0); //số lượng

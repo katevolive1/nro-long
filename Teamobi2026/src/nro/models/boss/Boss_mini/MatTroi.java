@@ -42,7 +42,7 @@ public class MatTroi extends Boss {
                 new String[]{}, // Text chat 1
                 new String[]{}, // Text chat 2
                 new String[]{},
-                600));
+                1800)); // hồi 30 phút sau khi chết
     }
 
     @Override
@@ -55,7 +55,7 @@ public class MatTroi extends Boss {
         long effectEndTime = System.currentTimeMillis() + 30000;
         globalEffectTimers.put(player.id, effectEndTime);
         ItemTimeService.gI().sendItemTime(player, 12953, 60);
-        this.chat("Nóng vãi lồn, " + player.name + " Đã bị bỏng nhiệt ");
+        this.chat("Nóng quá, " + player.name + " đã bị bỏng nhiệt");
     }
 
     private void checkGlobalEffects() {
@@ -191,6 +191,7 @@ public class MatTroi extends Boss {
             this.changeToTypePK();
         }
         this.attack();
+        // Tự rời map sau 15 phút
         if (Util.canDoWithTime(st, 900000)) {
             this.changeStatus(BossStatus.LEAVE_MAP);
             this.checkGlobalEffects();

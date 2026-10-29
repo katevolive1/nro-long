@@ -52,9 +52,7 @@ public class RongNhi extends Boss {
 
     @Override
     public void autoLeaveMap() {
-        if (Util.canDoWithTime(st, 900000)) {
-            this.changeStatus(BossStatus.LEAVE_MAP);
-        }
+        // Không tự rời map, chỉ biến mất khi bị giết
         if (this.zone != null && this.zone.getNumOfPlayers() > 0) {
             st = System.currentTimeMillis();
         }

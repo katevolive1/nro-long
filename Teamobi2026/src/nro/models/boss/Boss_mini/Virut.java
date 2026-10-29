@@ -188,6 +188,7 @@ public class Virut extends Boss {
             this.changeToTypePK();
         }
         this.attack();
+        // Tự rời map sau 15 phút
         if (Util.canDoWithTime(st, 900000)) {
             this.changeStatus(BossStatus.LEAVE_MAP);
             this.checkGlobalEffects();

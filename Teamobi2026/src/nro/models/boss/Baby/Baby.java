@@ -18,6 +18,7 @@ public class Baby extends Boss {
 
     public Baby() throws Exception {
         super(BossID.BABY, BossesData.BABY, BossesData.BABY_2, BossesData.BABY_3);
+        this.isZoneRandom = true; // ra khu ngẫu nhiên 0-9
     }
 
     @Override

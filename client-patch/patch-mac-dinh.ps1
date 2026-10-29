@@ -4,6 +4,7 @@
 # Các mục khác đã sẵn đúng: FPS Cao, Nhân Vật Trong Khu, Hành Trang Lưới bật; còn lại tắt.
 # Cách dùng: powershell -ExecutionPolicy Bypass -File patch-mac-dinh.ps1 "D:\nr-long\GameAssembly.dll"
 param([Parameter(Mandatory = $true)][string]$Dll)
+$ErrorActionPreference = 'Stop'   # lỗi ghi file (vd game đang mở) thì dừng, không báo "Da sua"
 
 function Hex([string]$s) { return ,[byte[]]($s -split ' ' | ForEach-Object { [Convert]::ToByte($_, 16) }) }
 function Same($b, $off, [byte[]]$x) { for ($i = 0; $i -lt $x.Length; $i++) { if ($b[$off + $i] -ne $x[$i]) { return $false } }; $true }

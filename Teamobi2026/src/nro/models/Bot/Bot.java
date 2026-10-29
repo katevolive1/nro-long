@@ -261,9 +261,9 @@ public class Bot extends Player {
 
     public String getChat() {
         String[] messages = {
-            "|1|Con chó tài tỏi súc vật cali",
-            "|2|bê ka tê địt mẹ tài tỏi tung lồn",
-            "|3|arriety địt nhau với mẹ tài tỏi"
+            "|1|Chào mọi người, cùng đi săn boss nào",
+            "|2|Ai train chung không?",
+            "|3|Hôm nay rớt đồ ngon quá"
         };
         return messages[new Random().nextInt(messages.length)];
     }

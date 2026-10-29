@@ -2,6 +2,7 @@
 # trong khung nhập IP/PORT. Sửa GameAssembly.dll và global-metadata.dat.
 # Cách dùng: powershell -ExecutionPolicy Bypass -File patch-port.ps1 "D:\nr-long"
 param([Parameter(Mandatory = $true)][string]$ClientDir)
+$ErrorActionPreference = 'Stop'   # lỗi ghi file (vd game đang mở) thì dừng, không báo "Da sua"
 
 $dll = Join-Path $ClientDir 'GameAssembly.dll'
 $meta = Get-ChildItem $ClientDir -Recurse -Filter global-metadata.dat | Select-Object -First 1 -ExpandProperty FullName

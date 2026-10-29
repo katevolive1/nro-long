@@ -191,7 +191,7 @@ public class Whis extends Npc {
         try {
             boolean success = Util.isTrue(15, 15);
             String message = success ? "Học skill thành công!" : "Tư chất kém!";
-            String npcMessage = success ? "Chúc mừng con nhé!" : "Ngu dốt!";
+            String npcMessage = success ? "Chúc mừng con nhé!" : "Thất bại rồi, cố lên con!";
             int usedBk = success ? 9999 : 99;
             if (success) {
                 SkillService.gI().learSkillSpecial(player, (byte) skillId);
@@ -217,7 +217,7 @@ public class Whis extends Npc {
         try {
             boolean success = Util.isTrue(1, 30);
             String message = success ? "Nâng skill thành công!" : "Tư chất kém!";
-            String npcMessage = success ? "Chúc mừng con nhé!" : "Ngu dốt!";
+            String npcMessage = success ? "Chúc mừng con nhé!" : "Thất bại rồi, cố lên con!";
             int usedBk = success ? 999 : 99;
             if (success) {
                 currentSkill.point++;

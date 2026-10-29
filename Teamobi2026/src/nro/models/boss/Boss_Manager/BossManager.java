@@ -138,6 +138,15 @@ public class BossManager implements Runnable {
         this.bosses.remove(boss);
     }
 
+    // Người vừa vào game nhận danh sách boss đang sống (không chạy chữ dưới màn hình)
+    public void sendBossAlive(Player player) {
+        for (Boss boss : new ArrayList<>(this.bosses)) {
+            if (boss != null) {
+                boss.notifyTo(player);
+            }
+        }
+    }
+
     public void loadBoss() {
         this.createBoss(BossID.TIEU_DOI_TRUONG);
         this.createBoss(BossID.TIEU_DOI_TRUONG_NM);
@@ -160,7 +169,7 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.AN_TROM, 5);
         this.createBoss(BossID.O_DO1, 5);
         this.createBoss(BossID.BABY, 2);
-        this.createBoss(BossID.MAT_TROI, 20);
+        this.createBoss(BossID.MAT_TROI, 5);
 
     }
 

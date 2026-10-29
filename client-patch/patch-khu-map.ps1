@@ -2,6 +2,7 @@
 # Cách dùng: powershell -ExecutionPolicy Bypass -File patch-khu-map.ps1 "D:\nr-long\GameAssembly.dll"
 # Chạy được trên bản int hoặc long. Chi tiết: CLIENT-UNITY.md.
 param([Parameter(Mandatory = $true)][string]$Dll)
+$ErrorActionPreference = 'Stop'   # lỗi ghi file (vd game đang mở) thì dừng, không báo "Da sua"
 
 $INIT = 0x99030      # il2cpp_codegen_initialize_runtime_metadata
 $TOSTR = 0x8C99F0    # System.Int32.ToString

@@ -19,12 +19,15 @@ if errorlevel 1 (
   exit /b 1
 )
 
-"%JBIN%jar" uf Teamobi2026.jar -C build\classes-cli nro -C build\classes-cli models
+rem Ghi ra jar cho san, khong dung toi jar server dang chay; run.bat thay vao luc khoi dong
+copy /y Teamobi2026.jar build\Teamobi2026.next.jar >nul
+"%JBIN%jar" uf build\Teamobi2026.next.jar -C build\classes-cli nro -C build\classes-cli models
 if errorlevel 1 (
   echo Cap nhat jar loi.
+  del build\Teamobi2026.next.jar 2>nul
   pause
   exit /b 1
 )
 echo.
-echo BUILD XONG: Teamobi2026.jar da cap nhat. Khoi dong lai server de ap dung.
+echo BUILD XONG: ban moi o build\Teamobi2026.next.jar. Tat server roi chay run.bat de ap dung.
 pause

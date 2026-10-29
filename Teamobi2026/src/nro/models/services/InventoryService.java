@@ -126,12 +126,10 @@ public class InventoryService {
                 Service.gI().sendThongBao(player, "Không thể bỏ vật phẩm này.");
                 return;
             }
-            if (itemThrow.template != null && itemThrow.template.id != 457) {
+            if (itemThrow.template != null ) {
                 removeItemBag(player, index);
                 sortItems(player.inventory.itemsBag);
                 sendItemBags(player);
-            } else {
-                Service.gI().sendThongBao(player, "Bỏ cái địt mẹ mày thằng ngu");
             }
         }
         if (itemThrow == null) {

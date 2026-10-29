@@ -19,11 +19,12 @@
   - `-9` (hp, dame), `-10` (hp), `-11` (dame), `-12` (dame), `-13` (hp), `56` (hp, dame), `-60` (dame).
   - Template quái trong `DataGame` (hp) và danh sách quái khi vào map trong `Zone` (hp, hpFull).
 - Các gói còn lại vẫn đọc int: boss to `101`/`102`/`51`, `87`… Nếu giá trị long thì dùng `Util.toInt()`.
-- Build: biên dịch bằng javac (`-cp "lib/*"`) rồi `jar uf Teamobi2026.jar` các thư mục `nro`, `models`. Jar int cũ: `Teamobi2026-int-backup.jar`.
+- Build: biên dịch bằng javac (`-cp "lib/*"`) ra `build/classes-cli`, chép `Teamobi2026.jar` thành `build/Teamobi2026.next.jar` rồi `jar uf` các thư mục `nro`, `models` vào bản đó (`build.bat` làm vậy, build được khi server đang chạy). `run.bat` thấy `build/Teamobi2026.next.jar` thì thay vào `Teamobi2026.jar` trước khi chạy. Tắt server trước khi bật lại; trước khi tự tắt server kiểm tra không ai đang kết nối port 14446. Jar int cũ: `Teamobi2026-int-backup.jar`.
 
 ## Bảng rơi đồ boss
 
 - Bảng boss rơi đồ và tỉ lệ nằm ở [BOSS-ROI-DO.md](BOSS-ROI-DO.md). Khi hỏi về đồ rơi từ boss, đọc file này trước, không quét lại code.
 - Khi sửa code làm thay đổi đồ rơi hoặc tỉ lệ rơi của boss (hàm `reward()`, `afk()`, `dropCt()` trong `Teamobi2026/src/nro/models/boss/**`, `ItemService.randDoTLBoss`, `rewardRatio`…), phải cập nhật luôn phần tương ứng trong `BOSS-ROI-DO.md` ngay trong cùng lượt sửa.
+- Boss thường không tự rời map (đã bỏ đồng hồ 15 phút trong `autoLeaveMap`/`active`, có comment "Không tự rời map"), chỉ biến mất khi bị giết. Còn giữ hẹn giờ: Mặt Trời, An Trộm, Ô Đỏ, Virut (15 phút, trong `active()`), Golden Frieza (21h), boss Mabư 12h, Pocolo, Nhân Bản, DeathBeam. `Boss.remindNotify` thông báo lại 5 phút/lần khi boss còn sống. Thông báo boss (gói 93) phải giữ đúng câu `BOSS <tên> vừa xuất hiện tại <tên map>`: mod client chỉ nhận câu này vào tab Thông báo và khung góc phải, câu khác chỉ chạy dưới màn hình. Lúc đăng nhập, `BossManager.sendBossAlive` gửi riêng các boss đang sống với `\t` ở đầu câu (client đã chạy `patch-thong-bao-boss.ps1` thì không chạy chữ dưới màn hình).
 - Thêm boss mới có rơi đồ thì thêm boss đó vào bảng. Xóa boss hoặc bỏ phần rơi đồ thì xóa hoặc chuyển boss đó sang mục "Không rơi đồ".
 - Chỉ sửa đúng dòng hoặc mục liên quan, không viết lại cả file. Cập nhật ngày ở đầu file.

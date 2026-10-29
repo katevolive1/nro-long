@@ -104,6 +104,8 @@ public class Boss extends Player implements IBoss {
 
     public boolean isNotifyDisabled;
     public boolean isZone01SpawnDisabled;
+    protected long lastTimeNotify;
+    protected boolean isZoneRandom;
 
     public Boss(int id, boolean isNotifyDisabled, boolean isZone01SpawnDisabled, BossData... data) throws Exception {
         this(id, data);
@@ -344,8 +346,10 @@ public class Boss extends Player implements IBoss {
             return;
         }
         switch (this.bossStatus) {
-            case CHAT_S, AFK, ACTIVE ->
+            case CHAT_S, AFK, ACTIVE -> {
                 this.autoLeaveMap();
+                this.remindNotify();
+            }
         }
         switch (this.bossStatus) {
             case REST ->
@@ -458,6 +462,10 @@ public class Boss extends Player implements IBoss {
                                 return;
                             }
                         } else {
+                            // Boss khu ngẫu nhiên: bắt đầu dò từ một khu bất kỳ 0-9 thay vì khu 0
+                            if (this.isZoneRandom) {
+                                zoneid = Util.nextInt(0, Math.min(9, this.zone.map.zones.size() - 1));
+                            }
                             // Check trong khu lớn hơn 10 người chuyển sang khu n + 1
                             while (zoneid < this.zone.map.zones.size() && this.zone.map.zones.get(zoneid).getNumOfPlayers() > 10) {
                                 zoneid++;
@@ -511,6 +519,30 @@ public class Boss extends Player implements IBoss {
     protected void notifyJoinMap() {
         if (canSendNotify()) {
             ServerNotify.gI().notify("BOSS " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
+            this.lastTimeNotify = System.currentTimeMillis();
+        }
+    }
+
+    // Boss còn sống thì 5 phút thông báo lại 1 lần. Giữ đúng câu "BOSS <tên> vừa xuất hiện tại <map>":
+    // mod client (BossCustom.addBoss, ShowBoss.HandleChatVip) chỉ nhận câu này vào tab Thông báo và góc phải
+    private void remindNotify() {
+        if (this.lastTimeNotify > 0 && this.zone != null && Util.canDoWithTime(this.lastTimeNotify, 300000)) {
+            this.notifyJoinMap();
+        }
+    }
+
+    // Gửi riêng cho người vừa vào game. Có "\t" ở đầu: client đã patch (patch-thong-bao-boss.ps1)
+    // chỉ đưa vào danh sách boss của mod, không chạy chữ dưới màn hình
+    public void notifyTo(Player player) {
+        if (this.lastTimeNotify > 0 && this.zone != null && !this.isDie()
+                && (this.bossStatus == CHAT_S || this.bossStatus == AFK || this.bossStatus == ACTIVE) && canSendNotify()) {
+            try {
+                Message msg = new Message(93);
+                msg.writer().writeUTF("\tBOSS " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
+                player.sendMessage(msg);
+                msg.cleanup();
+            } catch (Exception ignored) {
+            }
         }
     }
 

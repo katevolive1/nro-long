@@ -119,13 +119,7 @@ public class BlackGoku extends Boss {
 
     @Override
     public void autoLeaveMap() {
-        if (Util.canDoWithTime(st, timeLeaveMap)) {
-            if (Util.isTrue(1, 2)) {
-                this.leaveMap();
-            } else {
-                this.leaveMapNew();
-            }
-        }
+        // Không tự rời map, chỉ biến mất khi bị giết
         if (this.zone != null && this.zone.getNumOfPlayers() > 0) {
             st = System.currentTimeMillis();
             timeLeaveMap = Util.nextInt(300000, 900000);

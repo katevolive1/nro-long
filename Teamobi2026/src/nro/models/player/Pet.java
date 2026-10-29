@@ -144,7 +144,7 @@ public class Pet extends Player {
             case GOHOME:
                 return "OK con về, bibi sư phụ";
             case HTVV:
-                return "Dm sư phụ";
+                return "Ok sư phụ, hợp thể nào";
             default:
                 return "Sư phụ ơi con lên cấp rồi";
         }
@@ -152,7 +152,7 @@ public class Pet extends Player {
 
     public void fusionGogeta(boolean porata) {
         if (this.isDie()) {
-            Service.gI().sendThongBao(master, "Đệ cu chết rồi hợp thể chóa giề");
+            Service.gI().sendThongBao(master, "Đệ tử đã chết, không thể hợp thể");
             return;
         }
         if (Util.canDoWithTime(lastTimeUnfusion, TIME_WAIT_AFTER_UNFUSION)) {
@@ -1102,7 +1102,7 @@ public class Pet extends Player {
         if (this.typePet == 1) {
             this.isTransform = !this.isTransform;
             Service.gI().Send_Caitrang(this);
-            Service.gI().chat(this, "Bố Mày Là Bư Nè !! Bư..Bư..Bư..Ma..Nhân..Bư....");
+            Service.gI().chat(this, "Ta Là Bư Nè !! Bư..Bư..Bư..Ma..Nhân..Bư....");
         }
         if (this.typePet == 2) {
             this.isTransform = !this.isTransform;

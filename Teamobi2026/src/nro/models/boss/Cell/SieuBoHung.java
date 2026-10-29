@@ -197,9 +197,7 @@ public class SieuBoHung extends Boss {
         if (this.currentLevel > 0 && this.bossStatus == BossStatus.AFK) {
             this.changeStatus(BossStatus.ACTIVE);
         }
-        if (Util.canDoWithTime(st, 900000)) {
-            this.leaveMapNew();
-        }
+        // Không tự rời map, chỉ biến mất khi bị giết
         if (this.zone != null && this.zone.getNumOfPlayers() > 0) {
             st = System.currentTimeMillis();
         }

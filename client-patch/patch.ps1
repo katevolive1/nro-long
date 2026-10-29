@@ -2,6 +2,7 @@
 # Cách dùng: powershell -ExecutionPolicy Bypass -File patch.ps1 "D:\nr-long\GameAssembly.dll"
 # Chạy lại nhiều lần không sao (chỉ sửa byte còn ở trạng thái gốc).
 param([Parameter(Mandatory = $true)][string]$Dll)
+$ErrorActionPreference = 'Stop'   # lỗi ghi file (vd game đang mở) thì dừng, không báo "Da sua"
 
 # Mỗi mục: offset file, byte gốc, byte mới, byte kiểm tra (offset, giá trị) để chắc đúng chỗ
 $patches = @(

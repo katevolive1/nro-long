@@ -82,9 +82,7 @@ public class SuperBroly extends Boss {
 
     @Override
     public void autoLeaveMap() {
-        if (Util.canDoWithTime(st, 300_000)) {
-            this.leaveMap();
-        }
+        // Không tự rời map, chỉ biến mất khi bị giết
         if (this.zone != null && this.zone.getNumOfPlayers() > 0) {
             st = System.currentTimeMillis();
         }

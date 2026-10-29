@@ -480,7 +480,7 @@ public class Input {
                     int nmbv = Integer.parseInt(text[1]);
                     int rembv = Integer.parseInt(text[2]);
                     if ((mbv + "").length() != 6 || (nmbv + "").length() != 6 || (rembv + "").length() != 6) {
-                        Service.gI().sendThongBao(player, "Trêu bố mày à?");
+                        Service.gI().sendThongBao(player, "Mã bảo vệ phải gồm 6 chữ số!");
                     } else if (player.mbv == 0) {
                         Service.gI().sendThongBao(player, "Bạn chưa cài mã bảo vệ!");
                     } else if (player.mbv != mbv) {
@@ -638,7 +638,7 @@ public class Input {
     }
 
     public void createFormMBV(Player pl) {
-        createForm(pl, MBV, "Đồ ngu! Đồ ăn hại! Cút mẹ mày đi!", new SubInput("Nhập Mã Bảo Vệ Đã Quên", NUMERIC), new SubInput("Nhập Mã Bảo Vệ Mới", NUMERIC), new SubInput("Nhập Lại Mã Bảo Vệ Mới", NUMERIC));
+        createForm(pl, MBV, "Đổi mã bảo vệ", new SubInput("Nhập Mã Bảo Vệ Đã Quên", NUMERIC), new SubInput("Nhập Mã Bảo Vệ Mới", NUMERIC), new SubInput("Nhập Lại Mã Bảo Vệ Mới", NUMERIC));
     }
 
     public void createFormBangHoi(Player pl) {

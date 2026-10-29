@@ -108,9 +108,7 @@ public class SoiHecQuyn extends Boss {
 
     @Override
     public void autoLeaveMap() {
-        if (Util.canDoWithTime(st, timeLeave)) {
-            this.leaveMapNew();
-        }
+        // Không tự rời map, chỉ biến mất khi bị giết
     }
 
     @Override

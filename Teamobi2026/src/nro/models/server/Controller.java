@@ -924,6 +924,7 @@ public class Controller implements IMessageHandler {
                 SuperRankDAO.insertData(player);
             }
             ServerNotify.gI().sendNotifyTab(player);
+            BossManager.gI().sendBossAlive(player);
             player.setClothes.setup();
             if (player.pet != null) {
                 player.pet.setClothes.setup();
