@@ -919,7 +919,7 @@ public class NPoint {
         }
         // Xử lý pet mabư
         if (this.player.isPet && ((Pet) this.player).typePet == 1 && (((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2 || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA3)) {
-            hpMax += (hpMax * 0 / 100L);
+            hpMax += (hpMax * 10 / 100L);
         }
 
         // Xử lý pet Uub
@@ -1043,11 +1043,12 @@ public class NPoint {
         if (this.player.setClothes.worldcup
                 == 2) {
             mpMax += (this.mpMax * 10 / 100L);
-            // xử lý pet mabu
-            if (this.player.isPet && ((Pet) this.player).typePet == 1
-                    && (((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2 || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA3)) {
-                mpMax += (this.mpMax * 0 / 100L);
-            }
+        }
+
+        // xử lý pet mabu
+        if (this.player.isPet && ((Pet) this.player).typePet == 1
+                && (((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2 || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA3)) {
+            mpMax += (this.mpMax * 10 / 100L);
         }
 
         // Xử lý pet Uub
@@ -1166,7 +1167,7 @@ public class NPoint {
 
         // Xử lý pet mabư
         if (this.player.isPet && ((Pet) this.player).typePet == 1 && (((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2 || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA3)) {
-            dame += (dame * 0 / 100L);
+            dame += (dame * 10 / 100L);
         }
 
         // Xử lý pet Uub

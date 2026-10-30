@@ -41,7 +41,10 @@ Mục lục: [Vật phẩm](#vật-phẩm) · [Option](#option-chỉ-số-vật-
 Loại: 0 áo, 1 quần, 2 găng, 3 giày, 4 rada, 5 cải trang; số khác là loại riêng của game. Hành tinh: 0 Trái Đất, 1 Namếc, 2 Xayda, 3 dùng chung.
 
 Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử dụng có tác dụng; `Tiền` = vàng/ngọc, nhặt là cộng; `Không` = bấm Sử dụng không có tác dụng (nguyên liệu ghép, đồ nhiệm vụ/sự kiện, hoặc server chưa làm). Xét theo code `UseItem`/`InventoryService`, không phải theo tên.
-
+# Quan trọng
+| 76 | Vàng | 9 | 3 | Tiền |
+| 77 | Ngọc | 10 | 3 | Tiền |
+#
 | ID | Tên | Loại | Hành tinh | Dùng |
 |---|---|---|---|---|
 | 0 | Áo vải 3 lỗ | 0 | 0 | Mặc |

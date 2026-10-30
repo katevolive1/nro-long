@@ -220,7 +220,10 @@ parameterizedCommands.put("upp", (player, text) -> {
                     }
                 }
 
-                for (int i = 0; i < quantity; i++) {
+                // Đồ chồng được thì thêm cả chồng một lần (tối đa 99999/chồng), đồ khác thêm từng món và dừng khi túi đầy.
+                // Option 1/31 được addItemList cộng dồn mỗi lần thêm nên vẫn thêm từng món.
+                int added = 0;
+                while (added < quantity) {
                     Item item = ItemService.gI().createNewItem((short) itemId);
                     if (!customOptions.isEmpty()) {
                         item.itemOptions = new ArrayList<>(customOptions);
@@ -230,11 +233,23 @@ parameterizedCommands.put("upp", (player, text) -> {
                             item.itemOptions = ops;
                         }
                     }
-                    InventoryService.gI().addItemBag(player, item);
+                    boolean stack = item.template.isUpToUp
+                            && item.itemOptions.stream().noneMatch(io -> io.optionTemplate.id == 1 || io.optionTemplate.id == 31);
+                    int n = stack ? Math.min(quantity - added, 99999) : 1;
+                    item.quantity = n;
+                    if (!InventoryService.gI().addItemBag(player, item)) {
+                        break;
+                    }
+                    added += n;
                 }
 
                 InventoryService.gI().sendItemBags(player);
-                Service.gI().sendThongBao(player, "GET " + quantity + " x " + ItemService.gI().getTemplate(itemId).name + " [" + itemId + "] SUCCESS!");
+                String name = ItemService.gI().getTemplate(itemId).name + " [" + itemId + "]";
+                if (added < quantity) {
+                    Service.gI().sendThongBao(player, "Hành trang đầy, chỉ nhận " + added + "/" + quantity + " x " + name);
+                } else {
+                    Service.gI().sendThongBao(player, "GET " + quantity + " x " + name + " SUCCESS!");
+                }
 
             } catch (Exception e) {
                 Service.gI().sendThongBao(player, "Lỗi cú pháp! Dùng: i <itemId> <số lượng> [optionId:value]");

@@ -43,6 +43,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 - Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày).
 - Rồng Nhí: 20% có rơi → 4% Trứng vàng rồng nhí (1821), 16% NR 5/6/7 sao.
 - Mabư ngoài map (`Mabu_ngoai/MabuNgoai.java`, 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
+- Hirudegarn (quái to, `mob_bigboss/Hirudegarn.java`, map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
 
 ## 5. Golden Frieza + Death Beam 1–5
 - 100% Cải trang Fide vàng (629, +20% HP/KI/SĐ, HSD 20 ngày).

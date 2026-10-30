@@ -196,7 +196,7 @@ public class Mob {
             boolean hasKilisBuff = plAtt.itemTime != null && plAtt.itemTime.isUseKilis;
             int successRate = hasKilisBuff ? 10 : 1;
 
-            if (Util.isTrue(successRate, 333)) {
+            if (Util.isTrue(successRate, 20)) {
                 if (plAtt != null) {
                     Item item = InventoryService.gI().findItemBag(plAtt, 1795);
                     if (item != null) {
