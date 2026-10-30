@@ -108,7 +108,7 @@ public class ItemTimeService {
             }
         }
         if (player.itemTime.isUseKhoBauX2) {
-        //    sendItemTime(player, 12834, (int) ((TIME_MAY_DO - (System.currentTimeMillis() - player.itemTime.lastTimeUseKhoBauX2)) / 1000));
+            sendItemTime(player, 12834, (int) ((TIME_MAY_DO2 - (System.currentTimeMillis() - player.itemTime.lastTimeUseKhoBauX2)) / 1000));
         }
         if (player.itemTime.isUseBuaSanta) {
             sendItemTime(player, 13540, (int) ((TIME_BUA_SANTA - (System.currentTimeMillis() - player.itemTime.lastTimeBuaSanta)) / 1000));

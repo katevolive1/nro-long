@@ -3,6 +3,8 @@
 Xuất từ DB ngày 29/10/2026. Thêm/sửa dữ liệu trong DB thì xuất lại file này. Boss (không nằm trong DB) xem [BOSS-ROI-DO.md](BOSS-ROI-DO.md).
 
 ## Lệnh admin (gõ ở ô chat)
+Lệnh có tham số chỉ khớp khi sau tên lệnh là hết câu, dấu cách hoặc số (`Command.matchCommand`, sửa 30/10/2026), nên chat thường như `bao ve` không bị lệnh `b` bắt.
+
 | Lệnh | Tác dụng |
 |---|---|
 | `i <id> <số lượng> [option:giá trị ...]` | Lấy vật phẩm, ví dụ `i 1835 10`, `i 0 1 47:500 6:1000` |
@@ -11,6 +13,7 @@ Xuất từ DB ngày 29/10/2026. Thêm/sửa dữ liệu trong DB thì xuất l�
 | `n<id>` | Đặt nhiệm vụ chính, ví dụ `n10` |
 | `up <số>` / `upp <số>` | Cộng sức mạnh cho mình / đệ tử |
 | `hp <số>`, `ki <số>`, `dm <số>` | Đặt HP / KI / sức đánh gốc |
+| `b` | Mở khung gửi vật phẩm (`Input.createFormSenditem1`) |
 | `hs` | Hồi chiêu ngay |
 | `a` | Menu admin |
 
@@ -33,7 +36,7 @@ Xuất từ DB ngày 29/10/2026. Thêm/sửa dữ liệu trong DB thì xuất l�
 | `loadskill` | Nạp lại thanh kỹ năng |
 
 ## Lệnh đệ tử (server)
-`di theo`, `bao ve`, `tan cong`, `ve nha`, `bien hinh`, `ten con la <tên>` (đổi tên đệ), `sach tuyet ky` (đệ dùng sách tuyệt kỹ trong hành trang).
+`di theo`, `bao ve` (đánh quái trong 300px quanh sư phụ, không có quái thì đi theo sư phụ), `tan cong`, `ve nha`, `bien hinh`, `ten con la <tên>` (đổi tên đệ), `sach tuyet ky` (đệ dùng sách tuyệt kỹ trong hành trang).
 
 Mục lục: [Vật phẩm](#vật-phẩm) · [Option](#option-chỉ-số-vật-phẩm) · [Map](#map) · [Nhiệm vụ](#nhiệm-vụ-chính) · [Quái](#quái) · [NPC](#npc) · [Kỹ năng](#kỹ-năng)
 

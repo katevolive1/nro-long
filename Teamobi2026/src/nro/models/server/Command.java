@@ -267,6 +267,19 @@ parameterizedCommands.put("upp", (player, text) -> {
         }
     }
 
+    // Lệnh có tham số chỉ khớp khi sau tên lệnh là hết câu, dấu cách hoặc số (m5, n 12, upp 100),
+    // để câu chat thường như "bao ve", "bien hinh" không bị lệnh "b" bắt, "upp" không bị nhầm "up"
+    private static boolean matchCommand(String text, String key) {
+        if (!text.startsWith(key)) {
+            return false;
+        }
+        if (text.length() == key.length() || key.endsWith(" ")) {
+            return true;
+        }
+        char next = text.charAt(key.length());
+        return next == ' ' || (Character.isLetter(key.charAt(key.length() - 1)) && (Character.isDigit(next) || next == '-'));
+    }
+
     public boolean check(Player player, String text) {
         if (player.isAdmin()) {
             if (adminCommands.containsKey(text)) {
@@ -275,7 +288,7 @@ parameterizedCommands.put("upp", (player, text) -> {
             }
 
             for (Map.Entry<String, BiConsumer<Player, String>> entry : parameterizedCommands.entrySet()) {
-                if (text.startsWith(entry.getKey())) {
+                if (matchCommand(text, entry.getKey())) {
                     entry.getValue().accept(player, text);
                     return true;
                 }

@@ -1679,17 +1679,18 @@ public class NPoint {
                 }
             }
             long tn = tiemNang;
-            if (this.player.charms.tdTriTue > System.currentTimeMillis()) {
-                tiemNang += tn;
-            }
-            if (this.player.charms.tdTriTue3 > System.currentTimeMillis()) {
-                tiemNang += tn * 3;
-            }
-            if (this.player.charms.tdTriTue4 > System.currentTimeMillis()) {
-                tiemNang += tn * 4;
-            }
-            if (this.player.charms.tdTriTue4 > System.currentTimeMillis()) {
-                tiemNang += tn * 4;
+            // Đệ tử dùng bùa trí tuệ của sư phụ
+            Charms charms = this.player.isPet ? ((Pet) this.player).master.charms : this.player.charms;
+            if (charms != null) {
+                if (charms.tdTriTue > System.currentTimeMillis()) {
+                    tiemNang += tn;
+                }
+                if (charms.tdTriTue3 > System.currentTimeMillis()) {
+                    tiemNang += tn * 3;
+                }
+                if (charms.tdTriTue4 > System.currentTimeMillis()) {
+                    tiemNang += tn * 4;
+                }
             }
             if (this.player.timevip > System.currentTimeMillis()) {
                 tiemNang += tn * 3;
@@ -1969,6 +1970,11 @@ public class NPoint {
     }
 
     public void increasePoint(byte type, short point) {
+        increasePoint(type, point, player);
+    }
+
+    // thongBao: người nhận thông báo lỗi (nâng tay cho đệ thì là sư phụ; đệ tự cộng thì là đệ, không gửi)
+    public void increasePoint(byte type, short point, Player thongBao) {
         if (point <= 0 || point > 1000) {
             return;
         }
@@ -1977,11 +1983,11 @@ public class NPoint {
             int pointHp = point * 20;
             tiemNangUse = point * (2 * (this.hpg + 1000) + pointHp - 20) / 2;
             if ((this.hpg + pointHp) <= getHpMpLimit()) {
-                if (doUseTiemNang(tiemNangUse)) {
+                if (doUseTiemNang(tiemNangUse, thongBao)) {
                     hpg += pointHp;
                 }
             } else {
-                Service.gI().sendThongBaoOK(player, "Vui lòng mở giới hạn sức mạnh");
+                Service.gI().sendThongBaoOK(thongBao, "Vui lòng mở giới hạn sức mạnh");
                 return;
             }
         }
@@ -1989,11 +1995,11 @@ public class NPoint {
             int pointMp = point * 20;
             tiemNangUse = point * (2 * (this.mpg + 1000) + pointMp - 20) / 2;
             if ((this.mpg + pointMp) <= getHpMpLimit()) {
-                if (doUseTiemNang(tiemNangUse)) {
+                if (doUseTiemNang(tiemNangUse, thongBao)) {
                     mpg += pointMp;
                 }
             } else {
-                Service.gI().sendThongBaoOK(player, "Vui lòng mở giới hạn sức mạnh");
+                Service.gI().sendThongBaoOK(thongBao, "Vui lòng mở giới hạn sức mạnh");
                 return;
             }
         }
@@ -2001,23 +2007,23 @@ public class NPoint {
             TaskService.gI().checkDoneTaskNangCS(player);
             tiemNangUse = point * (2 * this.dameg + point - 1) / 2 * 100;
             if ((this.dameg + point) <= getDameLimit()) {
-                if (doUseTiemNang(tiemNangUse)) {
+                if (doUseTiemNang(tiemNangUse, thongBao)) {
                     dameg += point;
                 }
                 TaskService.gI().checkDoneTaskNangCS(player);
             } else {
-                Service.gI().sendThongBaoOK(player, "Vui lòng mở giới hạn sức mạnh");
+                Service.gI().sendThongBaoOK(thongBao, "Vui lòng mở giới hạn sức mạnh");
                 return;
             }
         }
         if (type == 3) {
             tiemNangUse = 2 * (this.defg + 5) / 2 * 100000;
             if ((this.defg + point) <= getDefLimit()) {
-                if (doUseTiemNang(tiemNangUse)) {
+                if (doUseTiemNang(tiemNangUse, thongBao)) {
                     defg += point;
                 }
             } else {
-                Service.gI().sendThongBaoOK(player, "Vui lòng mở giới hạn sức mạnh");
+                Service.gI().sendThongBaoOK(thongBao, "Vui lòng mở giới hạn sức mạnh");
                 return;
             }
         }
@@ -2027,20 +2033,20 @@ public class NPoint {
                 tiemNangUse *= 5L;
             }
             if ((this.critg + point) <= getCritLimit()) {
-                if (doUseTiemNang(tiemNangUse)) {
+                if (doUseTiemNang(tiemNangUse, thongBao)) {
                     critg += point;
                 }
             } else {
-                Service.gI().sendThongBaoOK(player, "Vui lòng mở giới hạn sức mạnh");
+                Service.gI().sendThongBaoOK(thongBao, "Vui lòng mở giới hạn sức mạnh");
                 return;
             }
         }
         Service.gI().point(player);
     }
 
-    private boolean doUseTiemNang(long tiemNang) {
+    private boolean doUseTiemNang(long tiemNang, Player thongBao) {
         if (this.tiemNang < tiemNang) {
-            Service.gI().sendThongBaoOK(player, "Bạn không đủ tiềm năng");
+            Service.gI().sendThongBaoOK(thongBao, "Bạn không đủ tiềm năng");
             return false;
         }
         if (this.tiemNang >= tiemNang && this.tiemNang - tiemNang >= 0) {

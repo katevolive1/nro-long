@@ -27,7 +27,7 @@ Lập ngày 30/10/2026 từ các thư mục `Teamobi2026/src/nro/models/`. Đán
 - Đá Hematite, đá mài, Dùi Đục, nhập ngọc rồng, làm phép nhập đá
 
 ## Nhân vật
-- Đệ tử (Mabư, các loại pet), hợp thể (`player/Pet.java`) **[đã sửa]** câu chat tục
+- Đệ tử (Mabư, các loại pet), hợp thể (`player/Pet.java`) **[đã sửa]** câu chat tục; nâng tiềm năng đệ bằng tay + khung đệ cập nhật liên tục 30/10/2026 (chi tiết: [CO-CHE.md](CO-CHE.md))
 - Nội tại (`intrinsic`), Huy hiệu (`player_badges`), Thẻ Rada (`radar`), Bang hội (`clan`)
 - Tạo nhân vật mới: 500 triệu vàng, 100k ngọc, 10.000 thỏi vàng **[đã sửa]**
 

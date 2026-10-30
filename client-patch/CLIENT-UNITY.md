@@ -14,7 +14,7 @@
 - Chưa có APK bản long (APK int cũ đã xóa). iOS chỉ là link TestFlight của người khác, không sửa được.
 
 ## Dump
-- Il2CppDumper (metadata v31), dump từ `GameAssembly.dll` gốc (`D:\nr-dump\goc`), nằm ở `D:\nr-dump` (ngoài repo, máy khác phải chép theo). RVA giống hệt bản long đã patch:
+- Il2CppDumper (metadata v31), dump từ `GameAssembly.dll` gốc (`D:\nr-dump\goc`), nằm ở `D:\nr-dump` (ngoài repo, máy khác phải chép theo; máy nhà để ở `F:\nro-dump\nr-dump`, client máy nhà `F:\nr-long`). RVA giống hệt bản long đã patch:
   - `dump.cs`: khai báo class/hàm kèm `RVA` và `Offset`.
   - `script.json`: `ScriptMethod` (Address = RVA, Name = `Game1.Class$$Method`).
   - `stringliteral.json`: chuỗi trong code và địa chỉ ô chứa chuỗi (RVA).
@@ -59,6 +59,10 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
   - Gói `-28` sub 8 (`Controller.loadItemNew`): loại 1 = danh sách đầu, lưu `NRitem1`; loại 2 = phần còn lại, **ghi đè** `NRitem2`, rồi đọc dart/effect/arrow/skill và gọi `Service.clientOk`. Nên chỉ được gửi **đúng 1 gói loại 1 + 1 gói loại 2**, mỗi gói ≤ 65535 byte (độ dài ghi 2 byte). Chia nhiều gói loại 2 thì cache chỉ còn gói cuối, lần sau vào game bị treo ở "Xin chờ".
 
 ## Bản đồ đã dò
+### Khung đệ tử và nâng tiềm năng (Game1, không cần patch, server xử lý)
+- `Panel.doFirePet` (`0x41D2C0`) gọi `Service.petInfo` (`0x48FED0`, gửi `-107`) rồi `setTypePetMain` (`0x459BA0`) + `show`. `doFirePetMain` (`0x41CD70`) chia tab theo `[panel+0C4h]`: 0 đồ đệ mặc, 1 `DoFirePetSkill` (`0x4065A0`, tab "Thông Tin": dòng HP/KI/SĐ/Giáp/Chí mạng gốc + kỹ năng), 2 `doFirePetStatus`, 3 `doFireInventory`. Dòng chọn = `[panel+238h]`.
+- `DoFirePetSkill` tạo menu với lệnh 9000/9005/9006/9007 (`0x2328`, `0x232D`–`0x232F`) kèm `bool` đóng gói = **1 (forPet)**; `Panel.perform` (`0x450A20`) gọi `Service.upPotential(forPet, [panel+238h], 1/10/100)` (`0x494190`): gói `-30`, sub = `16 + 2*forPet` (**16 sư phụ, 18 đệ tử**), `writeByte(loại)`, `writeShort(số điểm)`. `ModFunc.DoAutoIncreasePoint` (`0x3D6F..`) cũng gọi hàm này. Server xử lý sub 18 trong `Controller.messageSubCommand` (từ 30/10/2026).
+- `Controller.onMessage` Game1 `0x2E7C10` (Game2 `0x322790`), nhánh `-107`: loại 0/1 gán `Char.havePet` (`+400h`; `havePet2` `+401h` ở `0x2FC737`); loại 2 (`0x2E8BC5`–`0x2E991D`) `InfoDlg.hide` rồi chỉ đọc dữ liệu vào `Char.myPetz()` (`cTiemNang` `+128h`, chép hpFull/mpFull/dame/def/crit sang `+5C0h`/`+5C8h`/`+5B8h`/`+5D0h`/`+5D8h` cho tab Thông Tin), **không mở khung**. Nên server gửi lại `-107` loại 2 bất cứ lúc nào thì khung đang mở tự cập nhật.
 ### `ModFunc.Paint(mGraphics g)`: chữ dưới thanh máu
 - Game1: RVA `0x3E0550` (offset `0x3DED50`). Game2: RVA `0x5977F0` (offset `0x595FF0`).
 - Thứ tự vẽ: Vàng (`NinjaUtil.getMoneys`) → Ngọc → `"Khu: " + số khu` → **`"X: " + Char.myCharz().cx + " - Y: " + Char.myCharz().cy`** → Số sao (`"Số Sao : "`, `"Số Sao Cần Đập : "`, `"Chưa Có"`).

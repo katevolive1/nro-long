@@ -80,6 +80,7 @@ import nro.models.task.BadgesTaskService;
 public class Player implements Runnable {
 
     public long lastTimeEatPea;
+    public long lastTimeXemDeTu; // lần cuối mở khung đệ tử (client gửi -107), để gửi thông tin đệ liên tục
     public Map<Integer, Long> activeEffects = new HashMap<>();
     @Setter
     @Getter

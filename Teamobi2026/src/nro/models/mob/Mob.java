@@ -230,7 +230,8 @@ public class Mob {
                 tiemNang = 1;
                 break;
         }
-        if (checkLevel > 5 && levelPlayer > levelMob) {
+        // Phó bản: quái giữ cấp gốc (kho báu cấp 8) nhưng chỉ số theo cấp hang, nên không ép về 1 khi chênh cấp
+        if (checkLevel > 5 && levelPlayer > levelMob && !MapService.gI().isMapPhoBan(this.zone.map.mapId)) {
             tiemNang = 1;
         } else {
             if (checkLevel < 0) {

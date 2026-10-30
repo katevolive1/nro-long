@@ -317,6 +317,7 @@ public class Pet extends Player {
                 super.update();
                 increasePoint();
                 updatePower();
+                sendInfoToMaster();
 
                 if (isDie()) {
                     if (System.currentTimeMillis() - lastTimeDie > 120000) {
@@ -406,7 +407,8 @@ public class Pet extends Player {
                             return;
                         }
 
-                        mobAttack = findMobAttack();
+                        // Bảo vệ: chỉ đánh quái quanh sư phụ, không có thì đi theo sư phụ
+                        mobAttack = findMobAttackNear(master);
                         if (mobAttack != null) {
                             int disToMob = Util.getDistance(this, mobAttack);
                             if (disToMob <= ARANGE_ATT_SKILL1) {
@@ -442,7 +444,7 @@ public class Pet extends Player {
                                 }
                             }
                         } else {
-                            idle = true;
+                            followMaster(60);
                         }
 
                         break;
@@ -754,6 +756,27 @@ public class Pet extends Player {
     }
 
     private long lastTimeIncreasePoint;
+    private long lastTimeSendInfo;
+    private long lastInfoHash;
+
+    // Gửi lại thông tin đệ (-107) khi có thay đổi, tối đa 1 lần/giây, trong 5 phút sau khi sư phụ mở khung đệ tử.
+    // Client mod chỉ cập nhật dữ liệu, không mở lại khung; nhưng có gọi InfoDlg.hide nên không gửi khi không xem.
+    private void sendInfoToMaster() {
+        if (!master.isPl() || System.currentTimeMillis() - master.lastTimeXemDeTu > 300_000
+                || !Util.canDoWithTime(lastTimeSendInfo, 1000)) {
+            return;
+        }
+        long hash = nPoint.tiemNang;
+        for (long v : new long[]{nPoint.power, nPoint.hp, nPoint.hpMax, nPoint.mp, nPoint.mpMax, nPoint.dame,
+            nPoint.def, nPoint.crit, nPoint.stamina, getStatus()}) {
+            hash = hash * 31 + v;
+        }
+        if (hash != lastInfoHash) {
+            lastInfoHash = hash;
+            lastTimeSendInfo = System.currentTimeMillis();
+            Service.gI().showInfoPet(master);
+        }
+    }
 
     private void increasePoint() {
         if (this.nPoint != null && Util.canDoWithTime(lastTimeIncreasePoint, 0)) {
@@ -959,6 +982,23 @@ public class Pet extends Player {
                 continue;
             }
             int d = Util.getDistance(this, mob);
+            if (d <= dis) {
+                dis = d;
+                mobAtt = mob;
+            }
+        }
+        return mobAtt;
+    }
+
+    // Quái còn sống gần nhân vật pl nhất trong tầm ARANGE_CAN_ATTACK (dùng cho chế độ bảo vệ: tìm quanh sư phụ)
+    private Mob findMobAttackNear(Player pl) {
+        int dis = ARANGE_CAN_ATTACK;
+        Mob mobAtt = null;
+        for (Mob mob : zone.mobs) {
+            if (mob.isDie()) {
+                continue;
+            }
+            int d = Util.getDistance(pl, mob);
             if (d <= dis) {
                 dis = d;
                 mobAtt = mob;

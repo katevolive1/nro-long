@@ -1,0 +1,51 @@
+# Thay đổi cần áp dụng ở máy khác
+
+Nhật ký những thay đổi **không tự theo git**: lệnh SQL (DB không theo git), build server, cập nhật client. Máy nào `git pull` về thì Claude ở máy đó đọc file này và chạy các mục chưa chạy.
+
+## Cách dùng (cho Claude)
+
+- **Sau khi `git pull` hoặc đầu phiên làm việc**: đọc file `.thay-doi-da-chay` ở thư mục gốc repo (bị gitignore, mỗi máy một file, mỗi dòng một số mục đã chạy ở máy này; chưa có file thì coi như chưa chạy mục nào). Mục nào có trong file này mà chưa có trong `.thay-doi-da-chay` thì làm theo thứ tự số tăng dần:
+  1. **SQL**: ghi khối SQL ra file UTF-8 trong scratchpad rồi chạy `C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 team10_long < file.sql` (mật khẩu lấy từ `database.pass` trong `Teamobi2026/Config.properties`, trống thì bỏ `-p`). Không gõ tiếng Việt thẳng trong dòng lệnh Git Bash vì sẽ thành `?`. MySQL chưa chạy thì nhắc user bật trong XAMPP. Chạy xong kiểm tra lại bằng `SELECT`.
+  2. **Build**: mục có "Build: có" thì chạy `cmd /c "<thư mục repo>\Teamobi2026\build.bat < NUL"` (phải ghi đường dẫn đầy đủ, gọi `build.bat` trần thì cmd báo không tìm thấy) một lần sau khi đã áp hết các mục, rồi nhắc user gõ `bt` trong console server hoặc chạy `run.bat`.
+  3. **Client**: mục có "Client: có" thì nhắc user chạy `client-patch\cap-nhat-client.bat` (không tự chạy).
+  4. Ghi số mục vào `.thay-doi-da-chay` (mỗi số một dòng), rồi báo user đã áp những mục nào.
+- **Khi sửa mà có SQL / build / client**: thêm mục mới ở cuối file này (số tiếp theo, ngày, máy làm), và ghi số mục đó vào `.thay-doi-da-chay` của máy đang làm vì máy này đã có sẵn.
+- Mục chỉ có code Java (không SQL, không client) vẫn ghi "Build: có" để máy kia biết phải build.
+- Nạp nguyên DB từ file `Teamobi2026/team10_long.sql` thì DB đã có sẵn mọi SQL tới lúc xuất file: ghi luôn các số mục có trước lúc xuất vào `.thay-doi-da-chay`, không chạy lại SQL của chúng.
+
+## Các mục
+
+### 1. Rađa kho báu (1532) cộng dồn, hiện thời gian
+- Ngày: 30/10/2026, máy làm: nhà.
+- Build: có (`UseItem.java`, `ItemTimeService.java`, `DataGame.vsItem` = 16).
+- Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
+- SQL:
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiềm năng, sức mạnh khi đánh quái ở Bản đồ kho báu' WHERE id=1532;
+```
+- Kiểm tra: `SELECT is_up_to_up, description FROM item_template WHERE id=1532;` ra `1` và mô tả trên.
+
+### 2. Đệ tử ăn bùa trí tuệ của sư phụ, bùa x4 về +4
+- Ngày: 30/10/2026, máy làm: nhà.
+- Build: có (`NPoint.calSucManhTiemNang`).
+- Client: không.
+- SQL: không.
+
+### 3. Nâng tiềm năng đệ tử bằng tay, khung đệ tử cập nhật liên tục
+- Ngày: 30/10/2026, máy làm: nhà.
+- Build: có (`Controller.java` sub 18, `NPoint.increasePoint`, `Pet.sendInfoToMaster`, `Player.lastTimeXemDeTu`).
+- Client: không (client mod có sẵn menu nâng điểm cho đệ, chỉ thiếu server).
+- SQL: không.
+
+### 4. Lệnh admin không bắt nhầm chat "bao ve"; đệ bảo vệ đi theo sư phụ
+- Ngày: 30/10/2026, máy làm: nhà.
+- Build: có (`Command.matchCommand`, `Pet` chế độ PROTECT + `findMobAttackNear`).
+- Client: không.
+- SQL: không.
+
+### 5. Phó bản không ép tiềm năng về 1 khi người cao hơn quái quá 5 cấp
+- Ngày: 30/10/2026, máy làm: nhà.
+- Build: có (`Mob.getTiemNangForPlayer`).
+- Client: không.
+- SQL: không.

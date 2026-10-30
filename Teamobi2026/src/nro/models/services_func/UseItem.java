@@ -11,6 +11,7 @@ import nro.models.services.RadarService;
 import nro.models.radar.RadarCard;
 import nro.models.consts.ConstMap;
 import nro.models.item.Item;
+import nro.models.item.ItemTime;
 import nro.models.consts.ConstNpc;
 import nro.models.consts.ConstPlayer;
 import nro.models.services.shenron.Shenron_Service;
@@ -1701,9 +1702,13 @@ public class UseItem {
                 pl.itemTime.iconMeal2 = item.template.iconID;
                 break;
 
-            case 1532: //máy dò đồ
-                pl.itemTime.lastTimeUseKhoBauX2 = System.currentTimeMillis();
-                pl.itemTime.isUseKhoBauX2 = true;
+            case 1532: // rađa kho báu, đang dùng thì cộng thêm thời gian
+                if (pl.itemTime.isUseKhoBauX2) {
+                    pl.itemTime.lastTimeUseKhoBauX2 += ItemTime.TIME_MAY_DO2;
+                } else {
+                    pl.itemTime.lastTimeUseKhoBauX2 = System.currentTimeMillis();
+                    pl.itemTime.isUseKhoBauX2 = true;
+                }
 
 //            case 2109: //máy dò đồ
 //                pl.itemTime.lastTimeUseMayDo2 = System.currentTimeMillis();

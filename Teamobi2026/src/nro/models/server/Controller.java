@@ -262,6 +262,7 @@ public class Controller implements IMessageHandler {
                     break;
                 case -107:
                     if (player != null) {
+                        player.lastTimeXemDeTu = System.currentTimeMillis();
                         Service.gI().showInfoPet(player);
                     }
                     break;
@@ -833,6 +834,14 @@ public class Controller implements IMessageHandler {
                         short point = _msg.reader().readShort();
                         if (player != null && player.nPoint != null) {
                             player.nPoint.increasePoint(type, point);
+                        }
+                        break;
+                    case 18: // nâng tiềm năng đệ tử (client: Service.upPotential forPet)
+                        byte typePet = _msg.reader().readByte();
+                        short pointPet = _msg.reader().readShort();
+                        if (player != null && player.pet != null && player.pet.nPoint != null) {
+                            player.pet.nPoint.increasePoint(typePet, pointPet, player);
+                            Service.gI().showInfoPet(player);
                         }
                         break;
                     case 64:
