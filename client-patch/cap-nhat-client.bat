@@ -8,6 +8,9 @@ set "CLIENT=%~1"
 if "%CLIENT%"=="" set "CLIENT=%~d0\nr-long"
 set "DLL=%CLIENT%\GameAssembly.dll"
 set "RAREXE=C:\Program Files\WinRAR\Rar.exe"
+rem WinRAR cai cho khac: lay thu muc tu registry (exe64), roi toi PATH
+if not exist "%RAREXE%" for /f "tokens=2,*" %%A in ('reg query "HKLM\SOFTWARE\WinRAR" /v exe64 2^>nul ^| find "exe64"') do set "RAREXE=%%~dpBRar.exe"
+if not exist "%RAREXE%" for /f "delims=" %%P in ('where Rar.exe 2^>nul') do set "RAREXE=%%P"
 for %%I in ("%~dp0..") do set "REPO=%%~fI"
 rem File tai tren web nam trong repo (git bo qua): web\download\NRO-long.rar
 set "OUT=%REPO%\web\download\NRO-long.rar"

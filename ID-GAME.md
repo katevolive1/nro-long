@@ -1791,7 +1791,7 @@ Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử 
 | 1744 | CT Cađíc SSJ2 M | 5 | 3 | Mặc |
 | 1745 | CT Cađíc SSJ3 | 5 | 3 | Mặc |
 | 1746 | CT Cađíc SSJ Blue | 5 | 3 | Mặc |
-| 1747 | Hộp quà Black Friday | 27 | 3 | Không |
+| 1747 | Hộp cải trang Hit | 27 | 3 | Dùng |
 | 1748 | Pet tuần lộc | 27 | 3 | Không |
 | 1749 | Thú cưỡi Cây thông | 23 | 3 | Dùng |
 | 1750 | Pet Khủng Long ngok | 27 | 3 | Dùng |

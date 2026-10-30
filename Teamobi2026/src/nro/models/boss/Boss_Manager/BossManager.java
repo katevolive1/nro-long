@@ -17,6 +17,7 @@ import nro.models.boss.Boss_mini.RongNhi;
 import nro.models.boss.Boss_mini.SoiHecQuyn;
 import nro.models.boss.Boss_mini.Virut;
 import nro.models.boss.Broly.Broly;
+import nro.models.boss.Mabu_ngoai.MabuNgoai;
 import nro.models.boss.Cell.SieuBoHung;
 import nro.models.boss.Cell.XENCON1;
 import nro.models.boss.Cell.XENCON2;
@@ -170,6 +171,7 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.O_DO1, 5);
         this.createBoss(BossID.BABY, 2);
         this.createBoss(BossID.MAT_TROI, 5);
+        this.createBoss(BossID.MABU_NGOAI, 2);
 
     }
 
@@ -184,6 +186,8 @@ public class BossManager implements Runnable {
             return switch (bossID) {               
                 case BossID.BROLY ->
                     new Broly();
+                case BossID.MABU_NGOAI ->
+                    new MabuNgoai();
                 case BossID.TAP_SU_0 ->
                     new TAPSU0();
                 case BossID.TAP_SU_1 ->

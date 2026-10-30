@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026).
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 29/10/2026).
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -42,6 +42,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 - Ô Đô, Sói Hẹc Quyn, Virut: 100% 2 Hộp quà Goku Day (1591 + 1594).
 - Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày).
 - Rồng Nhí: 20% có rơi → 4% Trứng vàng rồng nhí (1821), 16% NR 5/6/7 sao.
+- Mabư ngoài map (`Mabu_ngoai/MabuNgoai.java`, 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
 
 ## 5. Golden Frieza + Death Beam 1–5
 - 100% Cải trang Fide vàng (629, +20% HP/KI/SĐ, HSD 20 ngày).
@@ -65,4 +66,4 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 - Nhân Bản: 100% Bình chứa Commeson (638, HSD 30).
 
 ## 8. Không rơi đồ
-Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h, Super Bu, Pocolo, Ông già Noel, Lân con, và mọi boss không override `reward()`.
+Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h, Super Bu, Pocolo, Ông già Noel, Lân con, và mọi boss không override `reward()`.

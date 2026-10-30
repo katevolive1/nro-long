@@ -655,6 +655,9 @@ public class UseItem {
                             case 1787: // capule kich hoat
                                 UseItem.gI().MapRiengTu(pl, item);
                                 break;
+                            case 1747: // hộp cải trang Hit
+                                openHopCaiTrangHit(pl, item);
+                                break;
                             case 1835: // vé hoàn thành nhiệm vụ
                                 if (TaskService.gI().skipTaskMain(pl)) {
                                     InventoryService.gI().subQuantityItemsBag(pl, item, 1);
@@ -1496,6 +1499,18 @@ public class UseItem {
             InventoryService.gI().sendItemBags(player);
         } else {
             Service.gI().sendThongBao(player, "Hành trang không đủ chỗ trống!");
+        }
+    }
+
+    private void openHopCaiTrangHit(Player pl, Item item) {
+        if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
+            Item it = RewardService.gI().createCaiTrangHit();
+            InventoryService.gI().addItemBag(pl, it);
+            InventoryService.gI().subQuantityItemsBag(pl, item, 1);
+            InventoryService.gI().sendItemBags(pl);
+            CombineService.gI().sendEffectOpenItem(pl, item.template.iconID, it.template.iconID);
+        } else {
+            Service.gI().sendThongBao(pl, "Hàng trang đã đầy");
         }
     }
 

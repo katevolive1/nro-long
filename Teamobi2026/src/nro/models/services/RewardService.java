@@ -1,5 +1,6 @@
 package nro.models.services;
 
+import nro.models.consts.ConstItem;
 import nro.models.item.Item;
 import nro.models.item.Item.ItemOption;
 import nro.models.player.Player;
@@ -34,6 +35,26 @@ public class RewardService {
     }
 
     //========================LUCKY ROUND========================
+    // Cải trang Hit chỉ số ngẫu nhiên, dùng chung cho vòng quay và hộp cải trang Hit (1747)
+    // 0.5% jackpot vĩnh viễn (sức đánh, chí mạng 28-30%), 5% vĩnh viễn, 94.5% có hạn 5-15 ngày
+    public Item createCaiTrangHit() {
+        int roll = Util.nextInt(1000);
+        boolean jackpot = roll < 5;
+        boolean vinhVien = roll < 55;
+        Item it = ItemService.gI().createNewItem((short) ConstItem.CAI_TRANG_HIT);
+        it.itemOptions.clear();
+        it.itemOptions.add(new ItemOption(50, jackpot ? Util.nextInt(28, 30) : Util.nextInt(15, 30))); // Sức đánh
+        it.itemOptions.add(new ItemOption(77, Util.nextInt(15, 30))); // HP
+        it.itemOptions.add(new ItemOption(103, Util.nextInt(15, 30))); // KI
+        it.itemOptions.add(new ItemOption(5, jackpot ? Util.nextInt(28, 30) : Util.nextInt(15, 30))); // Sức đánh chí mạng
+        it.itemOptions.add(new Item.ItemOption(154, 0)); // Không bán lại
+        if (!vinhVien) {
+            it.itemOptions.add(new Item.ItemOption(93, Util.nextInt(5, 15))); // HSD
+        }
+        it.quantity = 1;
+        return it;
+    }
+
     public List<Item> getListItemLuckyRound(Player player, int num, boolean vip) {
         List<Item> list = new ArrayList<>();
         for (int i = 0; i < num; i++) {
@@ -81,18 +102,7 @@ public class RewardService {
                     it.quantity = 1;
 
                 } else if (Util.isTrue(5, 100)) {
-                    it = ItemService.gI().createNewItem((short) 884);// hit
-                    it.itemOptions.clear();
-                    it.itemOptions.add(new ItemOption(50, Util.nextInt(20)));
-                    it.itemOptions.add(new ItemOption(77, Util.nextInt(20)));
-                    it.itemOptions.add(new ItemOption(103, Util.nextInt(20)));
-                    it.itemOptions.add(new ItemOption(5, Util.nextInt(30)));
-                    it.itemOptions.add(new Item.ItemOption(154, 0)); // Không bán lại
-                    // Xác suất 99% thêm option 93
-                    if (!Util.isTrue(1, 100)) {
-                        it.itemOptions.add(new Item.ItemOption(93, Util.nextInt(3, 15))); // HSD
-                    }
-                    it.quantity = 1;
+                    it = createCaiTrangHit();
                 } else if (Util.isTrue(5, 100)) {
                     it = ItemService.gI().createNewItem((short) 860); //mị nương
                     it.itemOptions.clear();
