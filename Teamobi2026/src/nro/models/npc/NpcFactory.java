@@ -1,5 +1,7 @@
 package nro.models.npc;
 
+import nro.models.npc_list.NgoKhong;
+import nro.models.npc_list.DuongTang;
 import nro.models.npc_list.Whis;
 import nro.models.npc_list.LinhCanh;
 import nro.models.npc_list.Bulma;
@@ -231,6 +233,10 @@ public class NpcFactory {
                     new XeNuocMia(mapId, status, cx, cy, tempId, avatar);
                 case ConstNpc.BARDOCK ->
                     new Bardock(mapId, status, cx, cy, tempId, avatar);
+                case ConstNpc.NGO_KHONG ->
+                    new NgoKhong(mapId, status, cx, cy, tempId, avatar);
+                case ConstNpc.DUONG_TANG ->
+                    new DuongTang(mapId, status, cx, cy, tempId, avatar);
                 default ->
                     new Npc(mapId, status, cx, cy, tempId, avatar) {
                         @Override
@@ -494,6 +500,12 @@ public class NpcFactory {
 //                            BuyBackService.gI().buyItem(player, pl);
 //                        }
                     }
+                    case ConstNpc.MENU_ADMIN_XAC_NHAN_BAO_TRI -> {
+                        if (select == 0 && player.isAdmin()) {
+                            System.out.println(player.name + " Đang bảo trì game!");
+                            Maintenance.gI().startSeconds(5);
+                        }
+                    }
                     case ConstNpc.MENU_ADMIN -> {
                         switch (select) {
                             case 0 -> {
@@ -507,9 +519,10 @@ public class NpcFactory {
                                 PetService.gI().createNormalPet(player, null);
                             }
                             case 2 -> {
+                                // Hỏi lại trước khi bảo trì để tránh bấm nhầm
                                 if (player.isAdmin()) {
-                                    System.out.println(player.name + " Đang bảo trì game!");
-                                    Maintenance.gI().startSeconds(5);
+                                    NpcService.gI().createMenuConMeo(player, ConstNpc.MENU_ADMIN_XAC_NHAN_BAO_TRI, -1,
+                                            "Bạn chắc chắn muốn bảo trì server?\nMọi người sẽ bị văng sau 5 giây.", "Đồng ý", "Hủy");
                                 }
                             }
                             case 3 ->

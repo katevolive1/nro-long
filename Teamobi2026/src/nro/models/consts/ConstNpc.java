@@ -205,6 +205,7 @@ public class ConstNpc {
     public static final int CONFIRM_LEAVE_CLAN = 510;
     public static final int CONFIRM_NHUONG_PC = 511;
     public static final int MENU_ADMIN = 512;
+    public static final int MENU_ADMIN_XAC_NHAN_BAO_TRI = 2008;
     public static final int BAN_PLAYER = 513;
     public static final int BUFF_PET = 514;
     public static final int CONFIRM_REMOVE_ALL_ITEM_LUCKY_ROUND = 515;

@@ -1727,7 +1727,7 @@ public class NPoint {
                 }
             }
             if (MapService.gI().isMapNguHanhSon(this.player.zone.map.mapId)) {
-                tiemNang *= 1;
+                tiemNang *= 2; // Ngũ Hành Sơn x2 (gốc x1)
             }
             if (MapService.gI().isMapCold(this.player.zone.map.mapId)) {
                 tiemNang *= 5;
@@ -1736,7 +1736,7 @@ public class NPoint {
                 //  tiemNang *= 10; //x x3 tiềm năng toàn server
             }
             if (MapService.gI().isMapBanDoKhoBau(this.player.zone.map.mapId)) {
-                tiemNang *= 1.5;
+                tiemNang *= 3; // Bản đồ kho báu x3 (gốc x1,5)
             }
             if (this.player.cFlag != 0) {
                 if (this.player.cFlag == 8) {

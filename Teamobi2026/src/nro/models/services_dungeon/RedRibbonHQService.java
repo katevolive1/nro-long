@@ -35,6 +35,16 @@ public class RedRibbonHQService {
         }
     }
 
+    // Mỗi người 1 lượt doanh trại/ngày (lastTimeJoinDT, cột player.doanhtrai), kể cả đổi hoặc tạo bang mới.
+    // Được vào lại trại đang mở của bang nếu đã vào chính trại đó (bị văng, chết...).
+    public static boolean daVaoHomNay(Player pl) {
+        if (pl.lastTimeJoinDT <= 0 || Util.isAfterMidnight(pl.lastTimeJoinDT)) {
+            return false;
+        }
+        RedRibbonHQ dt = pl.clan != null ? pl.clan.doanhTrai : null;
+        return dt == null || pl.lastTimeJoinDT < dt.getLastTimeOpen();
+    }
+
     public void addMapDoanhTrai(int id, Zone zone) {
         this.doanhTrais.get(id).getZones().add(zone);
     }
@@ -48,7 +58,11 @@ public class RedRibbonHQService {
             Service.gI().sendThongBao(pl, "Vui lòng chờ đến ngày mai");
             return;
         }
-        if (pl.clanMember.getNumDateFromJoinTimeToToday() < 1) {
+        if (pl.clanMember.getNumDateFromJoinTimeToToday() < RedRibbonHQ.MIN_DAYS_IN_CLAN) {
+            return;
+        }
+        if (daVaoHomNay(pl)) {
+            Service.gI().sendThongBao(pl, "Hôm nay bạn đã tham gia doanh trại rồi, hẹn gặp bạn vào ngày mai");
             return;
         }
         if (pl.clan.doanhTrai != null) {

@@ -21,15 +21,18 @@ import nro.models.map.service.ItemMapService;
 import nro.models.services.ItemTimeService;
 import nro.models.map.service.MapService;
 import nro.models.services.Service;
+import nro.models.services_dungeon.RedRibbonHQService;
 import nro.models.utils.Util;
 
 @Data
 public class RedRibbonHQ implements Runnable {
 
     //bang hội đủ số người mới đc mở
-    public static final int N_PLAYER_CLAN = 5;
-    //số người đứng cùng khu
-    public static final int N_PLAYER_MAP = 1;
+    public static final int N_PLAYER_CLAN = 1; // đang thử nghiệm (gốc 5)
+    //số đồng đội cùng bang đứng gần Lính canh (không tính người mở)
+    public static final int N_PLAYER_MAP = 0; // đang thử nghiệm (gốc 1)
+    //số ngày tối thiểu đã ở trong bang (0 = không cần; gốc 1). Giới hạn 1 lượt/ngày tính theo người chơi nên đổi/tạo bang mới không vào lại được
+    public static final int MIN_DAYS_IN_CLAN = 0;
     public static final int AVAILABLE = 50;
     public static final int TIME_DOANH_TRAI = 1800000;
     public static final int TIME_PICK_DOANH_TRAI = 300000;
@@ -105,7 +108,8 @@ public class RedRibbonHQ implements Runnable {
             }
         }
         for (Player pl : plJoinDT) {
-            if (pl.clanMember.getNumDateFromJoinTimeToToday() < 1 || pl.isDie()) {
+            if (pl.clanMember.getNumDateFromJoinTimeToToday() < MIN_DAYS_IN_CLAN || pl.isDie()
+                    || RedRibbonHQService.daVaoHomNay(pl)) {
                 continue;
             }
             pl.lastTimeJoinDT = System.currentTimeMillis();

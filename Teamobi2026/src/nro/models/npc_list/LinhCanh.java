@@ -11,7 +11,7 @@ import nro.models.utils.TimeUtil;
 import nro.models.utils.Util;
 
 public class LinhCanh extends Npc {
-
+    //Lính canh
     public LinhCanh(int mapId, int status, int cx, int cy, int tempId, int avartar) {
         super(mapId, status, cx, cy, tempId, avartar);
     }
@@ -30,12 +30,17 @@ public class LinhCanh extends Npc {
             }
             if (player.clan.getMembers().size() < RedRibbonHQ.N_PLAYER_CLAN) {
                 NpcService.gI().createTutorial(player, tempId, this.avartar,
-                        "Bang hội phải có ít nhất 5 thành viên mới có thể tham gia");
+                        "Bang hội phải có ít nhất " + RedRibbonHQ.N_PLAYER_CLAN + " thành viên mới có thể tham gia");
                 return;
             }
-            if (player.clanMember.getNumDateFromJoinTimeToToday() < 1) {
+            if (player.clanMember.getNumDateFromJoinTimeToToday() < RedRibbonHQ.MIN_DAYS_IN_CLAN) {
                 NpcService.gI().createTutorial(player, tempId, this.avartar,
-                        "Gia nhập bang hội trên 1 ngày mới được tham gia");
+                        "Gia nhập bang hội trên " + RedRibbonHQ.MIN_DAYS_IN_CLAN + " ngày mới được tham gia");
+                return;
+            }
+            if (RedRibbonHQService.daVaoHomNay(player)) {
+                NpcService.gI().createTutorial(player, tempId, this.avartar,
+                        "Hôm nay bạn đã tham gia doanh trại rồi, hẹn gặp bạn vào ngày mai");
                 return;
             }
             if (player.clan.doanhTrai != null) {

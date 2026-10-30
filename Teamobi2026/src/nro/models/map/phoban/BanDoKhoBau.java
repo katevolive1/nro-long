@@ -23,8 +23,9 @@ import nro.models.utils.TimeUtil;
 
 @Data
 public class BanDoKhoBau implements Runnable {
+    // Bản đồ kho báu
 
-    public static final long POWER_CAN_GO_TO_DBKB = 2000000000;
+    public static final long POWER_CAN_GO_TO_DBKB = 200000000; // 200 triệu (gốc 2 tỷ)
     public static final int AVAILABLE = 50;
     public static final int TIME_BAN_DO_KHO_BAU = 1800000;
     public int id;
