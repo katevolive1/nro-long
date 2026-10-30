@@ -24,6 +24,7 @@
 - **Ghi chú dự án ghi vào file trong repo này (CLAUDE.md, `client-patch/CLIENT-UNITY.md`…), không ghi vào memory** vì user làm ở nhiều máy, memory không theo git.
 - Bản sao của server int `nro` (đã xóa) với HP/KI kiểu `long`. Client duy nhất: `D:\nr-long` (đã đổi `ModFunc.isReadInt` = false trong `GameAssembly.dll`, offset `0x3E6298` và `0x59D538`). Cập nhật client: `client-patch\cap-nhat-client.bat`.
 - **Client Unity**: trước khi dò hay sửa client, đọc `client-patch/CLIENT-UNITY.md` (offset, hàm đã dò, công cụ `tools/xref.cs`). Dò được gì mới thì ghi thêm vào file đó.
+- **Tính năng có sẵn thì nói trước, đừng làm thừa**: trước khi thêm tính năng (client mod hoặc server), kiểm tra mod/server đã có cách làm chưa (phím tắt, click, lệnh chat, menu mod; xem mục "Tính năng mod có sẵn" trong `client-patch/CLIENT-UNITY.md`, lệnh chat trong `ID-GAME.md`). Có rồi thì báo user ngay và hỏi có cần làm nữa không. Ví dụ: đã làm phím P dừng AutoItem trong khi mod có sẵn click chuột để dừng, sau phải gỡ.
 - `NPoint.hp/hpMax/hpg/mp/mpMax/mpg`, `MobPoint.hp/maxHp`, `BossData.hp` là long. Trần HP/KI: `NPoint.MAX_HP_MP` (100 nghìn tỷ). `dame`/`def` vẫn là int.
 - Client đọc bằng long (`readIntToLongDQT`) ở các gói sau. Khi thêm/sửa gói này phải dùng `writeLong` đúng vị trí:
   - `-30` sub 4 (hp, mp), sub 5 (hp), sub 6 (mp), sub 7 / `readCharInfo` (hp, hpMax sau tên), sub 9 (hp, hpMax), sub 14 (hp, hpMax), sub 15 (hp, mp).

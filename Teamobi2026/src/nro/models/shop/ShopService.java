@@ -1325,6 +1325,9 @@ public class ShopService {
         } else {
             itemoptions.add(new ItemOption(73, (short) 0));
         }
+        if (item.template.id >= 650 && item.template.id <= 662) {
+            itemoptions.add(new ItemOption(21, 60)); // yêu cầu 60 tỷ sức mạnh
+        }
         itemoptions.add(new ItemOption(30, (short) 0));
         item.itemOptions.clear();
         item.itemOptions.addAll(itemoptions);

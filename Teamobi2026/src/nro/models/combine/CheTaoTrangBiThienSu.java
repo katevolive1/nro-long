@@ -80,7 +80,7 @@ public class CheTaoTrangBiThienSu {
 
                         if (tilemacdinh > 0) {
                             for (byte w = 0; w < itemTS.itemOptions.size(); w++) {
-                                if (itemTS.itemOptions.get(w).optionTemplate.id != 0 && itemTS.itemOptions.get(w).optionTemplate.id != 20) {
+                                if (itemTS.itemOptions.get(w).optionTemplate.id != 20 && itemTS.itemOptions.get(w).optionTemplate.id != 21 && itemTS.itemOptions.get(w).optionTemplate.id != 30) {
                                     itemTS.itemOptions.get(w).param += (itemTS.itemOptions.get(w).param * tilemacdinh / 100);
                                 }
                             }

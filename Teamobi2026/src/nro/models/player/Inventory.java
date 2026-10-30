@@ -16,10 +16,10 @@ import nro.models.task.BadgesTaskService;
  *
  */
 public class Inventory {
-
+    // Kho 
     public static final long LIMIT_GOLD = 200_000_000_000L;
-    public static final int MAX_ITEMS_BAG = 80;
-    public static final int MAX_ITEMS_BOX = 100;
+    public static final int MAX_ITEMS_BAG = 125; // gốc 80, client đọc số ô không dấu (tối đa 255)
+    public static final int MAX_ITEMS_BOX = 130; // gốc 100, cần patch-o-ruong.ps1 (gói đăng nhập client đọc có dấu)
     public Item trainArmor;
     public List<String> giftCode;
     public List<Item> itemsBody;

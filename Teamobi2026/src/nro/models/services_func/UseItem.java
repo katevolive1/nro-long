@@ -72,6 +72,7 @@ public class UseItem {
 
     private static final byte DO_USE_ITEM = 0;
     private static final byte DO_THROW_ITEM = 1;
+    private static final byte WHERE_AUTO_ITEM = 9; // client mod AutoItem gửi where = 9 (patch-auto-item.ps1)
     private static final byte ACCEPT_THROW_ITEM = 2;
     private static final byte ACCEPT_USE_ITEM = 3;
 
@@ -97,8 +98,8 @@ public class UseItem {
         TransactionService.gI().cancelTrade(player);
         try {
             int type = msg.reader().readByte();
-            int index = msg.reader().readByte();
-            if (index == -1) {
+            int index = msg.reader().readByte() & 0xFF; // không dấu: rương > 128 ô
+            if (index == 0xFF) {
                 return;
             }
             switch (type) {
@@ -203,7 +204,14 @@ public class UseItem {
                         } else {
                             int iditem = _msg.reader().readShort();
                             Item item = finditem(player, iditem);
-                            UseItem.gI().useItem(player, item, index);
+                            if (item == null) {
+                                return;
+                            }
+                            // where = 9: AutoItem của client mod (patch-auto-item.ps1), giữ lại cái cuối cùng
+                            if (where == WHERE_AUTO_ITEM && item.quantity <= 1) {
+                                return;
+                            }
+                            UseItem.gI().useItem(player, item, player.inventory.itemsBag.indexOf(item));
                         }
                     }
                 }
@@ -2382,21 +2390,13 @@ public class UseItem {
 
     public void NoelItemBox(Player pl, Item item) {
         if (InventoryService.gI().getCountEmptyBag(pl) > 0) {
-            int spl = Util.nextInt(441, 445);
             int dnc = Util.nextInt(381, 384);
-            int nr = Util.nextInt(17, 20);
             int nrBang = Util.nextInt(925, 931);
             int mts = Util.nextInt(1066, 1070);
 
-            if (Util.isTrue(5, 90)) {
-                int ruby = Util.nextInt(10, 20);
-                pl.inventory.gem += ruby;
-                PlayerService.gI().sendInfoHpMpMoney(pl);
-                InventoryService.gI().subQuantityItemsBag(pl, item, 1);
-                InventoryService.gI().sendItemBags(pl);
-                Service.gI().sendThongBao(pl, "Bạn nhận được " + ruby + "  Ngọc");
-            } else {
-                int[] temp = {spl, dnc, nr, nrBang, mts, 533, 380};
+            {
+                // Mỗi nhóm 1/3 (sửa 31/10/2026: bỏ ngọc xanh, sao pha lê, ngọc rồng 4-7 sao, kẹo giáng sinh, capsule kì bí)
+                int[] temp = {dnc, nrBang, mts};
                 byte index = (byte) Util.nextInt(0, temp.length - 1);
                 short[] icon = new short[2];
                 icon[0] = item.template.iconID;
@@ -2412,8 +2412,8 @@ public class UseItem {
                     it.quantity = Util.nextInt(1, 5);
                 } else if (temp[index] >= 381 && temp[index] <= 384) { // da nang cap
                     it.quantity = Util.nextInt(1, 5);
-                } else if (temp[index] >= 1066 && temp[index] <= 1070) { // da nang cap
-                    it.quantity = Util.nextInt(1, 5);
+                } else if (temp[index] >= 1066 && temp[index] <= 1070) { // mảnh thiên sứ
+                    it.quantity = Util.nextInt(50, 100);
 
                     /*
                    # Item Cải Trang

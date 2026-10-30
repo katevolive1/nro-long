@@ -1129,7 +1129,7 @@ public class ItemService {
         if (nhan.contains(itemId)) {
             dots.itemOptions.add(new ItemOption(14, Util.highlightsItem(gender == 1, new Random().nextInt(3) + 18))); // nhẫn 18-20%
         }
-        dots.itemOptions.add(new ItemOption(21, 30));
+        dots.itemOptions.add(new ItemOption(21, 60));
         dots.itemOptions.add(new ItemOption(30, 1));
         return dots;
     }

@@ -49,3 +49,45 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 - Build: có (`Mob.getTiemNangForPlayer`).
 - Client: không.
 - SQL: không.
+
+### 6. Thiên Sứ và Hủy Diệt yêu cầu 60 tỷ; chế tạo Thiên Sứ nhân đôi cả sức đánh
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`ItemService.DoThienSu` 21:60, `ShopService.buyItemHD` thêm 21:60 cho 650–662, `CheTaoTrangBiThienSu` nhân đôi mọi option trừ 20, 21, 30).
+- Client: không.
+- SQL: không.
+
+### 7. Auto Item: 0,1 giây mỗi lần, phím P để dừng
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: không.
+- Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (`patch-auto-item.ps1`: `ModFunc.Update` gọi `UseItemAuto` mỗi 100ms thay vì 1 giây, phím P tắt auto, thông báo thêm item đổi thành "Đã thêm X (P: dừng)"; sửa cả `GameAssembly.dll` và `global-metadata.dat`).
+- SQL: không.
+
+### 8. Hành trang tối đa 125 ô (gốc 80), rương 130 ô (gốc 100)
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`Inventory.MAX_ITEMS_BAG/BOX`, `UseItem.getItem` đọc số ô không dấu).
+- Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-o-ruong.ps1`). Client chưa patch mà rương > 127 ô thì lỗi lúc vào game, nên người chơi phải tải client mới trước khi mở rương quá 127 ô.
+- SQL: không.
+
+### 9. AutoItem 50ms, dùng theo mã vật phẩm, còn 1 cái thì dừng
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`UseItem.doItem`: gói dùng item với index -1 tìm món theo mã và dùng đúng ô của nó; `where = 9` (AutoItem) mà món còn <= 1 cái thì không dùng).
+- Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (`patch-auto-item.ps1` bản mới, nâng cấp được từ bản 100ms của mục 7).
+- SQL: không.
+
+### 10. Ctrl+V dán chữ vào ô nhập (khung chat...)
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: không.
+- Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-dan-chu.ps1`).
+- SQL: không.
+
+### 11. Hộp quà giáng sinh (648): còn 3 nhóm quà, mảnh Thiên Sứ 50–100
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`UseItem.NoelItemBox`).
+- Client: không.
+- SQL: không.
+
+### 12. AutoItem: bỏ phím P, gợi ý "(click:dừng)"
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: không.
+- Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (`patch-auto-item.ps1` bản mới: trả phím P về như cũ vì mod có sẵn click chuột để dừng; câu khi thêm item thành "Đã thêm X (click:dừng)").
+- SQL: không.

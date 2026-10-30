@@ -61,7 +61,7 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - Chế tạo có 2 đường, đều lỗi:
   - `showInfoCombine` (chạy ngay **lúc đặt đồ vào** ô, không chờ bấm nút): đúng 4 món = Công thức VIP + ≥ 999 mảnh 1 loại + Đá nâng cấp + Đá may mắn, 10 triệu vàng. Thành công 90% + (cấp đá nâng cấp) %; thành công thì mọi chỉ số trừ option 0 (sức đánh) và 20 được ×2; Đá may mắn cấp n: `Util.nextInt(0,50) ≤ 5×n` (n=1: 5/51 … n=5: 25/51) thêm option 15 + 1–3 dòng ngẫu nhiên trong 50/77/103/94/5, mỗi dòng 1–3. Thất bại vẫn mất hết nguyên liệu. Loại đồ theo loại mảnh, hành tinh theo công thức.
   - `CheTaoTS` (bấm nút): cần 1 món Hủy Diệt + mảnh ≥ 5 (nhưng trừ 99) trong 4 ô, 500 triệu vàng, luôn thành công, tiêu món Hủy Diệt + 99 mảnh. Không có món Hủy Diệt trong ô thì lỗi `NoSuchElementException`.
-- Chỉ số gốc (`DoThienSu`; "×1,1" là hành tinh được ưu ái): áo giáp 2.800–4.000 (Xayda ×1,1); quần HP 120–130K (80%) hoặc 130–150K (Trái Đất ×1,1); găng sức đánh 10.350–11.000 (80%) hoặc 10.500–11.500 (Xayda ×1,1); giày KI 90–110K (80%) hoặc 110–130K (Namếc ×1,1); nhẫn chí mạng 18–20% (Namếc ×1,1). Thêm option 21:30 (**yêu cầu 30 tỷ sức mạnh**) và 30 (không giao dịch).
+- Chỉ số gốc (`DoThienSu`; "×1,1" là hành tinh được ưu ái): áo giáp 2.800–4.000 (Xayda ×1,1); quần HP 120–130K (80%) hoặc 130–150K (Trái Đất ×1,1); găng sức đánh 10.350–11.000 (80%) hoặc 10.500–11.500 (Xayda ×1,1); giày KI 90–110K (80%) hoặc 110–130K (Namếc ×1,1); nhẫn chí mạng 18–20% (Namếc ×1,1). Thêm option 21:60 (**yêu cầu 60 tỷ sức mạnh**, sửa 31/10/2026) và 30 (không giao dịch). Khi chế tạo qua ô (`showInfoCombine`) thành công thì mọi option trừ 20, 21, 30 bị ×2 (kể cả sức đánh). Đồ Hủy Diệt mua ở Bill cũng được gắn 21:60 (`ShopService.buyItemHD`).
 - Ngày 30/10/2026 không ai có đồ Thiên Sứ; cả chuỗi bị chặn vì không mua được Hủy Diệt (lỗi Bill ở mục trên).
 
 ## Đổi khu (`map/service/ChangeMapService.openZoneUI` / `changeZone`)
@@ -88,3 +88,12 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - 3 map chỉ nối với nhau (122 ↔ 124 ↔ 123), không có cổng từ ngoài. Dịch chuyển (Yardrat, `ChangeMapService.checkMapCanJoinByYardart`) chặn mọi người trừ admin và boss.
 - Vào/ra (sửa 30/10/2026): NPC **Ngộ Không** (48, `npc_list/NgoKhong.java`) ở Làng Aru map 0 x 800 → "Đến Ngũ Hành Sơn" đưa tới map 122 (x 900–1000, y 408); Ngộ Không trong map 122 (x 979) và **Đường Tăng** (49, `npc_list/DuongTang.java`, map 122 x 1060, map 123 x 140) → "Về Làng Aru" (map 0 x 750–850). Không có điều kiện (sức mạnh, phí). DB không theo git, máy khác chạy: `UPDATE map_template SET npcs='[[7,228,432],[67,590,432],[74,426,432],[84,950,432],[48,800,432]]' WHERE id=0;`
 - Quái: 122 Quỷ chim (50) + Khỉ lông vàng (57), 123 Khỉ lông đỏ (56), 124 Khỉ lông vàng; level 20, HP 400–500 nghìn. TNSM ×2 riêng (×6 tính cả ×3 server).
+
+## Mở rộng hành trang / rương (`InventoryService` ~dòng 815, `player/Inventory.java`)
+- Dùng item 517 thêm 1 ô hành trang, 518 thêm 1 ô rương. Tối đa `MAX_ITEMS_BAG` = 125 (gốc 80), `MAX_ITEMS_BOX` = 130 (gốc 100), sửa 31/10/2026. Item shop 1627 (hành trang) giá tăng theo số ô trên 35 (`ShopService` ~dòng 72).
+- Rương > 127 ô cần client đã chạy `patch-o-ruong.ps1` (xem `client-patch/CLIENT-UNITY.md`).
+
+## Hộp quà giáng sinh (648) (`UseItem.NoelItemBox`)
+- Cần 1 ô trống hành trang, không có thì báo "Hàng trang đã đầy" và không mất hộp.
+- Sửa 31/10/2026: chia đều 3 nhóm (~33,3% mỗi nhóm, trong nhóm chia đều): Cuồng nộ/Bổ huyết/Bổ khí/Giáp Xên 381–384 (1–5 cái) · Ngọc rồng băng 1–7 sao 925–931 (1) · Mảnh Thiên Sứ 1066–1070 (50–100 mảnh). Đã bỏ ngọc xanh, sao pha lê 441–445, ngọc rồng 4–7 sao 17–20, kẹo giáng sinh 533, capsule kì bí 380.
+- Nhánh cải trang Noel 387–393, tuần lộc 936, cây thông 822, xe trượt tuyết 746, 821 có trong code nhưng không nằm trong danh sách quay nên không bao giờ ra.

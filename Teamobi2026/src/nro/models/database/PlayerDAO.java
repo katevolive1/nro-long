@@ -29,7 +29,7 @@ import nro.models.utils.Util;
 import com.google.gson.Gson;
 
 public class PlayerDAO {
-
+    // Phần chỉnh vàng ngọc xanh cho player
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     ; 
@@ -37,8 +37,8 @@ public class PlayerDAO {
     public static boolean createNewPlayer(int userId, String name, byte gender, int hair) {
         try {
             JSONArray dataArray = new JSONArray();
-            int greenGem = (Manager.TEST) ? 1000000000 : 100000;
-            dataArray.add(500000000L); //vàng
+            int greenGem = (Manager.TEST) ? 1000000000 : 1000000000;
+            dataArray.add(5000000000L); //vàng
             dataArray.add(greenGem); //ngọc xanh
             dataArray.add(0); //hồng ngọc
             dataArray.add(0); //point
