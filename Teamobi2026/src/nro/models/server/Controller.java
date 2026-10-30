@@ -282,12 +282,15 @@ public class Controller implements IMessageHandler {
                         }
                         byte typeBuy = _msg.reader().readByte();
                         int tempId = _msg.reader().readShort();
-//                        int quantity = 0;
-//                        try {
-//                            quantity = _msg.reader().readShort();
-//                        } catch (Exception e) {
-//                        }
-                        ShopService.gI().takeItem(player, typeBuy, tempId);
+                        // Client chỉ ghi số lượng khi > 1 (Service.buyItem); patch-mua-nhanh.ps1 cho client gửi 1 gói thay vì lặp
+                        int quantity = 1;
+                        try {
+                            if (_msg.reader().available() >= 2) {
+                                quantity = _msg.reader().readShort();
+                            }
+                        } catch (Exception e) {
+                        }
+                        ShopService.gI().takeItem(player, typeBuy, tempId, quantity);
                     }
                     break;
                 case 7: //sell item

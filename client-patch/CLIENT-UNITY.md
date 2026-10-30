@@ -6,7 +6,7 @@
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
 | `D:\nr-dump\goc` | chỉ giữ `GameAssembly.dll` + `global-metadata.dat` gốc của client int (bản int đã xóa 29/10/2026); chép đè vào client rồi chạy lại mọi script patch là ra bản long | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) + phím Q bay tới boss (`patch-phim-q.ps1`) + giữ cửa hàng khi server mở form nhập (`patch-giu-cua-hang.ps1`) | `1760598AF3BC5F074DDC905F1B1FBF6F` |
+| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) + phím Q bay tới boss (`patch-phim-q.ps1`) + giữ cửa hàng khi server mở form nhập (`patch-giu-cua-hang.ps1`) + mua số lượng 1 gói (`patch-mua-nhanh.ps1`) | `3D784B7207D16EE718D70F0326255857` |
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
@@ -93,6 +93,11 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 - Phím đang dùng: a c d e f g h j k l m n q s t u w x. Còn trống: b i o p r v.
 - Q: mã đặt ở thân `Game2.ModFunc.UpdateKey` (RVA `0x59BDA0`, 0x600 byte; chỉ `Game2.GameScr.updateKey` gọi nên không chạy) dài 372 byte. Duyệt `GameScr.vCharInMap` (static `+0F0h`), lọc giống `AutoFocusBoss` (`0x3D4280`: `charID` +90h < 0, `cTypePk` +295h == 5, `cName` +190h không bắt đầu bằng "Đ"), chọn |dx|+|dy| nhỏ nhất (`cx` +6Ch, `cy` +70h) → `Char.FocusManualTo` `0x2ADDE0` → `ModFunc.MoveTo(x, y)` `0x3DB5D0` (đặt vị trí + `Service.charMove`). Mã sinh bằng Iced Assembler; lệnh tương đối RIP dựng bằng `Instruction.Create(code, reg, ref new MemoryOperand(Register.RIP, đích))` vì `AssemblerRegisters` không có `rip`.
 - Thân hàm Game2 không gọi tới là chỗ trống lớn khi cave cuối section đã hết; kiểm tra không có lệnh `call`/`jmp` nào từ Game1 trỏ vào trước khi dùng. Thân `Game2.ModFunc.UpdateKey` đã dùng: `0x59BDA0`–`0x59BF14` (Q), `0x59BF20`–`0x59BF51`, `0x59BF60`–`0x59BF96` (giữ cửa hàng); còn trống tới `0x59C3A0`.
+
+### Mua số lượng gửi 1 gói (`patch-mua-nhanh.ps1`, chỉ Game1)
+- `Panel.onChatFromMe` (`0x427690`) → `ModFunc.AutoBuyItem` (`0x3D3E10`, bản 2 `0x3D3F20` type 3) tạo thread `<AutoBuyItem>b__0` (`0x3F9C00`): gốc lặp `count` (`[rbx+18h]`) lần `Service.buyItem(type [+10h], id [+14h], 0)` + `Thread.Sleep(200)`, xong báo "Đã mua xong N". `Service.buyItem` (`0x4886D0`, gói 6: sbyte type, short id, short số lượng nếu > 1).
+- Patch `0x3F9C60`–`0x3F9C8B`: `mov r9d,[rbx+18h]`, gọi `buyItem` 1 lần rồi `jmp 0x3F9C8B`. Server: `Controller` case 6 đọc short số lượng nếu còn ≥ 2 byte → `ShopService.takeItem(..., quantity)` → `buyItemQuantity` (tối đa 1000/lần; món thường trừ tiền N lần, gửi hành trang 1 lần; tab đặc biệt gọi `buyItem` N lần).
+- Vòng lặp khác của mod có `Thread.Sleep` (chưa sửa): `ModFunc.BanVang` (dùng thỏi vàng, 500ms), `GameScr.RemoveAllItem` (300ms), `ModFunc.CollectAllThuongDe` (openMenu/confirm/buy, 2 giây), `AutoPhaLe`, `CrackBallScr.AutoCrackBall`, `DoAutoNoitai`, `DoAutoIncreasePoint`, `DoFilter`. `Thread.Sleep` = `0x94BAF0`.
 
 ### Giữ khung cửa hàng khi server mở form nhập (`patch-giu-cua-hang.ps1`, chỉ Game1)
 - Mua số lượng: client tự mở `Panel.OpenShopBuyQuantityInput` (`0x40AF..`, chuỗi "Nhập số lượng mua"), ô nhập là `chatTField` nằm trong khung, nhập xong `Panel.onChatFromMe` gửi mua → khung không đóng.

@@ -460,6 +460,10 @@ public class ShopService {
     }
 
     public void takeItem(Player player, byte type, int tempId) {
+        takeItem(player, type, tempId, 1);
+    }
+
+    public void takeItem(Player player, byte type, int tempId, int quantity) {
         String tagName = player.idMark.getTagNameShop();
         if (tagName == null || tagName.length() <= 0) {
             return;
@@ -489,10 +493,55 @@ public class ShopService {
             Service.gI().Send_Caitrang(player);
             Service.gI().point(player);
             Service.gI().sendThongBao(player, "Đổi kiểu tóc thành công");
+        } else if (quantity > 1) {
+            buyItemQuantity(player, tempId, quantity);
         } else {
             buyItem(player, tempId);
         }
         Service.gI().sendMoney(player);
+    }
+
+    // Mua số lượng trong 1 gói: món thường trừ tiền và thêm vào hành trang N lần, gửi hành trang và báo 1 lần.
+    // Món ở tab/shop đặc biệt (phiếu giảm giá, danh hiệu, kỹ năng, điểm sự kiện, Capsule bang, luyện tập...) gọi buyItem N lần như cũ.
+    private void buyItemQuantity(Player player, int itemTempId, int quantity) {
+        quantity = Math.min(quantity, 1000);
+        Shop shop = player.idMark.getShopOpen();
+        ItemShop is = shop.getItemShop(itemTempId);
+        if (is == null) {
+            Service.gI().sendThongBao(player, "Không thể thực hiện");
+            return;
+        }
+        int tab = is.tabShop.id;
+        boolean dacBiet = tab == 30 || tab == 44 || tab == 45 || tab == 49 || tab == 59 || tab == 60 || tab == 61 || tab == 62
+                || shop.typeShop == ShopService.KINANG_SHOP
+                || itemTempId == 711 || itemTempId == 1523 || itemTempId == 1524 || itemTempId == 521
+                || (shop.typeShop != ShopService.NORMAL_SHOP && shop.typeShop != ShopService.SPEC_SHOP);
+        if (dacBiet) {
+            for (int i = 0; i < quantity; i++) {
+                buyItem(player, itemTempId);
+            }
+            return;
+        }
+        int[][] listDauThan = {{13, 293}, {60, 294}, {61, 295}, {62, 296}, {63, 297}, {64, 298}, {65, 299}, {352, 596}, {523, 597}};
+        int bought = 0;
+        for (int i = 0; i < quantity; i++) {
+            if (InventoryService.gI().getCountEmptyBag(player) == 0) {
+                Service.gI().sendThongBao(player, "Hành trang đã đầy");
+                break;
+            }
+            boolean paid = shop.typeShop == ShopService.NORMAL_SHOP ? subMoneyByItemShop(player, is) : subIemByItemShop(player, is);
+            if (!paid) {
+                break;
+            }
+            Item item = ItemService.gI().createItemFromItemShop(is);
+            item = buyMagicPean(player, listDauThan, item);
+            InventoryService.gI().addItemBag(player, item);
+            bought++;
+        }
+        if (bought > 0) {
+            InventoryService.gI().sendItemBags(player);
+            Service.gI().sendThongBao(player, "Mua thành công x" + bought + " " + is.temp.name);
+        }
     }
 
     private boolean subMoneyByItemShop(Player player, ItemShop is) {
