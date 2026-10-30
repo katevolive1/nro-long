@@ -6,7 +6,7 @@
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
 | `D:\nr-dump\goc` | chỉ giữ `GameAssembly.dll` + `global-metadata.dat` gốc của client int (bản int đã xóa 29/10/2026); chép đè vào client rồi chạy lại mọi script patch là ra bản long | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) | `C574914AE2B0AC8895169C2212B440BF` |
+| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) + phím Q bay tới boss (`patch-phim-q.ps1`) | `0B559DE8AA336248709D5E83F75C3896` |
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
@@ -76,9 +76,17 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 | Hiện ID Item/NPC | static `isShowID` (+0EEh) | chỉ ghi `showid`, không đọc | bật (patch) |
 | Hiện Hành Trang Lưới | static `isInventory` (+0E8h) | `LoadGame` luôn gán 1 | bật |
 | Giảm Dung Lượng | static `GiamDungLuong` (+0ECh) | `background`, `== 1` | tắt |
-| Gõ Tiếng Việt | static `isVietnamese` (+17h) | không | bật (patch) |
+| Gõ Tiếng Việt | static `isVietnamese` (+17h) | không | tắt (gốc; bản patch cũ bật, nay đổi lại) |
+| Kẻ đường tới BOSS | `lineToBoss` (+0C0h), vẽ trong `ModFunc.Paint` `0x3E1489` | không | bật (patch, chỉ Game1) |
+| Tự focus boss | `focusBoss` (+0C1h), dùng trong `ModFunc.Update` | không | tắt |
 
-`Rms.loadRMSInt` trả `-1` khi chưa có. Field instance nằm trên `ModFunc` (đặt trong `.ctor` `0x3E8FB0`), static đặt trong `.cctor` `0x3E76C0`, đọc RMS trong `LoadGame` `0x3DA260`. Game2 = Game1 + `0x1B72A0` (riêng `ModFunc`). Script: `patch-mac-dinh.ps1` (cctor: `+17h`=1 và ghi thêm `+0EEh`=1 vào chỗ 2 lệnh nạp lại rcx; LoadGame `cmp eax,1/sete` → `cmp eax,0/setne`; ctor `mov [rdi+0D0h],1` → jmp cave `0xA52D90`/`0xA52DB0` ghi thêm `+0D2h`=1). Sao lưu: `*.truoc-mac-dinh`.
+`Rms.loadRMSInt` trả `-1` khi chưa có. Field instance nằm trên `ModFunc` (đặt trong `.ctor` `0x3E8FB0`), static đặt trong `.cctor` `0x3E76C0`, đọc RMS trong `LoadGame` `0x3DA260`. Game2 = Game1 + `0x1B72A0` (riêng `ModFunc`). Script: `patch-mac-dinh.ps1` (cctor: `+17h`=1 và ghi thêm `+0EEh`=1 vào chỗ 2 lệnh nạp lại rcx; LoadGame `cmp eax,1/sete` → `cmp eax,0/setne`; ctor `mov [rdi+0D0h],1` → jmp cave `0xA52D90`/`0xA52DB0` ghi thêm `+0D2h`=1, cave Game1 ghi thêm `+0C0h`=1 nên dài 26 byte tới `0xA52DAA`). Sao lưu: `*.truoc-mac-dinh`.
+
+### Phím tắt mod (`ModFunc.UpdateKey`, Game1 `0x3E4B00`) và phím Q (`patch-phim-q.ps1`, chỉ Game1)
+- `switch (key - 'a')`, 24 mục a..x, bảng nhảy RVA `0x3E5098` (mỗi mục 4 byte = RVA đích), mục trống trỏ `0x3E5083` (trả false). Đoạn thoát chung trả true: `0x3E4FD3` (`mov al,1` rồi epilogue). Lúc nhảy vào mục: `rbx` = ModFunc, khung `push rdi; sub rsp,30h` (dùng được `[rsp+20h..2Fh]` và ô home `[rsp+48h..5Fh]`).
+- Phím đang dùng: a c d e f g h j k l m n q s t u w x. Còn trống: b i o p r v.
+- Q: mã đặt ở thân `Game2.ModFunc.UpdateKey` (RVA `0x59BDA0`, 0x600 byte; chỉ `Game2.GameScr.updateKey` gọi nên không chạy) dài 372 byte. Duyệt `GameScr.vCharInMap` (static `+0F0h`), lọc giống `AutoFocusBoss` (`0x3D4280`: `charID` +90h < 0, `cTypePk` +295h == 5, `cName` +190h không bắt đầu bằng "Đ"), chọn |dx|+|dy| nhỏ nhất (`cx` +6Ch, `cy` +70h) → `Char.FocusManualTo` `0x2ADDE0` → `ModFunc.MoveTo(x, y)` `0x3DB5D0` (đặt vị trí + `Service.charMove`). Mã sinh bằng Iced Assembler; lệnh tương đối RIP dựng bằng `Instruction.Create(code, reg, ref new MemoryOperand(Register.RIP, đích))` vì `AssemblerRegisters` không có `rip`.
+- Thân hàm Game2 không gọi tới là chỗ trống lớn khi cave cuối section đã hết; kiểm tra không có lệnh `call`/`jmp` nào từ Game1 trỏ vào trước khi dùng.
 
 ### Hành trang nhảy lên đầu khi cất đồ vào rương (đã sửa ở server)
 - Nguyên nhân: `InventoryService.sendItemBox` luôn gửi kèm `-35` loại 1 (`openBox`) → client `Panel.setTypeBox` + `show` dựng lại khung, cuộn về đầu. Khi cất/lấy đồ (rương đang mở) gọi `sendItemBox(player, false)` để chỉ gửi dữ liệu. Lấy đồ ra vẫn phải gửi `-35` loại 0, không thì rương còn hiện món đã lấy.

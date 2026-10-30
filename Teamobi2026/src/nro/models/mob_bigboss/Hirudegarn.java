@@ -12,10 +12,16 @@ import nro.models.utils.Util;
 
 public class Hirudegarn extends BigBoss {
 
+    // Tạm tắt: luôn chết, không hồi sinh, không rơi đồ. Bật lại thì đổi thành false
+    public static final boolean DISABLED = true;
+
     private int errors;
 
     public Hirudegarn(Mob mob) {
         super(mob);
+        if (DISABLED) {
+            this.point.sethp(0);
+        }
     }
 
     @Override
@@ -26,6 +32,9 @@ public class Hirudegarn extends BigBoss {
 
     @Override
     public void update() {
+        if (DISABLED) {
+            return;
+        }
         super.update();
         if (isDie() && (System.currentTimeMillis() - lastTimeDie) > 600000 && lvMob == 3) {
             lvMob = 0;

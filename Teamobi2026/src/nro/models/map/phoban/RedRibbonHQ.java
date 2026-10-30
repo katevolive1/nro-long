@@ -250,7 +250,9 @@ public class RedRibbonHQ implements Runnable {
     public ItemMap NR(Zone zone) {
         int x = Util.nextInt(100, zone.map.mapWidth - 100);
         int y = zone.map.yPhysicInTop(x, 100);
-        int nr = Util.isTrue(1, 500) ? Util.nextInt(14, 18) : Util.nextInt(18, 20);
+        // 2% NR 3 sao (16), 14% NR 4-5 sao (17-18), 84% NR 6-7 sao (19-20)
+        int rd = Util.nextInt(0, 99);
+        int nr = rd < 2 ? 16 : rd < 16 ? Util.nextInt(17, 18) : Util.nextInt(19, 20);
         ItemMap it = new ItemMap(zone, nr, 1, x, y, -1);
         return it;
     }

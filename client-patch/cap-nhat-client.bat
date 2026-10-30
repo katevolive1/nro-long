@@ -19,7 +19,7 @@ if not exist "%REPO%\web\download" mkdir "%REPO%\web\download"
 if not exist "%DLL%" ( echo Khong thay %DLL% & goto loi )
 tasklist /FI "IMAGENAME eq DragonBoy.exe" | find /I "DragonBoy.exe" >nul && ( echo Tat game truoc da. & goto loi )
 
-for %%S in (patch patch-khu-map patch-mac-dinh patch-khung-nhap patch-thoi-vang patch-thong-bao-boss) do (
+for %%S in (patch patch-khu-map patch-mac-dinh patch-khung-nhap patch-thoi-vang patch-thong-bao-boss patch-phim-q) do (
     echo === %%S
     powershell -NoProfile -ExecutionPolicy Bypass -File "%%S.ps1" "%DLL%" || goto loi
 )

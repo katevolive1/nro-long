@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 29/10/2026).
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 30/10/2026).
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -26,7 +26,7 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 - Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115%; sao pha lê 1–3 (80%), 4–5 (17%), 6 (3%).
 
 ## 3. Doanh trại
-| Boss | NR 4 sao (17) | Bản đồ kho báu (611) | Cậu Vàng (1824) |
+| Boss | NR 4 hoặc 5 sao (17/18, mỗi loại 50%) | Bản đồ kho báu (611) | Cậu Vàng (1824) |
 |---|---|---|---|
 | Trung úy Trắng | 50% | – | 100% |
 | Trung úy Thép | 50% | 30% (x1–2) | 100% |
@@ -43,7 +43,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 - Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày).
 - Rồng Nhí: 20% có rơi → 4% Trứng vàng rồng nhí (1821), 16% NR 5/6/7 sao.
 - Mabư ngoài map (`Mabu_ngoai/MabuNgoai.java`, 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
-- Hirudegarn (quái to, `mob_bigboss/Hirudegarn.java`, map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
+- **Đang tạm tắt** (`Hirudegarn.DISABLED = true`, luôn chết, không rơi gì). Hirudegarn (quái to, `mob_bigboss/Hirudegarn.java`, map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
 
 ## 5. Golden Frieza + Death Beam 1–5
 - 100% Cải trang Fide vàng (629, +20% HP/KI/SĐ, HSD 20 ngày).

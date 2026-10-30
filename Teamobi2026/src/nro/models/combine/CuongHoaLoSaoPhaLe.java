@@ -134,7 +134,7 @@ public class CuongHoaLoSaoPhaLe {
             return;
         }
 
-        boolean success = Util.isTrue(50, 200);
+        boolean success = Util.isTrue(50, 100); // 50% đúng như NPC báo (cũ: isTrue(50, 200) = 25%, xem TI-LE-DAP-DO.md)
         player.inventory.gold -= COST;
 
         if (star == 8) {

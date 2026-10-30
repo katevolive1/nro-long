@@ -62,29 +62,9 @@ public class PhaLeHoaTrangBi {
         }
     }
 
+    // Tỉ lệ thật = tỉ lệ NPC báo (getFakeRatio). Bảng cũ để rollback: TI-LE-DAP-DO.md
     public static float getRatio(int star) {
-        switch (star) {
-            case 0:
-                return 50f;
-            case 1:
-                return 20f;
-            case 2:
-                return 10f;
-            case 3:
-                return 5f;
-            case 4:
-                return 1f;
-            case 5:
-                return 0.7f;
-            case 6:
-                return 0.5f;
-            case 7:
-                return 0.1f;
-            case 8:
-                return 0.1f;
-        }
-
-        return 0;
+        return getFakeRatio(star);
     }
 
     private static int getFakeRatio(int star) {

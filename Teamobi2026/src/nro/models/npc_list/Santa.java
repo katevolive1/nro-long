@@ -32,7 +32,8 @@ public class Santa extends Npc {
                     "Nhập mã\nquà tặng",
                     "Cửa hàng\nHạn sử dụng",
                     "Tiệm\nHớt tóc",
-                    "Danh\nhiệu"));
+                    "Danh\nhiệu",
+                    "Shop\nthỏi vàng"));
 
             if (soLuong >= 1) {
                 menu.add(1, "Giảm giá\n80%");
@@ -100,8 +101,12 @@ public class Santa extends Npc {
                             if (soLuong >= 1) {
                                 ShopService.gI().opendShop(player, "SANTA_DANH_HIEU", false);
                             } else {
-                                ShopService.gI().opendShop(player, "SHOP_VIP", false);
+                                // Shop type 3 trả bằng thỏi vàng (icon_spec 4028), có Bình hút năng lượng 1795
+                                ShopService.gI().opendShop(player, "SANTA_THOI_VANG", false);
                             }
+                            break;
+                        case 7:
+                            ShopService.gI().opendShop(player, "SANTA_THOI_VANG", false);
                             break;
                     }
                 }
