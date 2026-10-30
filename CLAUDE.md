@@ -28,7 +28,7 @@
   - `-9` (hp, dame), `-10` (hp), `-11` (dame), `-12` (dame), `-13` (hp), `56` (hp, dame), `-60` (dame).
   - Template quái trong `DataGame` (hp) và danh sách quái khi vào map trong `Zone` (hp, hpFull).
 - Các gói còn lại vẫn đọc int: boss to `101`/`102`/`51`, `87`… Nếu giá trị long thì dùng `Util.toInt()`.
-- Build: biên dịch bằng javac (`-cp "lib/*"`) ra `build/classes-cli`, chép `Teamobi2026.jar` thành `build/Teamobi2026.next.jar` rồi `jar uf` các thư mục `nro`, `models` vào bản đó (`build.bat` làm vậy, build được khi server đang chạy). `run.bat` thấy `build/Teamobi2026.next.jar` thì thay vào `Teamobi2026.jar` trước khi chạy. Tắt server trước khi bật lại; trước khi tự tắt server kiểm tra không ai đang kết nối port 14446. Jar int cũ: `Teamobi2026-int-backup.jar`.
+- Build: biên dịch bằng javac (`-cp "lib/*"`) ra `build/classes-cli`, chép `Teamobi2026.jar` thành `build/Teamobi2026.next.jar` rồi `jar uf` các thư mục `nro`, `models` vào bản đó (`build.bat` làm vậy, build được khi server đang chạy). `run.bat` thấy `build/Teamobi2026.next.jar` thì thay vào `Teamobi2026.jar` trước khi chạy. `run.bat` chạy lặp: server tắt (bảo trì tự động 4h30 trong `AutoMaintenance`, lệnh console `bt`, lỗi) thì 10 giây sau tự chạy lại; muốn tắt hẳn thì đóng cửa sổ. Áp bản build mới: gõ `bt` trong console server. `Teamobi2026.jar` vẫn nằm trong git (`build.bat` lấy làm gốc, có sẵn thư viện) nhưng mỗi máy chạy một lần `git update-index --skip-worktree Teamobi2026/Teamobi2026.jar` để bản build không hiện là thay đổi (máy công ty đã chạy 30/10/2026); bỏ bằng `--no-skip-worktree`. Tắt server trước khi bật lại; trước khi tự tắt server kiểm tra không ai đang kết nối port 14446. Jar int cũ: `Teamobi2026-int-backup.jar`.
 
 ## Bảng rơi đồ boss
 

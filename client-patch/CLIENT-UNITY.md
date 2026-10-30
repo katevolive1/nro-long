@@ -6,7 +6,7 @@
 | Thư mục | Bản | MD5 `GameAssembly.dll` |
 |---|---|---|
 | `D:\nr-dump\goc` | chỉ giữ `GameAssembly.dll` + `global-metadata.dat` gốc của client int (bản int đã xóa 29/10/2026); chép đè vào client rồi chạy lại mọi script patch là ra bản long | `984E6FD75A748B1158C2330DD863BA8C` |
-| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) + phím Q bay tới boss (`patch-phim-q.ps1`) | `0B559DE8AA336248709D5E83F75C3896` |
+| `D:\nr-long` (client duy nhất) | long đầy đủ + tên map K(khu) + port 14446 + ô tích mặc định (`patch-mac-dinh.ps1`) + khung nhập trên cùng (`patch-khung-nhap.ps1`) + tổng thỏi vàng (`patch-thoi-vang.ps1`) + thông báo boss lúc vào game (`patch-thong-bao-boss.ps1`) + phím Q bay tới boss (`patch-phim-q.ps1`) + giữ cửa hàng khi server mở form nhập (`patch-giu-cua-hang.ps1`) | `1760598AF3BC5F074DDC905F1B1FBF6F` |
 
 `BC2BD49AE412E904FF835FE83DFD40AC` là bản long **lỗi** cũ (chưa sửa `ReadParamDQT`), nằm trong `NRO-long.rar` cũ: vào game bị đọc lệch gói có đồ.
 
@@ -86,7 +86,14 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 - `switch (key - 'a')`, 24 mục a..x, bảng nhảy RVA `0x3E5098` (mỗi mục 4 byte = RVA đích), mục trống trỏ `0x3E5083` (trả false). Đoạn thoát chung trả true: `0x3E4FD3` (`mov al,1` rồi epilogue). Lúc nhảy vào mục: `rbx` = ModFunc, khung `push rdi; sub rsp,30h` (dùng được `[rsp+20h..2Fh]` và ô home `[rsp+48h..5Fh]`).
 - Phím đang dùng: a c d e f g h j k l m n q s t u w x. Còn trống: b i o p r v.
 - Q: mã đặt ở thân `Game2.ModFunc.UpdateKey` (RVA `0x59BDA0`, 0x600 byte; chỉ `Game2.GameScr.updateKey` gọi nên không chạy) dài 372 byte. Duyệt `GameScr.vCharInMap` (static `+0F0h`), lọc giống `AutoFocusBoss` (`0x3D4280`: `charID` +90h < 0, `cTypePk` +295h == 5, `cName` +190h không bắt đầu bằng "Đ"), chọn |dx|+|dy| nhỏ nhất (`cx` +6Ch, `cy` +70h) → `Char.FocusManualTo` `0x2ADDE0` → `ModFunc.MoveTo(x, y)` `0x3DB5D0` (đặt vị trí + `Service.charMove`). Mã sinh bằng Iced Assembler; lệnh tương đối RIP dựng bằng `Instruction.Create(code, reg, ref new MemoryOperand(Register.RIP, đích))` vì `AssemblerRegisters` không có `rip`.
-- Thân hàm Game2 không gọi tới là chỗ trống lớn khi cave cuối section đã hết; kiểm tra không có lệnh `call`/`jmp` nào từ Game1 trỏ vào trước khi dùng.
+- Thân hàm Game2 không gọi tới là chỗ trống lớn khi cave cuối section đã hết; kiểm tra không có lệnh `call`/`jmp` nào từ Game1 trỏ vào trước khi dùng. Thân `Game2.ModFunc.UpdateKey` đã dùng: `0x59BDA0`–`0x59BF14` (Q), `0x59BF20`–`0x59BF51`, `0x59BF60`–`0x59BF96` (giữ cửa hàng); còn trống tới `0x59C3A0`.
+
+### Giữ khung cửa hàng khi server mở form nhập (`patch-giu-cua-hang.ps1`, chỉ Game1)
+- Mua số lượng: client tự mở `Panel.OpenShopBuyQuantityInput` (`0x40AF..`, chuỗi "Nhập số lượng mua"), ô nhập là `chatTField` nằm trong khung, nhập xong `Panel.onChatFromMe` gửi mua → khung không đóng.
+- Form của server (gói `-125`, vd bán thỏi vàng `Input.createFormBanSLL`): `Controller2.readMessage` → `ClientInput.init` + `switchToMe` (màn hình riêng). Bấm vào ô nhập = bấm ngoài khung → `Panel.updateKey` nhánh `0x463BB8`–`0x463C13` (`isPointerJustRelease` và không `isPointer(x,y,w,h)` và `[+259h]`=0) gọi `Panel.hide`.
+- `GameCanvas.update` (`0x3A3D10`): luôn gọi `currentScreen.update` (slot 7, `+1A8h`); `Panel.updateKey` (`0x4638C0`) khi khung mở; `currentScreen.updateKey` (slot 8, `+1B8h`, `0x3A5066`) chỉ khi `panel.isShow` (`+10h`) = 0 và không có `ChatPopup`. Phím gõ: `keyPressedz` → `mapKeyPress` → `currentScreen.keyPress` không phụ thuộc khung.
+- Patch: đầu `Panel.updateKey` nhảy cave `0x59BF20`: `GameCanvas.currentScreen` (static `+0C8h`) có lớp == `ClientInput_TypeInfo` (`0xCA5528`) thì `ret`. `0x3A4FFF` (`cmp [panel+10h],0; jne 3A5079`) nhảy cave `0x59BF60`: khung mở mà currentScreen là ClientInput thì vẫn tới `0x3A504F` gọi `updateKey`.
+- `mScreen` slot: 4 `switchToMe` (`+178h`), 5 `unLoad` (`+188h`), 6 `keyPress`, 7 `update`, 8 `updateKey`, 9 `paint`. `Panel.hide` `0x425180`, `hideNow` `0x424D00`.
 
 ### Hành trang nhảy lên đầu khi cất đồ vào rương (đã sửa ở server)
 - Nguyên nhân: `InventoryService.sendItemBox` luôn gửi kèm `-35` loại 1 (`openBox`) → client `Panel.setTypeBox` + `show` dựng lại khung, cuộn về đầu. Khi cất/lấy đồ (rương đang mở) gọi `sendItemBox(player, false)` để chỉ gửi dữ liệu. Lấy đồ ra vẫn phải gửi `-35` loại 0, không thì rương còn hiện món đã lấy.
