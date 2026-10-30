@@ -49,6 +49,15 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - Cuối cùng `calSubTNSM` chia theo sức mạnh: ≥ 40 tỷ /30, ≥ 50 tỷ /40, ≥ 60 tỷ /50, ≥ 80 tỷ /90, ≥ 90 tỷ /100.
 - Danh sách map (id, tên, hành tinh): mục "Map" trong [ID-GAME.md](ID-GAME.md).
 
+## Khí Gas Hủy Diệt / Destron Gas (`map/phoban/DestronGas.java`, `services_dungeon/DestronGasService.java`, NPC `npc_list/MrPoPo.java`)
+- Vào: Mr PoPo làng Aru (map 0) → "OK" → nhập cấp 1–110 (`Input.CHOOSE_LEVEL_KGHD`). Bang chủ mở; cần vào bang ≥ 2 ngày (`DestronGasService.java:48`, `MrPoPo.java:55`) và đã mở thành viên. Thành viên khác gặp Mr PoPo để đi theo.
+- Giới hạn: mỗi bang 3 lần/ngày (`timesPerDayKGHD > 3`), cả server 50 phó bản cùng lúc (`AVAILABLE`), 30 phút (`TIME_KHI_GAS_HUY_DIET`). `POWER_CAN_GO_TO_KHI_GAS_HUY_DIET` (2 tỷ) không được kiểm tra ở đâu; `N_PLAYER_CLAN = 0` nên bang 1 người vào được (câu "ít nhất 5 thành viên" ở MrPoPo không bao giờ hiện).
+- Map 147 Sa mạc, 148 (map boss), 149 Thành phố Santa, 151 Hành tinh bóng tối, 152 Vùng đất băng giá (`MapService.isMapKhiGasHuyDiet`, 150 không thuộc). Phải hết quái + boss map hiện tại mới sang map khác.
+- Số quái lấy từ DB `map_template.mobs` (`[temp, level, hp, x, y]`, nạp ở `Map.java:162`), code không thêm/bớt: 147 Sa mạc 17 con (73×7, 75×8, 76×2), 148 Lâu đài Lychee 11 (73×3, 74×3, 75×5), 149 Thành phố Santa 14 (74×7, 75×6, 76×1), 151 Hành tinh bóng tối 9 (73×2, 74×2, 75×4, 76×1), 152 Vùng đất băng giá 30 (73×8, 74×7, 75×13, 76×2). Tổng 81. Bớt quái thì giữ con đứng vị trí quái mạnh (chọn theo thứ tự trong `init()`); sửa DB phải khởi động lại server.
+- Đang thử nghiệm: máu + sát thương quái và 2 boss chia `DestronGas.GIAM = 20` (gốc 1, xem [GIA-TRI-GOC.md](GIA-TRI-GOC.md)); số dưới đây và bảng mục 7a BOSS-ROI-DO.md là số gốc.
+- Quái (`DestronGas.init()`): thường sát thương Lv×155×tempId, máu Lv×225×tempId; quái mạnh (quái đầu ở 147/151/152, thứ 8 ở 149, thứ 34 ở 152) sát thương ×10, máu Lv×201.000×tempId. Còn Cỗ máy hủy diệt (quái 76) sống thì Liên hoàn/Antomic/Masenko/Kamejoko chỉ gây 1 (`Mob.java:132`).
+- Hết quái mọi map → Dr Lychee ở map 148 → chết thì Hatchiyack → chết (hoặc còn 1 phút) báo "Nơi này sắp nổ tung", 60 giây sau về làng Aru. Chỉ số boss và phần thưởng theo cấp: mục 7a [BOSS-ROI-DO.md](BOSS-ROI-DO.md).
+
 ## Ngũ Hành Sơn (map 122–124)
 - 3 map chỉ nối với nhau (122 ↔ 124 ↔ 123), không có cổng từ ngoài. Dịch chuyển (Yardrat, `ChangeMapService.checkMapCanJoinByYardart`) chặn mọi người trừ admin và boss.
 - Vào/ra (sửa 30/10/2026): NPC **Ngộ Không** (48, `npc_list/NgoKhong.java`) ở Làng Aru map 0 x 800 → "Đến Ngũ Hành Sơn" đưa tới map 122 (x 900–1000, y 408); Ngộ Không trong map 122 (x 979) và **Đường Tăng** (49, `npc_list/DuongTang.java`, map 122 x 1060, map 123 x 140) → "Về Làng Aru" (map 0 x 750–850). Không có điều kiện (sức mạnh, phí). DB không theo git, máy khác chạy: `UPDATE map_template SET npcs='[[7,228,432],[67,590,432],[74,426,432],[84,950,432],[48,800,432]]' WHERE id=0;`

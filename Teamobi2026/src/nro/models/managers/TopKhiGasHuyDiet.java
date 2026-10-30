@@ -20,7 +20,7 @@ import org.json.simple.JSONValue;
  * @author By hnam
  */
 public class TopKhiGasHuyDiet {
-
+    //Khí ga hủy diệt
     @Getter
     private List<Player> list = new ArrayList<>();
     private static final TopKhiGasHuyDiet INSTANCE = new TopKhiGasHuyDiet();

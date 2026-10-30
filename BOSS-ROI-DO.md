@@ -58,7 +58,24 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 (DB chỉ ghi tên "Cải trang"; ứng với boss nào là suy theo code.)
 
 ## 7. Phó bản / sự kiện
-- Hatchiyack / Dr Lychee (Khí Gas): CT Hatchiyack (729) / CT Dr Lychee (738), số lượng 1 + 2×số người trong khu, ai nhặt cũng được; chỉ số theo level Khí Gas.
+- Hatchiyack / Dr Lychee (Khí Gas): CT Hatchiyack (729) / CT Dr Lychee (738), số lượng 1 + 2×số người trong khu, ai nhặt cũng được; chỉ số theo level Khí Gas → chi tiết mục 7a.
+
+### 7a. Khí Gas Hủy Diệt – boss và phần thưởng (`boss/khi_gas/DrLychee.java`, `Hatchiyack.java`)
+Cơ chế phó bản: mục "Khí Gas Hủy Diệt" trong [CO-CHE.md](CO-CHE.md). Lv = cấp độ chọn lúc mở (1–110). Số máu/sát thương dưới đây là gốc; đang thử nghiệm chia 20 (`DestronGas.GIAM`, [GIA-TRI-GOC.md](GIA-TRI-GOC.md)). Phần thưởng không đổi.
+- Dr Lychee (ngoại hình 742/743/744): sát thương 10.000 + 1.000×Lv, máu 1 triệu + 15 triệu×Lv (gốc ở `DestronGas.update()`, phần +10.000/+1 triệu ở constructor DrLychee). Né "Xí hụt" Lv/1000, giảm sát thương nhận (Lv/10)% và trừ thêm ngẫu nhiên 0–100×Lv.
+- Hatchiyack (639/640/641, tên trống): hiện khi Dr Lychee rời map, ×1,5 sát thương (tối đa 200 triệu) và ×1,5 máu (tối đa 2 tỷ) của Dr Lychee (`DrLychee.leaveMap()`). Né (Lv+10)/1000, giảm (Lv/5)% và trừ thêm 0–200×Lv. Chết → 60 giây sau đưa về làng Aru.
+- Cả 2: chiêu Demon cấp 1–7; đòn xuyên giáp không bị né và phá khiên; đang khiên thì đòn thường = 1; người cầm NR Namek đánh = 1.
+- Cải trang rơi (`dropCt()`): P = 14 nếu Lv < 10, còn lại 14 + Lv/10. Sức đánh/HP/KI mỗi cái +(P+8 đến P+11)%; Dr Lychee thêm giảm sát thương nhận +(P đến P+3)% (option 94, cộng vào tlGiap, bị xuyên giáp trừ), Hatchiyack thêm sát thương chí mạng +(P đến P+3)% (option 5, không phải tỉ lệ chí mạng option 14); HSD 3–P ngày (tối đa 21); không giao dịch. Số lượng 1 + 2×số người trong khu, mỗi boss rơi riêng.
+
+| Lv | Dr Lychee sát thương / máu | Hatchiyack sát thương / máu | SĐ/HP/KI | Giảm ST nhận (738) / ST chí mạng (729) | HSD (ngày) |
+|---|---|---|---|---|---|
+| 1 | 11.000 / 16 triệu | 16.500 / 24 triệu | 22–25% | 14–17% | 3–14 |
+| 10 | 20.000 / 151 triệu | 30.000 / 226,5 triệu | 23–26% | 15–18% | 3–15 |
+| 50 | 60.000 / 751 triệu | 90.000 / 1,1265 tỷ | 27–30% | 19–22% | 3–19 |
+| 100 | 110.000 / 1,501 tỷ | 165.000 / 2 tỷ (trần) | 32–35% | 24–27% | 3–21 |
+| 110 | 120.000 / 1,651 tỷ | 180.000 / 2 tỷ (trần) | 33–36% | 25–28% | 3–21 |
+
+Ngoài cải trang: không có quà khác; kết thúc lưu thành tích bang (cấp cao nhất, thời gian nhanh nhất → Top Khí Gas), xong cấp ≥ 70 thì +1 `destronGas70CompletionCount` cho người chơi.
 - Yardrat: Bí kiếp (590) – Tập sự 1/5, Tân binh 1/4, Chiến binh 1/3, Đội trưởng 5 1/2, còn lại 1/5.
 - Bí Ma, Dơi, Ma Trơi (Halloween): 100% Bí ngô (585).
 - Khỉ Đột (Trung thu): 100% Đuôi khỉ (1045).

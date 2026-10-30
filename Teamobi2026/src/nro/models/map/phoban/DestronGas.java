@@ -28,6 +28,8 @@ public class DestronGas implements Runnable {
     public static final int AVAILABLE = 50;
     public static final int TIME_KHI_GAS_HUY_DIET = 1800000;
     public static final int N_PLAYER_CLAN = 0;
+    // Chia máu + sát thương quái và Dr Lychee/Hatchiyack (thử nghiệm = 20, gốc 1; xem GIA-TRI-GOC.md)
+    public static final int GIAM = 20;
 
     public int id;
     public byte level;
@@ -80,8 +82,8 @@ public class DestronGas implements Runnable {
 
             if (allCharactersDead && !callBoss) {
                 try {
-                    long bossDamage = (1000 * level);
-                    long bossMaxHealth = (15000000 * level);
+                    long bossDamage = (1000L * level) / GIAM;
+                    long bossMaxHealth = (15000000L * level) / GIAM;
                     bossDamage = Math.min(bossDamage, 200000000L);
                     bossMaxHealth = Math.min(bossMaxHealth, 2000000000L);
                     bosses.add(new DrLychee(
@@ -178,14 +180,14 @@ public class DestronGas implements Runnable {
                         ((i == 33) && zone.map.mapId == 152)) { // Quái 76 xuất hiện thứ 34 ở Map 152 (Vùng đất băng giá)
 
                     mob.lvMob = 1;
-                    mob.point.dame = (int) Math.min((long) level * 31 * 5 * mob.tempId * 10, 2_147_483_647);
-                    mob.point.maxHp = (int) Math.min((long) level * 3 * 6700 * mob.tempId * 10, 2_147_483_647);
+                    mob.point.dame = (int) Math.min((long) level * 31 * 5 * mob.tempId * 10 / GIAM, 2_147_483_647);
+                    mob.point.maxHp = (int) Math.min((long) level * 3 * 6700 * mob.tempId * 10 / GIAM, 2_147_483_647);
                     mob.hoiSinh();
                     mob.hoiSinhMobPhoBan();
                 } else {
                     mob.lvMob = mob.tempId == 76 ? 1 : 0;
-                    mob.point.dame = (int) Math.min((long) level * 31 * 5 * mob.tempId, 2_147_483_647);
-                    mob.point.maxHp = (int) Math.min((long) level * 5 * 45 * mob.tempId, 2_147_483_647);
+                    mob.point.dame = (int) Math.min((long) level * 31 * 5 * mob.tempId / GIAM, 2_147_483_647);
+                    mob.point.maxHp = (int) Math.min((long) level * 5 * 45 * mob.tempId / GIAM, 2_147_483_647);
                     mob.hoiSinh();
                     mob.hoiSinhMobPhoBan();
                 }

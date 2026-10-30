@@ -6,6 +6,7 @@ import nro.models.consts.BossStatus;
 import nro.models.consts.ConstPlayer;
 import nro.models.boss.Boss_Manager.GasDestroyManager;
 import static nro.models.consts.BossType.PHOBANKGHD;
+import nro.models.map.phoban.DestronGas;
 import nro.models.clan.Clan;
 import nro.models.item.Item;
 import nro.models.map.ItemMap;
@@ -29,8 +30,8 @@ public class DrLychee extends Boss {
                 "Dr Lychee",
                 ConstPlayer.TRAI_DAT,
                 new short[]{742, 743, 744, -1, -1, -1},
-                ((10000 + dame)),
-                new int[]{((1000000 + hp))},
+                ((10000 / DestronGas.GIAM + dame)),
+                new int[]{((1000000 / DestronGas.GIAM + hp))},
                 new int[]{148},
                 (int[][]) Util.addArray(FULL_DEMON),
                 new String[]{"|-1|Ta đợi các ngươi mãi",
