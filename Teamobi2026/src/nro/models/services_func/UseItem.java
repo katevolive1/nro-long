@@ -55,7 +55,7 @@ import nro.models.utils.Logger;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class UseItem {

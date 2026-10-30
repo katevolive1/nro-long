@@ -15,7 +15,7 @@ import nro.models.shop.ShopService;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class ChiChi extends Npc {

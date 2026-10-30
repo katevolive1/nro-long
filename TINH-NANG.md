@@ -3,8 +3,8 @@
 Lập ngày 30/10/2026 từ các thư mục `Teamobi2026/src/nro/models/`. Đánh dấu: **[đã xem]** đã đọc code/giải thích cho user, **[đã sửa]** có thay đổi (chi tiết ở file ghi chú tương ứng). Xem hoặc sửa thêm phần nào thì cập nhật dấu ở đây.
 
 ## Phó bản / hoạt động theo giờ (`map/phoban`, `services_dungeon`)
-- Doanh trại Độc Nhãn (`RedRibbonHQ`) **[đã sửa]**: ngọc rơi sau khi Độc Nhãn thua (`RedRibbonHQ.NR`) 2% NR 3 sao, 14% NR 4–5 sao, 84% NR 6–7 sao (cũ: 1/500 NR 1–5 sao, còn lại 5–7 sao); boss trại rơi NR 4 hoặc 5 sao. Chưa sửa: vào lại giữa chừng thì boss/quái còn sống hồi đầy máu (`updateHPDame`), chỉ số tính theo cả thành viên bang online ngoài trại
-- Bản đồ kho báu (`BanDoKhoBau`, `TreasureUnderSeaService`)
+- Doanh trại Độc Nhãn (`RedRibbonHQ`) **[đã sửa]** (chi tiết: [CO-CHE.md](CO-CHE.md)): ngọc rơi sau khi Độc Nhãn thua (`RedRibbonHQ.NR`) 2% NR 3 sao, 14% NR 4–5 sao, 84% NR 6–7 sao (cũ: 1/500 NR 1–5 sao, còn lại 5–7 sao); boss trại rơi NR 4 hoặc 5 sao. Chưa sửa: vào lại giữa chừng thì boss/quái còn sống hồi đầy máu (`updateHPDame`), chỉ số tính theo cả thành viên bang online ngoài trại
+- Bản đồ kho báu (`BanDoKhoBau`, `TreasureUnderSeaService`) **[đã xem]** (chi tiết: [CO-CHE.md](CO-CHE.md))
 - Khí Gas Hủy Diệt (`DestronGas`)
 - Con đường rắn độc (`SnakeWay`, `boss_con_duong_ran_doc`)
 - Ngọc Rồng Sao Đen (`BlackBallWar`, NPC `RongOmega`)

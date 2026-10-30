@@ -5,7 +5,7 @@ import lombok.Setter;
 import nro.models.player.Player;
 
 /**
- * @author By Mr Blue
+ * @author By hnam
  */
 @Setter
 @Getter

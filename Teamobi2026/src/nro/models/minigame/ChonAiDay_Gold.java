@@ -10,7 +10,7 @@ import nro.models.utils.Util;
 
 /**
  *
- * @author Mr Blue
+ * @author By hnam
  */
 public class ChonAiDay_Gold implements Runnable {
 

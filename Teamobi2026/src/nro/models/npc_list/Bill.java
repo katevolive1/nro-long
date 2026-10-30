@@ -21,7 +21,7 @@ import nro.models.shop.ShopService;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class Bill extends Npc {

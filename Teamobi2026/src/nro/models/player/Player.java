@@ -74,7 +74,7 @@ import nro.models.task.BadgesTaskService;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class Player implements Runnable {

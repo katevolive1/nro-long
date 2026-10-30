@@ -20,7 +20,7 @@ import nro.models.services_dungeon.MajinBuuService;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class TimeUtil {

@@ -14,7 +14,7 @@ import nro.models.utils.Util;
 
 /**
  *
- * @author Administrator
+ * @author By hnam
  */
 public class ConSoMayManGold implements Runnable {
 

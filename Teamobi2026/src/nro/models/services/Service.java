@@ -52,7 +52,7 @@ import nro.models.server.Manager;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class Service {

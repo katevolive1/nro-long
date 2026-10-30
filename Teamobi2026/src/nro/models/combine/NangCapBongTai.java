@@ -11,7 +11,7 @@ import nro.models.utils.Util;
 
 /**
  *
- * @author By Minh Du
+ * @author By hnam
  */
 public class NangCapBongTai {
 

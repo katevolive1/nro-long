@@ -22,7 +22,7 @@ import nro.models.player.Player;
 import nro.models.services.ItemService;
 
 /**
- * @author By Mr Blue
+ * @author By hnam
  */
 public class MyClanTopBanDoKhoBau {
 

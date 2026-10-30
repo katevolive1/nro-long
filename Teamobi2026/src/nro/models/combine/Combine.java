@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  */
 
 public class Combine {

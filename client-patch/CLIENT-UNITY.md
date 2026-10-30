@@ -31,6 +31,12 @@ Add-Type -Path D:\AILinhTinh\nro-long\client-patch\tools\xref.cs
 ```
 Cách tìm nhanh một chữ hiện trên màn hình: tìm chuỗi trong `stringliteral.json` → lấy `address` → `Find` ra tên hàm → `Calls` để xem thứ tự vẽ.
 
+Danh sách hàm sắp theo địa chỉ (tìm hàm chứa một RVA, lấy điểm cuối hàm = địa chỉ hàm kế tiếp), Git Bash:
+```bash
+grep -A1 '"Address"' /d/nr-dump/script.json | paste - - - | sed -E 's/.*"Address": ([0-9]+),.*"Name": "([^"]+)".*/\1 \2/' | sort -n -u > funcs.txt
+```
+Tìm ai gọi hàm X: quét cả section `il2cpp` (offset `0x17C800`–`0xA51600`) tìm byte `E8`/`E9` có `rva + 5 + rel32 == X` (PowerShell vòng lặp trên `ReadAllBytes`, ~1 phút). Hàm ảo (gọi qua `call rax` với `[vtable+178h+16*(slot-4)]`) không tìm được kiểu này; slot xem `dump.cs`.
+
 ## Công cụ: `tools/dis.cs` (dịch ngược, cần Iced)
 Máy không có Python/objdump. Tải Iced 1.21.0 từ NuGet (`https://api.nuget.org/v3-flatcontainer/iced/1.21.0/iced.1.21.0.nupkg`, giải nén `lib/netstandard2.0/Iced.dll`) vào thư mục tạm, rồi:
 ```powershell

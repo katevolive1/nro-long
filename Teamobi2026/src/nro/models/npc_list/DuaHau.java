@@ -17,7 +17,7 @@ import nro.models.map.*;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  */
 public class DuaHau extends Npc {
 

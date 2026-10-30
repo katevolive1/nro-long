@@ -9,7 +9,7 @@ import nro.models.utils.Util;
 
 /**
  *
- * @author By Minh Du
+ * @author By hnam
  */
 public class NangChiSoBongTai {
     private static final int GEM_NANG_BT = 1_000;

@@ -50,7 +50,7 @@ import nro.models.shop_ky_gui.ConsignShopManager;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class ServerManager {

@@ -30,7 +30,7 @@ import nro.models.skill.Skill;
 
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  *
  */
 public class SkillService {

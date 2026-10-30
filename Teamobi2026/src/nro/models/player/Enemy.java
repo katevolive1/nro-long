@@ -1,7 +1,7 @@
 package nro.models.player;
 /**
  *
- * @author By Mr Blue
+ * @author By hnam
  * 
  */
 public class Enemy extends Friend {
