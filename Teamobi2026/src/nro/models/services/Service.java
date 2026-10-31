@@ -954,8 +954,8 @@ public class Service {
 
             Player master = ((Pet) player).master;
 
-            // Sư phụ từ 40 tỷ nhận 1/12 phần đệ nhận (đệ 0 -> 40 tỷ ~ sư phụ +3,3 tỷ)
-            long masterParam = master.nPoint.power >= 40_000_000_000L ? param / 12 : param;
+            // Sư phụ từ 40 tỷ nhận 1/12 phần đệ nhận (đệ 0 -> 40 tỷ ~ sư phụ +3,3 tỷ); từ 31/10/2026 nhân 3
+            long masterParam = (master.nPoint.power >= 40_000_000_000L ? param / 12 : param) * 3;
             if (masterParam <= 0) {
                 return;
             }

@@ -357,7 +357,16 @@ public class PlayerDAO {
     }
 
     public static void updatePlayer(Player player) {
-        if (player != null && player.idMark.isLoadedAllDataPlayer()) {
+        if (player == null) {
+            return;
+        }
+        synchronized (player.saveLock) {
+            doUpdatePlayer(player);
+        }
+    }
+
+    private static void doUpdatePlayer(Player player) {
+        if (player.idMark != null && player.idMark.isLoadedAllDataPlayer()) { // idMark = null: đã dispose
             long st = System.currentTimeMillis();
             try {
                 JSONArray dataArray = new JSONArray();
@@ -630,7 +639,7 @@ public class PlayerDAO {
                 dataArray.add((player.itemTime.isUseNuocMia2 ? (ItemTime.TIME_NUOC_MIA2 - (System.currentTimeMillis() - player.itemTime.lastTimeUseNuocMia2)) : 0));
                 dataArray.add((player.itemTime.isUseNuocMia3 ? (ItemTime.TIME_NUOC_MIA3 - (System.currentTimeMillis() - player.itemTime.lastTimeUseNuocMia3)) : 0));
                 dataArray.add((player.itemTime.isUseKilis ? (ItemTime.TIME_KILIS - (System.currentTimeMillis() - player.itemTime.lastTimeUseKilis)) : 0));
-                dataArray.add(0);
+                dataArray.add((player.itemTime.isUseBuaDeX3 ? (player.itemTime.lastTimeBuaDeX3 - System.currentTimeMillis()) : 0)); // idx 30
                 dataArray.add(0);
                 String itemTime = dataArray.toJSONString();
                 dataArray.clear();
@@ -1063,6 +1072,9 @@ public class PlayerDAO {
                 }
             } catch (Exception e) {
                 Logger.logException(PlayerDAO.class, e, "Lỗi save player " + player.name);
+                java.io.StringWriter sw = new java.io.StringWriter();
+                e.printStackTrace(new java.io.PrintWriter(sw));
+                Logger.fileLog("loi_luu_nhan_vat", "Lỗi save player " + player.name + " (id " + player.id + ")\n" + sw);
             }
 
         }

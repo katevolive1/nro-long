@@ -30,7 +30,7 @@ Lập ngày 30/10/2026 từ các thư mục `Teamobi2026/src/nro/models/`. Đán
 - Đệ tử (Mabư, các loại pet), hợp thể (`player/Pet.java`) **[đã sửa]** câu chat tục; nâng tiềm năng đệ bằng tay + khung đệ cập nhật liên tục 30/10/2026 (chi tiết: [CO-CHE.md](CO-CHE.md))
 - Nội tại (`intrinsic`), Huy hiệu (`player_badges`), Thẻ Rada (`radar`), Bang hội (`clan`)
 - Tạo nhân vật mới: 500 triệu vàng, 100k ngọc, 20.000 thỏi vàng khóa **[đã sửa]**
-- Tiềm năng sức mạnh (`NPoint.calSucManhTiemNang`) **[đã sửa]**: bùa trí tuệ cho cả đệ, bùa x4 về +4; từ 40 tỷ chia 30 **[đã xem]**
+- Tiềm năng sức mạnh (`NPoint.calSucManhTiemNang`) **[đã sửa]**: đuôi khỉ + bùa x3 cho đệ, sư phụ nhận x3 khi đệ đánh (31/10); bùa trí tuệ cho cả đệ, bùa x4 về +4; từ 40 tỷ chia 30 **[đã xem]**
 - Hành trang tối đa 125, rương 130 **[đã sửa]** (cần `patch-o-ruong.ps1`)
 - Đổi khu (`ChangeMapService.changeZone`) **[đã xem]**: phó bản đã chặn, admin bỏ qua; chưa chốt thêm map nào
 

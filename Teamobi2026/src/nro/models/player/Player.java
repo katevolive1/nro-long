@@ -169,6 +169,7 @@ public class Player implements Runnable {
     public byte maxTime = 30;
     public byte type = 0;
     public boolean isOffline = false;
+    public final Object saveLock = new Object(); // PlayerDAO.updatePlayer: tự lưu định kỳ và lưu lúc thoát không chạy chồng nhau
 
     public String notify = null;
 

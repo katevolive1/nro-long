@@ -621,6 +621,10 @@ public class SkillService {
                                 if (player.isPet && ((Pet) player).master.equals(pl)) {
                                     continue;
                                 }
+                                // sư phụ và đệ tử miễn nhiễm thái dương của nhau (kể cả khi bật cờ)
+                                if (pl.isPet && ((Pet) pl).master != null && ((Pet) pl).master.equals(player)) {
+                                    continue;
+                                }
                                 String[] text = {"Mắt của ta", "Chói mắt quá", "Đui mắt rồi", "Mù mắt rồi"};
                                 Service.gI().chat(pl, text[Util.nextInt(text.length)]);
                                 EffectSkillService.gI().startStun(pl, System.currentTimeMillis(), timeStun);

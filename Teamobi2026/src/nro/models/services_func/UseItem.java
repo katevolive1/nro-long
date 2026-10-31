@@ -159,12 +159,8 @@ public class UseItem {
             type = _msg.reader().readByte();
             int where = _msg.reader().readByte();
             int index = _msg.reader().readByte();
-            // Đã chết thì không dùng/vứt vật phẩm được (tránh ăn đậu, dùng đồ hồi sinh/dịch chuyển khi đang chết)
-            if (player != null && player.isDie()
-                    && (type == DO_USE_ITEM || type == ACCEPT_USE_ITEM || type == DO_THROW_ITEM || type == ACCEPT_THROW_ITEM)) {
-                Service.gI().sendThongBao(player, "Bạn đang chết, không thể sử dụng vật phẩm.");
-                return;
-            }
+            // Đã chết vẫn dùng được vật phẩm; riêng ăn đậu và capsule/dịch chuyển bị chặn
+            // (xem eatPea, openCapsuleUI, choseMapCapsule, MapRiengTu) vì làm sống lại không qua hồi sinh
             switch (type) {
                 case DO_USE_ITEM -> {
                     if (player != null && player.inventory != null) {
@@ -819,6 +815,9 @@ public class UseItem {
                             case 1233:
                             case 1532:
                             case 1628:
+                            case 1826: // bùa x3 tn,sm đệ tử
+                            case 1827:
+                            case 1828:
 
                                 useItemTime(pl, item);
                                 break;
@@ -1728,6 +1727,18 @@ public class UseItem {
 //                pl.itemTime.lastTimeUseMayDo2 = System.currentTimeMillis();
 //                pl.itemTime.isUseMayDo2 = true;
                 break;
+            case 1826: // bùa x3 tn,sm đệ tử (1h, 1827: 8h, 1828: 1 tháng), đang dùng thì cộng thêm giờ
+            case 1827:
+            case 1828:
+                long timeBuaDe = item.template.id == 1826 ? ItemTime.TIME_BUA_DE_X3
+                        : item.template.id == 1827 ? ItemTime.TIME_BUA_DE_X3_8H : ItemTime.TIME_BUA_DE_X3_1M;
+                if (pl.itemTime.isUseBuaDeX3) {
+                    pl.itemTime.lastTimeBuaDeX3 += timeBuaDe;
+                } else {
+                    pl.itemTime.lastTimeBuaDeX3 = System.currentTimeMillis() + timeBuaDe;
+                    pl.itemTime.isUseBuaDeX3 = true;
+                }
+                break;
             case 1628: //máy dò đồ
                 long currentTime = System.currentTimeMillis();
 
@@ -1859,12 +1870,18 @@ public class UseItem {
     }
 
     private void openCapsuleUI(Player pl) {
+        if (pl.isDie()) {
+            Service.gI().sendThongBao(pl, "Bạn đang chết, không thể dùng chức năng này.");
+            return;
+        }
         pl.idMark.setTypeChangeMap(ConstMap.CHANGE_CAPSULE);
         ChangeMapService.gI().openChangeMapTab(pl);
     }
 
     public void choseMapCapsule(Player pl, int index) {
-
+        if (pl.isDie()) {
+            return; // đang chết: dịch chuyển bằng capsule sẽ hồi sinh miễn phí
+        }
         if (pl.idNRNM != -1) {
             Service.gI().sendThongBao(pl, "Không thể mang ngọc rồng này lên Phi thuyền");
             Service.gI().hideWaitDialog(pl);
@@ -1893,13 +1910,17 @@ public class UseItem {
             pl.mapBeforeCapsule = pl.zone;
         } else {
             zoneId = pl.mapBeforeCapsule != null ? pl.mapBeforeCapsule.zoneId : -1;
-            pl.mapBeforeCapsule = null;
+            // Về chỗ cũ xong thì nhớ chỗ vừa rời, để bấm lại được chỗ cũ qua lại
+            pl.mapBeforeCapsule = pl.zone;
         }
         pl.changeMapVIP = true;
         ChangeMapService.gI().changeMapBySpaceShip(pl, pl.mapCapsule.get(index).map.mapId, zoneId, -1);
     }
 
     public void eatPea(Player player) {
+        if (player.isDie()) {
+            return; // ăn đậu khi chết sẽ cộng HP làm sống lại không qua hồi sinh
+        }
         if (!Util.canDoWithTime(player.lastTimeEatPea, 1000)) {
             return;
         }
@@ -2781,6 +2802,10 @@ public class UseItem {
     }
 
     private void MapRiengTu(Player pl, Item item) {
+        if (pl.isDie()) {
+            Service.gI().sendThongBao(pl, "Bạn đang chết, không thể dùng chức năng này.");
+            return;
+        }
         ChangeMapService.gI().changeMapBySpaceShip(pl, 164, -1, 870);
     }
 

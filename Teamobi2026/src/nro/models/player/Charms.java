@@ -112,6 +112,18 @@ public class Charms {
                 }
                 tdDeTuMabu3 += min * 60 * 1000L;
                 break;
+            case 1826: // bùa x3 tn,sm đệ tử (1h / 8h / 1 tháng), lưu ở itemTime, mua là áp dụng luôn
+            case 1827:
+            case 1828:
+                long add = min * 60 * 1000L;
+                if (player.itemTime.isUseBuaDeX3 && player.itemTime.lastTimeBuaDeX3 > System.currentTimeMillis()) {
+                    player.itemTime.lastTimeBuaDeX3 += add;
+                } else {
+                    player.itemTime.lastTimeBuaDeX3 = System.currentTimeMillis() + add;
+                    player.itemTime.isUseBuaDeX3 = true;
+                }
+                nro.models.services.ItemTimeService.gI().sendAllItemTime(player);
+                break;
             case 3000:
                 if (tdPhuHP < System.currentTimeMillis()) {
                     tdPhuHP = System.currentTimeMillis();

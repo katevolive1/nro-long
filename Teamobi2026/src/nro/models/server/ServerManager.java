@@ -104,9 +104,24 @@ public class ServerManager {
         e.printStackTrace();
     }
 
+    public static volatile boolean savedOnClose = false;
+
     public void run() {
         try {
             isRunning = true;
+            // Tắt ngang (đóng cửa sổ run.bat, Ctrl+C): lưu người chơi + bang trước khi JVM thoát.
+            // Không lưu ký gửi ở đây vì save() TRUNCATE rồi ghi lại, bị giết giữa chừng là mất hết (ký gửi đã lưu sau mỗi lần mua/bán).
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (savedOnClose) {
+                    return;
+                }
+                Logger.log(Logger.YELLOW, "Server bi tat ngang, dang luu nguoi choi...\n");
+                Client.gI().saveAll();
+                try {
+                    ClanService.gI().close();
+                } catch (Exception e) {
+                }
+            }, "Luu khi tat"));
             activeServerSocket();
 
             // Gửi các nhiệm vụ cập nhật theo từng dịch vụ
@@ -293,13 +308,9 @@ public class ServerManager {
             Logger.error("Lỗi save shop ký gửi!\n");
         }
         Client.gI().close();
+        savedOnClose = true;
         Logger.success("SUCCESSFULLY MAINTENANCE!\n");
-
-        try {
-            Runtime.getRuntime().exec("cmd /c start restart_server.bat");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Không mở restart_server.bat nữa: run.bat tự chạy lại sau 10 giây, mở thêm thì 5 phút sau thành 2 server chạy song song
         System.exit(0);
     }
 

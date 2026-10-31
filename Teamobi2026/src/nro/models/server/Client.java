@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import nro.models.services.shenron.SummonDragonNamek;
 
 /**
@@ -41,6 +42,36 @@ public class Client implements Runnable {
 
     private Client() {
         Executors.newSingleThreadExecutor().submit(this, "Update Client");
+        // Trước đây chỉ lưu lúc thoát: server tắt ngang (đóng cửa sổ, crash) là mất hết từ lúc đăng nhập
+        Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(() -> {
+            if (!Maintenance.isRunning) {
+                saveAll();
+            }
+        }, AUTO_SAVE_MINUTES, AUTO_SAVE_MINUTES, TimeUnit.MINUTES);
+    }
+
+    public static final int AUTO_SAVE_MINUTES = 5;
+
+    /**
+     * Lưu mọi người đang online (không đá ra). Dùng cho tự lưu định kỳ và
+     * shutdown hook.
+     */
+    public void saveAll() {
+        List<Player> list;
+        try {
+            list = new ArrayList<>(players);
+        } catch (Exception e) {
+            return; // danh sách đang bị sửa, lần sau lưu
+        }
+        for (Player pl : list) {
+            try {
+                if (pl != null && !pl.beforeDispose) {
+                    PlayerDAO.updatePlayer(pl);
+                }
+            } catch (Exception e) {
+                Logger.logException(Client.class, e, "Lỗi tự lưu");
+            }
+        }
     }
 
     public static Client gI() {
@@ -69,7 +100,9 @@ public class Client implements Runnable {
     private void remove(MySession session) {
         if (session.player != null) {
             this.remove(session.player);
-            session.player.dispose();
+            synchronized (session.player.saveLock) {
+                session.player.dispose();
+            }
         }
         if (session.joinedGame) {
             session.joinedGame = false;

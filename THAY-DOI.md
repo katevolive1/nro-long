@@ -110,3 +110,48 @@ UPDATE item_template SET description='Tăng tiềm năng sức mạnh khi đánh
 INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec,sort_order) VALUES (1000,64,579,1,1,1,2,4028,1);
 ```
 - Kiểm tra: `SELECT id,is_up_to_up FROM item_template WHERE id IN (1628,1045,579);` ra 1,1,1; `SELECT * FROM item_shop WHERE id=1000;` có dòng.
+
+### 15. Đuôi khỉ cho đệ, bùa x3 đệ tử (1826) ở Bà Hạt Mít, sư phụ nhận x3 khi đệ đánh, Cải trang Mabư Còm 50%, chết dùng đồ (trừ đổi khu/capsule/ăn đậu), gộp thêm đồ
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`NPoint` đuôi khỉ + bùa đệ x3, `Service.addSMTN` x3, `ItemTime`/`ItemTimeService`/`UseItem`/`PlayerDAO`/`MrBlue` bùa 1826, `UseItem`/`ChangeMapService` chặn khi chết, `DataGame.vsItem` = 18).
+- Client: không.
+- SQL (chạy từ file UTF-8, không gõ tiếng Việt qua Git Bash):
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template t JOIN item_template s ON s.id=1628 SET t.type=s.type,t.gender=s.gender,t.name='Bùa x3 tn,sm đệ tử',t.description='Có thể cộng dồn thời gian',t.level=s.level,t.icon_id=s.icon_id,t.part=s.part,t.is_up_to_up=1,t.power_require=s.power_require,t.gold=s.gold,t.gem=s.gem,t.head=s.head,t.body=s.body,t.leg=s.leg WHERE t.id=1826;
+INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec,sort_order) VALUES (1001,14,1826,1,1,1,20,0,0);
+UPDATE item_shop_option SET param=50 WHERE item_shop_id=913 AND option_id=160;
+UPDATE item_template SET is_up_to_up=1 WHERE id IN (1233,1703,1717,1537,1775,1480,1481,1552,1306,1307,1308);
+```
+- Ghi chú: 1826 dùng lại item trống (type 75), icon 13540 như bùa 1628; bán tab 14 (Bùa 1 giờ, Bà Hạt Mít) 20 ngọc. Cải trang Mabư Còm (1255) bán ở Santa: đồ đã mua trước đó vẫn giữ 30%.
+- Kiểm tra: `SELECT id,name,is_up_to_up FROM item_template WHERE id IN (1826,1233,1552);` ra 1; `SELECT param FROM item_shop_option WHERE item_shop_id=913 AND option_id=160;` ra 50.
+
+## 16. Bùa x3 đệ tử 8 giờ (1827) và 1 tháng (1828) — 31/10/2026
+
+- Build lại server (`build.bat`, `bt`); `DataGame.vsItem` = 19 (client tự tải lại dữ liệu vật phẩm, không cần cập nhật client). `ItemTime.lastTimeBuaDeX3` nay là thời điểm hết hạn.
+- SQL (chạy từ file UTF-8 hoặc phpMyAdmin):
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template t JOIN item_template s ON s.id=1826 SET t.type=s.type,t.gender=s.gender,t.name='Bùa x3 tn,sm đệ tử 8 giờ',t.description='Có thể cộng dồn thời gian',t.level=s.level,t.icon_id=s.icon_id,t.part=s.part,t.is_up_to_up=1,t.power_require=s.power_require,t.gold=s.gold,t.gem=s.gem,t.head=s.head,t.body=s.body,t.leg=s.leg WHERE t.id=1827;
+UPDATE item_template t JOIN item_template s ON s.id=1826 SET t.type=s.type,t.gender=s.gender,t.name='Bùa x3 tn,sm đệ tử 1 tháng',t.description='Có thể cộng dồn thời gian',t.level=s.level,t.icon_id=s.icon_id,t.part=s.part,t.is_up_to_up=1,t.power_require=s.power_require,t.gold=s.gold,t.gem=s.gem,t.head=s.head,t.body=s.body,t.leg=s.leg WHERE t.id=1828;
+UPDATE item_template SET name='Bùa x3 tn,sm đệ tử 1 giờ' WHERE id=1826;
+INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec,sort_order) VALUES (1002,15,1827,1,1,1,80,0,0),(1003,16,1828,1,1,1,2000,0,0);
+```
+
+## 17. Bùa x3 đệ tử thành bùa Bà Hạt Mít (mua là áp dụng, xem thời gian còn lại) — 31/10/2026
+
+- Build lại server (`build.bat`, `bt`); `DataGame.vsItem` = 20. Code: `Charms.addTimeCharms` (case 1826/1827/1828), `ShopService.resolveShopBua`.
+- SQL:
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức mạnh đệ tử nhận được. Mua là áp dụng luôn, cộng dồn thời gian' WHERE id IN (1826,1827,1828);
+```
+
+## 18. Client: thanh máu xanh giữa màn khi click mục tiêu → chữ đỏ "Tên" + "HP/HP tối đa" — 31/10/2026
+
+- Cập nhật client: chạy `client-patch\cap-nhat-client.bat` (đã thêm `patch-bo-thanh-muc-tieu`, cùng `patch-bo-man-trang`). Không có SQL, không cần build server.
+
+## 19. Chống roll back: tự lưu 5 phút, lưu khi đóng cửa sổ server, sửa đăng nhập đọc dữ liệu cũ; bỏ thông báo "đang chết không thể đổi khu" — 31/10/2026
+
+- Build lại server (`build.bat`, rồi `bt` trong console). Không có SQL, client không cần cập nhật.
+- `restart_server.bat` giờ chỉ `exit` (server cũ gọi file này sau bảo trì làm sinh thêm server thứ 2). Sau `git pull` kiểm tra chỉ có 1 cửa sổ server; nếu còn cửa sổ "Sever Se Tu Khoi Dong Lai Sau 5 Phut Nua..." thì đóng nó.

@@ -85,3 +85,11 @@ Ngoài cải trang: không có quà khác; kết thúc lưu thành tích bang (c
 
 ## 8. Không rơi đồ
 Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h, Super Bu, Pocolo, Ông già Noel, Lân con, và mọi boss không override `reward()`.
+
+## Tỉ lệ né của boss (dò 31/10/2026)
+
+- Boss né đòn theo 2 cách trong `injured()`:
+  - Chung: `Util.isTrue(this.nPoint.tlNeDon, 1000)` (Boss, Baby, Broly, SuperBroly, Cumber, XenBoHung, SieuBoHung, RobotVeSi, MabuNgoai, Drabura3, SonTinh, ThuyTinh, NhatThan, NguyetThan, KhiDot, GoldenFrieza, BlackGoku, SAIBAMEN, CADICH). Cadic, Goku, TaoPaiPai dùng `isTrue(tlNeDon, 1)`.
+  - Riêng: DrLychee `isTrue(level, 1000)`, Hatchiyack `isTrue(level + 10, 1000)`.
+- `nPoint.tlNeDon` chỉ được cộng từ option 108/111 (NPoint `calPoint`, option danh hiệu, vật phẩm, đá đen R7S) và bị reset về 0 khi tính lại. Code boss không gán giá trị nào cho `tlNeDon`, nên boss dùng `tlNeDon` hiện tại né 0% (trừ khi sau này có gán).
+- Dr Lychee: né Lv/1000. Hatchiyack: né (Lv+10)/1000.

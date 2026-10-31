@@ -34,7 +34,7 @@ public class DataGame {
     public static byte vsData = 9;
     public static byte vsMap = 2;
     public static byte vsSkill = 1;
-    public static byte vsItem = 17; // tăng khi đổi dữ liệu vật phẩm gửi client (10: tên kèm [id], 11: vé 1835, 13: chia 2 gói theo số byte, 14: bỏ [id] vì client có sẵn "Hiện ID Item/NPC", 15: hộp cải trang Hit 1747, 16: rađa kho báu 1532 cộng dồn, 17: bùa x2 đệ tử 1628 và đuôi khỉ 1045 cộng dồn)
+    public static byte vsItem = 20; // tăng khi đổi dữ liệu vật phẩm gửi client (10: tên kèm [id], 11: vé 1835, 13: chia 2 gói theo số byte, 14: bỏ [id] vì client có sẵn "Hiện ID Item/NPC", 15: hộp cải trang Hit 1747, 16: rađa kho báu 1532 cộng dồn, 17: bùa x2 đệ tử 1628 và đuôi khỉ 1045 cộng dồn, 20: bùa x3 đệ tử 1826-1828 thành loại bùa 13 (mua là áp dụng), 19: bùa x3 đệ tử 1827 (8h) 1828 (1 tháng), 18: bùa x3 đệ tử 1826, gộp 1233 1703 1717 1537 1775 1480 1481 1552 1306-1308)
     public static int vsRes = 1;
     public static short maxSmallVersion = 32767;
 

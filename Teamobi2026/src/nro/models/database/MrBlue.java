@@ -101,6 +101,11 @@ public class MrBlue {
                     if (secondsPass < Manager.SECOND_WAIT_LOGIN) {
                         Service.gI().sendWaitToLogin(session, Manager.SECOND_WAIT_LOGIN - secondsPass);
                     } else {
+                        // Đá (và lưu) phiên cũ trước rồi mới đọc DB; trước đây đọc trước nên nạp dữ liệu cũ → roll back
+                        plInGame = Client.gI().getPlayerByUser(session.userId);
+                        if (plInGame != null) {
+                            Client.gI().kickSession(plInGame.getSession());
+                        }
                         rs = LocalManager.executeQuery("select * from player where account_id = ? limit 1", session.userId);
                         if (!rs.first()) {
                             //-28 -4 version data game
@@ -109,10 +114,6 @@ public class MrBlue {
                             DataGame.sendDataItemBG(session);
                             Service.gI().switchToCreateChar(session);
                         } else {
-                            plInGame = Client.gI().getPlayerByUser(session.userId);
-                            if (plInGame != null) {
-                                Client.gI().kickSession(plInGame.getSession());
-                            }
                             if ((player = loadPlayer(rs, false)) != null) {
                                 player.isPlayer = true;
                                 player.deltaTime = deltaTime;
@@ -566,6 +567,7 @@ public class MrBlue {
             int iconMeal2 = 0;
             int timeUseNCD = 0;
             long timeKilis = 0;
+            long timeBuaDeX3 = 0;
             long timeNuocMia1 = 0;
             long timeNuocMia2 = 0;
             long timeNuocMia3 = 0;
@@ -638,6 +640,7 @@ public class MrBlue {
                 timeNuocMia3 = (int) Long.parseLong(String.valueOf(dataArray.get(28)));
             }
             if (dataArray.size() > 30) {
+                timeBuaDeX3 = Long.parseLong(String.valueOf(dataArray.get(30)));
             }
 
             player.itemTime.lastTimeBoHuyet = System.currentTimeMillis() - (ItemTime.TIME_ITEM - timeBoHuyet);
@@ -691,6 +694,8 @@ public class MrBlue {
             player.itemTime.isEatMeal2 = timeMeal2 != 0;
             player.itemTime.isUseNCD = timeUseNCD != 0;
             player.itemTime.isUseKilis = timeKilis != 0;
+            player.itemTime.isUseBuaDeX3 = timeBuaDeX3 > 0;
+            player.itemTime.lastTimeBuaDeX3 = System.currentTimeMillis() + timeBuaDeX3;
             player.itemTime.isUseNuocMia1 = timeNuocMia1 != 0;
             player.itemTime.isUseNuocMia2 = timeNuocMia2 != 0;
             player.itemTime.isUseNuocMia3 = timeNuocMia3 != 0;

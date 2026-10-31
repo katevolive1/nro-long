@@ -26,6 +26,9 @@ public class ItemTime {
     public static final int TIME_NUOC_MIA3 = 600_000;
 
     public static final int TIME_BUA_SANTA = 1800000;
+    public static final long TIME_BUA_DE_X3 = 3600000L;
+    public static final long TIME_BUA_DE_X3_8H = 8 * 3600000L;
+    public static final long TIME_BUA_DE_X3_1M = 30L * 24 * 3600000L;
     public static final int TIME_EAT_MEAL = 600000;
     public static final int TIME_CMS = 3600000;
     public static final int TIME_DK = 1800000;
@@ -62,6 +65,8 @@ public class ItemTime {
     public long lastTimeUseKhoBauX2;
     public boolean isUseBuaSanta;
     public long lastTimeBuaSanta;
+    public boolean isUseBuaDeX3; // bùa x3 tn,sm đệ tử (item 1826 1h, 1827 8h, 1828 1 tháng), cộng dồn thời gian
+    public long lastTimeBuaDeX3; // thời điểm hết hạn (ms)
 
     public long lastTimeUseCoBonLa;
     public boolean isUseCoBonLa;
@@ -253,6 +258,11 @@ public class ItemTime {
         if (isUseBuaSanta) {
             if (Util.canDoWithTime(lastTimeBuaSanta, TIME_BUA_SANTA)) {
                 isUseBuaSanta = false;
+            }
+        }
+        if (isUseBuaDeX3) {
+            if (System.currentTimeMillis() >= lastTimeBuaDeX3) {
+                isUseBuaDeX3 = false;
             }
         }
         if (isUseKhoBauX2) {

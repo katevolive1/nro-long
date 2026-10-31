@@ -7,6 +7,7 @@ import nro.models.consts.ConstRatio;
 import nro.models.intrinsic.Intrinsic;
 import nro.models.item.Item;
 import nro.models.item.Item.ItemOption;
+import nro.models.item.ItemTime;
 import nro.models.skill.Skill;
 import nro.models.server.Manager;
 import nro.models.services.EffectSkillService;
@@ -1702,7 +1703,9 @@ public class NPoint {
                     && ((Pet) this.player).master.getSession() != null && ((Pet) this.player).master.getSession().vip > 0) {
                 tiemNang += tn * 3;
             }
-            if (this.player.itemTime != null && this.player.itemTime.isUseDK) {
+            // Đuôi khỉ: đệ tử dùng đuôi khỉ của sư phụ
+            ItemTime itemTimeDK = this.player.isPet ? ((Pet) this.player).master.itemTime : this.player.itemTime;
+            if (itemTimeDK != null && itemTimeDK.isUseDK) {
                 tiemNang += tn * 2;
             }
             if (player.zone.map.mapId >= 135 && player.zone.map.mapId <= 138) {
@@ -1722,6 +1725,9 @@ public class NPoint {
             if (this.player.isPet) {
                 if (((Pet) this.player).master.itemTime.isUseBuaSanta) {
                     tiemNang += tn * 2;
+                }
+                if (((Pet) this.player).master.itemTime.isUseBuaDeX3) {
+                    tiemNang += tn * 3;
                 }
                 if (((Pet) this.player).master.nPoint != null && ((Pet) this.player).master.nPoint.tlTNSMPet > 0) {
                     tiemNang += tn / 100 * (((Pet) this.player).master.nPoint.tlTNSMPet + 100);

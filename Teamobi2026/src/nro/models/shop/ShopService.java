@@ -151,6 +151,13 @@ public class ShopService {
                     case 672:
                         min = (player.charms.tdTriTue4 - System.currentTimeMillis()) / 60000;
                         break;
+                    case 1826:
+                    case 1827:
+                    case 1828:
+                        if (player.itemTime.isUseBuaDeX3) {
+                            min = (player.itemTime.lastTimeBuaDeX3 - System.currentTimeMillis()) / 60000;
+                        }
+                        break;
                 }
                 if (min > 0) {
                     item.options.clear();

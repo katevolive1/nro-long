@@ -113,6 +113,9 @@ public class ChangeMapService {
      * @param pl
      */
     public void openZoneUI(Player pl) {
+        if (pl.isDie() && !pl.isBoss) { // chặn lặng lẽ, không hiện thông báo
+            return;
+        }
         if (pl.zone == null) {
             Service.gI().sendThongBaoOK(pl, "Không thể đổi khu vực trong map này");
             return;
@@ -163,6 +166,9 @@ public class ChangeMapService {
      * @param zoneId
      */
     public void changeZone(Player pl, int zoneId) {
+        if (pl.isDie() && !pl.isBoss) { // chặn lặng lẽ, không hiện thông báo
+            return;
+        }
         if (pl.zone == null) {
             NpcService.gI().createTutorial(pl, -1, "Không thể đến khu vực này");
             return;
