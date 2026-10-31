@@ -13,6 +13,8 @@ Danh sách những chỗ đang chỉnh để test. Khi mở bản chính thức,
 | `mob_bigboss/Hirudegarn.java` `DISABLED` | true | false |
 | DB `account.vnd` mặc định | 1000000 | 0 (`ALTER TABLE account ALTER vnd SET DEFAULT 0`) |
 | `map/phoban/DestronGas.java` `GIAM` (Khí Gas: chia máu + sát thương quái và Dr Lychee/Hatchiyack) | 20 | 1 |
+| `services/shenron/SummonDragon.java` `timeResummonShenron` (chờ gọi rồng lần sau, chung cả server) | 180000 (3 phút) | 600000 (10 phút) |
+| `boss/Boss_Manager/BossManager.loadBoss` Mặt Trời (`createBoss(BossID.MAT_TROI, 5)`) | comment (tắt) | 5 con |
 
 ## Khí Gas Hủy Diệt – công thức gốc (trước khi chia `GIAM`)
 Đặt `GIAM = 1` là về đúng như dưới. Lv = cấp độ 1–110.

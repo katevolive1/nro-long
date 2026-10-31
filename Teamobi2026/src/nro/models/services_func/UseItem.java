@@ -15,6 +15,7 @@ import nro.models.item.ItemTime;
 import nro.models.consts.ConstNpc;
 import nro.models.consts.ConstPlayer;
 import nro.models.services.shenron.Shenron_Service;
+import nro.models.services.shenron.Shenron_BiNgo;
 import nro.models.item.Item.ItemOption;
 import static java.awt.SystemColor.text;
 import java.io.IOException;
@@ -1775,6 +1776,8 @@ public class UseItem {
             }
         } else if (tempId >= Shenron_Service.NGOC_RONG_1_SAO && tempId <= Shenron_Service.NGOC_RONG_7_SAO) {
             Shenron_Service.gI().openMenuSummonShenron(pl, 0);
+        } else if (tempId >= Shenron_BiNgo.BI_NGO_1_SAO && tempId <= Shenron_BiNgo.BI_NGO_7_SAO) {
+            Shenron_BiNgo.openMenuSummonShenron(pl);
         }
     }
 

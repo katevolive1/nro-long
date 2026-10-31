@@ -155,3 +155,95 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 - Build lại server (`build.bat`, rồi `bt` trong console). Không có SQL, client không cần cập nhật.
 - `restart_server.bat` giờ chỉ `exit` (server cũ gọi file này sau bảo trì làm sinh thêm server thứ 2). Sau `git pull` kiểm tra chỉ có 1 cửa sổ server; nếu còn cửa sổ "Sever Se Tu Khoi Dong Lai Sau 5 Phut Nua..." thì đóng nó.
+
+## 20. Đệ tử tự cộng tiềm năng chỉ vào HP/KI/SĐ (không cộng giáp gốc, chí mạng gốc) — 31/10/2026
+
+- Build lại server (`build.bat`, `bt`). Code: `Pet.increasePoint` (`Util.nextInt(0, 2)`, trước là `0..4`). Không có SQL, client không cần cập nhật.
+
+## 21. Client: sửa crash khi mua số lượng (vd 5 món ở Santa) — 31/10/2026
+
+- Cập nhật client: chạy `client-patch\cap-nhat-client.bat` (`patch-mua-nhanh.ps1` bản mới, nhận cả bản cũ). Không có SQL, không cần build server.
+
+## 22. Gift code `danangcap`: 9999 mỗi loại đá + 999 Đá bảo vệ — 31/10/2026
+
+- SQL (code chỉ có trong DB, id 1266; phát đúng item/số lượng ghi trong JSON, không option, cần 19 ô hành trang trống, mỗi nhân vật dùng 1 lần). Đá: 220–224 (lục bảo, Saphia, Ruby, Titan, thạch anh tím), 674 ngũ sắc, 935 xanh lam, 1074–1078 nâng cấp cấp 1–5, 1079–1083 may mắn cấp 1–5, 1439 mài (mỗi loại 9999), 987 Đá bảo vệ (999). Không có 1143 (Đá bảo vệ khóa).
+  ```sql
+  INSERT INTO giftcode (code, count_left, detail, expired) VALUES ('danangcap', 999999999,
+  '[{"id":220,"quantity":9999,"options":[]},{"id":221,"quantity":9999,"options":[]},{"id":222,"quantity":9999,"options":[]},{"id":223,"quantity":9999,"options":[]},{"id":224,"quantity":9999,"options":[]},{"id":674,"quantity":9999,"options":[]},{"id":935,"quantity":9999,"options":[]},{"id":1074,"quantity":9999,"options":[]},{"id":1075,"quantity":9999,"options":[]},{"id":1076,"quantity":9999,"options":[]},{"id":1077,"quantity":9999,"options":[]},{"id":1078,"quantity":9999,"options":[]},{"id":1079,"quantity":9999,"options":[]},{"id":1080,"quantity":9999,"options":[]},{"id":1081,"quantity":9999,"options":[]},{"id":1082,"quantity":9999,"options":[]},{"id":1083,"quantity":9999,"options":[]},{"id":1439,"quantity":9999,"options":[]},{"id":987,"quantity":999,"options":[]}]',
+  '2030-01-01 00:00:00');
+  INSERT INTO giftcode_reload_request () VALUES ();
+  ```
+- Build: không. Client: không cần cập nhật.
+
+## 23. Bà Hạt Mít (map 5): đổi đồ Thần Linh → Hủy Diệt (10 thỏi vàng), 3 Hủy Diệt → 1 món kích hoạt (20 thỏi vàng) — 31/10/2026
+
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `combine/DoiDoBaHatMit.java`, `CombineService` (tab 998/999), `BaHatMit` (2 nút cuối menu map 5), `ItemService.randomItemSKH` (tách bảng món kích hoạt dùng chung, capsule không đổi hành vi), `Item.isHuyDiet`. Chi tiết trong CO-CHE.md mục "Đồ Hủy Diệt".
+
+## 24. Công thức thiên sứ Namếc/Xayda cộng dồn; gift code `giangsinh` (2000 Hộp quà giáng sinh 648) — 31/10/2026
+
+- Build lại server (`build.bat`, `bt`; `DataGame.vsItem` = 21, client tự tải lại dữ liệu vật phẩm, không cần cập nhật client).
+- SQL (Công thức 1072, 1073 và VIP 1085, 1086 trước đây `is_up_to_up = 0` nên mỗi cái chiếm 1 ô; code `giangsinh` id 1267, mỗi nhân vật dùng 1 lần, cần 1 ô trống):
+  ```sql
+  UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1072, 1073, 1085, 1086);
+  INSERT INTO giftcode (code, count_left, detail, expired) VALUES ('giangsinh', 999999999,
+  '[{"id":648,"quantity":2000,"options":[]}]', '2030-01-01 00:00:00');
+  INSERT INTO giftcode_reload_request () VALUES ();
+  ```
+
+## 25. Gift code `danangcap`: bỏ đá nâng cấp/may mắn cấp 1–4, thêm 999 Hematite + 999 Dùi đục, mọi món khóa — 31/10/2026
+
+- SQL (chạy sau mục 22; còn lại đá 220–224, 674, 935, 1078 nâng cấp cấp 5, 1083 may mắn cấp 5, 1439 mài mỗi loại 9999, 987 Đá bảo vệ 999, 1423 Hematite 999, 1438 Dùi đục 999; mọi món có option `30:0` không thể giao dịch; cần 13 ô trống). Nhân vật đã nhập code này trước đó không nhập lại được.
+  ```sql
+  UPDATE giftcode SET detail = '[{"id":220,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":221,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":222,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":223,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":224,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":674,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":935,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1078,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1083,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1439,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":987,"quantity":999,"options":[{"id":30,"param":0}]},{"id":1423,"quantity":999,"options":[{"id":30,"param":0}]},{"id":1438,"quantity":999,"options":[{"id":30,"param":0}]}]' WHERE code = 'danangcap';
+  INSERT INTO giftcode_reload_request () VALUES ();
+  ```
+- Build: không. Client: không cần cập nhật.
+
+## 26. Gọi rồng 3 phút/lần, tắt boss Mặt Trời, `danangcap`: đá 220–224 và Đá bảo vệ giao dịch được — 31/10/2026
+
+- Build lại server (`build.bat`, rồi `bt`). Code: `SummonDragon.timeResummonShenron` 180000 (gốc 600000), `BossManager.loadBoss` comment dòng Mặt Trời. Client không cần cập nhật.
+- SQL (chạy sau mục 25; bỏ option 30 khỏi 220–224 và 987, các món khác vẫn khóa):
+  ```sql
+  UPDATE giftcode SET detail = '[{"id":220,"quantity":9999,"options":[]},{"id":221,"quantity":9999,"options":[]},{"id":222,"quantity":9999,"options":[]},{"id":223,"quantity":9999,"options":[]},{"id":224,"quantity":9999,"options":[]},{"id":674,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":935,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1078,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1083,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1439,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":987,"quantity":999,"options":[]},{"id":1423,"quantity":999,"options":[{"id":30,"param":0}]},{"id":1438,"quantity":999,"options":[{"id":30,"param":0}]}]' WHERE code = 'danangcap';
+  INSERT INTO giftcode_reload_request () VALUES ();
+  ```
+
+## 27. Giáp tập luyện cho đệ tử tích theo giây, nhận Giáp tập luyện cấp 5 (1869), cho đục lỗ cải trang — 31/10/2026
+
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `EffectSkin.updateTrainArmor` (đệ mặc +1/giây khi đệ đánh), `NPoint.setDameTrainArmor` (đệ mặc bị giảm sức đánh; sư phụ chỉ tính giáp còn trong hành trang), `ItemService.isTrainArmor`/`getPercentTrainArmor` (1869 = 50%), `CombineSystem.isTrangBiPhaLeHoa` + `Item.canPhaLeHoa` (thêm type 5). Chi tiết: CO-CHE.md mục "Giáp tập luyện".
+
+## 28. Client: khung hành trang bị lem khi trúng Thái Dương Hạ San — 31/10/2026
+
+- Cập nhật client: **đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (`patch-bo-man-trang.ps1` bản 4: trúng Thái Dương chỉ bị choáng, không trắng màn, màn hình vẽ như gốc; nhận bản gốc và bản 1–3). Không có SQL, không cần build server.
+
+## 29. Bí ngô gọi rồng, nhiệm vụ hằng ngày 99 lượt + Bí ngô 1/2 sao — 31/10/2026
+
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `services/shenron/Shenron_BiNgo.java` (mới), `models/ShenronEvent.java`, `Player.shenronBiNgo`, `Client` (mất kết nối), `NpcFactory` (menu Con mèo + menu ước), `ConstNpc.SUMMON_SHENRON_BI_NGO`, `UseItem.controllerCallRongThan`, `ConstTask.MAX_SIDE_TASK` = 99, `TaskService.paySideTask` (địa ngục ra Bí ngô 702–704). Chi tiết: CO-CHE.md mục "Bí ngô" và "Nhiệm vụ hằng ngày".
+
+## 30. Boss Thiên sứ + Hủy diệt, map Trạm hủy diệt 186–188 — 31/10/2026
+
+- File dữ liệu map đã theo git: `Teamobi2026/data/map/tile_map_data/186..188` (chép Rừng Karin 47), `item_bg_map_data/186..188` (cây của Rừng Karin, bỏ Tháp Karin và lều).
+- SQL (tạo 3 map, nối cổng mép trái Vách núi 42/43/44):
+  ```sql
+  INSERT INTO map_template (id, NAME, zones, max_player, data, type, planet_id, bg_type, tile_id, bg_id, waypoints, mobs, npcs, is_map_double) VALUES
+  (186, 'Trạm hủy diệt', 10, 15, '[1,0,0,4,3]', 0, 0, 0, 4, 3, '[["Vách núi Aru",936,312,960,336,0,0,42,60,264]]', '[]', '[]', 0),
+  (187, 'Trạm hủy diệt', 10, 15, '[1,0,0,4,3]', 0, 1, 0, 4, 3, '[["Vách núi Moori",936,312,960,336,0,0,43,60,240]]', '[]', '[]', 0),
+  (188, 'Trạm hủy diệt', 10, 15, '[1,0,0,4,3]', 0, 2, 0, 4, 3, '[["Vách núi Kakarot",936,312,960,336,0,0,44,60,264]]', '[]', '[]', 0);
+  UPDATE map_template SET waypoints = '[["Làng Aru",1416,408,1440,432,0,0,0,60,432],["Trạm hủy diệt",0,240,24,264,0,0,186,900,336]]' WHERE id = 42;
+  UPDATE map_template SET waypoints = '[["Làng Mori",1416,408,1440,432,0,0,7,60,408],["Trạm hủy diệt",0,216,24,240,0,0,187,900,336]]' WHERE id = 43;
+  UPDATE map_template SET waypoints = '[["Làng Kakarot",1416,408,1440,432,0,0,14,60,408],["Đại hội võ thuật",936,408,1008,432,1,0,52,620,336],["Trạm hủy diệt",0,240,24,264,0,0,188,900,336]]' WHERE id = 44;
+  ```
+- Build lại server (`build.bat`), **tắt hẳn rồi bật lại server** (map mới chỉ nạp lúc khởi động; `bt` cũng được vì `run.bat` tự chạy lại). Code: `boss/thien_su/` (mới), `BossID`, `BossManager.loadBoss`/`createBoss`, `DataGame.vsMap` = 3 (client tự tải lại danh sách map). Client không cần cập nhật `GameAssembly.dll`. Chi tiết: BOSS-ROI-DO.md mục 3b, KE-HOACH-BOSS-THIEN-SU.md.
+
+## 31. Client: danh sách server lấy từ `Config.properties`, thêm server `home` — 31/10/2026
+
+- Cập nhật client: **đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-danh-sach-server.ps1`: tắt `isMultiSever`, client dùng đúng danh sách server gửi, hết nút "DragonBoy"/"0"/nút trống). Không có SQL.
+- `Teamobi2026/Config.properties`: tắt `server.ip` (để `server.name` chỉ dùng cho câu chào), danh sách = `server.sv1=Home:127.0.0.1:14446`, `server.sv2=sv1:ngocrongprivate.kozow.com:14446`. Khởi động lại server (`bt`) để nạp. Danh sách server trên client = `server.name`/`server.ip`/`server.port` rồi `server.sv1..10`, sửa ở đây là người chơi thấy sau khi kết nối 1 lần.
+
+## 32. Đi bộ từ mép trái Vách núi 42/43/44 sang Trạm hủy diệt — 31/10/2026
+
+- Cột tile ngoài cùng của map là tường; cổng ở mép map phải có 1 ô trống (tile 0) ở cột 0 (mép trái) hoặc cột cuối (mép phải), hàng = `minY/24` của cổng. 42/43/44 chưa có ô này nên đi bộ bị chặn (phím L của mod dịch chuyển thẳng nên vẫn qua). Đã mở ô: `tile_map_data/42` và `44` hàng 10, `43` hàng 9 (file theo git). Không có SQL, client không cần cập nhật. Khởi động lại server (`bt`) và thoát game vào lại.
+
+## 33. Client: tự đánh `ak` vẫn đánh khi mở hành trang — 31/10/2026
+
+- Cập nhật client: **đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-ak-hanh-trang.ps1`). Không có SQL, không cần build server. Chi tiết: `client-patch/CLIENT-UNITY.md` mục "Tự đánh `ak` dừng khi mở hành trang".

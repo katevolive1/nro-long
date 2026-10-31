@@ -26,7 +26,7 @@ Cột JSON chính:
 | `items_box` | rương đồ |
 | `items_box_lucky_round` | rương vòng quay may mắn |
 | `items_daban` | đồ đã bán (mua lại) |
-| `pet` | đệ tử `[info, chỉ số, items_body, skills]`; info = `[typePet, gender, tên, typeFusion, thời gian hợp thể, status]`; chỉ số giống `data_point` |
+| `pet` | đệ tử `[info, chỉ số, items_body, skills]`; info = `[typePet, gender, tên, typeFusion, thời gian hợp thể, status]`; chỉ số là 12 số (không có critdragon, năng động): `[limitPower, sức mạnh, tiềm năng, thể lực, thể lực max, hpGốc, kiGốc, sđGốc, giápGốc, chí mạng gốc, hp hiện tại, ki hiện tại]`. Chỉ số của đệ nằm trong chuỗi con (không escape), sửa bằng `REPLACE` như mục "Sửa chỉ số đệ tử" dưới đây |
 | `skills`, `skills_shortcut` | kỹ năng `[id, level, lastTimeUse, …]`, ô phím tắt |
 | `friends`, `enemies` | bạn bè, kẻ thù |
 | `data_intrinsic` | nội tại |
@@ -45,6 +45,17 @@ Cột JSON chính:
 [id item, số lượng, "[[id option, chỉ số], ...]", thời gian tạo (ms)]
 ```
 Ô trống có id `-1`. Đồ không cộng dồn (cải trang, trang bị) mỗi cái 1 ô. Trong DB dấu `"` bên trong bị escape nhiều lớp (`\"`, `\\\"`). Option hay gặp: `93` hạn sử dụng (ngày), `154` không bán lại, `107` số sao pha lê, `102` sao pha lê đã ép, `30` không giao dịch. Tên option ở `item_option_template`.
+
+## Sửa chỉ số đệ tử (bằng SQL)
+- Đọc: `SELECT id, name, pet FROM player WHERE id = <id>;` (đệ nằm trong cột `pet`, phần tử thứ 2 là chỉ số 12 số, xem bảng ở trên).
+- Sửa: chỉ thay đúng chuỗi chỉ số cũ bằng chuỗi mới (giữ 12 vị trí, đếm từ 1; đổi `sức mạnh` ở vị trí 2, `tiềm năng` ở vị trí 3):
+  ```sql
+  UPDATE player SET pet = REPLACE(pet, '[0,813743,43,569,1000,2760,2320,101,45,0,2760,2320]', '[0,5000000000,1000000,569,1000,2760,2320,101,45,0,2760,2320]') WHERE id = <id>;
+  ```
+  Kiểm tra số dòng báo "Rows matched: 1". Nếu 0 dòng, chuỗi cũ không khớp (đọc lại cột `pet`).
+- **Phải để nhân vật (sư phụ) offline** khi sửa: server giữ bản trong RAM, tự lưu mỗi 5 phút (`Client.saveAll`) và khi thoát sẽ ghi đè lại DB. Nâng HP/KI gốc (vị trí 6, 7) thì đặt HP/KI hiện tại (vị trí 11, 12) không vượt HP/KI tối đa mới.
+- Mốc ảnh hưởng: sức mạnh đệ ≥ 50 tỷ (5000000000) mới mở được giới hạn sức mạnh (`ToSuKaio.handleLimitPowerPet`); giới hạn theo `limitPower` (vị trí 1) qua `NPoint.getHpMpLimit`/`getDameLimit`.
+- Trong game (đệ đang online): `upp <số>` cộng cùng lúc sức mạnh và tiềm năng cho đệ (`Command` + `Service.addSMTN` type 2), và cộng thêm cho sư phụ (1/12 nếu sư phụ ≥ 40 tỷ, rồi nhân 3). Không có lệnh riêng để chỉ đổi tiềm năng hay sức mạnh, nên đặt giá trị chính xác thì sửa DB.
 
 ## Bang hội
 - `clan`: `id`, `NAME`, `NAME_2` (tên viết tắt 4 ký tự), `slogan`, `img_id`, `power_point`, `max_member`, `clan_point`, `LEVEL`, `members` (JSON thành viên: `id`, `name`, `head`, `body`, `leg`, `role`, `donate`, `receive_donate`, `member_point`, `clan_point`, `join_time` giây Unix, `ask_pea_time`, `power`), `tops`, `create_time`, `thanhTichBDKB`, `thongTinLeader`.

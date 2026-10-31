@@ -286,7 +286,7 @@ public class Item {
     }
 
     public boolean canPhaLeHoa() {
-        return this.template != null && (this.template.type < 5 || this.template.type == 32);
+        return this.template != null && (this.template.type <= 5 || this.template.type == 32);
     }
 
     public Item cloneItem() {
@@ -318,6 +318,10 @@ public class Item {
             return true;
         }
         return false;
+    }
+
+    public boolean isHuyDiet() {
+        return this.template.id >= 650 && this.template.id <= 662;
     }
 
     public boolean isThucAn() {

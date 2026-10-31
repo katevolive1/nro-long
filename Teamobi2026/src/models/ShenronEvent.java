@@ -58,7 +58,7 @@ public class ShenronEvent {
                         player = pl;
                         if (player.zone != null && player.zone.map.mapId != 0 && player.zone.map.mapId != 7 && player.zone.map.mapId != 14
                                 && player.zone.map.mapId != 21 && player.zone.map.mapId != 22 && player.zone.map.mapId != 23) {
-                            //          player.shenronEvent = this;
+                            player.shenronBiNgo = this;
                             zone = player.zone;
                             player.idMark.setShenronType(shenronType);
                             isPlayerDisconnect = false;
@@ -221,7 +221,7 @@ public class ShenronEvent {
         if (!shenronLeave) {
             shenronLeave = true;
             if (player != null && player.zone != null) {
-                player.shenronEvent = null;
+                player.shenronBiNgo = null;
                 if (!leaveMap) {
                     NpcService.gI().createTutorial(player, 0, "Điều ước của ngươi đã được thực hiện...tạm biệt");
                 }

@@ -146,6 +146,9 @@ public class Client implements Runnable {
             if (player.shenronEvent != null) {
                 player.shenronEvent.isPlayerDisconnect = true;
             }
+            if (player.shenronBiNgo != null) {
+                player.shenronBiNgo.isPlayerDisconnect = true;
+            }
             if (player.mobMe != null) {
                 player.mobMe.mobMeDie();
             }

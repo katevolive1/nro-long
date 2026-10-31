@@ -765,6 +765,16 @@ public class NPoint {
     }
 
     private void setDameTrainArmor() {
+        // Đệ tử mặc giáp tập luyện cũng bị giảm sức đánh (tích giáp ở EffectSkin.updateTrainArmor của sư phụ)
+        if (this.player.isPet && !this.player.isNewPet) {
+            if (this.player.inventory.itemsBody.size() > 6) {
+                Item gtl = this.player.inventory.itemsBody.get(6);
+                if (gtl.isNotNullItem() && ItemService.gI().isTrainArmor(gtl)) {
+                    this.tlSubSD += ItemService.gI().getPercentTrainArmor(gtl);
+                }
+            }
+            return;
+        }
         if (!this.player.isPet && !this.player.isBot && !this.player.isBoss) {
             if (this.player.inventory.itemsBody.size() < 7) {
                 return;
@@ -776,13 +786,16 @@ public class NPoint {
                     this.player.inventory.trainArmor = gtl;
                     this.tlSubSD += ItemService.gI().getPercentTrainArmor(gtl);
                 } else {
-                    if (this.player.inventory.trainArmor == null) {
+                    // Giáp đã đưa cho đệ / cất rương / bán thì không còn tính cho sư phụ
+                    final Item oldGtl = this.player.inventory.trainArmor;
+                    if (oldGtl == null || this.player.inventory.itemsBag.stream().noneMatch(it -> it == oldGtl)) {
                         gtl = this.player.inventory.itemsBag.stream().filter(item -> item.isNotNullItem() && item.template.type == 32 && item.itemOptions != null
                                 && item.itemOptions.stream().filter(io -> io.optionTemplate.id == 9 && io.param > 0).findFirst().orElse(null) != null).findFirst().orElse(null);
+                        this.wearingTrainArmor = false;
+                        this.player.inventory.trainArmor = gtl;
                         if (gtl == null) {
                             return;
                         }
-                        this.player.inventory.trainArmor = gtl;
                     }
                     this.wearingTrainArmor = false;
                     for (Item.ItemOption io : this.player.inventory.trainArmor.itemOptions) {

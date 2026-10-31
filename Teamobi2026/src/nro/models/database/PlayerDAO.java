@@ -37,7 +37,7 @@ public class PlayerDAO {
     public static boolean createNewPlayer(int userId, String name, byte gender, int hair) {
         try {
             JSONArray dataArray = new JSONArray();
-            int greenGem = (Manager.TEST) ? 1000000000 : 1000000000;
+            int greenGem = (Manager.TEST) ? 1000000000 : 10000000;
             dataArray.add(5000000000L); //vàng
             dataArray.add(greenGem); //ngọc xanh
             dataArray.add(0); //hồng ngọc
@@ -133,11 +133,11 @@ public class PlayerDAO {
                     item.add(10); //số lượng
                     options.add(opt.toJSONString());
                     opt.clear();
-                } else if (i == 1) { //20.000 thỏi vàng khởi đầu, khóa (không giao dịch)
+                } else if (i == 1) { //500.000 thỏi vàng khởi đầu, khóa (không giao dịch)
                     opt.add(30); //id option: không thể giao dịch
                     opt.add(0); //param option
                     item.add(457); //id item
-                    item.add(20000); //số lượng
+                    item.add(500000); //số lượng
                     options.add(opt.toJSONString());
                     opt.clear();
                 } else {

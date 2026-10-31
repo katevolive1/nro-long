@@ -127,6 +127,54 @@ public class ItemService {
         return item;
     }
 
+    // Món kích hoạt theo [hành tinh][loại: áo, quần, găng, giày, rada], dùng chung cho capsule kích hoạt, vé tặng ngọc và Bà Hạt Mít (đổi đồ Hủy Diệt)
+    private static final int[][][] SKH_ITEM_IDS = {
+        { // Trái đất
+            {0, 3, 33, 34, 136, 137, 138, 139, 230, 231, 232, 233}, // Áo
+            {6, 9, 35, 36, 140, 141, 142, 143, 242, 243, 244, 245}, // Quần
+            {21, 24, 37, 38, 144, 145, 146, 147, 254, 256, 257}, // Găng
+            {27, 30, 39, 40, 148, 149, 150, 151, 266, 267, 268, 269}, // Giày
+            {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
+        },
+        { // Namek
+            {1, 4, 41, 42, 152, 153, 154, 155, 235, 236, 237}, // Áo
+            {7, 10, 43, 44, 156, 157, 158, 159, 246, 247, 248, 249}, // Quần
+            {22, 25, 45, 46, 160, 161, 162, 163, 259, 260, 261}, // Găng
+            {28, 31, 47, 48, 164, 165, 166, 167, 270, 271, 272, 273}, // Giày
+            {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
+        },
+        { // Xayda
+            {2, 5, 49, 50, 168, 169, 170, 171, 238, 239, 240, 241}, // Áo
+            {8, 11, 51, 52, 172, 173, 174, 174, 250, 251, 252, 253}, // Quần
+            {23, 26, 53, 54, 176, 177, 178, 179, 262, 263, 264, 265}, // Găng
+            {29, 32, 55, 56, 180, 181, 182, 183, 274, 275, 276, 277}, // Giày
+            {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
+        }
+    };
+
+    private static final int[][] SKH_OPTION_IDS = {
+        {128, 129, 127, 233, 245}, // Trái đất
+        {130, 131, 132, 233, 237}, // Namek
+        {133, 135, 134, 233, 241} // Xayda
+    };
+
+    /**
+     * Tạo ngẫu nhiên 1 món kích hoạt như capsule kích hoạt.
+     *
+     * @param gender hành tinh (0 Trái Đất, 1 Namếc, 2 Xayda; lớn hơn 2 tính như Xayda)
+     * @param select loại món: 0 áo, 1 quần, 2 găng, 3 giày, 4 rada
+     */
+    public Item randomItemSKH(int gender, int select) {
+        if (gender > 2) {
+            gender = 2;
+        }
+        int[] selectedItemIds = SKH_ITEM_IDS[gender][select];
+        int itemId = selectedItemIds[Util.nextInt(selectedItemIds.length)];
+        int[] possibleOptions = SKH_OPTION_IDS[gender];
+        int optionRandom = possibleOptions[Util.nextInt(possibleOptions.length)];
+        return createItemSKH(itemId, optionRandom);
+    }
+
     public void OpenSKH(Player player, int itemUseId, int select) throws Exception {
         if (select < 0 || select > 4) {
             return;
@@ -141,46 +189,7 @@ public class ItemService {
             return;
         }
 
-        int gender = player.gender;
-        if (gender > 2) {
-            gender = 2;
-        }
-        int[][][] itemIds = {
-            { // Trái đất
-                {0, 3, 33, 34, 136, 137, 138, 139, 230, 231, 232, 233}, // Áo
-                {6, 9, 35, 36, 140, 141, 142, 143, 242, 243, 244, 245}, // Quần
-                {21, 24, 37, 38, 144, 145, 146, 147, 254, 256, 257}, // Găng
-                {27, 30, 39, 40, 148, 149, 150, 151, 266, 267, 268, 269}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            },
-            { // Namek
-                {1, 4, 41, 42, 152, 153, 154, 155, 235, 236, 237}, // Áo
-                {7, 10, 43, 44, 156, 157, 158, 159, 246, 247, 248, 249}, // Quần
-                {22, 25, 45, 46, 160, 161, 162, 163, 259, 260, 261}, // Găng
-                {28, 31, 47, 48, 164, 165, 166, 167, 270, 271, 272, 273}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            },
-            { // Xayda
-                {2, 5, 49, 50, 168, 169, 170, 171, 238, 239, 240, 241}, // Áo
-                {8, 11, 51, 52, 172, 173, 174, 174, 250, 251, 252, 253}, // Quần
-                {23, 26, 53, 54, 176, 177, 178, 179, 262, 263, 264, 265}, // Găng
-                {29, 32, 55, 56, 180, 181, 182, 183, 274, 275, 276, 277}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            }
-        };
-
-        int[][] optionIds = {
-            {128, 129, 127, 233, 245}, // Trái đất
-            {130, 131, 132, 233, 237}, // Namek
-            {133, 135, 134, 233, 241} // Xayda
-        };
-
-        int[] selectedItemIds = itemIds[gender][select];
-        int itemId = selectedItemIds[Util.nextInt(selectedItemIds.length)];
-        int[] possibleOptions = optionIds[gender];
-        int optionRandom = possibleOptions[Util.nextInt(possibleOptions.length)];
-
-        Item item = createItemSKH(itemId, optionRandom);
+        Item item = randomItemSKH(player.gender, select);
         if (item != null) {
             InventoryService.gI().addItemBag(player, item);
             InventoryService.gI().sendItemBags(player);
@@ -204,46 +213,7 @@ public class ItemService {
             return;
         }
 
-        int gender = player.gender;
-        if (gender > 2) {
-            gender = 2;
-        }
-        int[][][] itemIds = {
-            { // Trái đất
-                {0, 3, 33, 34, 136, 137, 138, 139, 230, 231, 232, 233}, // Áo
-                {6, 9, 35, 36, 140, 141, 142, 143, 242, 243, 244, 245}, // Quần
-                {21, 24, 37, 38, 144, 145, 146, 147, 254, 256, 257}, // Găng
-                {27, 30, 39, 40, 148, 149, 150, 151, 266, 267, 268, 269}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            },
-            { // Namek
-                {1, 4, 41, 42, 152, 153, 154, 155, 235, 236, 237}, // Áo
-                {7, 10, 43, 44, 156, 157, 158, 159, 246, 247, 248, 249}, // Quần
-                {22, 25, 45, 46, 160, 161, 162, 163, 259, 260, 261}, // Găng
-                {28, 31, 47, 48, 164, 165, 166, 167, 270, 271, 272, 273}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            },
-            { // Xayda
-                {2, 5, 49, 50, 168, 169, 170, 171, 238, 239, 240, 241}, // Áo
-                {8, 11, 51, 52, 172, 173, 174, 174, 250, 251, 252, 253}, // Quần
-                {23, 26, 53, 54, 176, 177, 178, 179, 262, 263, 264, 265}, // Găng
-                {29, 32, 55, 56, 180, 181, 182, 183, 274, 275, 276, 277}, // Giày
-                {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281} // Rada
-            }
-        };
-
-        int[][] optionIds = {
-            {128, 129, 127, 233, 245}, // Trái đất
-            {130, 131, 132, 233, 237}, // Namek
-            {133, 135, 134, 233, 241} // Xayda
-        };
-
-        int[] selectedItemIds = itemIds[gender][select];
-        int itemId = selectedItemIds[Util.nextInt(selectedItemIds.length)];
-        int[] possibleOptions = optionIds[gender];
-        int optionRandom = possibleOptions[Util.nextInt(possibleOptions.length)];
-
-        Item item = createItemSKH(itemId, optionRandom);
+        Item item = randomItemSKH(player.gender, select);
         if (item != null) {
             InventoryService.gI().addItemBag(player, item);
             InventoryService.gI().sendItemBags(player);
@@ -375,6 +345,8 @@ public class ItemService {
                     return 30;
                 case 1716:
                     return 40;
+                case 1869:
+                    return 50;
                 default:
                     return 0;
             }
@@ -393,6 +365,7 @@ public class ItemService {
                 case 531:
                 case 536:
                 case 1716:
+                case 1869:
                     return true;
                 default:
                     return false;

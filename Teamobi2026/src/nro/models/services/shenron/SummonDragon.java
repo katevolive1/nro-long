@@ -76,7 +76,7 @@ public class SummonDragon {
     private final Map pl_dragonStar;
     private long lastTimeShenronAppeared;
     private long lastTimeShenronWait;
-    private final int timeResummonShenron = 600000;
+    private final int timeResummonShenron = 180000; // 3 phút (gốc 10 phút)
     private boolean isShenronAppear;
     private final int timeShenronWait = 300000;
 

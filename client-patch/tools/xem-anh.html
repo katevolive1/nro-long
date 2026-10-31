@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xem ảnh icon</title>
+<style>
+  :root { --bg: #1e1f22; --panel: #2b2d31; --text: #e6e6e6; --muted: #9aa0a6; --accent: #4f8cff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px system-ui, sans-serif; }
+  header { position: sticky; top: 0; z-index: 2; background: var(--panel); padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; border-bottom: 1px solid #000; }
+  header label { color: var(--muted); }
+  input[type=text] { width: 220px; padding: 6px 8px; background: #1b1c1f; color: var(--text); border: 1px solid #444; border-radius: 6px; }
+  button, .btn { padding: 6px 12px; background: var(--accent); color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+  button.ghost { background: #3a3d42; }
+  #info { color: var(--muted); }
+  #grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--cell, 120px), 1fr)); gap: 8px; padding: 16px; }
+  .cell { background: var(--panel); border-radius: 8px; padding: 6px; text-align: center; cursor: pointer; border: 2px solid transparent; }
+  .cell:hover { border-color: var(--accent); }
+  .img { height: var(--cell, 120px); display: flex; align-items: center; justify-content: center; border-radius: 6px;
+         background-color: var(--imgbg, #3a3d42); background-image: var(--check, none); background-size: 16px 16px; }
+  .img img { max-width: 100%; max-height: 100%; image-rendering: pixelated; }
+  .name { margin-top: 4px; font-size: 12px; color: var(--muted); word-break: break-all; }
+  #pager { padding: 0 16px 24px; display: flex; gap: 8px; align-items: center; }
+  #big { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: none; align-items: center; justify-content: center; flex-direction: column; gap: 10px; z-index: 5; }
+  #big img { max-width: 90vw; max-height: 80vh; image-rendering: pixelated; background: var(--imgbg, #3a3d42); background-image: var(--check, none); background-size: 16px 16px; }
+  .hint { padding: 40px 16px; color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <label class="btn">Chọn thư mục ảnh<input id="dir" type="file" webkitdirectory multiple hidden></label>
+  <label>Lọc: <input id="filter" type="text" placeholder="vd 4843 · 4800-4900 · 48*"></label>
+  <label>Cỡ: <input id="size" type="range" min="48" max="320" value="120"></label>
+  <label>Nền: <select id="bg"><option value="dark">Tối</option><option value="light">Sáng</option><option value="check">Ô caro</option></select></label>
+  <span id="info"></span>
+</header>
+<div id="grid"><div class="hint">Bấm "Chọn thư mục ảnh" rồi chọn thư mục chứa ảnh, ví dụ <code>Teamobi2026\data\icon\x4</code> hoặc <code>F:\AILinhTinh\icons_x4</code>.<br>
+Lọc: một số (<code>4843</code>), khoảng (<code>4800-4900</code>), nhiều giá trị cách nhau dấu phẩy (<code>505,506,507</code>) hoặc có dấu <code>*</code> (<code>48*</code>). Bấm vào ảnh để phóng to và chép tên.</div></div>
+<div id="pager"></div>
+<div id="big"><img id="bigImg" alt=""><div id="bigName"></div><button class="ghost" onclick="big.style.display='none'">Đóng (Esc)</button></div>
+<script>
+const PAGE = 400;
+let files = [], shown = [], page = 0, urls = [];
+const $ = id => document.getElementById(id);
+const big = $('big');
+
+function num(name) { const m = name.match(/^(\d+)/); return m ? +m[1] : Infinity; }
+
+$('dir').addEventListener('change', e => {
+  files = [...e.target.files].filter(f => /\.(png|jpe?g|gif|webp|bmp)$/i.test(f.name))
+    .sort((a, b) => num(a.name) - num(b.name) || a.name.localeCompare(b.name));
+  apply();
+});
+
+function match(name, q) {
+  if (!q) return true;
+  const n = num(name), base = name.replace(/\.[^.]+$/, '');
+  return q.split(',').map(s => s.trim()).filter(Boolean).some(t => {
+    const r = t.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (r) return n >= +r[1] && n <= +r[2];
+    if (t.includes('*')) return new RegExp('^' + t.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i').test(base);
+    return base.toLowerCase() === t.toLowerCase() || (!/^\d+$/.test(t) && base.toLowerCase().includes(t.toLowerCase()));
+  });
+}
+
+function apply() {
+  const q = $('filter').value.trim();
+  shown = files.filter(f => match(f.name, q));
+  page = 0; render();
+}
+
+function render() {
+  urls.forEach(u => URL.revokeObjectURL(u)); urls = [];
+  const grid = $('grid'); grid.innerHTML = '';
+  const start = page * PAGE, part = shown.slice(start, start + PAGE);
+  for (const f of part) {
+    const u = URL.createObjectURL(f); urls.push(u);
+    const c = document.createElement('div'); c.className = 'cell';
+    c.innerHTML = `<div class="img"><img loading="lazy" src="${u}" alt=""></div><div class="name">${f.name}</div>`;
+    c.onclick = () => { $('bigImg').src = u; $('bigName').textContent = f.name; big.style.display = 'flex'; navigator.clipboard?.writeText(f.name.replace(/\.[^.]+$/, '')).catch(() => {}); };
+    grid.appendChild(c);
+  }
+  const pages = Math.max(1, Math.ceil(shown.length / PAGE));
+  $('info').textContent = files.length ? `${shown.length} / ${files.length} ảnh · trang ${page + 1}/${pages}` : '';
+  $('pager').innerHTML = pages > 1
+    ? `<button class="ghost" ${page ? '' : 'disabled'} id="prev">‹ Trước</button><span>Trang ${page + 1}/${pages}</span><button class="ghost" ${page < pages - 1 ? '' : 'disabled'} id="next">Sau ›</button>` : '';
+  $('prev') && ($('prev').onclick = () => { page--; render(); scrollTo(0, 0); });
+  $('next') && ($('next').onclick = () => { page++; render(); scrollTo(0, 0); });
+}
+
+let t; $('filter').addEventListener('input', () => { clearTimeout(t); t = setTimeout(apply, 250); });
+$('size').addEventListener('input', e => document.documentElement.style.setProperty('--cell', e.target.value + 'px'));
+$('bg').addEventListener('change', e => {
+  const s = document.documentElement.style;
+  s.setProperty('--imgbg', e.target.value === 'light' ? '#f2f2f2' : e.target.value === 'check' ? '#fff' : '#3a3d42');
+  s.setProperty('--check', e.target.value === 'check' ? 'conic-gradient(#ccc 25%, #fff 0 50%, #ccc 0 75%, #fff 0)' : 'none');
+});
+addEventListener('keydown', e => { if (e.key === 'Escape') big.style.display = 'none'; });
+</script>
+</body>
+</html>

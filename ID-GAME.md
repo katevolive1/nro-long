@@ -2480,6 +2480,9 @@ Dấu `#` trong tên là chỗ thay bằng giá trị. Dùng trong lệnh `i` d�
 | 183 | Thành cổ 1 | 0 |
 | 184 | Thành cổ 2 | 0 |
 | 185 | Đấu trường thành cổ | 0 |
+| 186 | Trạm hủy diệt | 0 |
+| 187 | Trạm hủy diệt | 1 |
+| 188 | Trạm hủy diệt | 2 |
 
 ## Nhiệm vụ chính
 | ID | Tên |

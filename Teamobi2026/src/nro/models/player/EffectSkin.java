@@ -60,6 +60,7 @@ public class EffectSkin {
 
     public long lastTimeAddTimeTrainArmor;
     public long lastTimeSubTimeTrainArmor;
+    public long lastTimeAddTimeTrainArmorPet;
 
     public boolean isVoHinh;
 
@@ -457,6 +458,25 @@ public class EffectSkin {
                 }
             }
             this.lastTimeAddTimeTrainArmor = System.currentTimeMillis();
+        }
+        // Đệ tử mặc giáp tập luyện: đệ đánh trong 30 giây gần nhất thì +1 mỗi giây (sư phụ +1 mỗi phút)
+        if (this.player.pet != null && Util.canDoWithTime(lastTimeAddTimeTrainArmorPet, 1000)) {
+            this.lastTimeAddTimeTrainArmorPet = System.currentTimeMillis();
+            Pet pet = this.player.pet;
+            if (pet.inventory.itemsBody.size() > 6 && pet.effectSkin != null
+                    && !Util.canDoWithTime(pet.effectSkin.lastTimeAttack, 30000)) {
+                Item gtl = pet.inventory.itemsBody.get(6);
+                if (gtl.isNotNullItem() && ItemService.gI().isTrainArmor(gtl)) {
+                    for (Item.ItemOption io : gtl.itemOptions) {
+                        if (io.optionTemplate.id == 9) {
+                            if (io.param < 1000) {
+                                io.param++;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
         }
         if (Util.canDoWithTime(lastTimeSubTimeTrainArmor, 60000)) {
             for (Item item : this.player.inventory.itemsBag) {

@@ -12,7 +12,7 @@ public class CombineSystem {
 
     public static boolean isTrangBiPhaLeHoa(Item item) {
         if (item != null && item.isNotNullItem()) {
-            return item.template.type < 5 || item.template.type == 32;
+            return item.template.type <= 5 || item.template.type == 32; // 5 = cải trang (cho đục lỗ từ 31/10/2026)
         } else {
             return false;
         }

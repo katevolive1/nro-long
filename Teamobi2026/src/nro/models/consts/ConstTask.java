@@ -16,7 +16,7 @@ public class ConstTask {
     public static final int GOLD_HELL = 25;
 
     //const max side task of date
-    public static final byte MAX_SIDE_TASK = 10;
+    public static final byte MAX_SIDE_TASK = 99; // gốc 10
 
     //const max clan task of date
     public static final byte MAX_CLAN_TASK = 5;

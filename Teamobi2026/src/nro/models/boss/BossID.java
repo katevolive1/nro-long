@@ -66,6 +66,12 @@ public class BossID {
     public static final int SUPER_BROLY = -82282;
     public static final int MABU_NGOAI = -1823;
 
+    // Thiên sứ + Hủy diệt ở Trạm hủy diệt (map 186-188), xem boss/thien_su
+    public static final int HUY_DIET_BEERUS = -1824;
+    public static final int HUY_DIET_CHAMPA = -1825;
+    public static final int THIEN_SU_WHIS = -1826;
+    public static final int THIEN_SU_VADOS = -1827;
+
     //================MINIBOSSS=============
     public static final int SOI_HEC_QUYN1 = -77;
     public static final int O_DO1 = -78;

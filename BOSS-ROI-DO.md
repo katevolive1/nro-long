@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 30/10/2026).
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 31/10/2026, thêm mục "Giáp boss").
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -37,10 +37,14 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 
 Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
+## 3b. Thiên sứ + Hủy diệt (Trạm hủy diệt 186–188, thêm 31/10/2026, `boss/thien_su`)
+- Mỗi map 2 cặp: Beerus (hình 1983/1986/1987) + Whis (505/506/507), Champa (511/512/513) + Vados (530/531/532). HP 2 tỷ, sức đánh 100.000, không giới hạn sát thương mỗi đòn, chiêu đấm/chưởng cấp 7. Cặp vào cùng khu ngẫu nhiên (2 cặp có thể chung khu). Thiên sứ mỗi 10 giây hồi 10% HP tối đa cho Hủy diệt cùng cặp (cùng khu, còn sống). Hồi sinh: chết cả 2 con mới đếm 10 phút rồi cả cặp xuất hiện lại.
+- Rơi đồ (mỗi con rơi riêng, `ThienSuHuyDietReward`): 40% 1 món Hủy Diệt theo hành tinh người giết (áo/quần/găng/giày/nhẫn đều nhau; chỉ số shop Bill cộng 0–15% như `buyItemHD`, 21:60, 30); 20% Ngọc rồng 2 hoặc 3 sao; 20% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1150–1153) x1–5; 20% không rơi gì.
+
 ## 4. Boss mini
 - Ăn Trộm: chỉ khi đã trộm vàng → trả 80% vàng đã trộm + 100% Hộp quà Goku Day (1591, 1594).
 - Ô Đô, Sói Hẹc Quyn, Virut: 100% 2 Hộp quà Goku Day (1591 + 1594).
-- Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày).
+- Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày). **Đang tắt từ 31/10/2026** (dòng tạo boss trong `BossManager.loadBoss` bị comment).
 - Rồng Nhí: 20% có rơi → 4% Trứng vàng rồng nhí (1821), 16% NR 5/6/7 sao.
 - Mabư ngoài map (`Mabu_ngoai/MabuNgoai.java`, 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
 - **Đang tạm tắt** (`Hirudegarn.DISABLED = true`, luôn chết, không rơi gì). Hirudegarn (quái to, `mob_bigboss/Hirudegarn.java`, map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
@@ -93,3 +97,21 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
   - Riêng: DrLychee `isTrue(level, 1000)`, Hatchiyack `isTrue(level + 10, 1000)`.
 - `nPoint.tlNeDon` chỉ được cộng từ option 108/111 (NPoint `calPoint`, option danh hiệu, vật phẩm, đá đen R7S) và bị reset về 0 khi tính lại. Code boss không gán giá trị nào cho `tlNeDon`, nên boss dùng `tlNeDon` hiện tại né 0% (trừ khi sau này có gán).
 - Dr Lychee: né Lv/1000. Hatchiyack: né (Lv+10)/1000.
+
+## Giáp boss = cách giảm sát thương nhận trong `injured()` (dò 31/10/2026)
+
+`BossData` không có chỉ số giáp; `nPoint.def` của boss = 0 nên `subDameInjureWithDeff` không trừ gì. "Giáp" thực tế nằm trong `injured()` từng boss. Né `tlNeDon` = 0% (mục trên). "Khiên": đang khiên năng lượng thì sát thương chia thêm (ghi trong ngoặc). Xuyên giáp (`piercing`) bỏ qua né, khiên và phần lớn giới hạn.
+- **Nhận đủ** (không override, `Boss.injured`): Fide, Kuku, Mập đầu đinh, Rambo, Tiểu đội trưởng, Bojack, Super Bojack, King Kong, Android 13/14/15… Android 19: Kamejoko/Masenko/Antomic bị hấp thụ (hồi 80% sát thương, nhận 0). Dr Kore: 3 chiêu đó hồi 100%.
+- Broly: tối đa **1% HP**/đòn (trừ Tự sát). Super Broly, Mabư ngoài map: tối đa **10% HP**/đòn.
+- Cooler: né 1%, nhận đủ. Golden Frieza: tối đa **50 triệu**/đòn.
+- Black Goku, Cumber: **½** sát thương rồi trừ thêm 0–100.000. Baby: ×0,7 rồi ½ (= **35%**, khiên ÷4). Xên bọ hung: **½** (khiên ÷4). Siêu bọ hung: **⅓** (khiên ÷4).
+- Doanh trại: Trung úy Trắng/Thép/Xanh lơ, Ninja clone né 20%, Ninja áo tím né 30%; tất cả nhận **½** (khiên ÷2). Robot vệ sĩ ½.
+- Mabư 12h: Mabư né 20%, tối đa **50 triệu**; Drabura né 10%, Drabura 2 né 20%, Drabura 3, Goku tối đa **20 triệu**; Cađíc tối đa **10 triệu**; BuiBui, Yacon né 20%. Mabư 14h, Super Bư: né 10%, tối đa **30 triệu**.
+- Pocolo: né 1%; đòn đủ giết thành 0 (có điều kiện riêng trong code). Cađích (Con đường rắn độc): khiên ÷4, đòn đủ giết có điều kiện riêng. Saibamen: **÷7** (khiên ÷4).
+- Halloween (Bí ma, Dơi, Ma trơi): né 1%, **÷7**, tối đa **2% HP**. Khỉ Đột (Trung thu): ÷7.
+- Sơn Tinh, Thủy Tinh, Nhật Thần, Nguyệt Thần: tối đa **~1 triệu** (0,9–1 triệu)/đòn. Lân con: né 10%, tối đa **500.000**.
+- Ô Đỏ: mỗi đòn đúng **50.000**. An Trộm: mỗi đòn **1**. Tàu Pảy Pảy: tối đa **100**/đòn.
+- Yardrat: né 10%, tối đa **1% HP**. Võ đài Hạt Mít (Bông Băng, Dracula, Người vô hình, Thỏ đầu bạc, Vua quỷ Sa Tăng…): né 10%, tối đa **10% HP**.
+- Luyện tập tự động (TrainingBoss, Tàu Pảy Pảy luyện tập, Whis): né 40%; Whis ÷ cấp.
+- Khí gas (Dr Lychee, Hatchiyack): mục 7a. Quái to: Hirudegarn mỗi đòn 1% HP còn lại; Gấu tướng cướp 5% sát thương.
+- **Lỗi**: `NPoint.subDameInjureWithDeff` trả về `int` (ép kiểu từ `long`), nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).

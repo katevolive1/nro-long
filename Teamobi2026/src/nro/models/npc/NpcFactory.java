@@ -88,6 +88,7 @@ import nro.models.utils.Util;
 import nro.models.services_dungeon.SuperDivineWaterService;
 import nro.models.services.SubMenuService;
 import nro.models.services.shenron.Shenron_Service;
+import nro.models.services.shenron.Shenron_BiNgo;
 import java.util.List;
 import nro.models.event.XeNuocMia;
 import nro.models.npc_list.ChiChi;
@@ -278,12 +279,20 @@ public class NpcFactory {
                         }
                         break;
                     case ConstNpc.SHOW_SHENRON_EVENT_CONFIRM:
-                        if (player.shenronEvent != null) {
+                        if (player.shenronBiNgo != null) {
+                            player.shenronBiNgo.showConfirmShenron((byte) select);
+                        } else if (player.shenronEvent != null) {
                             player.shenronEvent.showConfirmShenron((byte) select);
                         }
                         break;
                     case ConstNpc.SHENRON_EVENT_CONFIRM:
-                        if (player.shenronEvent != null) {
+                        if (player.shenronBiNgo != null) {
+                            if (select == 0) {
+                                player.shenronBiNgo.confirmWish();
+                            } else if (select == 1) {
+                                player.shenronBiNgo.sendWhishesShenron();
+                            }
+                        } else if (player.shenronEvent != null) {
                             if (select == 0) {
                                 player.shenronEvent.confirmWish();
                             } else if (select == 1) {
@@ -333,6 +342,11 @@ public class NpcFactory {
                     case ConstNpc.SUMMON_SHENRON_EVENT -> {
                         if (select == 0) {
                             Shenron_Service.gI().summonShenron(player);
+                        }
+                    }
+                    case ConstNpc.SUMMON_SHENRON_BI_NGO -> {
+                        if (select == 0) {
+                            Shenron_BiNgo.summonShenron(player);
                         }
                     }
                     case ConstNpc.MAKE_MATCH_PVP -> {

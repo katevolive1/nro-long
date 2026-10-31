@@ -1316,10 +1316,9 @@ public class TaskService {
                     case ConstTask.HELL:
                         BadgesTaskService.updateCountBagesTask(player, ConstTaskBadges.NONG_DAN_CHAM_CHI, 1);
                         goldReward = ConstTask.GOLD_HELL;
-                        ngocBi = 704;
-                        if (player.playerTask.sideTask.leftTask < 15) {
-                            cayThong = 822;
-                        }
+                        ngocBi = Util.nextInt(702, 704); // Bí ngô 1, 2 hoặc 3 sao (trước chỉ 704)
+                        // trước đây `leftTask < 15` (luôn đúng khi tối đa 10 lượt), bỏ để giữ nguyên khi lên 99 lượt
+                        cayThong = 822;
                         break;
                 }
 

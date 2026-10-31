@@ -248,6 +248,7 @@ public class Player implements Runnable {
     public long lastTimeShenronAppeared;
     public boolean isShenronAppear;
     public Shenron_Event shenronEvent;
+    public models.ShenronEvent shenronBiNgo; // rồng gọi bằng 7 viên Bí ngô (702–708)
 
     // vo dai sinh tu
     public long lastTimePKVoDaiSinhTu;

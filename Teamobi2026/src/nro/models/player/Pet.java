@@ -781,7 +781,7 @@ public class Pet extends Player {
     private void increasePoint() {
         if (this.nPoint != null && Util.canDoWithTime(lastTimeIncreasePoint, 0)) {
             for (int i = 0; i < 20; i++) {
-                this.nPoint.increasePoint((byte) Util.nextInt(0, 4), (short) 1);
+                this.nPoint.increasePoint((byte) Util.nextInt(0, 2), (short) 1); // chỉ HP(0)/KI(1)/SĐ(2), không tự cộng giáp gốc (3), chí mạng gốc (4)
             }
             lastTimeIncreasePoint = System.currentTimeMillis();
         }
