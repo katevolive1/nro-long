@@ -159,6 +159,12 @@ public class UseItem {
             type = _msg.reader().readByte();
             int where = _msg.reader().readByte();
             int index = _msg.reader().readByte();
+            // Đã chết thì không dùng/vứt vật phẩm được (tránh ăn đậu, dùng đồ hồi sinh/dịch chuyển khi đang chết)
+            if (player != null && player.isDie()
+                    && (type == DO_USE_ITEM || type == ACCEPT_USE_ITEM || type == DO_THROW_ITEM || type == ACCEPT_THROW_ITEM)) {
+                Service.gI().sendThongBao(player, "Bạn đang chết, không thể sử dụng vật phẩm.");
+                return;
+            }
             switch (type) {
                 case DO_USE_ITEM -> {
                     if (player != null && player.inventory != null) {

@@ -25,3 +25,6 @@ desktop.ini
 Teamobi2026.jar
 # Danh sách mục THAY-DOI.md đã chạy ở máy này (mỗi máy một file)
 .thay-doi-da-chay
+
+mcp.json
+.codegraph/

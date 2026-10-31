@@ -14,7 +14,7 @@
 - Cấu trúc DB (bảng, cột, định dạng JSON của cột nhân vật/đồ): [DB.md](DB.md). Hỏi dữ liệu nằm ở đâu thì đọc file này trước, không quét DB; đổi cấu trúc bảng thì cập nhật.
 - Cơ chế server đã dò (doanh trại, nhân vật mới, shop, bảo trì tự động, Hirudegarn…): [CO-CHE.md](CO-CHE.md). Hỏi cơ chế thì đọc file này trước khi quét code.
 - Giá trị gốc của những chỗ đang chỉnh để test (trả về khi mở bản chính thức): [GIA-TRI-GOC.md](GIA-TRI-GOC.md). Chỉnh thử nghiệm mới thì thêm dòng vào đó.
-- **Ghi lại thứ tốn token để dò**: dò code/DB/client mất nhiều lượt (cơ chế, công thức, offset, cấu trúc dữ liệu, cách làm) thì ghi kết quả vào file md trong repo này (CO-CHE.md, DB.md, `client-patch/CLIENT-UNITY.md`, BOSS-ROI-DO.md… hoặc tạo file md mới rồi thêm dòng trỏ ở đây) ngay trong lượt đó, để máy công ty và máy nhà đọc lại khỏi dò.
+- **Ghi lại thứ tốn token để dò** (cả khi chỉ trả lời hỏi đáp, không sửa code): dò code/DB/client mất nhiều lượt (cơ chế, công thức, offset, cấu trúc dữ liệu, cách làm) thì ghi kết quả vào file md trong repo này (CO-CHE.md, DB.md, `client-patch/CLIENT-UNITY.md`, BOSS-ROI-DO.md… hoặc tạo file md mới rồi thêm dòng trỏ ở đây) ngay trong lượt đó, để máy công ty và máy nhà đọc lại khỏi dò.
 - Danh sách tính năng server và phần nào đã xem/đã sửa: [TINH-NANG.md](TINH-NANG.md). Xem hoặc sửa tính năng nào thì cập nhật dấu trong file đó.
 - **Không tiết lộ cho người chơi**: tỉ lệ rơi, tỉ lệ/khoảng chỉ số (vòng quay, hộp cải trang Hit, jackpot…), cơ chế boss (giới hạn sát thương, HP, thời gian hồi sinh, số con) chỉ ghi trong tài liệu nội bộ (CLAUDE.md, BOSS-ROI-DO.md, ID-GAME.md, comment code). Không đưa vào mô tả item, chat/thông báo trong game, NPC hay web.
 - **Cuối mỗi lần sửa, nhắc user 3 việc** (user làm ở nhà và ở công ty):
@@ -44,3 +44,8 @@
 - **Super Broly**: chỉ sinh ra khi giết Broly thường (30 con, nghỉ 10 phút, `Default.boss()`), mỗi đòn đánh vào tối đa 10% HP. **Mabư ngoài map** (`boss/Mabu_ngoai/MabuNgoai.java`, `BossID.MABU_NGOAI`, tạo trong `BossManager.loadBoss`): 2 con, HP cố định 100 triệu, dame 1 triệu, không hồi máu/tăng chỉ số, chỉ có chiêu đánh như Super Broly (không Tái tạo năng lượng), mỗi đòn tối đa 10% HP, cùng map với Broly, từ khu 2, chết nghỉ 15 phút rồi hồi sinh.
 - Thêm boss mới có rơi đồ thì thêm boss đó vào bảng. Xóa boss hoặc bỏ phần rơi đồ thì xóa hoặc chuyển boss đó sang mục "Không rơi đồ".
 - Chỉ sửa đúng dòng hoặc mục liên quan, không viết lại cả file. Cập nhật ngày ở đầu file.
+
+## Codegraph (MCP)
+
+- Tra code bằng `codegraph_explore` trước khi Grep/Read nhiều file. Cấu hình ở `.mcp.json` (đã commit). `mcp.json` (không dấu chấm) là file riêng của user, có mật khẩu, bị gitignore.
+- Mỗi máy cài một lần: `npm.cmd install -g @colbymchenry/codegraph` (PowerShell chặn `npm.ps1` nên dùng `npm.cmd`), rồi trong thư mục repo chạy `codegraph.cmd init` để lập chỉ mục `.codegraph/` (bị gitignore). Khởi động lại Claude Code và duyệt server `codegraph`. Truyền `projectPath` là đường dẫn repo khi gọi tool.

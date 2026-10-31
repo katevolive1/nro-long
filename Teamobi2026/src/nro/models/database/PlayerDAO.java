@@ -133,9 +133,13 @@ public class PlayerDAO {
                     item.add(10); //số lượng
                     options.add(opt.toJSONString());
                     opt.clear();
-                } else if (i == 1) { //10.000 thỏi vàng khởi đầu
+                } else if (i == 1) { //20.000 thỏi vàng khởi đầu, khóa (không giao dịch)
+                    opt.add(30); //id option: không thể giao dịch
+                    opt.add(0); //param option
                     item.add(457); //id item
-                    item.add(10000); //số lượng
+                    item.add(20000); //số lượng
+                    options.add(opt.toJSONString());
+                    opt.clear();
                 } else {
                     item.add(-1); //id item
                     item.add(0); //số lượng

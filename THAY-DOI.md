@@ -91,3 +91,22 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 - Build: không.
 - Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (`patch-auto-item.ps1` bản mới: trả phím P về như cũ vì mod có sẵn click chuột để dừng; câu khi thêm item thành "Đã thêm X (click:dừng)").
 - SQL: không.
+
+### 13. Chế tạo Thiên Sứ: bấm Nâng cấp mới chế tạo, nhận công thức thường (50%) hoặc VIP (90%); thỏi vàng khởi đầu 20.000 khóa
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`CheTaoTrangBiThienSu` viết lại, câu hướng dẫn trong `CombineService`, `PlayerDAO.createNewPlayer` thêm option 30 cho 457).
+- Client: không.
+- SQL: không.
+
+### 14. Cộng dồn bùa x2 đệ tử (1628) và đuôi khỉ (1045), bán đuôi khỉ 579 ở Shop thỏi vàng 2 thỏi; khiên không bị quái thường phá; chết không dùng đồ; quái BDKB chỉ đánh sát; KOL 5 tính nhiệm vụ địa ngục
+- Ngày: 31/10/2026, máy làm: nhà.
+- Build: có (`UseItem.doItem` chặn khi chết, `Mob.mobAttackPlayer` khiên, `Mob.getPlayerCanAttack` BDKB `BDKB_MOB_RANGE` = 60, `TaskService.paySideTask`, `DataGame.vsItem` = 17).
+- Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
+- SQL:
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template SET is_up_to_up=1 WHERE id IN (1628,1045);
+UPDATE item_template SET description='Tăng tiềm năng sức mạnh khi đánh quái trong 30 phút' WHERE id=579;
+INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec,sort_order) VALUES (1000,64,579,1,1,1,2,4028,1);
+```
+- Kiểm tra: `SELECT id,is_up_to_up FROM item_template WHERE id IN (1628,1045,579);` ra 1,1,1; `SELECT * FROM item_shop WHERE id=1000;` có dòng.

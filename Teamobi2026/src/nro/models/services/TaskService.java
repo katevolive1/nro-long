@@ -1350,6 +1350,9 @@ public class TaskService {
                     Service.gI().sendMoney(player);
                     Service.gI().sendThongBao(player, "Bạn nhận được "
                             + Util.numberToMoney(goldReward) + " vàng");
+                    if (player.playerTask.sideTask.level == ConstTask.HELL) {
+                        player.dailySuperHardQuestCompletionCount++; // nhiệm vụ KOL 5 (siêu khó = địa ngục)
+                    }
                     player.playerTask.sideTask.reset();
                 } else {
                     Service.gI().sendThongBao(player, "Hành trang không đủ chỗ trống.");

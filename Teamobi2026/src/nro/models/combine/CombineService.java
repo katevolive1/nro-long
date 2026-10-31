@@ -687,8 +687,7 @@ public class CombineService {
                 return "vào hành trang\nChọn trang bị\n(Áo, quần, găng, giày hoặc rađa)\nChọn loại đá để phân rã\n"
                         + "Sau đó chọn 'Phân Rã'";
             case CHE_TAO_TRANG_BI_THIEN_SU:
-                return "vào hành trang\nChọn 1 công thức và công thức Vip\nkèm 1 đá nâng, 1 đá may mắn\n và 999 mảnh thiên sứ\n "
-                        + "Ta sẽ cho ra đồ thiên sứ từ 0-15% chỉ số\n"
+                return "vào hành trang\nChọn 1 trong 2: Công thức hoặc Công thức VIP\nkèm 1 đá nâng cấp, 1 đá may mắn\nvà 999 mảnh thiên sứ cùng loại\n"
                         + "Sau đó chọn 'Nâng Cấp'";
             case NANG_CAP_BONG_TAI:
                 return "Vào hành trang\nChọn bông tai Porata\nChọn mảnh bông tai để nâng cấp, Số lượng 9999 cái"

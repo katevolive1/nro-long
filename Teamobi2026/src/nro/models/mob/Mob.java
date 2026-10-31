@@ -340,12 +340,16 @@ public class Mob {
         }
     }
 
+    private static final int BDKB_MOB_RANGE = 60;
+
     public Player getPlayerCanAttack() {
-        Player plAttack = getFirstPlayerCanAttack();
+        // Bản đồ kho báu: quái không đuổi đánh trả người đánh nó, chỉ đánh người đứng sát (BDKB_MOB_RANGE)
+        boolean bdkb = MapService.gI().isMapBanDoKhoBau(this.zone.map.mapId);
+        Player plAttack = bdkb ? null : getFirstPlayerCanAttack();
         if (plAttack != null) {
             return plAttack;
         }
-        int distance = 100;
+        int distance = bdkb ? BDKB_MOB_RANGE : 100;
         try {
             List<Player> players = this.zone.getNotBosses();
             for (Player pl : players) {
@@ -416,6 +420,11 @@ public class Mob {
 
         if (player.satellite != null && player.satellite.isDefend) {
             dameMob -= dameMob / 5;
+        }
+
+        // Khiên năng lượng: quái thường chỉ gây 1 sát thương (10 trong phó bản), không bao giờ làm vỡ khiên
+        if (player.effectSkill != null && player.effectSkill.isShielding) {
+            dameMob = MapService.gI().isMapPhoBan(this.zone.map.mapId) ? 10 : 1;
         }
 
         if (player.itemTime != null && player.itemTime.isUseCMS) {

@@ -12,7 +12,7 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - Cậu Vàng (1824): mỗi boss trại (trừ clone) rơi 100%; nộp 10 cho nhiệm vụ KOL 2 ở Quy Lão (thường 5 + 5 hộp 1592/1757, VIP 10 + 10).
 
 ## Nhân vật mới (`database/PlayerDAO.createNewPlayer`)
-- 500 triệu vàng, 100.000 ngọc (`server.test=true` thì 1 tỷ), 0 hồng ngọc. Đang mặc: áo cấp 1 (giáp +2, Xayda +3) và quần cấp 1 (HP +30 Trái Đất, +20 còn lại) của hành tinh. Hành trang: 10 Đậu thần cấp 5 (63, HP/KI +8000), 10.000 Thỏi vàng (457). Rương: Rada cấp 1 (12, chí mạng +1). Map 39 + gender, x 100 y 384. Sức mạnh, tiềm năng 2.000. Cây đậu cấp 1, 5 hạt.
+- 500 triệu vàng, 100.000 ngọc (`server.test=true` thì 1 tỷ), 0 hồng ngọc. Đang mặc: áo cấp 1 (giáp +2, Xayda +3) và quần cấp 1 (HP +30 Trái Đất, +20 còn lại) của hành tinh. Hành trang: 10 Đậu thần cấp 5 (63, HP/KI +8000), 20.000 Thỏi vàng (457, khóa: option 30 không giao dịch, sửa 31/10/2026). Rương: Rada cấp 1 (12, chí mạng +1). Map 39 + gender, x 100 y 384. Sức mạnh, tiềm năng 2.000. Cây đậu cấp 1, 5 hạt.
 - Không có quà tự động lần đầu vào game (`PlayerService.dailyLogin` chỉ reset nhiệm vụ huy hiệu, quà hằng ngày, lượt nhận…). Gift code tân thủ xem CLAUDE.md.
 - Tài khoản: `active` mặc định 1, `vnd` mặc định 1.000.000 (đang test, xem DB.md).
 
@@ -58,11 +58,24 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - Món: áo 1048–1050, quần 1051–1053, găng 1054–1056, giày 1057–1059, nhẫn 1060–1062 (thứ tự Trái Đất, Namếc, Xayda). Avatar 1063–1065 không chế tạo ở đây.
 - NPC Whis (56) ở map 48 Hành tinh Kaio và 154 Hành tinh Bill: "Cửa hàng" `THIEN_SU` (shop 20, tab 37, giá thỏi vàng `icon_spec` 4028, đều không giao dịch): Đá nâng cấp 1–5 (1074–1078) 1–5 thỏi, Đá may mắn 1–5 (1079–1083) 1–5 thỏi, Công thức 1071–1073 10 thỏi, Công thức VIP 1084–1086 20 thỏi. "Chế tạo" chỉ mở khi **mặc đủ 5 món Hủy Diệt** (`SetClothes.checkSetDes`).
 - Mảnh: 1066 áo, 1067 quần, 1068 giày, 1069 nhẫn, 1070 găng (cộng dồn). Rơi khi giết quái map 155 Hành tinh ngục tù (Osin map 50 → 154 Hành tinh Bill → Osin → 155) **chỉ khi mặc đủ 5 món Hủy Diệt**: 10% (+2/555 nếu tài khoản active) (`Mob.java` ~1035). Hộp quà giáng sinh 648: 1/7 ra 1–5 mảnh ngẫu nhiên. Rương Mảnh Thiên Sứ 1173 không có code mở.
-- Chế tạo có 2 đường, đều lỗi:
-  - `showInfoCombine` (chạy ngay **lúc đặt đồ vào** ô, không chờ bấm nút): đúng 4 món = Công thức VIP + ≥ 999 mảnh 1 loại + Đá nâng cấp + Đá may mắn, 10 triệu vàng. Thành công 90% + (cấp đá nâng cấp) %; thành công thì mọi chỉ số trừ option 0 (sức đánh) và 20 được ×2; Đá may mắn cấp n: `Util.nextInt(0,50) ≤ 5×n` (n=1: 5/51 … n=5: 25/51) thêm option 15 + 1–3 dòng ngẫu nhiên trong 50/77/103/94/5, mỗi dòng 1–3. Thất bại vẫn mất hết nguyên liệu. Loại đồ theo loại mảnh, hành tinh theo công thức.
-  - `CheTaoTS` (bấm nút): cần 1 món Hủy Diệt + mảnh ≥ 5 (nhưng trừ 99) trong 4 ô, 500 triệu vàng, luôn thành công, tiêu món Hủy Diệt + 99 mảnh. Không có món Hủy Diệt trong ô thì lỗi `NoSuchElementException`.
+- Chế tạo (viết lại 31/10/2026, `CheTaoTrangBiThienSu`): đúng 4 món = 1 công thức (thường 1071–1073 hoặc VIP 1084–1086) + ≥ 999 mảnh cùng loại + 1 đá nâng cấp + 1 đá may mắn. Bấm "Nâng cấp" ở khung (gói `-81`) → `showInfoCombine` chỉ kiểm tra và hiện xác nhận của Whis (menu 515, báo đúng món thiếu/thừa) → chọn "Nâng cấp" → `startCombine` → `CheTaoTS`: 10 triệu vàng; thành công VIP 90% / thường 50% + cấp đá nâng cấp (1–5); thành công thì mọi option trừ 20, 21, 30 ×2 (kể cả sức đánh); Đá may mắn cấp n: `nextInt(0,50) ≤ 5+5n` thêm option 15 + 1–3 dòng ngẫu nhiên trong 50/77/103/94/5 (1–3). Thất bại vẫn mất 1 công thức, 1 đá mỗi loại, 999 mảnh. Loại đồ theo loại mảnh, hành tinh theo công thức (gender > 2 thì theo người chơi). Nhánh cũ dùng món Hủy Diệt đã bỏ.
 - Chỉ số gốc (`DoThienSu`; "×1,1" là hành tinh được ưu ái): áo giáp 2.800–4.000 (Xayda ×1,1); quần HP 120–130K (80%) hoặc 130–150K (Trái Đất ×1,1); găng sức đánh 10.350–11.000 (80%) hoặc 10.500–11.500 (Xayda ×1,1); giày KI 90–110K (80%) hoặc 110–130K (Namếc ×1,1); nhẫn chí mạng 18–20% (Namếc ×1,1). Thêm option 21:60 (**yêu cầu 60 tỷ sức mạnh**, sửa 31/10/2026) và 30 (không giao dịch). Khi chế tạo qua ô (`showInfoCombine`) thành công thì mọi option trừ 20, 21, 30 bị ×2 (kể cả sức đánh). Đồ Hủy Diệt mua ở Bill cũng được gắn 21:60 (`ShopService.buyItemHD`).
 - Ngày 30/10/2026 không ai có đồ Thiên Sứ; cả chuỗi bị chặn vì không mua được Hủy Diệt (lỗi Bill ở mục trên).
+
+## Nguồn tăng tiềm năng sức mạnh (ai được hưởng, lấy ở đâu) (lập 31/10/2026)
+Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_sell` 0 vàng / 1 ngọc; shop type 3 trả vật phẩm theo `icon_spec` (4028 = thỏi vàng).
+- **Chỉ sư phụ:**
+  - Bùa Trí Tuệ 213 (+1), x3 671 (+3), x4 672 (+4): NPC Bà Hạt Mít (npc 21) shop `BUA_1H` / `BUA_8H` / `BUA_1M` (213: 5/20/500 ngọc; 671: 15/60/1500; 672: 45/180/4500). **Đệ cũng hưởng bùa của sư phụ** (sửa 30/10/2026).
+  - Đuôi khỉ 1045 (+2, 30 phút `TIME_DK`): rơi từ boss sự kiện Trung thu Khỉ Đột (`boss/event_trung_thu/KhiDot.java`), không bán.
+  - Rađa kho báu 1532 (+2, chỉ trong Bản đồ kho báu 135–138, 30 phút): Santa (npc 39) shop `SANTA`, 2 ngọc.
+  - Vệ tinh trí tuệ 343 (+1/5, đặt ra map): Uron (npc 16) shop `URON`, 5 ngọc.
+  - Option 101 "+#% TN,SM" / 88 "Cộng #% exp khi đánh quái" / 156 (giảm 50% SĐ/HP/KI, +#% SM, TN, vàng) trên đồ đang mặc (`tlTNSM`): Cải trang 461 (101:10) Santa `SANTA` 2000 ngọc; Cải trang 452 (101:20) `SANTA_GIAM_GIA_1` 400 ngọc; Pet Zịt vàng bối rối 1631 (101:10) `SHOP_CHI_CHI` 1,5 tỷ vàng, `SHOP_VIP` 150 thỏi, `SHOP_CLAN`; Avatar 683/687/690 (156:50) `URON` 599 ngọc; sao pha lê 447 ép vào đồ (101:5); balo pet 1360 (101:20) thưởng KOL ở Quy Lão Kame (`QuyLaoKame` ~dòng 549).
+  - Nội tại 24 (+param%), VIP thời gian `timevip` (+3).
+- **Cả hai:** tài khoản `vip` > 0 (+3, đệ lấy theo tài khoản chủ).
+- **Chỉ đệ tử:**
+  - Bùa x2 tn,sm đệ tử 1628 (`isUseBuaSanta`, +2 cho đệ, 30 phút `TIME_BUA_SANTA`, dùng tiếp thì +30 phút): Santa shop `SANTA`, 5 ngọc.
+  - Option 160 "TNSM PET" trên đồ **sư phụ** mặc (`tlTNSMPet`, đệ +tn×(100+x)/100): Cải trang Mabư Còm 1255 (160:30) Santa `SANTA` 5000 ngọc; Cánh thiên thần 3 1531 (160:30) `SANTA_HAN_SU_DUNG` 129 triệu vàng, `SHOP_VIP` 100 thỏi.
+- Hệ số theo map (cả hai): Ngũ Hành Sơn 122–124, map lạnh 105–110, Bản đồ kho báu 135–138, cờ PK (mục "Tiềm năng sức mạnh").
 
 ## Đổi khu (`map/service/ChangeMapService.openZoneUI` / `changeZone`)
 - Người thường không đổi khu được ở: map loại offline (`type` 1, nhà 21–23…), phó bản (`isMapPhoBan`: doanh trại 53–62, kho báu 135–138, con đường rắn độc 141–144, khí gas 147–152 trừ 150), Mabư 114–120, Mabư 2H 127–128. **Admin và boss bỏ qua mọi chặn** (nên admin thử thấy vẫn đổi được). Chờ 5 giây giữa 2 lần đổi. Cột `zones` trong `map_template` đang = 10 cho mọi map.
@@ -97,3 +110,16 @@ Ghi lại những gì đã đọc code để khỏi dò lại. Code ở `Teamobi
 - Cần 1 ô trống hành trang, không có thì báo "Hàng trang đã đầy" và không mất hộp.
 - Sửa 31/10/2026: chia đều 3 nhóm (~33,3% mỗi nhóm, trong nhóm chia đều): Cuồng nộ/Bổ huyết/Bổ khí/Giáp Xên 381–384 (1–5 cái) · Ngọc rồng băng 1–7 sao 925–931 (1) · Mảnh Thiên Sứ 1066–1070 (50–100 mảnh). Đã bỏ ngọc xanh, sao pha lê 441–445, ngọc rồng 4–7 sao 17–20, kẹo giáng sinh 533, capsule kì bí 380.
 - Nhánh cải trang Noel 387–393, tuần lộc 936, cây thông 822, xe trượt tuyết 746, 821 có trong code nhưng không nằm trong danh sách quay nên không bao giờ ra.
+
+## Nhiệm vụ KOL (Quy Lão Kame, `npc_list/QuyLaoKame.java`) và điểm sự kiện
+- KOL **không reset**, không phải nhiệm vụ ngày/tuần: làm tuần tự 7 nhiệm vụ (`kolQuestStage`, lưu cùng người chơi), xong nhận thưởng thì sang nhiệm vụ kế, hết 7 là hết. KOL thường và KOL VIP (`kolVIPQuestStage`) chạy riêng. VIP cần có **Vé Nhiệm Vụ KOL VIP (1825)** trong hành trang (chỉ kiểm tra, không trừ vé). 1825 **chưa có nguồn**: không shop bán, không code cho rơi (chỉ admin cấp).
+- Bộ đếm: Nhiệm vụ 3 `destronGas70CompletionCount` (khí gas cấp ≥ 70, `DestronGas.java`), 4 `martialArtsTournamentWins` (đại hội võ thuật), 5 `dailySuperHardQuestCompletionCount` (nhiệm vụ phụ độ khó địa ngục `ConstTask.HELL`, tính ở `TaskService.paySideTask`, thêm 31/10/2026 vì trước đó không ai cộng nên không làm được), 6 `bossBabyDefeatParticipationCount` (`Baby.java`), 7 `monsterKillCountAutoTrain` (`Mob.java`, mọi quái giết ở map `AllMap`).
+- Điểm sự kiện: `player.event.addEventPoint(n)` khi giết boss (`reward()` của từng boss, đa số +5, 4 boss +1; Rồng Nhi/Trung úy Xanh Lơ BDKB +5…). Đổi ở Quy Lão (shop `SHOP_DOI_DIEM`, id 34, giá = điểm sự kiện, icon_spec 14116): Hộp quà Goku Day VIP 1840 (99), 1757 (99), Trứng vàng rồng nhí 1821 (199), 1731 (999)…; shop `SHOP_SU_KIEN_VL` đổi Rađa ngọc rồng 1822 (19 điểm).
+
+## Cộng dồn vật phẩm (`InventoryService.addItemList`)
+- Chỉ cộng dồn khi `item_template.is_up_to_up = 1` và **option giống hệt nhau**. Đổi cờ này thì tăng `DataGame.vsItem` để client tải lại. Đã bật cho 1628 (Bùa x2 tn,sm đệ tử) và 1045 (Đuôi khỉ) ngày 31/10/2026. Đuôi khỉ bán ở Santa "Shop thỏi vàng" là **579** (2 thỏi vàng, item_shop 1000), cùng tác dụng với 1045.
+
+## Chiến đấu của quái thường (`mob/Mob.java`)
+- Khiên năng lượng (`effectSkill.isShielding`): quái thường đánh chỉ gây 1 sát thương (10 trong phó bản) và **không** làm vỡ khiên (`Player.injured` chỉ vỡ khiên với đòn không phải quái). Trước 31/10/2026 quái bỏ qua khiên, đánh đủ sát thương. Quái to (`mob_bigboss`) vẫn gọi `injured` riêng, chưa đổi.
+- Bản đồ kho báu (`isMapBanDoKhoBau`, map 135–138): quái không đuổi đánh người đã đánh nó (bỏ `getFirstPlayerCanAttack`, tầm 300), chỉ đánh người đứng cách ≤ `BDKB_MOB_RANGE` (60, chỗ khác là 100).
+- Người chơi đã chết: `UseItem.doItem` chặn dùng/vứt vật phẩm (DO_USE/ACCEPT_USE/DO_THROW/ACCEPT_THROW). Chưa kiểm tra: mua shop, giao dịch, ký gửi, đập đồ, chuyển map khi đã chết.
