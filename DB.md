@@ -54,6 +54,11 @@ Cột JSON chính:
   ```
   Kiểm tra số dòng báo "Rows matched: 1". Nếu 0 dòng, chuỗi cũ không khớp (đọc lại cột `pet`).
 - **Phải để nhân vật (sư phụ) offline** khi sửa: server giữ bản trong RAM, tự lưu mỗi 5 phút (`Client.saveAll`) và khi thoát sẽ ghi đè lại DB. Nâng HP/KI gốc (vị trí 6, 7) thì đặt HP/KI hiện tại (vị trí 11, 12) không vượt HP/KI tối đa mới.
+- Đổi loại đệ (`typePet` 0 thường, 1 Mabư, 2 Uub, 3 Kid Beer, 4 Jiren) = số đầu của phần tử 1, kèm tên `$<tên>` (dấu `"` trong chuỗi con có `\` đứng trước). Ví dụ Kid Beer → Mabư (đã thử bằng SELECT với `hoang`):
+  ```sql
+  UPDATE player SET pet = REPLACE(REPLACE(pet, '["[3,', '["[1,'), '$Kid Beer', '$Mabư') WHERE name = '<tên>';
+  ```
+  Ngoại hình đệ tính theo `typePet` nên tự đổi. Chỉ số gốc giữ nguyên (Uub/Kid Beer/Jiren tạo mới với HP/KI 400.000, SĐ 20.000; Mabư mới HP/KI 800–2.100, SĐ 50–120, `PetService.getDataPet*`), muốn đổi thì sửa vị trí 6–8 như trên. Chạy từ file SQL UTF-8 hoặc phpMyAdmin (chữ `ư` gõ trong Git Bash bị thành `?`).
 - Mốc ảnh hưởng: sức mạnh đệ ≥ 50 tỷ (5000000000) mới mở được giới hạn sức mạnh (`ToSuKaio.handleLimitPowerPet`); giới hạn theo `limitPower` (vị trí 1) qua `NPoint.getHpMpLimit`/`getDameLimit`.
 - Trong game (đệ đang online): `upp <số>` cộng cùng lúc sức mạnh và tiềm năng cho đệ (`Command` + `Service.addSMTN` type 2), và cộng thêm cho sư phụ (1/12 nếu sư phụ ≥ 40 tỷ, rồi nhân 3). Không có lệnh riêng để chỉ đổi tiềm năng hay sức mạnh, nên đặt giá trị chính xác thì sửa DB.
 

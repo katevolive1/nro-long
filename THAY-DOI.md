@@ -247,3 +247,163 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 ## 33. Client: tự đánh `ak` vẫn đánh khi mở hành trang — 31/10/2026
 
 - Cập nhật client: **đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-ak-hanh-trang.ps1`). Không có SQL, không cần build server. Chi tiết: `client-patch/CLIENT-UNITY.md` mục "Tự đánh `ak` dừng khi mở hành trang".
+
+## 34. Clone nhân vật 1368 sang Xayda `tata2` (account `xd`) và Namek `hoang` (account `nm`) — 31/10/2026, máy nhà
+
+- Build: không. Client: không. Chỉ SQL. Chi tiết và các điểm đã chốt: [KE-HOACH-CLONE-NHAN-VAT.md](KE-HOACH-CLONE-NHAN-VAT.md).
+- Chạy khi nhân vật 1368 (account `11`) offline. Chỉ chạy nếu máy này có player 1368 và chưa có account `xd`/`nm` (`SELECT id FROM account WHERE username IN ('xd','nm');` ra rỗng). Máy nhà đã tạo account 3735/3736, player 1370/1371; máy khác lấy id MAX+1 nên có thể khác.
+- Mật khẩu không ghi vào git: SQL dưới lấy mật khẩu giống account 3729. Đặt lại bằng `UPDATE account SET password='<mật khẩu>' WHERE username IN ('xd','nm');` (hỏi user, bản ở máy nhà là `db/clone-xd-nm.sql`, bị gitignore).
+- SQL:
+```sql
+SET NAMES utf8mb4;
+START TRANSACTION;
+SET @acc_xd = (SELECT MAX(id) + 1 FROM account);
+SET @acc_nm = @acc_xd + 1;
+SET @pl_xd = (SELECT MAX(id) + 1 FROM player);
+SET @pl_nm = @pl_xd + 1;
+CREATE TEMPORARY TABLE tmp_acc AS SELECT * FROM account WHERE id = 3729;
+UPDATE tmp_acc SET id = @acc_xd, username = 'xd', token = '', xsrf_token = '', newpass = '', ip_address = '', create_time = NOW(), update_time = NOW();
+INSERT INTO account SELECT * FROM tmp_acc;
+UPDATE tmp_acc SET id = @acc_nm, username = 'nm';
+INSERT INTO account SELECT * FROM tmp_acc;
+DROP TEMPORARY TABLE tmp_acc;
+CREATE TEMPORARY TABLE tmp_pl AS SELECT * FROM player WHERE id = 1368;
+UPDATE tmp_pl SET clan_id = 0, create_time = NOW(), data_intrinsic = '[0,0,0,0,false,0,0,0]';
+CREATE TEMPORARY TABLE tmp_xd AS SELECT * FROM tmp_pl;
+UPDATE tmp_xd SET id = @pl_xd, account_id = @acc_xd, name = 'tata2', gender = 2, head = 27,
+  items_body = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(items_body,
+      '"[136,1,', '"[168,1,'), '"[242,1,', '"[250,1,'), '"[257,1,', '"[265,1,'), '"[268,1,', '"[276,1,'),
+      '[129,1]', '[135,1]'), '[141,1]', '[138,1]'),
+  skills = '["[4,7,0,0]","[5,7,0,0]","[8,7,0,0]","[13,0,0,0]","[14,0,0,0]","[21,0,0,0]","[23,7,0,0]","[19,7,0,0]"]',
+  skills_shortcut = '[4,5,8,23,19,-1,-1,-1,-1,-1]',
+  BoughtSkill = '[0,435,436,437,438,439,440,503,504,505,506,507,508,88,89,90,91,92,93,130,131,132,133,134,135,109,110,111,112,113,114]';
+INSERT INTO player SELECT * FROM tmp_xd;
+DROP TEMPORARY TABLE tmp_xd;
+CREATE TEMPORARY TABLE tmp_nm AS SELECT * FROM tmp_pl;
+UPDATE tmp_nm SET id = @pl_nm, account_id = @acc_nm, name = 'hoang', gender = 1, head = 29,
+  items_body = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(items_body,
+      '"[136,1,', '"[152,1,'), '"[242,1,', '"[246,1,'), '"[257,1,', '"[261,1,'), '"[268,1,', '"[272,1,'),
+      '[129,1]', '[131,1]'), '[141,1]', '[143,1]'),
+  skills = '["[2,7,0,0]","[3,7,0,0]","[7,7,0,0]","[11,0,0,0]","[12,0,0,0]","[17,7,0,0]","[18,0,0,0]","[19,7,0,0]"]',
+  skills_shortcut = '[2,3,7,17,19,-1,-1,-1,-1,-1]',
+  BoughtSkill = '[0,435,436,437,438,439,440,482,483,484,485,486,487,80,81,82,83,84,86,123,124,125,126,127,128,102,103,104,105,106,107]';
+INSERT INTO player SELECT * FROM tmp_nm;
+DROP TEMPORARY TABLE tmp_nm;
+DROP TEMPORARY TABLE tmp_pl;
+COMMIT;
+```
+- Kiểm tra: `SELECT a.username, p.id, p.name, p.gender, p.head FROM account a JOIN player p ON p.account_id = a.id WHERE a.username IN ('xd','nm');` ra `xd`/`tata2`/2/27 và `nm`/`hoang`/1/29.
+
+## 35. `tata2` (Xayda): sao pha lê đổi từ sức đánh sang HP — 31/10/2026, máy nhà
+
+- Build: không. Client: không. Chạy sau mục 34, khi `tata2` offline.
+- Mỗi lỗ ép đá HP (Ngọc rồng 20) = `[77,5]`, đá SĐ (Ngọc rồng 16) = `[50,3]`. Trên 5 món (áo, quần, găng, giày, rada) đổi 7 sao `[50,21]` → `[77,35]`, 2 lỗ cường hóa `[50,3]` → `[77,5]`. Cải trang Hit: `[50,51]` (30 gốc + 21 sao) → `[50,30]`, HP `[77,29]` → `[77,64]`, 2 lỗ `[50,3]` → `[77,5]`. Đồ của đệ không đổi.
+- SQL:
+```sql
+UPDATE player SET items_body = REPLACE(REPLACE(REPLACE(REPLACE(items_body,
+    '[50,51]', '[50,30]'), '[77,29]', '[77,64]'), '[50,21]', '[77,35]'), '[50,3]', '[77,5]')
+WHERE name = 'tata2' AND gender = 2;
+```
+- Kiểm tra: `items_body` của `tata2` có 5 chỗ `[77,35]`, 12 chỗ `[77,5]`, không còn `[50,3]`/`[50,21]`.
+
+## 36. Ngọc rồng sao đen: sao 5 đổi sang +35% TN/SM, sao 6 KI tối đa còn +20% — 31/10/2026, máy nhà
+
+- Build: có (`NPoint.java`, `RewardBlackBall.java`). Client: không. SQL: không.
+- Sao 5: bỏ SĐ chí mạng +35%, thay bằng tiềm năng và sức mạnh nhận thêm +35% (`tlTNSM`). Sao 6: KI tối đa +40% → +20% (`R6S_1` = 20). Chi tiết: CO-CHE.md mục "Ngọc rồng sao đen". Gốc: GIA-TRI-GOC.md.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc chạy `run.bat`). Hiệu ứng sao đang giữ trên người chơi sẽ tính lại khi họ đăng nhập lại.
+
+## 37. Chữ NPC sao đen, nhắc boss 15 phút, đệ Mabư của `tata2` đổi sang HP — 31/10/2026, máy nhà
+
+- Build: có (`ConstNpc.HUONG_DAN_BLACK_BALL_WAR`: chữ hướng dẫn Trạm tàu vũ trụ khớp sao 5 = +35% TN/SM, sao 6 = KI+20%; `Boss.remindNotify` 5 phút → 15 phút, `900000`). Client: không.
+- (Xem thêm mục 39: đệ tích giáp tập luyện theo thời gian thực 0,1 giây/điểm.)
+- SQL (chạy sau mục 34 và 35, khi `tata2` offline): đệ của `tata2` (Mabư, gender 2). Sao pha lê SĐ → HP trên 7 món (áo, quần, găng, giày, nhẫn, cải trang 584, giáp tập luyện): mỗi lỗ SĐ `[50,3]` → HP `[77,5]`, 7 sao `[50,21]` → `[77,35]`; giày đã có `[77,1]` nên gộp thành `[77,36]`; cải trang 584 `[50,45]` → `[50,24]` (SĐ gốc 24), `[77,24]` → `[77,59]`. Quần Thiên Sứ 1053 lên +8: `[22,260]` → `[22,557]` (260 × 1,1^8, công thức `ChuyenHoaTrangBi_Ngoc`) và thêm `[72,8]`. Giáp tập luyện cấp 1 (529) → cấp 4 (1716), option 9 về 0, 9 sao HP 45% (`[77,35]` + 2 × `[77,5]`), chưa thêm `77:10, 94:3` như bản bán ở Santa.
+```sql
+SET NAMES utf8mb4;
+SET @p = (SELECT LOCATE('[77,1]', pet) FROM player WHERE name = 'tata2');
+SET @sep = (SELECT SUBSTRING(pet, @p + 6, LOCATE('[107,9]', pet, @p) - (@p + 6)) FROM player WHERE name = 'tata2');
+UPDATE player SET pet = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pet,
+    CONCAT('[77,1]', @sep, '[107,9]', @sep, '[50,21]'), CONCAT('[77,36]', @sep, '[107,9]')),
+    '[50,21]', '[77,35]'),
+    '[50,3]', '[77,5]'),
+    '[50,45]', '[50,24]'),
+    '[77,24]', '[77,59]'),
+    '[22,260]', CONCAT('[22,557]', @sep, '[72,8]')),
+    '[529,1,', '[1716,1,'),
+    '[9,31]', '[9,0]')
+WHERE name = 'tata2' AND gender = 2;
+```
+- Kiểm tra: cột `pet` của `tata2` đọc đúng JSON, có 5 chỗ `[77,35]`, 14 chỗ `[77,5]`, 1 chỗ `[77,36]`, 1 chỗ `[77,59]`, `[22,557]`, không còn `[50,21]`/`[50,3]`/`[529,1,`. Chạy xong mới có `[1716,1,`.
+
+## 38. Client: số lượng trong rương hết nhòe — 31/10/2026, máy nhà
+
+- Client: có. **Đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-so-luong-ruong.ps1`). Build: không. SQL: không. Chi tiết: `client-patch/CLIENT-UNITY.md` mục "Số lượng trong rương bị nhòe". Máy nhà chưa áp vào `F:\nr-long` (game đang chạy lúc sửa); áp xong thì ghi `38` vào `.thay-doi-da-chay`.
+
+## 39. Đệ tích giáp tập luyện mỗi 0,1 giây (cộng theo thời gian thực) — 31/10/2026, máy nhà
+
+- Build: có (`EffectSkin.java`, `updateTrainArmor`). Client: không. SQL: không.
+- Trước đây đệ +1 mỗi 1 giây khi đang đánh. Bây giờ cộng `elapsed / 100` mỗi lần `update()` (update chạy mỗi giây, cộng tối đa 10 điểm mỗi lần), vẫn giới hạn 1000 và chỉ khi đệ đánh trong 30 giây gần nhất. Gốc: GIA-TRI-GOC.md.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 41. Nội tại Liên hoàn của Namek (gender 1) 5–25% → 5–35% — 31/10/2026, máy nhà
+
+- SQL (không cần build, khởi động lại server để nạp lại bảng `intrinsic`; nhân vật đang có nội tại giữ chỉ số cũ đã roll, người mới roll theo 5–35):
+```sql
+UPDATE intrinsic SET param_to_1 = 35 WHERE id = 13 AND gender = 1;
+```
+- Kèm lệnh bỏ cột `rid` (đã thêm tạm lúc dò, không dùng): `ALTER TABLE intrinsic DROP COLUMN rid;` (chạy trước lệnh trên). Bảng `intrinsic` không có khóa chính như cũ.
+- Client: không cần cập nhật.
+
+## 42. Bỏ sự kiện nước mía; rơi đồ Thiên sứ/Hủy diệt mới; đổi Hủy diệt không trùng món — 31/10/2026, máy nhà
+
+- Build: có (`build.bat` hoặc javac + `jar uf`, xem THAY-DOI mục 36). Client: không cần cập nhật. SQL: không.
+- Bỏ nước mía: xóa `event/XeNuocMia.java`, bỏ case trong `NpcFactory`, `Map.initNpc` bỏ qua NPC id 84, `ChiChi` bỏ nút "Top Nước mía" (menu còn Hộp quà / Kem / Cửa hàng). Ly mía trong túi vẫn dùng được. Bảng top nước mía (`Manager.Topsukien1`) còn trong code nhưng không còn được dùng.
+- Rơi đồ boss Thiên sứ + Hủy diệt (`ThienSuHuyDietReward.drop`): 2% Thần Linh, 30% Hủy Diệt, 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% thỏi vàng (457). Món Hủy Diệt chọn hành tinh ngẫu nhiên, không theo người giết. Bảng ở BOSS-ROI-DO.md mục 3b.
+- Bà Hạt Mít đổi 3 món Hủy Diệt (`DoiDoBaHatMit.checkHuyDiet`): 3 món không được trùng món (cùng id), được khác hành tinh.
+- Chữ "10 tỷ": xem mục 43.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 43. Thiên sứ rơi đồ như cũ (bảng mới chỉ cho Hủy diệt); client: số dưới 10 tỷ hiện đủ dấu chấm — 31/10/2026, máy nhà
+
+- Build: có (`ThienSuHuyDietReward`: `drop` = Thiên sứ bảng cũ, món Hủy Diệt theo hành tinh người giết; `dropHuyDiet` = Hủy diệt bảng mới ở mục 42). SQL: không.
+- Client: có. **Đóng hết cửa sổ game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-ty-10.ps1`, kèm `patch-so-luong-ruong.ps1` của mục 38 nếu máy chưa áp). Chi tiết: `client-patch/CLIENT-UNITY.md` mục "Số dưới 10 tỷ hiện đủ dấu chấm". Máy nhà chưa áp (game đang mở lúc sửa); áp xong thì ghi `38` và `43` vào `.thay-doi-da-chay`.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 44. Tổ sư Kaio: tách câu báo mở giới hạn đệ — 31/10/2026, máy nhà
+
+- Build: có (`ToSuKaio.handleLimitPowerPet`: đệ bậc 9 báo "Sức mạnh của đệ tử đã đạt tới giới hạn", dưới bậc 5 báo "Đệ tử cần mở giới hạn tới bậc 5 ở Quốc Vương trước"; trước đây cả hai báo "cần đạt 50 tỷ sức mạnh"). Client: không. SQL: không.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 45. Đệ Uub / Kid Beer / Jiren mặc được đồ cả 3 hành tinh — 31/10/2026, máy nhà
+
+- Build: có (`InventoryService.putItemBody`: đệ `typePet` 2–4 bỏ qua kiểm tra hành tinh của đồ; đệ thường và Mabư vẫn chỉ mặc đồ cùng hành tinh). Client: không. SQL: không.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 46. Boss lớn: HP, nhận đủ sát thương, tỉ lệ rơi mới; đổi kích hoạt theo hành tinh người chơi; ô đồ đệ VIP; client: số sát thương có dấu chấm — 31/10/2026, máy nhà
+
+- Build: có. SQL: không.
+- HP (`BossesData`): Cooler 1 tỷ, Cooler 2 1,5 tỷ, Black Goku 1 tỷ, Super Black Goku 3,5 tỷ, Cumber 2 tỷ (Super Cumber, Baby 3 dạng giữ 2 tỷ); Hủy diệt Beerus/Champa 3 tỷ (`HuyDiet.HP`), hồi sinh 20 phút (user sửa). Black Goku, Cumber, Baby, Xên bọ hung, Siêu bọ hung bỏ giảm sát thương. `NPoint.subDameInjureWithDeff` trả `long` (hết tràn số đòn > 2,1 tỷ).
+- Rơi đồ: Thần Linh Baby 3/4/5%, Black Goku 5/7%, Cumber 7%, Cooler 5/7%, Siêu bọ hung 3/5%, Mabư 12h 0,15%; ngọc rồng boss lớn 10% x1 (2 sao 70%, 3 sao 30%), Mabư 12h không rơi ngọc rồng. Chi tiết BOSS-ROI-DO.md mục 2.
+- Bà Hạt Mít đổi 3 Hủy Diệt → kích hoạt: hành tinh theo người chơi, loại theo món đặt đầu tiên.
+- Đệ Uub/Kid Beer/Jiren: ô 8 mặc thú cưng (loại 27), đồ đeo lưng ô 9 hiện trên lưng đệ, kiểm tra đệ VIP bằng `typePet` (đổi đệ xong mặc được ngay); đệ không mặc sách tuyệt kỹ nữa. Đệ thường và Mabư vẫn 7 ô.
+- Client: có. **Đóng game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-so-sat-thuong.ps1`). Máy nhà đã áp vào `F:\nr-long`.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 47. Đổi tên 3 item thành hộp thú cưng / đồ đeo lưng / thú cưỡi — 1/11/2026, máy nhà
+
+- SQL (chạy từ file UTF-8 hoặc phpMyAdmin). Chưa có code mở hộp, chờ duyệt [KE-HOACH-HOP-QUA.md](KE-HOACH-HOP-QUA.md). Không dùng 1453 (để dành).
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template SET NAME='Hộp thú cưng', description='Mở ra ngẫu nhiên 1 thú cưng', icon_id=14514 WHERE id=1135;
+UPDATE item_template SET NAME='Hộp đồ đeo lưng', description='Mở ra ngẫu nhiên 1 đồ đeo lưng', icon_id=14514 WHERE id=1136;
+UPDATE item_template SET NAME='Hộp thú cưỡi', description='Mở ra ngẫu nhiên 1 thú cưỡi', icon_id=14514 WHERE id=1397;
+UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộng dồn trong túi
+```
+- Build: có (`DataGame.vsItem` 21 → 23 để client tải lại tên và cộng dồn). Client: không cần cập nhật.
+- Kiểm tra: `SELECT id, NAME, is_up_to_up FROM item_template WHERE id IN (1135, 1136, 1397);` ra 3 tên hộp và `1`.
+
+## 48. Gói VIP Tori Bot: hết lỗi reset mỗi ngày, mùa 1/11/2026–30/4/2027, bỏ x3 kinh nghiệm — 1/11/2026, máy nhà
+
+- Build: có. SQL: không. Client: không.
+- Trước đây `PlayerService.dailyLogin` lấy mốc hết mùa 5/7 nên từ 6/7 ngày nào cũng xóa lượt mua, cấp VIP và `timevip`. Giờ mùa khai báo một chỗ trong `ToriBot` (`VIP_SEASON_ID` = 1, mở 1/11/2026 đến hết 30/4/2027, ngoài khoảng đó đóng). `data_vip` thêm phần tử thứ 9 là mã mùa; nạp nhân vật thấy khác mã mùa thì reset lượt mua và cấp VIP, giữ `timevip`.
+- VIP không cộng kinh nghiệm nữa (bỏ +3 của `timevip` và của cột `account.vip` trong `NPoint`), bỏ dòng "X3 Kinh nghiệm" trong menu Tori Bot và thông báo lúc đăng nhập.
+- Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).

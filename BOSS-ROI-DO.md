@@ -14,14 +14,16 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 - 80%: 1 viên Ngọc rồng 5/6/7 sao (id 18/19/20)
 
 ## 2. Boss lớn
-| Boss | Vàng 20–30k | Đồ Thần Linh | Đồ Goku + sao pha lê | Ngọc rồng (x1–3) | Thêm |
+| Boss | Vàng 20–30k | Đồ Thần Linh | Đồ Goku + sao pha lê | Ngọc rồng | Thêm |
 |---|---|---|---|---|---|
-| Baby | 100% | 10% | 5% | 10% (2–7 sao + Nhẫn thời không 992) | 1%: CT Baby/Vegeta Baby/Baby khỉ (1785/1786/1788) |
-| Black Goku, Cumber | 100% | 5% | 5% | 10% (2–7 sao + 992) | – |
-| Cooler | 100% | 5% | 5% | 80% (2–7 sao) | – |
-| Siêu bọ hung | 100% | 5% | 30% | 80% (2–7 sao) | – |
-| Mabu 12h (Bui Bui 1/2, Cadic, Drabura 1/2/3, Goku, Yacon, Mabu) | 100% | 1% | 1% | 10% (2–7 sao) | điểm Mabu +10 (Drabura3 +20, Mabu +25) |
+| Baby | 100% | dạng 1 3%, dạng 2 4%, dạng 3 5% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | 1%: CT Baby/Vegeta Baby/Baby khỉ (1785/1786/1788) |
+| Black Goku | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
+| Cumber | 100% | 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
+| Cooler | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
+| Siêu bọ hung | 100% | dạng 1 3%, dạng 2 5% | 30% | 10% x1 (2 sao 70%, 3 sao 30%) | +5 điểm sự kiện mỗi dạng |
+| Mabu 12h (Bui Bui 1/2, Cadic, Drabura 1/2/3, Goku, Yacon, Mabu) | 100% | 0,15% | 1% | không rơi | điểm Mabu +10 (Drabura3 +20, Mabu +25) |
 
+- Cập nhật 31/10/2026: Thần Linh theo dạng (`Boss.isDropDoTL`, mỗi dạng chết đều gọi `reward`), ngọc rồng chung `Boss.dropNgocRong23` (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ (`BossesData`).
 - Đồ Thần Linh (`ItemService.randDoTLBoss`, id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
 - Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115%; sao pha lê 1–3 (80%), 4–5 (17%), 6 (3%).
 
@@ -39,7 +41,9 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
 ## 3b. Thiên sứ + Hủy diệt (Trạm hủy diệt 186–188, thêm 31/10/2026, `boss/thien_su`)
 - Mỗi map 2 cặp: Beerus (hình 1983/1986/1987) + Whis (505/506/507), Champa (511/512/513) + Vados (530/531/532). HP 2 tỷ, sức đánh 100.000, không giới hạn sát thương mỗi đòn, chiêu đấm/chưởng cấp 7. Cặp vào cùng khu ngẫu nhiên (2 cặp có thể chung khu). Thiên sứ mỗi 10 giây hồi 10% HP tối đa cho Hủy diệt cùng cặp (cùng khu, còn sống). Hồi sinh: chết cả 2 con mới đếm 10 phút rồi cả cặp xuất hiện lại.
-- Rơi đồ (mỗi con rơi riêng, `ThienSuHuyDietReward`): 40% 1 món Hủy Diệt theo hành tinh người giết (áo/quần/găng/giày/nhẫn đều nhau; chỉ số shop Bill cộng 0–15% như `buyItemHD`, 21:60, 30); 20% Ngọc rồng 2 hoặc 3 sao; 20% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1150–1153) x1–5; 20% không rơi gì.
+- Rơi đồ Hủy diệt Beerus/Champa (`ThienSuHuyDietReward.dropHuyDiet`, tổng 100%, cập nhật 31/10/2026): 2% đồ Thần Linh (`randDoTLBoss`); 30% 1 món Hủy Diệt hành tinh ngẫu nhiên (áo/quần/găng/giày/nhẫn đều nhau; chỉ số shop Bill cộng 0–15% như `buyItemHD`, 21:60, 30); 20% Ngọc rồng 2 sao (15); 10% Ngọc rồng 3 sao (16); 38% 1 Thỏi vàng (457).
+- Rơi đồ Thiên sứ Whis/Vados (`ThienSuHuyDietReward.drop`, giữ như cũ): 40% 1 món Hủy Diệt theo hành tinh người giết; 20% Ngọc rồng 2 hoặc 3 sao; 20% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1150–1153) x1–5; 20% không rơi gì.
+- Đổi 3 món Hủy Diệt → 1 món kích hoạt (Bà Hạt Mít, `DoiDoBaHatMit`): 3 món không được trùng món (cùng id), được khác hành tinh; loại theo món đặt đầu tiên, hành tinh theo người chơi.
 
 ## 4. Boss mini
 - Ăn Trộm: chỉ khi đã trộm vàng → trả 80% vàng đã trộm + 100% Hộp quà Goku Day (1591, 1594).
@@ -104,7 +108,7 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 - **Nhận đủ** (không override, `Boss.injured`): Fide, Kuku, Mập đầu đinh, Rambo, Tiểu đội trưởng, Bojack, Super Bojack, King Kong, Android 13/14/15… Android 19: Kamejoko/Masenko/Antomic bị hấp thụ (hồi 80% sát thương, nhận 0). Dr Kore: 3 chiêu đó hồi 100%.
 - Broly: tối đa **1% HP**/đòn (trừ Tự sát). Super Broly, Mabư ngoài map: tối đa **10% HP**/đòn.
 - Cooler: né 1%, nhận đủ. Golden Frieza: tối đa **50 triệu**/đòn.
-- Black Goku, Cumber: **½** sát thương rồi trừ thêm 0–100.000. Baby: ×0,7 rồi ½ (= **35%**, khiên ÷4). Xên bọ hung: **½** (khiên ÷4). Siêu bọ hung: **⅓** (khiên ÷4).
+- Black Goku, Cumber, Baby: **nhận đủ** từ 31/10/2026 (trước: Black Goku/Cumber dạng 2 ½ rồi trừ 0–100.000; Baby ×0,7 rồi ½). Khiên giữ như cũ (Black Goku/Cumber thành 1, Baby ÷4). Hủy diệt (Beerus/Champa) HP 3 tỷ, nhận đủ. Xên bọ hung, Siêu bọ hung: **nhận đủ** từ 31/10/2026 (trước ½ và ⅓; khiên vẫn ÷4).
 - Doanh trại: Trung úy Trắng/Thép/Xanh lơ, Ninja clone né 20%, Ninja áo tím né 30%; tất cả nhận **½** (khiên ÷2). Robot vệ sĩ ½.
 - Mabư 12h: Mabư né 20%, tối đa **50 triệu**; Drabura né 10%, Drabura 2 né 20%, Drabura 3, Goku tối đa **20 triệu**; Cađíc tối đa **10 triệu**; BuiBui, Yacon né 20%. Mabư 14h, Super Bư: né 10%, tối đa **30 triệu**.
 - Pocolo: né 1%; đòn đủ giết thành 0 (có điều kiện riêng trong code). Cađích (Con đường rắn độc): khiên ÷4, đòn đủ giết có điều kiện riêng. Saibamen: **÷7** (khiên ÷4).
@@ -114,4 +118,4 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 - Yardrat: né 10%, tối đa **1% HP**. Võ đài Hạt Mít (Bông Băng, Dracula, Người vô hình, Thỏ đầu bạc, Vua quỷ Sa Tăng…): né 10%, tối đa **10% HP**.
 - Luyện tập tự động (TrainingBoss, Tàu Pảy Pảy luyện tập, Whis): né 40%; Whis ÷ cấp.
 - Khí gas (Dr Lychee, Hatchiyack): mục 7a. Quái to: Hirudegarn mỗi đòn 1% HP còn lại; Gấu tướng cướp 5% sát thương.
-- **Lỗi**: `NPoint.subDameInjureWithDeff` trả về `int` (ép kiểu từ `long`), nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).
+- **Đã sửa 31/10/2026** (trả về `long`): `NPoint.subDameInjureWithDeff` trước trả về `int`, nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).

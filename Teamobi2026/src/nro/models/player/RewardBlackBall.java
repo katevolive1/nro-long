@@ -25,7 +25,7 @@ public class RewardBlackBall {
     public static final int R5S_1 = 35;
     public static final int R5S_2 = 20;
     public static final int R5S_3 = 20;
-    public static final int R6S_1 = 40;
+    public static final int R6S_1 = 20;
     public static final int R6S_2 = 20;
     public static final int R7S_1 = 14;
     public static final int R7S_2 = 15;

@@ -40,18 +40,18 @@ Lập ngày 30/10/2026 từ các thư mục `Teamobi2026/src/nro/models/`. Đán
 - Rương đồ **[đã sửa]** (không reload, không nhảy cuộn, món cuối thế chỗ)
 - Lệnh admin chat (`Command.matchCommand`) **[đã sửa]** không bắt nhầm chat thường
 - Gift code **[đã sửa]** (tanthutd/tanthunm/tanthuxd), quà hằng ngày (`daily_Giftcode`)
-- Gói VIP ở ToriBot **[đã sửa]** (bỏ item 1248)
+- Gói VIP ở ToriBot **[đã sửa]** (bỏ item 1248; 1/11/2026: mùa 1/11/2026–30/4/2027, reset theo mã mùa, bỏ x3 kinh nghiệm)
 - Minigame: Con số may mắn vàng/ngọc, Chọn ai đây (`minigame`)
 - Nhiệm vụ KOL ở Quy Lão Kame, nhiệm vụ chính (`task`)
 
 ## Sự kiện (`event`, `event_list`, bật theo mùa)
 - Trung thu, Halloween, Noel, Tết, Hùng Vương, 8/3, nạp thẻ (`TopUp`)
-- Nồi bánh, xe nước mía, Vua Hùng
+- Nồi bánh, Vua Hùng (xe nước mía đã bỏ 31/10/2026: NPC không còn xuất hiện, bảng top Nước mía ở ChiChi đã bỏ)
 - Hộp quà giáng sinh 648 **[đã sửa]** (3 nhóm quà, mảnh Thiên Sứ 50–100; chi tiết [CO-CHE.md](CO-CHE.md))
 
 ## Boss (`boss`)
 - Rơi đồ: [BOSS-ROI-DO.md](BOSS-ROI-DO.md) **[đã xem]**
-- Không tự rời map trừ boss theo giờ, thông báo 5 phút/lần, gửi danh sách boss lúc đăng nhập **[đã sửa]** (ghi trong CLAUDE.md)
+- Không tự rời map trừ boss theo giờ, thông báo 15 phút/lần, gửi danh sách boss lúc đăng nhập **[đã sửa]** (ghi trong CLAUDE.md)
 - Mặt Trời (5 con, hồi 30 phút) **[đã sửa]**, Baby (khu ngẫu nhiên 0–9) **[đã sửa]**
 - Hirudegarn (map 126) **[đã sửa]** tạm tắt bằng `Hirudegarn.DISABLED`
 - Chưa xem kỹ: Yardrat, Tàu Pảy Pảy, Mabư ngoài map, Nhân bản, Broly

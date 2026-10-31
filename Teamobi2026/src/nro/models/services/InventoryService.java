@@ -301,8 +301,9 @@ public class InventoryService {
             }
         }
 
-        // Kiểm tra giới tính của vật phẩm
-        if (item.template.gender < 3 && item.template.gender != player.gender) {
+        // Kiểm tra giới tính của vật phẩm (đệ Uub 2 / Kid Beer 3 / Jiren 4 mặc được đồ cả 3 hành tinh)
+        boolean moiHanhTinh = player.isPet && ((Pet) player).typePet >= 2 && ((Pet) player).typePet <= 4;
+        if (!moiHanhTinh && item.template.gender < 3 && item.template.gender != player.gender) {
             Service.gI().sendThongBaoOK(player.isPet ? ((Pet) player).master : player, "Trang bị không phù hợp!");
             return sItem;
         }
@@ -357,16 +358,18 @@ public class InventoryService {
                 index = player.isPet ? 8 : 10;
                 break;
         }
-        if (player.isPet && (item.template.type == 11 || item.template.type == 25)) {
+        // Ô 8 (thú cưng, loại 27) và ô 9 (đeo lưng, loại 11) chỉ đệ Uub / Kid Beer / Jiren mới có
+        if (player.isPet && (item.template.type == 11 || item.template.type == 27)) {
             Pet pet = (Pet) player;
-            if (pet.type != 2 && pet.type != 3 && pet.type != 4) {
+            if (pet.typePet != 2 && pet.typePet != 3 && pet.typePet != 4) {
                 Player recipient = pet.master != null ? pet.master : player;
                 Service.gI().sendThongBaoOK(recipient, "Chỉ đệ tử vip mới sử dụng được vật phẩm này!");
                 return sItem;
             }
         }
 
-        if (player.isPet && (item.template.type == 23 || item.template.type == 24 || item.template.type == 27)) {
+        // đệ không mặc thú cưỡi (23/24) và sách tuyệt kỹ (25, bỏ từ 31/10/2026)
+        if (player.isPet && (item.template.type == 23 || item.template.type == 24 || item.template.type == 25)) {
             Player recipient = ((Pet) player).master;
             if (recipient == null) {
                 recipient = player;

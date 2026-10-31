@@ -36,7 +36,7 @@ Lệnh có tham số chỉ khớp khi sau tên lệnh là hết câu, dấu các
 | `loadskill` | Nạp lại thanh kỹ năng |
 
 ## Lệnh đệ tử (server)
-`di theo`, `bao ve` (đánh quái trong 300px quanh sư phụ, không có quái thì đi theo sư phụ), `tan cong`, `ve nha`, `bien hinh`, `ten con la <tên>` (đổi tên đệ), `sach tuyet ky` (đệ dùng sách tuyệt kỹ trong hành trang).
+`di theo`, `bao ve` (đánh quái trong 300px quanh sư phụ, không có quái thì đi theo sư phụ), `tan cong`, `ve nha`, `bien hinh`, `ten con la <tên>` (đổi tên đệ), `sach tuyet ky` (đã bỏ 31/10/2026: đệ không mặc sách tuyệt kỹ, lệnh chỉ báo không dùng được).
 
 Mục lục: [Vật phẩm](#vật-phẩm) · [Option](#option-chỉ-số-vật-phẩm) · [Map](#map) · [Nhiệm vụ](#nhiệm-vụ-chính) · [Quái](#quái) · [NPC](#npc) · [Kỹ năng](#kỹ-năng)
 
@@ -1185,8 +1185,8 @@ Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử 
 | 1132 | Fan cuồng bóng đá | 27 | 3 | Không |
 | 1133 | Fan gà nửa mùa | 27 | 3 | Không |
 | 1134 | Thiệp World Cup | 27 | 3 | Không |
-| 1135 | Capsule World Cup | 27 | 3 | Không |
-| 1136 | Capsule World Cup VIP | 27 | 3 | Không |
+| 1135 | Hộp thú cưng | 27 | 3 | Không |
+| 1136 | Hộp đồ đeo lưng | 27 | 3 | Không |
 | 1137 | Cờ GOAL | 11 | 3 | Dùng |
 | 1138 | Cờ FIFA | 11 | 3 | Dùng |
 | 1139 | Quả Bóng Vàng | 11 | 3 | Dùng |
@@ -1447,7 +1447,7 @@ Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử 
 | 1394 | Gõ đầu trẻ | 36 | 3 | Không |
 | 1395 | Đóa hoa hồng | 27 | 3 | Không |
 | 1396 | Cải trang Super Píc | 5 | 3 | Mặc |
-| 1397 | Rương radar | 29 | 3 | Không |
+| 1397 | Hộp thú cưỡi | 29 | 3 | Không |
 | 1398 | Rương giày | 29 | 3 | Không |
 | 1399 | Rương nhẫn | 29 | 3 | Không |
 | 1400 | Rương găng tay | 29 | 3 | Không |

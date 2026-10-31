@@ -3,8 +3,6 @@ package nro.models.services;
 import nro.models.daily_Giftcode.DailyGiftService;
 import nro.models.data.LocalManager;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Date;
 import nro.models.Bot.BotAttackplayer;
 import nro.models.map.Map;
@@ -334,17 +332,7 @@ public class PlayerService {
             player.event.luotNhanNgocMienPhi = 1;
             player.event.luotNhanCapsuleBang = 1;
             player.lastCheckIn = null;
-            LocalDate VIP_SEASON_END_DATE_FOR_CURRENT_YEAR = LocalDate.of(LocalDate.now().getYear(), Month.JULY, 5);
-            LocalDate currentDate = LocalDate.now();
-            if (currentDate.isAfter(VIP_SEASON_END_DATE_FOR_CURRENT_YEAR)) {
-                if (player.vipPurchaseCount != 0) {
-                    player.vipPurchaseCount = 0;
-                 //   System.out.println("DEBUG: VIP của người chơi " + player.name + " đã được reset do mùa VIP kết thúc.");
-                    player.vip = 0;
-                    player.timevip = 0L;
-                    player.vipPurchaseCount = 0;
-                }
-            }
+            // reset VIP theo mùa nằm ở MrBlue (so mã mùa ToriBot.VIP_SEASON_ID), không reset theo ngày nữa
         }
     }
 }

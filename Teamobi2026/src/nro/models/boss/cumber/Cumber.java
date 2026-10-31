@@ -34,7 +34,7 @@ public class Cumber extends Boss {
         int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
         int drop = 190;
         int quantity = Util.nextInt(20000, 30000);
-        if (Util.isTrue(5 , 100)) {
+        if (isDropDoTL(7)) { // đồ Thần Linh 7%
         ItemMap it = ItemService.gI().randDoTLBoss(this.zone, 1, x, y, plKill.id);
         if (it != null) {
         Service.gI().dropItemMap(zone, it);
@@ -68,13 +68,7 @@ public class Cumber extends Boss {
             optionalItemMap.options.add(new Item.ItemOption(107, value));
             Service.gI().dropItemMap(zone, optionalItemMap);
         }
-        if (Util.isTrue(10, 100)) {
-            int[] dropItems = {15,16,17,18,19,20,992};
-            int dropOptional = dropItems[Util.nextInt(0, dropItems.length - 1)];
-            ItemMap optionalItemMap = new ItemMap(this.zone, dropOptional, Util.nextInt(1, 3), x, y, plKill.id);
-            Item optionalItem = ItemService.gI().createNewItem((short) dropOptional);
-            Service.gI().dropItemMap(zone, optionalItemMap);
-        }
+        dropNgocRong23(plKill, x, y);
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
         int diem = 5;
         plKill.event.addEventPoint(diem);
@@ -87,10 +81,7 @@ public class Cumber extends Boss {
                 this.chat("Xí hụt");
                 return 0;
             }
-            if (this.currentLevel != 0) {
-                damage /= 2;
-            }
-            damage = this.nPoint.subDameInjureWithDeff(damage - Util.nextInt(100000));
+            damage = this.nPoint.subDameInjureWithDeff(damage); // nhận đủ sát thương (bỏ ½ và -0–100.000 từ 31/10/2026)
             if (!piercing && effectSkill.isShielding) {
                 if (damage > nPoint.hpMax) {
                     EffectSkillService.gI().breakShield(this);

@@ -73,8 +73,10 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
   - Rađa kho báu 1532 (+2, chỉ trong Bản đồ kho báu 135–138, 30 phút): Santa (npc 39) shop `SANTA`, 2 ngọc.
   - Vệ tinh trí tuệ 343 (+1/5, đặt ra map): Uron (npc 16) shop `URON`, 5 ngọc.
   - Option 101 "+#% TN,SM" / 88 "Cộng #% exp khi đánh quái" / 156 (giảm 50% SĐ/HP/KI, +#% SM, TN, vàng) trên đồ đang mặc (`tlTNSM`): Cải trang 461 (101:10) Santa `SANTA` 2000 ngọc; Cải trang 452 (101:20) `SANTA_GIAM_GIA_1` 400 ngọc; Pet Zịt vàng bối rối 1631 (101:10) `SHOP_CHI_CHI` 1,5 tỷ vàng, `SHOP_VIP` 150 thỏi, `SHOP_CLAN`; Avatar 683/687/690 (156:50) `URON` 599 ngọc; sao pha lê 447 ép vào đồ (101:5); balo pet 1360 (101:20) thưởng KOL ở Quy Lão Kame (`QuyLaoKame` ~dòng 549).
-  - Nội tại 24 (+param%), VIP thời gian `timevip` (+3).
-- **Cả hai:** tài khoản `vip` > 0 (+3, đệ lấy theo tài khoản chủ).
+  - Nội tại 24 (+param%).
+- VIP **không còn** cộng kinh nghiệm (bỏ 1/11/2026: trước đây `timevip` còn hạn +3, cột `account.vip` > 0 +3).
+
+**Gói VIP Tori Bot (sửa 1/11/2026):** `ToriBot.BuyVip`, tối đa 4 lượt mỗi mùa (`vipPurchaseCount`), chỉ nhận vật phẩm (không còn x3 kinh nghiệm). Lưu trong cột `data_vip` dạng `[cuuSat, lastCuuSat, nhanDeTu, nhanVang, nhanSKH, vip, timevip, vipPurchaseCount, vipSeason]`. Mùa khai báo một chỗ trong `ToriBot`: `VIP_SEASON_ID` = 1, từ 1/11/2026 đến hết 30/4/2027, ngoài khoảng này Tori Bot đóng. Lúc nạp nhân vật (`MrBlue`), `vipSeason` khác `VIP_SEASON_ID` thì reset lượt mua và cấp `vip`, giữ `timevip`; dữ liệu cũ chưa có `vipSeason` thì coi là mùa hiện tại. Mở mùa mới: tăng `VIP_SEASON_ID` và đổi 2 ngày. Lỗi cũ (đã bỏ): `PlayerService.dailyLogin` lấy mốc hết mùa 5/7 nên từ 6/7 mỗi ngày mới đều xóa lượt mua, `vip` và `timevip`.
 - **Chỉ đệ tử:**
   - Bùa x2 tn,sm đệ tử 1628 (`isUseBuaSanta`, +2 cho đệ, 30 phút `TIME_BUA_SANTA`, dùng tiếp thì +30 phút): Santa shop `SANTA`, 5 ngọc.
   - Option 160 "TNSM PET" trên đồ **sư phụ** mặc (`tlTNSMPet`, đệ +tn×(100+x)/100): Cải trang Mabư Còm 1255 (160:30) Santa `SANTA` 5000 ngọc; Cánh thiên thần 3 1531 (160:30) `SANTA_HAN_SU_DUNG` 129 triệu vàng, `SHOP_VIP` 100 thỏi.
@@ -169,7 +171,7 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
 - Món: 529/534 cấp 1 (10%), 530/535 cấp 2 (20%), 531/536 cấp 3 (30%), 1716 cấp 4 (40%), 1869 cấp 5 (50%, thêm vào `ItemService.isTrainArmor`/`getPercentTrainArmor` 31/10/2026; trước đó code không nhận). Option 9 = số "phút tập luyện" tích được, tối đa 1000.
 - Mua: 529–531 (ngọc 30/300/3000) và 534–536 (vàng 10 tr/100 tr/1 tỷ) ở BUNMA, DENDE, APPULE, SANTA; 1716 ở SANTA (9999 ngọc, kèm 77:10, 94:3) và SHOP_VIP (80 thỏi vàng). **1869 không bán ở đâu, không rơi, không có trong gift code.**
 - Sư phụ mặc (`NPoint.setDameTrainArmor`): giảm X% sức đánh; mỗi 60 giây nếu đã đánh trong 30 giây gần nhất thì option 9 +1 (`EffectSkin.updateTrainArmor`). Tháo ra để trong hành trang: +X% sức đánh khi option 9 > 0; mỗi 60 giây mọi giáp trong hành trang/rương −1. `lastTimeAttack` chỉ cập nhật khi dùng chiêu đánh (Kamejoko, Masenko, Antomic, Dragon, Demon, Galick, Liên hoàn, Kaioken, Quả cầu kênh khí, Makankosappo, Dịch chuyển tức thời) (`SkillService` ~dòng 588).
-- **Đệ tử mặc (từ 31/10/2026)**: đệ bị giảm X% sức đánh; đệ đánh trong 30 giây gần nhất thì option 9 +1 **mỗi giây** (chạy trong `EffectSkin.updateTrainArmor` của sư phụ). Giáp đang ở trên đệ không bị trừ. Lấy về hành trang sư phụ thì tính như trên. Sư phụ chỉ hưởng % từ giáp còn nằm trong hành trang mình (trước đây vẫn giữ tham chiếu giáp cũ sau khi đưa cho đệ).
+- **Đệ tử mặc (từ 31/10/2026)**: đệ bị giảm X% sức đánh; đệ đánh trong 30 giây gần nhất thì option 9 +1 **mỗi 0,1 giây** (cộng theo thời gian thực trong `EffectSkin.updateTrainArmor` của sư phụ, tối đa 10 điểm mỗi lần chạy vì update chạy mỗi giây). Giáp đang ở trên đệ không bị trừ. Lấy về hành trang sư phụ thì tính như trên. Sư phụ chỉ hưởng % từ giáp còn nằm trong hành trang mình (trước đây vẫn giữ tham chiếu giáp cũ sau khi đưa cho đệ).
 
 ## Vật phẩm dùng tăng SĐ/HP/KI (`UseItem.useItemTime`, `NPoint`, `ItemTime`) — dò 31/10/2026
 - Không shop nào bán các món dưới (kiểm tra `item_shop`). Thời gian 10 phút (`TIME_ITEM`, `TIME_EAT_MEAL`, `TIME_NUOC_MIA*`).
@@ -178,7 +180,7 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
   - Nguồn 1150–1154: Hộp quà chỉnh chu (`HopQuaChinhChu`), Bánh chưng ở Vua Hùng (`randomBanhChung`).
 - Thức ăn 663–667 (Pudding, Xúc xích, Kem dâu, Mì ly, Sushi): ăn +10% SĐ (đệ hưởng của sư phụ). Rơi từ quái khi mặc đủ set Thần Linh (`Mob.java` ~dòng 1004, `checkSetGod`). Gom 99 để mua đồ Hủy Diệt ở Bill.
 - 880 Cua rang me (+5% SĐ), 881 Bạch tuộc nướng (+5% ST chí mạng), 882 Tôm chiên xù (+5% HP): code có hiệu ứng (`isEatMeal2`, theo icon 8060/8061/8062) nhưng **không có nguồn** (không shop, không rơi, không gift code).
-- Nước mía (NPC Xe nước mía `event/XeNuocMia.java`, sự kiện: 5 khúc mía + 2 nước đá + 5 triệu vàng → 1 ly ngẫu nhiên): 1614 HP +10%; 1615 HP +10%, chí mạng +10; 1616 HP +10%, SĐ +10%, ST chí mạng +10%, giáp +10%. Chỉ dùng 1 loại một lúc. **Lỗi**: `ItemTime.update` tính hết hạn của ly 2 và ly 3 theo `lastTimeUseNuocMia1` (dòng ~247, ~253), nên ly 2/3 hết hiệu lực gần như ngay nếu chưa uống ly 1.
+- Nước mía (đã BỎ 31/10/2026: class `XeNuocMia` xóa, NPC id 84 không còn được tạo ở `Map.initNpc`; ly mía còn trong túi vẫn dùng được. Ghi cũ: sự kiện: 5 khúc mía + 2 nước đá + 5 triệu vàng → 1 ly ngẫu nhiên): 1614 HP +10%; 1615 HP +10%, chí mạng +10; 1616 HP +10%, SĐ +10%, ST chí mạng +10%, giáp +10%. Chỉ dùng 1 loại một lúc. **Lỗi**: `ItemTime.update` tính hết hạn của ly 2 và ly 3 theo `lastTimeUseNuocMia1` (dòng ~247, ~253), nên ly 2/3 hết hiệu lực gần như ngay nếu chưa uống ly 1.
 - Khác: điều ước rồng thần sự kiện (`isUseRX`, +10% HP/KI/SĐ, `Shenron_Event`), mua ×HP/KI và ×SĐ bằng vàng trong Ngọc rồng sao đen (`BlackBallWarService`, mất khi rời map), Ngọc rồng 2 sao đen 373 (+20% HP/KI toàn bang).
 
 ## Nhiệm vụ hằng ngày (Bò Mộng, `TaskService.paySideTask`) — dò 31/10/2026
@@ -189,3 +191,41 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
 ## Bí ngô 702–708 (type 12) — dò 31/10/2026
 - **Từ 31/10/2026**: dùng 1 viên → `UseItem.controllerCallRongThan` → `Shenron_BiNgo.openMenuSummonShenron` (menu Con mèo `ConstNpc.SUMMON_SHENRON_BI_NGO` 31720030) → `summonShenron`: cần đủ 7 viên 702–708 (mỗi viên trừ 1), không gọi ở map 0, 7, 14, 21–23, chờ `ShenronEvent.timeResummonShenron` (5 phút, tính chung `lastTimeShenronAppeared` với các rồng khác). Rồng là `models/ShenronEvent` (cập nhật mỗi giây ở `ShenronEventManager`, chờ ước 5 phút, gói `-83` loại 1 như Rồng băng), 4 điều ước: đổi chiêu 3/4 đệ, chiêu 5 đệ +1 cấp, +10% HP/KI/SĐ 30 phút (`isUseRX`), quần đang mặc +1 cấp (+10% chỉ số nâng cấp, tối đa cấp 7). `Player.shenronBiNgo`; menu ước dùng chung `SHOW_SHENRON_EVENT_CONFIRM`/`SHENRON_EVENT_CONFIRM` với Rồng băng (`NpcFactory` ưu tiên `shenronBiNgo`); mất kết nối thì đăng nhập lại ở map khác gọi lại rồng.
 - Nguồn Bí ngô: nhiệm vụ hằng ngày (dễ 708 … rất khó 705, địa ngục ngẫu nhiên 702/703/704 từ 31/10/2026), Trung úy Xanh Lơ (705), Cađích (706), hộp quà giáng sinh 648 (704).
+
+## Ngọc rồng sao đen 371–377 (tìm ngọc, `BlackBallWar`, `RewardBlackBall`) — dò 31/10/2026
+- Giữ ngọc đủ `TIME_WIN` (`BlackBallWar.win`) thì sao = id ngọc − 371, gọi `RewardBlackBall.reward(sao)` cho người nhặt và **toàn bang** (online qua `Client`, offline qua `MrBlue.loadById` rồi `PlayerDAO.updatePlayer`). Mỗi sao có hiệu lực 22 giờ (`TIME_REWARD` = 79200000 ms), gia hạn nếu nhận lại. `quantilyBlackBall` chỉ đếm số lần nhận, không có hiệu ứng.
+- Hiệu ứng (theo sao, chỉ tính khi còn hạn, đọc trong `NPoint`):
+  - Sao 1: SĐ +21% (`NPoint` ~1241).
+  - Sao 2: HP tối đa +35% (`NPoint` ~923).
+  - Sao 3: biến 35% sát thương thành HP (`tlHutHp`, `setPointWhenWearClothes`).
+  - Sao 4: phản 35% sát thương (`tlPST`).
+  - Sao 5: tiềm năng, sức mạnh nhận thêm +35% (`tlTNSM`, `NPoint.setPointWhenWearClothes`).
+  - Sao 6: KI tối đa +20% (`NPoint` ~1052, `R6S_1` = 20).
+  - Sao 7: né đòn +14% (`tlNeDon`).
+- Hằng số `R1S_1`, `R2S_2`, `R3S_2`, `R4S_1`, `R5S_2`, `R5S_3`, `R6S_2`, `R7S_2` không có chỗ nào dùng. Chỉnh hiệu ứng thì sửa đúng hằng số đang dùng ở `NPoint`.
+- Menu NPC `RongOmega` (map 24–26) hiện "có phần thưởng ngọc sao đen" khi còn sao hạn, nút "Nhận thưởng" chỉ báo "Chỉ Số Tự Cộng Khi Nhặt xong" (`RewardBlackBall.getReward`), không cộng gì thêm.
+
+## Chặn qua map theo nhiệm vụ chính (dò 31/10/2026)
+- `ChangeMapService.checkMapCanJoin` (gọi trong `changeMap`, mọi kiểu chuyển map: đi bộ qua cổng, tàu, dịch chuyển): so `TaskService.getIdTask(player)` với `ConstTask.TASK_x_0`, chưa tới thì trả `null` → "Bạn chưa thể đến khu vực này". Pet, boss và **admin** (`session.isAdmin`) không bị chặn, nên test bằng tài khoản admin sẽ không thấy.
+- Mốc: 1/8/15 cần NV1; 42/43/44 NV2; 2/9/16 NV3; 24/25/26 NV4; 3/11/17 NV7; 27/28/31/32/35/36 NV13; 30/34/38 NV15; 6/10/19 NV16; 64/65/68–72 NV18; 63/66/67/73–77, 79/81/82/83 NV19; 80 NV20 (**thiếu `break`**, rơi xuống điều kiện NV21 của nhóm sau); 92/93/94/96/102 NV21; 97–100 NV24; 103, 105–110, 154 NV27; 111 chỉ vào khi sức mạnh ≤ 1,5 triệu. Map 186–188 (Trạm hủy diệt) và các map không có trong danh sách: không chặn.
+- Ngoài ra: nhà 21/22/23 chỉ vào nhà đúng hành tinh; `checkMapCanJoinByYardart` cho dịch chuyển; NPC Calick ẩn khi chưa NV21 (`NpcManager`); `Zone` kiểm tra NV3.
+
+## Giới hạn sức mạnh đệ Uub / Kid Beer / Jiren (dò 31/10/2026)
+- Đệ tự cộng tiềm năng mọi loại (`Pet.increasePoint`, 20 điểm ngẫu nhiên vào HP/KI/SĐ mỗi lần `update`), nhưng bị chặn bởi giới hạn theo `limitPower`: HP/KI `NPoint.getHpMpLimit` (bậc 0 → 9: 220k, 240k, 300k, 350k, 400k, 450k, 500k, 525k, 550k, 575k), SĐ `getDameLimit` (11k, 12k, 15k, 18k, 20k, 22k, 24k, 24,5k, 25k, 26k). Vượt giới hạn thì không cộng (thông báo gửi cho đệ nên không ai thấy).
+- Sức mạnh chỉ tăng khi `power < getPowerLimit()` (bậc 0 → 9: 18 tỷ, 20, 25, 30, 40, 50,01, 60,01, 70,01, 80,01, 90,01 tỷ), tiềm năng cũng chỉ có khi còn tăng sức mạnh.
+- Uub/Kid Beer/Jiren tạo từ Bình hút năng lượng (`changePetRamdom` gọi `createXxxPet(player)` không truyền `limitPower`) nên về **bậc 0**, sức mạnh 40 tỷ, HP/KI gốc 400k, SĐ gốc 20k → đã vượt mọi giới hạn bậc 0: không tăng sức mạnh, không có tiềm năng, không tự cộng.
+- Mở lại: Quốc Vương (`QuocVuong`, menu đệ tử) nâng nhanh 0 → 5, mỗi bậc 50 triệu vàng (`OpenPowerService.COST_SPEED_OPEN_LIMIT_POWER`, `MAX_LIMIT_CUSTOM` = 5); Tổ sư Kaio (`ToSuKaio.handleLimitPowerPet`) 5 → 9, cùng giá, chỉ khi đệ đang ở bậc 5–8. Đệ bắt đầu tự cộng HP/KI và SĐ từ bậc 5 (450k > 400k, 22k > 20k), có sức mạnh/tiềm năng lại từ bậc 5 (40 tỷ < 50,01 tỷ).
+
+## Hành tinh Yardart (map 131–133, dò 31/10/2026)
+- Vào: NPC Goku SSJ (`npc_list/GokuSSJ.java`) ở map 80 → "Chuồn" → map 131 (`changeMapBySpaceShip`). Map 80 có chặn NV20 trong `checkMapCanJoin`, nên phải làm tới NV20 mới vào được map 80. Từ 131 "Về chỗ cũ" về map 80.
+- Boss (`boss/yardrat/*`, `YardartManager`), mỗi map 6 con xuất hiện cùng nhau (`APPEAR_WITH_ANOTHER`), mỗi con rơi riêng:
+  - Map 131: Tập sự 0–4 (1/5 mỗi con), Tân binh 5 (1/4).
+  - Map 132: Tân binh 0–4 (1/4 mỗi con), Chiến binh 5 (1/3).
+  - Map 133: Chiến binh 0–4 (1/3 mỗi con), Đội trưởng 5 (1/2).
+- Đồ rơi: Bí kiếp (590), `Yardart.reward` (`Util.isTrue(1, rewardRatio)`), rơi đúng 1 cái ngay chỗ người kết liễu, không có đồ khác.
+- Né 10%, sát thương tối đa 1% HP mỗi đòn (`Yardart.injured`, trừ đòn xuyên).
+
+## Bí kíp tuyệt kỹ (item 1229, dò 31/10/2026)
+- Nguồn duy nhất: quái map 155 Hành tinh ngục tù (`Mob.java` ~1048), mỗi con quái chết rơi 1 cái với 10% (20% nếu tài khoản active và đang mặc đủ 5 món Hủy Diệt trên người). Map 155 vào qua Osin map 50 → 154 Hành tinh Bill → Osin → 155.
+- Dùng: `HocTuyetKy` (combine, học kỹ năng tuyệt kỹ của sư phụ). Cấp 1: 9999 bí kíp + 99 ngọc + 10 triệu vàng; từ cấp 2: 999 bí kíp + 10 triệu vàng.
+- Không có boss nào rơi 1229 (Yardrat rơi 590 Bí kiếp, không phải 1229).

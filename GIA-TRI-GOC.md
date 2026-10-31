@@ -15,6 +15,9 @@ Danh sách những chỗ đang chỉnh để test. Khi mở bản chính thức,
 | `map/phoban/DestronGas.java` `GIAM` (Khí Gas: chia máu + sát thương quái và Dr Lychee/Hatchiyack) | 20 | 1 |
 | `services/shenron/SummonDragon.java` `timeResummonShenron` (chờ gọi rồng lần sau, chung cả server) | 180000 (3 phút) | 600000 (10 phút) |
 | `boss/Boss_Manager/BossManager.loadBoss` Mặt Trời (`createBoss(BossID.MAT_TROI, 5)`) | comment (tắt) | 5 con |
+| `player/NPoint.java` `setPointWhenWearClothes`: sao đen 5 | `tlTNSM` +35 (TN/SM) | `tlDameCrit` + `tlSDCM` +35 (SĐ chí mạng) |
+| `player/RewardBlackBall.java` `R6S_1` (KI tối đa sao đen 6) | 20 | 40 |
+| `player/EffectSkin.java` `updateTrainArmor`: đệ tích giáp tập luyện (option 9) | cứ 0,1 giây +1 (cộng theo thời gian thực) | 1 giây +1 (`canDoWithTime(…, 1000)`, lúc đó chạy mỗi giây) |
 
 ## Khí Gas Hủy Diệt – công thức gốc (trước khi chia `GIAM`)
 Đặt `GIAM = 1` là về đúng như dưới. Lv = cấp độ 1–110.

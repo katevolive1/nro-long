@@ -83,7 +83,7 @@ public class XenBoHung extends Boss {
                 this.chat("Xí hụt");
                 return 0;
             }
-            damage = this.nPoint.subDameInjureWithDeff(damage / 2);
+            damage = this.nPoint.subDameInjureWithDeff(damage); // nhận đủ sát thương (bỏ ½ từ 31/10/2026)
             if (!piercing && effectSkill.isShielding) {
                 if (damage > nPoint.hpMax) {
                     EffectSkillService.gI().breakShield(this);

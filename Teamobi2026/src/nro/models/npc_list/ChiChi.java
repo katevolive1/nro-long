@@ -29,7 +29,6 @@ public class ChiChi extends Npc {
         if (canOpenNpc(player)) {
             List<String> menu = new ArrayList<>(Arrays.asList(
                     "Top\nHộp quà\nthiếu nhi\n2025",
-                    "Top\nNước mía",
                     "Top\nKem trái cây",
                     "Cửa hàng",
                     "Đóng"));
@@ -49,7 +48,7 @@ public class ChiChi extends Npc {
             if (this.mapId == 5) {
                 if (player.idMark.isBaseMenu()) {
                     switch (select) {
-                        case 3:
+                        case 2:
                             ShopService.gI().opendShop(player, "SHOP_VIP", false);
                             break;
                         case 0:
@@ -60,13 +59,6 @@ public class ChiChi extends Npc {
                                     "Đóng");
                             break;
                         case 1:
-                            createOtherMenu(player, ConstNpc.PHAO_BONG,
-                                    "Sự kiện đua top Nước mía nhận quà khủng\n Kết thúc và trao giải sau (....)\nHạn chót nhận giải: (15 ngày nữa)\nĐến gặp ChiChi để nhận giải nhé\nChi tiết xem tại diễn đàn, Fanpage",
-                                    "Top 100\nNước mía",
-                                    "Xem điểm",
-                                    "Đóng");
-                            break;
-                        case 2:
                             createOtherMenu(player, ConstNpc.GOKU_DAY,
                                     "Sự kiện đua top Kem trái cây nhận quà khủng\n Kết thúc và trao giải sau (....)\nHạn chót nhận giải: (15 ngày nữa)\nĐến gặp ChiChi để nhận giải nhé\nChi tiết xem tại diễn đàn, Fanpage",
                                     "Top 100\nKem trái cây",
@@ -81,15 +73,6 @@ public class ChiChi extends Npc {
                             break;
                         case 1:
                             Service.gI().sendThongBao(player, "Bạn có " + player.point_sukien + " điểm Hộp quà thiếu nhi.");
-                            break;
-                    }
-                } else if (player.idMark.getIndexMenu() == ConstNpc.PHAO_BONG) {
-                    switch (select) {
-                        case 0:
-                            Service.gI().showListTop(player, Manager.Topsukien1);
-                            break;
-                        case 1:
-                            Service.gI().sendThongBao(player, "Bạn có " + player.point_sukien1 + " điểm Nước mía.");
                             break;
                     }
                 } else if (player.idMark.getIndexMenu() == ConstNpc.GOKU_DAY) {

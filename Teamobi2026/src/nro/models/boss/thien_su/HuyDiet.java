@@ -9,13 +9,13 @@ import nro.models.player.Player;
 import nro.models.skill.Skill;
 
 // Boss Hủy diệt (Beerus / Champa) ở Trạm hủy diệt 186-188, dẫn cặp với Thiên sứ (Whis / Vados) đi kèm.
-// HP 2 tỷ, không giới hạn sát thương mỗi đòn. Vào khu ngẫu nhiên (2 cặp có thể chung khu).
-// Hồi sinh: chỉ đếm 10 phút khi cả 2 con trong cặp đã chết, rồi cả cặp xuất hiện lại.
+// HP 3 tỷ, không giới hạn sát thương mỗi đòn. Vào khu ngẫu nhiên (2 cặp có thể chung khu).
+// Hồi sinh: chỉ đếm 20 phút khi cả 2 con trong cặp đã chết, rồi cả cặp xuất hiện lại.
 public class HuyDiet extends Boss {
 
     public static final int DAME = 100_000;
-    public static final long HP = 2_000_000_000L;
-    public static final int REST_SECONDS = 600;
+    public static final long HP = 3_000_000_000L; // gốc 2 tỷ
+    public static final int REST_SECONDS = 1200;
 
     static final int[][] SKILLS = {
         {Skill.DRAGON, 7, 1000}, {Skill.DEMON, 7, 1000}, {Skill.GALICK, 7, 1000},
@@ -39,7 +39,7 @@ public class HuyDiet extends Boss {
                 new int[]{mapId}, //map join
                 SKILLS, //skill
                 new String[]{beerus ? "|-1|Ta là Thần Hủy Diệt Beerus" : "|-1|Ta là Thần Hủy Diệt Champa"}, //text chat 1
-                new String[]{"|-1|Hủy diệt!", "|-1|Các ngươi chỉ có thế thôi sao?"}, //text chat 2
+                new String[]{"|-1|Ta sẽ hủy diệt các ngươi!", "|-1|Các ngươi chỉ có thế thôi sao?"}, //text chat 2
                 new String[]{"|-1|Ta sẽ quay lại..."}, //text chat 3
                 REST_SECONDS, //giây nghỉ trước khi hồi sinh
                 new int[]{beerus ? BossID.THIEN_SU_WHIS : BossID.THIEN_SU_VADOS} //thiên sứ đi kèm
@@ -73,6 +73,6 @@ public class HuyDiet extends Boss {
     @Override
     public void reward(Player plKill) {
         super.reward(plKill);
-        ThienSuHuyDietReward.drop(this, plKill);
+        ThienSuHuyDietReward.dropHuyDiet(this, plKill);
     }
 }

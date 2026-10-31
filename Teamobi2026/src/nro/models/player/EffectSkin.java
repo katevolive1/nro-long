@@ -459,19 +459,20 @@ public class EffectSkin {
             }
             this.lastTimeAddTimeTrainArmor = System.currentTimeMillis();
         }
-        // Đệ tử mặc giáp tập luyện: đệ đánh trong 30 giây gần nhất thì +1 mỗi giây (sư phụ +1 mỗi phút)
-        if (this.player.pet != null && Util.canDoWithTime(lastTimeAddTimeTrainArmorPet, 1000)) {
-            this.lastTimeAddTimeTrainArmorPet = System.currentTimeMillis();
+        // Đệ tử mặc giáp tập luyện: đệ đánh trong 30 giây gần nhất thì cứ 0,1 giây +1 (sư phụ +1 mỗi phút).
+        // update() chạy mỗi giây nên cộng theo thời gian thực, tối đa 1 giây mỗi lần (ticks = số 0,1 giây đã qua)
+        if (this.player.pet != null) {
+            long now = System.currentTimeMillis();
+            int ticks = (int) (Math.min(now - lastTimeAddTimeTrainArmorPet, 1000) / 100);
+            this.lastTimeAddTimeTrainArmorPet = now;
             Pet pet = this.player.pet;
-            if (pet.inventory.itemsBody.size() > 6 && pet.effectSkin != null
+            if (ticks > 0 && pet.inventory.itemsBody.size() > 6 && pet.effectSkin != null
                     && !Util.canDoWithTime(pet.effectSkin.lastTimeAttack, 30000)) {
                 Item gtl = pet.inventory.itemsBody.get(6);
                 if (gtl.isNotNullItem() && ItemService.gI().isTrainArmor(gtl)) {
                     for (Item.ItemOption io : gtl.itemOptions) {
                         if (io.optionTemplate.id == 9) {
-                            if (io.param < 1000) {
-                                io.param++;
-                            }
+                            io.param = Math.min(io.param + ticks, 1000);
                             break;
                         }
                     }

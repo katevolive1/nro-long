@@ -174,6 +174,9 @@ public class Map implements Runnable {
                     && (this.mapId == 21 || this.mapId == 22 || this.mapId == 23)) {
                 continue;
             }
+            if (npcId[i] == ConstNpc.XE_NUOC_MIA) { // bỏ sự kiện nước mía
+                continue;
+            }
             this.npcs.add(NpcFactory.createNPC(this.mapId, 1, npcX[i], npcY[i], npcId[i]));
         }
     }

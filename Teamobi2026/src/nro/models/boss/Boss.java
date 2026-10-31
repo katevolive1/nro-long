@@ -523,10 +523,10 @@ public class Boss extends Player implements IBoss {
         }
     }
 
-    // Boss còn sống thì 5 phút thông báo lại 1 lần. Giữ đúng câu "BOSS <tên> vừa xuất hiện tại <map>":
+    // Boss còn sống thì 15 phút thông báo lại 1 lần. Giữ đúng câu "BOSS <tên> vừa xuất hiện tại <map>":
     // mod client (BossCustom.addBoss, ShowBoss.HandleChatVip) chỉ nhận câu này vào tab Thông báo và góc phải
     private void remindNotify() {
-        if (this.lastTimeNotify > 0 && this.zone != null && Util.canDoWithTime(this.lastTimeNotify, 300000)) {
+        if (this.lastTimeNotify > 0 && this.zone != null && Util.canDoWithTime(this.lastTimeNotify, 900000)) {
             this.notifyJoinMap();
         }
     }
@@ -683,6 +683,20 @@ public class Boss extends Player implements IBoss {
     @Override
     public void reward(Player plKill) {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
+    }
+
+    // Boss lớn: 10% rơi 1 viên Ngọc rồng, 70% 2 sao (15), 30% 3 sao (16)
+    protected void dropNgocRong23(Player plKill, int x, int y) {
+        if (Util.isTrue(10, 100)) {
+            int id = Util.isTrue(70, 100) ? 15 : 16;
+            Service.gI().dropItemMap(this.zone, new nro.models.map.ItemMap(this.zone, id, 1, x, y, plKill.id));
+        }
+    }
+
+    // Tỉ lệ (%) rơi đồ Thần Linh theo dạng hiện tại (currentLevel), dạng vượt mảng lấy phần tử cuối
+    protected boolean isDropDoTL(double... tiLeTheoDang) {
+        double tiLe = tiLeTheoDang[Math.min(this.currentLevel, tiLeTheoDang.length - 1)];
+        return Util.isTrue((long) (tiLe * 100), 10000);
     }
 
     @Override

@@ -877,7 +877,7 @@ public class BossesData {
             ConstPlayer.TRAI_DAT, //gender
             new short[]{550, 551, 552, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
             50000, //dame
-            new int[]{500000000}, //hp
+            new long[]{1_000_000_000L}, //hp (gốc 500 triệu)
             new int[]{102, 92, 93, 94, 96, 97, 98, 99, 100}, //map join
             new int[][]{
                 {Skill.KAMEJOKO, 7, 100},
@@ -907,7 +907,7 @@ public class BossesData {
             ConstPlayer.TRAI_DAT, //gender
             new short[]{553, 551, 552, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
             100000, //dame
-            new int[]{2_000_000_000}, //hp
+            new long[]{3_500_000_000L}, //hp (gốc 2 tỷ)
             new int[]{102, 92, 93, 94, 96, 97, 98, 99, 100}, //map join
             new int[][]{
                 {Skill.THAI_DUONG_HA_SAN, 7, 30000},
@@ -935,7 +935,7 @@ public class BossesData {
             ConstPlayer.TRAI_DAT, //gender
             new short[]{1254, 1255, 1256, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
             50000, //dame
-            new int[]{500000000}, //hp
+            new long[]{2_000_000_000L}, //hp (gốc 500 triệu)
             new int[]{155}, //map join
             new int[][]{
                 {Skill.KAMEJOKO, 7, 100},
@@ -2224,7 +2224,7 @@ public class BossesData {
             ConstPlayer.XAYDA, //gender
             new short[]{317, 318, 319, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
             32000, //dame
-            new int[]{200000000}, //hp
+            new long[]{1_000_000_000L}, //hp (gốc 200 triệu)
             new int[]{110}, //map join
             new int[][]{
                 {Skill.GALICK, 1, 2000},
@@ -2252,7 +2252,7 @@ public class BossesData {
             ConstPlayer.XAYDA, //gender
             new short[]{320, 321, 322, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
             50000, //dame
-            new int[]{500000000}, //hp
+            new long[]{1_500_000_000L}, //hp (gốc 500 triệu)
             new int[]{110}, //map join
             new int[][]{
                 {Skill.GALICK, 1, 2000},

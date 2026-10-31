@@ -1150,7 +1150,16 @@ public class MrBlue {
                         player.nhanSKHVIP = false;
                         player.vipPurchaseCount = 0;
                     }
+                    // chưa có mã mùa (dữ liệu trước 1/11/2026) thì coi như mùa hiện tại, không xóa VIP đang có
+                    player.vipSeason = dataArray.size() > 8
+                            ? Integer.parseInt(String.valueOf(dataArray.get(8))) : nro.models.npc_list.ToriBot.VIP_SEASON_ID;
                 }
+                // sang mùa VIP mới: reset lượt mua và cấp VIP, giữ timevip
+                if (player.vipSeason != nro.models.npc_list.ToriBot.VIP_SEASON_ID) {
+                    player.vipPurchaseCount = 0;
+                    player.vip = 0;
+                }
+                player.vipSeason = nro.models.npc_list.ToriBot.VIP_SEASON_ID;
 
             } catch (Exception e) {
                 //  System.err.println("Lỗi khi đọc data_vip cho player " + player.name + ": " + e.getMessage());

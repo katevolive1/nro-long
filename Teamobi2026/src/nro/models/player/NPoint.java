@@ -238,8 +238,7 @@ public class NPoint {
             tlPST += RewardBlackBall.R4S_2;
         }
         if (this.player.rewardBlackBall.timeOutOfDateReward[4] > System.currentTimeMillis()) {
-            tlDameCrit.add(RewardBlackBall.R5S_1);
-            tlSDCM += RewardBlackBall.R5S_1;
+            tlTNSM.add(RewardBlackBall.R5S_1);
         }
         if (this.player.rewardBlackBall.timeOutOfDateReward[6] > System.currentTimeMillis()) {
             tlNeDon += RewardBlackBall.R7S_1;
@@ -1706,15 +1705,9 @@ public class NPoint {
                     tiemNang += tn * 4;
                 }
             }
-            if (this.player.timevip > System.currentTimeMillis()) {
-                tiemNang += tn * 3;
-            }
+            // VIP (timevip của gói Tori Bot, cột account.vip) không còn cộng kinh nghiệm (bỏ 1/11/2026)
             if (this.player.effectSkill.isChibi && this.player.typeChibi == 2) {
                 tiemNang += tn * 2;
-            }
-            if (this.player.getSession() != null && this.player.getSession().vip > 0 || this.player.isPet
-                    && ((Pet) this.player).master.getSession() != null && ((Pet) this.player).master.getSession().vip > 0) {
-                tiemNang += tn * 3;
             }
             // Đuôi khỉ: đệ tử dùng đuôi khỉ của sư phụ
             ItemTime itemTimeDK = this.player.isPet ? ((Pet) this.player).master.itemTime : this.player.itemTime;
@@ -1803,13 +1796,13 @@ public class NPoint {
         return this.tlHutMp;
     }
 
-    public int subDameInjureWithDeff(long dame) {
+    public long subDameInjureWithDeff(long dame) {
         long def = this.def;
         dame -= def;
         if (dame < 0) {
             dame = 1;
         }
-        return (int) dame;
+        return dame;
     }
 
     /*------------------------------------------------------------------------*/

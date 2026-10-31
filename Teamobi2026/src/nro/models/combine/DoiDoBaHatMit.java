@@ -17,9 +17,9 @@ import nro.models.utils.Util;
  *    món Hủy Diệt cùng loại, cùng hành tinh (id + 95). Chỉ số gốc như bán ở Bill (item_shop), mỗi chỉ số
  *    nâng được (InventoryService.optionCanUpgrade) cộng thêm ngẫu nhiên 5-15% (cùng một mức cho cả món),
  *    thêm 21:60 (yêu cầu 60 tỷ sức mạnh) và 30 (không giao dịch) giống ShopService.buyItemHD.
- * 2. Hủy Diệt -> Kích hoạt: đặt 3 món Hủy Diệt (650-662) + 20 thỏi vàng trong hành trang ->
- *    1 món kích hoạt ngẫu nhiên như capsule kích hoạt (ItemService.randomItemSKH), loại và hành tinh
- *    theo món đặt đầu tiên (rada/nhẫn thì theo hành tinh người chơi). Cả hai đều thành công 100%.
+ * 2. Hủy Diệt -> Kích hoạt: đặt 3 món Hủy Diệt (650-662, không trùng món, có thể khác hành tinh) + 20 thỏi vàng trong hành trang ->
+ *    1 món kích hoạt ngẫu nhiên như capsule kích hoạt (ItemService.randomItemSKH), loại theo món đặt đầu tiên,
+ *    hành tinh theo người chơi. Cả hai đều thành công 100%.
  */
 public class DoiDoBaHatMit {
 
@@ -157,9 +157,15 @@ public class DoiDoBaHatMit {
         if (items.size() != SO_MON_HUY_DIET) {
             return "Hãy đặt đúng " + SO_MON_HUY_DIET + " món đồ Hủy Diệt";
         }
-        for (Item it : items) {
+        for (int i = 0; i < items.size(); i++) {
+            Item it = items.get(i);
             if (!it.isHuyDiet()) {
                 return "Chỉ đổi được đồ Hủy Diệt";
+            }
+            for (int j = 0; j < i; j++) {
+                if (items.get(j).template.id == it.template.id) {
+                    return "3 món Hủy Diệt không được trùng nhau";
+                }
             }
         }
         return null;
@@ -196,10 +202,9 @@ public class DoiDoBaHatMit {
         }
         List<Item> items = getItems(player);
         Item dau = items.get(0);
-        // loại đồ theo món đầu tiên: type 0 áo, 1 quần, 2 găng, 3 giày, 4 nhẫn (rada); nhẫn gender 3 thì theo người chơi
+        // loại đồ theo món đầu tiên: type 0 áo, 1 quần, 2 găng, 3 giày, 4 nhẫn (rada); hành tinh luôn theo người chơi
         int select = dau.template.type;
-        int gender = dau.template.gender <= 2 ? dau.template.gender : player.gender;
-        Item kichHoat = ItemService.gI().randomItemSKH(gender, select);
+        Item kichHoat = ItemService.gI().randomItemSKH(player.gender, select);
         if (kichHoat == null) {
             Service.gI().sendThongBao(player, "Không thể thực hiện");
             return;

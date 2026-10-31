@@ -34,7 +34,7 @@ public class ThienSu extends Boss {
                 HuyDiet.SKILLS, //skill
                 new String[]{whis ? "|-1|Ngài Beerus, để tôi lo" : "|-1|Ngài Champa, để tôi lo"}, //text chat 1
                 new String[]{"|-1|Ồ, thú vị đấy", "|-1|Hohoho"}, //text chat 2
-                new String[]{"|-1|Hẹn gặp lại"}, //text chat 3
+                new String[]{"|-1|Đừng để ta gặp lại"}, //text chat 3
                 0, //nghỉ (xuất hiện theo Hủy diệt)
                 AppearType.APPEAR_WITH_ANOTHER
         );

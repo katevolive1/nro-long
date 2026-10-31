@@ -353,6 +353,7 @@ public class Player implements Runnable {
     public long bossBabyDefeatParticipationCount;
     public long monsterKillCountAutoTrain;
     public int vipPurchaseCount;
+    public int vipSeason; // mã mùa VIP của vipPurchaseCount (ToriBot.VIP_SEASON_ID)
     public long lastClanCheckIn = 0;
     public long lastChallengeGauTuongCuopTime;
     public long lastChallengeGauTuopCuopTime;
@@ -1012,9 +1013,11 @@ public class Player implements Runnable {
                 return this.inventory.itemsBody.get(8).template.part;
             }
         }
-        if (this.isPet && this.inventory.itemsBody.size() >= 8) {
-            if (this.inventory.itemsBody.get(7).isNotNullItem()) {
-                return this.inventory.itemsBody.get(7).template.part;
+        // Đệ VIP: đồ đeo lưng ở ô 9 (index 8), ô 8 (index 7) là thú cưng
+        if (this.isPet && this.inventory.itemsBody.size() >= 9) {
+            Item bag = this.inventory.itemsBody.get(8);
+            if (bag.isNotNullItem() && bag.template.type == 11) {
+                return bag.template.part;
             }
         }
         if (this.clan != null) {

@@ -28,7 +28,7 @@ public class Baby extends Boss {
         int drop = 190; // 100% rơi item ID 190
         int quantity = Util.nextInt(20000, 30000);
         // Tạo itemMap cho item ID 190
-        if (Util.isTrue(10, 100)) {
+        if (isDropDoTL(3, 4, 5)) { // đồ Thần Linh: dạng 1 3%, dạng 2 4%, dạng 3 5%
             ItemMap it = ItemService.gI().randDoTLBoss(this.zone, 1, x, y, plKill.id);
             if (it != null) {
                 Service.gI().dropItemMap(zone, it);
@@ -86,15 +86,7 @@ public class Baby extends Boss {
             // Drop vật phẩm tùy chọn xuống bản đồ
             Service.gI().dropItemMap(zone, optionalItemMap);
         }
-        // 80% xác suất rơi ngọc rồng
-        if (Util.isTrue(10, 100)) {
-            int[] dropItems = {15, 16, 17, 18, 19, 20, 992};
-            int dropOptional = dropItems[Util.nextInt(0, dropItems.length - 1)];
-            // Tạo và rơi vật phẩm ngọc rồng hoặc item cấp 2
-            ItemMap optionalItemMap = new ItemMap(this.zone, dropOptional, Util.nextInt(1, 3), x, y, plKill.id);
-            Item optionalItem = ItemService.gI().createNewItem((short) dropOptional);
-            Service.gI().dropItemMap(zone, optionalItemMap);
-        }
+        dropNgocRong23(plKill, x, y);
     }
 
     @Override
@@ -114,9 +106,7 @@ public class Baby extends Boss {
                 return 0;
             }
 
-            damage = (long) (damage * 0.7);
-
-            damage = this.nPoint.subDameInjureWithDeff(damage / 2);
+            damage = this.nPoint.subDameInjureWithDeff(damage); // nhận đủ sát thương (bỏ ×0,7 và ½ từ 31/10/2026)
 
             if (!piercing && effectSkill.isShielding) {
                 if (damage > nPoint.hpMax) {

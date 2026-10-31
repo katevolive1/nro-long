@@ -8,7 +8,6 @@ import nro.models.services.InventoryService;
 import nro.models.services.ItemService;
 import nro.models.services.PetService;
 import nro.models.services.Service;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -16,9 +15,17 @@ import java.time.Duration;
 
 public class ToriBot extends Npc {
 
-    private static final LocalDateTime VIP_SEASON_START_DATE = LocalDateTime.of(LocalDate.now().getYear(), Month.JUNE, 5, 0, 0, 0);
-    private static final LocalDateTime VIP_SEASON_END_DATE = LocalDateTime.of(LocalDate.now().getYear(), Month.DECEMBER, 5, 23, 59, 59);
+    // Mùa VIP: mã mùa lưu ở data_vip[8], đăng nhập thấy khác mã mùa này thì reset lượt mua và cấp VIP (MrBlue).
+    // Mùa 1: 1/11/2026 – hết 30/4/2027, hết mùa thì đóng. Mùa mới: tăng VIP_SEASON_ID và đổi ngày.
+    public static final int VIP_SEASON_ID = 1;
+    private static final LocalDateTime VIP_SEASON_START_DATE = LocalDateTime.of(2026, Month.NOVEMBER, 1, 0, 0, 0);
+    private static final LocalDateTime VIP_SEASON_END_DATE = LocalDateTime.of(2027, Month.APRIL, 30, 23, 59, 59);
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+    private static boolean isVipSeasonOpen() {
+        LocalDateTime now = LocalDateTime.now();
+        return !now.isBefore(VIP_SEASON_START_DATE) && !now.isAfter(VIP_SEASON_END_DATE);
+    }
 
     public ToriBot(int mapId, int status, int cx, int cy, int tempId, int avartar) {
         super(mapId, status, cx, cy, tempId, avartar);
@@ -27,7 +34,7 @@ public class ToriBot extends Npc {
     @Override
     public void openBaseMenu(Player player) {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        if (currentDateTime.isAfter(VIP_SEASON_END_DATE)) {
+        if (!isVipSeasonOpen()) {
             this.createOtherMenu(player, 0, "Ngươi tìm ta có việc gì?", "Đóng");
         } else {
             int currentPurchases = player.vipPurchaseCount;
@@ -57,7 +64,7 @@ public class ToriBot extends Npc {
                     "Trong thời gian mùa VIP diễn ra\n(Từ " + startDateStr + " đến hết " + endDateStr + ")\n"
                     + "Thời gian còn lại: " + remainingTimeString + "\n"
                     + // Thêm dòng thời gian còn lại
-                    "Tạo nhân vật mới sẽ được X2 Kinh nghiệm toàn mùa\n Nếu nâng cấp VIP sẽ được nhận\n nhiều ưu đãi hơn nữa.\n" + vipInfoMessage,
+                    "Nếu nâng cấp VIP sẽ được nhận\n nhiều ưu đãi hơn nữa.\n" + vipInfoMessage,
                     "Vip 1", "Vip 2", "Vip 3", "Vip 4");
         }
     }
@@ -67,9 +74,8 @@ public class ToriBot extends Npc {
         if (!canOpenNpc(pl)) {
             return;
         }
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        if (currentDateTime.isAfter(VIP_SEASON_END_DATE)) {
-            Service.gI().sendThongBao(pl, "Mùa VIP đã kết thúc. Bạn không thể mua VIP vào lúc này.");
+        if (!isVipSeasonOpen()) {
+            Service.gI().sendThongBao(pl, "Hiện không trong mùa VIP. Bạn không thể mua VIP vào lúc này.");
            // openBaseMenu(pl);
             return;
         }
@@ -77,19 +83,19 @@ public class ToriBot extends Npc {
             case 0 -> {
                 switch (select) {
                     case 0 ->
-                        createOtherMenu(pl, 1, "Nâng cấp VIP 1 bạn sẽ nhận được\n200 thỏi vàng, 10 phiếu giảm giá 80%\nX3 Kinh nghiệm toàn mùa\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 5 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày",
+                        createOtherMenu(pl, 1, "Nâng cấp VIP 1 bạn sẽ nhận được\n200 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 5 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày",
                                 "50.000\nđiểm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 1 ->
-                        createOtherMenu(pl, 2, "Nâng cấp VIP 2 bạn sẽ nhận được\n500 thỏi vàng, 10 phiếu giảm giá 80%\nX3 Kinh nghiệm toàn mùa\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 10 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày\nCải trang thỏ buma hsd 30 ngày",
+                        createOtherMenu(pl, 2, "Nâng cấp VIP 2 bạn sẽ nhận được\n500 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 10 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày\nCải trang thỏ buma hsd 30 ngày",
                                 "100.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 2 ->
-                        createOtherMenu(pl, 3, "Nâng cấp VIP 3 bạn sẽ nhận được\n700 thỏi vàng, 10 phiếu giảm giá 80%\nX3 Kinh nghiệm toàn mùa\nThú cưỡi ve sầu xên vĩnh viễn\nTặng 1 đệ tử, 30 viên đá bảo vệ\nBúa hắc hường vĩnh viễn\n2 viên capsule kích hoạt\n10 thẻ đội trưởng vàng\nCải trang thỏ buma vĩnh viễn",
+                        createOtherMenu(pl, 3, "Nâng cấp VIP 3 bạn sẽ nhận được\n700 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên vĩnh viễn\nTặng 1 đệ tử, 30 viên đá bảo vệ\nBúa hắc hường vĩnh viễn\n2 viên capsule kích hoạt\n10 thẻ đội trưởng vàng\nCải trang thỏ buma vĩnh viễn",
                                 "150.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 3 ->
-                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nX3 Kinh nghiệm toàn mùa\nCải trang hắc mị vĩnh viễn\nTặng 1 đệ tử mabu, 50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
+                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nCải trang hắc mị vĩnh viễn\nTặng 1 đệ tử mabu, 50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
                                 "200.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                 }
@@ -107,9 +113,8 @@ public class ToriBot extends Npc {
     }
 
     private void BuyVip(Player pl, int vipLevel, int cost) {
-        LocalDateTime currentDateTime = LocalDateTime.now();
-        if (currentDateTime.isAfter(VIP_SEASON_END_DATE)) {
-            Service.gI().sendThongBao(pl, "Mùa VIP đã kết thúc. Bạn không thể mua VIP vào lúc này.");
+        if (!isVipSeasonOpen()) {
+            Service.gI().sendThongBao(pl, "Hiện không trong mùa VIP. Bạn không thể mua VIP vào lúc này.");
             openBaseMenu(pl); // Mở lại menu mặc định
             return;
         }

@@ -124,9 +124,14 @@ public class ToSuKaio extends Npc {
             return;
         }
 
-        if (player.pet.nPoint.limitPower < 5 || player.pet.nPoint.limitPower >= 9) {
+        if (player.pet.nPoint.limitPower >= NPoint.MAX_LIMIT) {
             this.createOtherMenu(player, ConstNpc.IGNORE_MENU,
-                    "Đệ tử của bạn cần đạt 50 tỷ sức mạnh!", "Đóng");
+                    "Sức mạnh của đệ tử đã đạt tới giới hạn", "Đóng");
+            return;
+        }
+        if (player.pet.nPoint.limitPower < 5) {
+            this.createOtherMenu(player, ConstNpc.IGNORE_MENU,
+                    "Đệ tử cần mở giới hạn tới bậc 5 ở Quốc Vương trước", "Đóng");
             return;
         }
 
