@@ -168,6 +168,13 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 - AutoItem: nút "Thêm vào/Xoá khỏi AutoItem" trong menu item; **click chuột để dừng** (không cần phím riêng).
 - Menu mod (nút menu): Chức năng / Tự động / Hiển thị / Cài đặt, bảng ô tích ở mục "Ô tích menu mod".
 
+## Đăng nhập và RMS tài khoản (dò 3/11/2026, chưa patch)
+- RMS chuỗi = 2 byte độ dài big-endian + nội dung. `acc`/`pass` = tài khoản đang dùng, `check` (1 byte) = nhớ mật khẩu, `accManager` = danh sách tài khoản của mod dạng `tk$mk|tk$mk`.
+- Game1: `LoginScr..ctor` `0x3B6FA0` và `setUserPass` `0x3BAF30` nạp `acc`/`pass` vào ô nhập; **`doLogin` `0x3B84B0` đọc lại `acc`/`pass` từ RMS mỗi lần đăng nhập**; `savePass` `0x3BADF0` ghi lại. RMS dùng chung mọi cửa sổ nên nhiều cửa sổ rớt mạng sẽ cùng đăng nhập tài khoản ghi sau cùng.
+- `ModFunc.LoadAcc` `0x3D9A20` đọc `accManager` vào `ModFunc.accounts` (static `+50h`, `List<Account>`, `Account` = struct username/password); `SaveAcc` `0x3E1B00`; `AddAccount` `0x3D2E90`. `ModFunc.AutoLogin()` `0x3D44E0`: `autoLogin.accAutoLogin` (`AutoLogin` object ở static `+70h`, field `+28h`) có tên thì `GetAccWithUsername` → ghi `acc`/`pass` → `setUserPass` → `doLogin`.
+- Thư mục RMS = `LocalLow\<companyName>\<productName>`, lấy từ `DragonBoy_Data\globalgamemanagers` (`DefaultCompany` offset 1176, `DragonBoy` offset 1196) và `app.info`. Kế hoạch manager dùng điều này để mỗi tài khoản có RMS riêng: [KE-HOACH-AUTO-MANAGER.md](../KE-HOACH-AUTO-MANAGER.md).
+- `System.Environment.GetEnvironmentVariable` còn trong GameAssembly (RVA `0x91C3F0`); `GetCommandLineArgs` đã bị strip.
+
 ## Dò crash client (31/10/2026)
 - Log game: `C:\Users\<tên>\AppData\LocalLow\DefaultCompany\DragonBoy\Player.log` (lần chạy trước: `Player-prev.log`); bản chép lúc crash: `%TEMP%\DefaultCompany\DragonBoy\Crashes\Crash_<ngày_giờ>\{Player.log,crash.dmp}`. Windows ghi thêm Application Error (Id 1000) trong Event Viewer. Game cài ở `F:\nr-long` (máy nhà), không phải `D:\nr-long`.
 - Crash 12:13: mã `0x80000003` (Unity tự dừng, không phải lỗi bộ nhớ) trong `UnityPlayer.dll`, ngay sau dòng `Graphics device is null.` với stack được: `GUIStyle.CalcSize` ← `mFont.getWidthExactOf` ← `splitFontVector` ← `splitFontArray` ← `Info.getInfo` ← `Info.addInfo` ← `InfoMe.addInfo` ← `ExecutionContext.RunInternal`. Nghĩa là một **luồng nền** (Thread/Task của mod) gọi `InfoMe.addInfo` (hiện thông báo), mà đo chữ bằng `GUIStyle` thì Unity chỉ cho luồng chính. Không có reset GPU trong Event Log. `ArgumentNullException ... shader` ở `mGraphics.CreateLineMaterial` lúc khởi động là lỗi cũ vô hại.
