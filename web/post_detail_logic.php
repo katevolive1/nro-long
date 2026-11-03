@@ -80,7 +80,7 @@ if ($post_id !== null && isset($conn)) {
                 $views_column_result->free();
             }
 
-            $author_avatar_src = '/images/avatar/default_avatar.png';
+            $author_avatar_src = '/images/avatar/0.png';
             $author_gender = $post_detail['author_gender'] ?? 0;
             $author_head = $post_detail['author_head'] ?? 0;
             $is_ghimbai = ($post_detail['ghimbai'] ?? 0) == 1;
@@ -97,7 +97,7 @@ if ($post_id !== null && isset($conn)) {
                     } elseif ($author_gender == 2) {
                         $author_avatar_src = "/images/avatar/2.png";
                     } else {
-                        $author_avatar_src = "/images/avatar/default_avatar.png";
+                        $author_avatar_src = "/images/avatar/0.png";
                     }
                 }
             }
