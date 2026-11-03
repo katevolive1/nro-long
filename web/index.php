@@ -138,8 +138,8 @@ var url;
 	<figure>
 	  <a href="https://pay.teamobi.com/?game=nr&name=" title="CHÚ BÉ RỒNG ONLINE"><img src="/images/napngoc.png" height="35">
 		</a>
-		<figcaption><span style="color:rgb(209, 9, 50);"><a href="/app/index.php?for=event&do=sms&p=0&sz=15">Báo Lỗi SMS</a></span><br>
-			<span style="color:rgb(209, 9, 50);"><a href="/app/index.php?for=event&do=report&p=0&sz=15">Báo Lỗi thẻ</a></span></figcaption>	
+		<figcaption>
+			</figcaption>	
 	</figure>
    -->
 </div>                    <div id="columns" class="text-center"> </div>
@@ -296,7 +296,7 @@ var url;
 
     })(jQuery);
 </script>
-<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="09944df4cd4f5d04eb164296-|49" defer></script></body>
+<script src="/view/static/js/rocket-loader.min.js" data-cf-settings="09944df4cd4f5d04eb164296-|49" defer></script></body>
 
 </html>
 

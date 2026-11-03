@@ -26,10 +26,10 @@ require_once 'post_detail_logic.php';
 		<meta name="robots" content="INDEX,FOLLOW" />
     
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" type="d8583da729ad4da4fb7fe69d-text/javascript"></script>
-        <link rel="stylesheet" type="text/css" href="app/wiew/css/StyleSheet.css" />
-		<link rel="stylesheet" href="app/view/css/w3.css">           
+        <link rel="stylesheet" type="text/css" href="/view/static/style/stylesheet.css" />
+		<link rel="stylesheet" href="/view/static/css/w3.css">           
         <link rel="stylesheet" href="/view/static/css/template.css?v=1.10">        		
-         <link rel="stylesheet" type="text/css" href="https://forum.ngocrongonline.com/app/css/eff.css" />
+         <link rel="stylesheet" type="text/css" href="/view/static/css/eff.css?v=1.00" />
     </head>
     <body>
     <div class="snowEffect">
@@ -60,9 +60,9 @@ require_once 'post_detail_logic.php';
 				<div class="menu2" style="">
         <table width="100%" border="0" cellspacing="4">
 			<tr class="menu">
-				<td style="border: 3px solid #924C31;padding: 2px;"><a href="trang-chu">Trang Chủ</a></td>
-				<td style="border: 3px solid #924C31;padding: 2px;"><a href="gioi-thieu">Giới Thiệu</a></td>
-				<td id="selected" style="border: 3px solid #FFAF4D;padding: 2px;"><a href="forum">Diễn Đàn</a></td>
+				<td style="border: 3px solid #924C31;padding: 2px;"><a href="/index.php">Trang Chủ</a></td>
+				<td style="border: 3px solid #924C31;padding: 2px;"><a href="/gioi-thieu.php">Giới Thiệu</a></td>
+				<td id="selected" style="border: 3px solid #FFAF4D;padding: 2px;"><a href="/forum.php">Diễn Đàn</a></td>
 				<td style="border: 3px solid #924C31;padding: 2px;">
 			               <a href="<?php echo htmlspecialchars($box_zalo_url ?? 'https://zalo.me/g/njvxgh490'); ?>" target="_blank">Box Zalo</a>
 			</tr>
@@ -77,7 +77,7 @@ require_once 'post_detail_logic.php';
         <div class="box_parent_list_next">
             <div class="box_phantrang">
                 <div class="backlink">
-                    <a style="color:#fff;" href="forum">Quay l&#7841;i</a>
+                    <a style="color:#fff;" href="/forum.php">Quay l&#7841;i</a>
                 </div>
                 <div class="pagination"></div>
             </div>
@@ -136,7 +136,7 @@ require_once 'post_detail_logic.php';
 </div>
 <div class="clearfix"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" type="d8583da729ad4da4fb7fe69d-text/javascript"></script>
-<script src="https://forum.ngocrongonline.com/app/js/icon.js?v6" type="d8583da729ad4da4fb7fe69d-text/javascript"></script>
+
 </div>
 <br></div>
 </div><br>
@@ -158,7 +158,7 @@ require_once 'post_detail_logic.php';
 
 
    
-    <script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="d8583da729ad4da4fb7fe69d-|49" defer></script></body>
+    <script src="/view/static/js/rocket-loader.min.js" data-cf-settings="d8583da729ad4da4fb7fe69d-|49" defer></script></body>
 </html>
 
 

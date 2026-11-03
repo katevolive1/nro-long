@@ -14,11 +14,11 @@ h4{
 .a img{
 	margin-top:-32px;z-index:2;position: relative;
 }
-.b{background: url(../images/menu_bg.png) repeat-x  ; height:23px;color:#ff7700;margin-left:10px;margin-right:9px;}
+.b{height:23px;color:#ff7700;margin-left:10px;margin-right:9px;}
 .b-content{position: relative;z-index:1;padding-top:4px;padding-left:3px;}
 /*.b-left{background: url(../images/left_menu.gif) no-repeat;position: absolute;background-position:left;height:34px; width:18px;} */
-.b-left{background: url(../images/left_menu.png) no-repeat;position: absolute;background-position:left;height:23px;width:7px;margin-left:3px; }
-.b-right{background: url(../images/right_menu.png) no-repeat;margin-left:206px;position: absolute;height:23px; width:7px;}
+.b-left{position: absolute;background-position:left;height:23px;width:7px;margin-left:3px; }
+.b-right{margin-left:206px;position: absolute;height:23px; width:7px;}
 .c{color: #ff7700;font-weight: bold;text-decoration: none;font-size:1.2em;}
 .d{color: #ff7700;text-decoration: none;font-weight: bold;}
 .h{padding-left: 0px;padding-top:5px;}
@@ -65,13 +65,13 @@ a{color: #ff7700;text-decoration: none;}
                
 }
 .bg-content222{
-	background: url('../images/bg_center.png') no-repeat #d79242;background-position: right bottom; width:98%;margin-left:5px;
+	background-color: #d79242;background-position: right bottom; width:98%;margin-left:5px;
 	z-index: 15;
 	position: relative;
 }
 .bg_top_2{
 	display: table;
-	background: url('../images/banner_2.png') no-repeat; 
+
 	height:303px;
 	width:100%;
 }
@@ -104,7 +104,7 @@ border-radius: 15px 15px 0 0;
 		
 }
 .left_b_bottom { width:100%;margin-top:-1px;position: relative;}
-.bg_bottom {background: url(../images/bg_bottom.png) repeat-x;position: relative;width:94%;height:98px;margin-left: auto;margin-right: auto;padding-bottom:5px;}
+.bg_bottom {position: relative;width:94%;height:98px;margin-left: auto;margin-right: auto;padding-bottom:5px;}
 .right_b_bottom {position: relative;z-index:2;background-position:right;width:100%;margin-top:-5px;}
 .body_body {max-width:630px;margin-left: auto;margin-right: auto;margin-bottom:5px;}
 .copyright{position: relative;z-index:3;width:95%;margin-left: auto;margin-right: auto;text-align:center;color:#000;font-size:10px;

@@ -25,9 +25,9 @@
     
     <link rel="stylesheet" href="/view/static/css/styleSheet.css?v=1.1">
     <link rel="stylesheet" href="/view/static/css/site-fixes.css?v=4">
-<!--     <script src="https://www.google.com/recaptcha/api.js?render=<br />
-<b>Warning</b>:  Undefined array key "SiteKey" in <b>C:\xampp\htdocs\Controllers\Header.php</b> on line <b>40</b><br />
-"></script> -->
+<!--     <script src="https://www.google.com/recaptcha/api.js?render="></script> -->
+
+
 
     <script src="/view/static/js/animation.js?v4" type="text/javascript"></script>
     </head>
@@ -406,7 +406,7 @@
 
     })(jQuery);
 </script>
-<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="bda44b490cab1719935b06d7-|49" defer></script></body>
+<script src="/view/static/js/rocket-loader.min.js" data-cf-settings="bda44b490cab1719935b06d7-|49" defer></script></body>
 
 </html>
 
