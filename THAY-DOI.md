@@ -484,3 +484,10 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Build: có (`mob/Mob.java`, cùng khối map 156–159 với mục 53). SQL: không. Client: không.
 - Mỗi quái giết ở Tây/Đông/Bắc/Nam thánh địa: tung **riêng** 30% rơi 1 Mảnh vỡ bông tai cấp 3 (item 1820, option `31:1` nên tự gộp vào 1 ô), không phụ thuộc 3 lần tung của 933/934/935 và không có giới hạn mỗi ngày. Không tính Cổ Bồn La. Dùng để nâng bông tai cấp 2 → 3 (`NangCapBongTai3`: 20000 mảnh, 200 triệu vàng, 1000 ngọc).
 - Kiểm tra: giết quái ở map 156–159, nhặt thấy "Mảnh vỡ bông tai cấp 3", giết thêm thì "Số lượng" cộng dồn trong cùng 1 ô; vào Bà Hạt Mít nâng bông tai cấp 2 thì đếm đúng.
+
+
+## 56. Boss Hủy diệt (Beerus, Champa) rơi 5–20 thỏi vàng — 7/11/2026, máy nhà
+
+- Build: có (`boss/thien_su/ThienSuHuyDietReward.dropHuyDiet`). SQL: không. Client: không.
+- Nhánh 38% Thỏi vàng (457) trước rơi 1, giờ rơi ngẫu nhiên 5–20 (`Util.nextInt(5, 20)`). Thiên sứ Whis/Vados không rơi thỏi vàng nên không đổi. Đã cập nhật BOSS-ROI-DO.md mục 3b.
+- Kiểm tra: giết Beerus hoặc Champa nhiều lần, khi rơi thỏi vàng thì số lượng nằm trong 5–20.

@@ -69,7 +69,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 | 30% | 1 món Hủy Diệt, hành tinh ngẫu nhiên (áo / quần / găng / giày / nhẫn đều nhau). Chỉ số lấy từ shop Bill, cộng thêm 0–15% như `buyItemHD`; option 21:60 và 30 |
 | 20% | Ngọc rồng 2 sao (id 15) |
 | 10% | Ngọc rồng 3 sao (id 16) |
-| 38% | 1 Thỏi vàng (id 457) |
+| 38% | 5–20 Thỏi vàng (id 457), số lượng ngẫu nhiên (trước 1, đổi 7/11/2026) |
 
 **Rơi đồ Thiên sứ Whis / Vados** (`ThienSuHuyDietReward.drop`, giữ như cũ, tổng 100%):
 

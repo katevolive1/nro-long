@@ -34,7 +34,7 @@ public class ThienSuHuyDietReward {
     }
 
     // Hủy diệt (tổng 100%): 2% đồ Thần Linh (randDoTLBoss), 30% 1 món Hủy Diệt hành tinh ngẫu nhiên,
-    // 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% 1 thỏi vàng (457)
+    // 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% 5-20 thỏi vàng (457)
     public static void dropHuyDiet(Boss boss, Player plKill) {
         int rd = Util.nextInt(100);
         ItemMap it;
@@ -47,7 +47,7 @@ public class ThienSuHuyDietReward {
         } else if (rd < 62) {
             it = new ItemMap(boss.zone, 16, 1, boss.location.x, y(boss), plKill.id);
         } else {
-            it = new ItemMap(boss.zone, THOI_VANG, 1, boss.location.x, y(boss), plKill.id);
+            it = new ItemMap(boss.zone, THOI_VANG, Util.nextInt(5, 20), boss.location.x, y(boss), plKill.id); // 5-20 thỏi vàng (trước 1)
         }
         Service.gI().dropItemMap(boss.zone, it);
     }

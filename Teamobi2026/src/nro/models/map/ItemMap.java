@@ -108,12 +108,12 @@ public class ItemMap {
             if (this.itemTemplate.type == 22) {
                 satelliteUpdate();
             }
-            if (Util.canDoWithTime(createTime, 45000)) {
+            if (Util.canDoWithTime(createTime, 30000)) {
                 if (this.itemTemplate.type != 22 && this.itemTemplate.id != 726 && this.itemTemplate.id != 992) {
                     this.playerId = -1;
                 }
             }
-            if ((Util.canDoWithTime(createTime, 50000) && isNotNullItem() && itemTemplate.type != 22 || Util.canDoWithTime(createTime, 1800000)) && !this.isNamecBall) {
+            if ((Util.canDoWithTime(createTime, 45000) && isNotNullItem() && itemTemplate.type != 22 || Util.canDoWithTime(createTime, 1800000)) && !this.isNamecBall) {
                 if (this.zone != null && this.zone.map.mapId != 21 && this.zone.map.mapId != 22
                         && this.zone.map.mapId != 23 && this.itemTemplate.id != 78
                         && this.itemTemplate.id != 726 && !(MapService.gI().isMapDoanhTrai(this.zone.map.mapId) && this.itemTemplate.id >= 14 && this.itemTemplate.id <= 20)) {

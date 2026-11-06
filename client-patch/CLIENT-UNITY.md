@@ -237,3 +237,9 @@ Kế hoạch Né boss / Tàn sát boss: [KE-HOACH-NE-TAN-SAT-BOSS.md](../KE-HOAC
 ### Chữ khung nhập số lượng mua (`patch-nhap-so-luong.ps1`, 6/11/2026)
 - Literal `"Nhập số lượng mua"` (ô `0xCA8C20`) dùng ở `Panel.OpenShopBuyQuantityInput` (`0x40AF10`, đặt vào `[Panel+88h]`), `onCancelChat` (`0x427600`), `onChatFromMe` (cùng ô nên so sánh vẫn khớp). Ô nhập giới hạn 5 chữ số (`TField.maxTextLenght` = 5 tại `0x40B254`), vừa đủ nhập 10000.
 - Script đổi nội dung literal trong `global-metadata.dat` thành `"Mua (tối đa 10000)"` (ngắn hơn nên đè tại chỗ rồi giảm `len`, cách như `patch-port.ps1`), không sửa `GameAssembly.dll`. Gọi trong `cap-nhat-client.bat` sau `patch-port`, nhận thư mục client. Sao lưu `global-metadata.dat.truoc-nhap-so-luong`. Slot manager là hard link tới file này nên tự theo.
+
+## Tự nhặt đồ (dò 7/11/2026)
+
+- `PickMob..cctor` (Game1 RVA `0x4CF6A0`+, dò qua `5043680`) đặt mặc định: `IsAutoPickItems` (`+40h`) = 1, **`IsPickItemsAll` (`+41h`, nút "Nhặt tất cả") = 1**, `IsPickItemsDis` (`+42h`, "Nhặt xa") = 0, `IsLimitTimesPickItem` (`+43h`) = 1. Không cần vá gì để mặc định nhặt đồ người khác.
+- `PickMobController.GetTypePickItem` (`0x4CCAA0`): `itemMap.playerId` (`+2Ch`) khác `Char.myCharz.charID` (`+90h`) và khác -1 thì chỉ nhặt khi `IsPickItemsAll` bật; rồi qua `FilterItemPick` (`0x4CBB60`, lọc theo danh sách id/loại, không xét chủ). Quá `TimesAutoPickItemMax` (`+44h`) lần thử (`ItemMap.countAutoPick` `+88h`) thì bỏ qua món đó.
+- Phía server: đồ rơi chỉ của người gây sát thương trong **45 giây** (`ItemMap.update`: `createTime` ≥ 45000 ms thì `playerId = -1`, ai cũng nhặt được, trừ item 726, 992, loại 22), biến mất sau **50 giây** (đồ ở map 21/22/23, item 78, 726 và đồ Doanh trại 14–20 không biến mất). `Zone.pickItem` chỉ cho nhặt khi `playerId` là mình hoặc -1, người khác nhặt trong 45 giây bị bỏ qua lặng lẽ (không có thông báo).
