@@ -41,10 +41,48 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
 ## 3b. Thiên sứ + Hủy diệt (Trạm hủy diệt 186–188, thêm 31/10/2026, `boss/thien_su`)
-- Mỗi map 2 cặp: Beerus (hình 1983/1986/1987) + Whis (505/506/507), Champa (511/512/513) + Vados (530/531/532). HP 2 tỷ, sức đánh 100.000, không giới hạn sát thương mỗi đòn, chiêu đấm/chưởng cấp 7. Cặp vào cùng khu ngẫu nhiên (2 cặp có thể chung khu). Thiên sứ mỗi 10 giây hồi 10% HP tối đa cho Hủy diệt cùng cặp (cùng khu, còn sống). Hồi sinh: chết cả 2 con mới đếm 10 phút rồi cả cặp xuất hiện lại.
-- Rơi đồ Hủy diệt Beerus/Champa (`ThienSuHuyDietReward.dropHuyDiet`, tổng 100%, cập nhật 31/10/2026): 2% đồ Thần Linh (`randDoTLBoss`); 30% 1 món Hủy Diệt hành tinh ngẫu nhiên (áo/quần/găng/giày/nhẫn đều nhau; chỉ số shop Bill cộng 0–15% như `buyItemHD`, 21:60, 30); 20% Ngọc rồng 2 sao (15); 10% Ngọc rồng 3 sao (16); 38% 1 Thỏi vàng (457).
-- Rơi đồ Thiên sứ Whis/Vados (`ThienSuHuyDietReward.drop`, giữ như cũ): 40% 1 món Hủy Diệt theo hành tinh người giết; 20% Ngọc rồng 2 hoặc 3 sao; 20% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1150–1153) x1–5; 20% không rơi gì.
-- Đổi 3 món Hủy Diệt → 1 món kích hoạt (Bà Hạt Mít, `DoiDoBaHatMit`): 3 món không được trùng món (cùng id), được khác hành tinh; loại theo món đặt đầu tiên, hành tinh theo người chơi.
+
+**Boss và cặp** (mỗi map 186–188 có 2 cặp):
+
+| Cặp | Hủy diệt | Thiên sứ (hình) |
+|---|---|---|
+| 1 | Beerus (1983 / 1986 / 1987) | Whis (505 / 506 / 507) |
+| 2 | Champa (511 / 512 / 513) | Vados (530 / 531 / 532) |
+
+**Cơ chế:**
+
+| Mục | Giá trị |
+|---|---|
+| HP | 2 tỷ |
+| Sức đánh | 100.000 |
+| Giới hạn sát thương mỗi đòn | không có |
+| Chiêu | đấm / chưởng cấp 7 |
+| Khu xuất hiện | mỗi cặp vào cùng một khu ngẫu nhiên (2 cặp có thể chung khu) |
+| Thiên sứ hồi cho Hủy diệt | mỗi 10 giây hồi 10% HP tối đa, chỉ cho Hủy diệt cùng cặp, cùng khu, còn sống |
+| Hồi sinh | chết cả 2 con mới đếm 10 phút, rồi cả cặp xuất hiện lại |
+
+**Rơi đồ Hủy diệt Beerus / Champa** (`ThienSuHuyDietReward.dropHuyDiet`, cập nhật 31/10/2026, tổng 100%):
+
+| Tỉ lệ | Rơi |
+|---|---|
+| 2% | 1 món đồ Thần Linh (`randDoTLBoss`) |
+| 30% | 1 món Hủy Diệt, hành tinh ngẫu nhiên (áo / quần / găng / giày / nhẫn đều nhau). Chỉ số lấy từ shop Bill, cộng thêm 0–15% như `buyItemHD`; option 21:60 và 30 |
+| 20% | Ngọc rồng 2 sao (id 15) |
+| 10% | Ngọc rồng 3 sao (id 16) |
+| 38% | 1 Thỏi vàng (id 457) |
+
+**Rơi đồ Thiên sứ Whis / Vados** (`ThienSuHuyDietReward.drop`, giữ như cũ, tổng 100%):
+
+| Tỉ lệ | Rơi |
+|---|---|
+| 40% | 1 món Hủy Diệt, theo hành tinh của người giết |
+| 20% | Ngọc rồng 2 hoặc 3 sao |
+| 20% | Một trong Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (id 1150–1153), số lượng 1–5 |
+| 20% | Không rơi gì |
+
+**Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít (`DoiDoBaHatMit`).
+- 3 món không được trùng món (cùng id), nhưng được khác hành tinh.
+- Loại món kích hoạt theo món đặt đầu tiên, hành tinh theo người chơi.
 
 ## 4. Boss mini
 - Ăn Trộm: chỉ khi đã trộm vàng → trả 80% vàng đã trộm + 100% Hộp quà Goku Day (1591, 1594).

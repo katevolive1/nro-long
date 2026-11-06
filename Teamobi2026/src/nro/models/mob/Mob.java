@@ -660,6 +660,13 @@ public class Mob {
                 it.options.add(new Item.ItemOption(31, 1));
                 list.add(it);
             }
+
+            // Mảnh vỡ bông tai cấp 3 (1820): tung riêng, 30%, không giới hạn số lần mỗi ngày (thêm 6/11/2026)
+            if (Util.isTrue(30, 100)) {
+                ItemMap it = new ItemMap(zone, 1820, 1, x, yEnd, player.id);
+                it.options.add(new Item.ItemOption(31, 1));
+                list.add(it);
+            }
         }
 
         //======================== Vàng Ngọc ========================

@@ -20,6 +20,9 @@ public class NangChiSoBongTai3 {
     private static final int HON_BONG_TAI_ID = 934;
     private static final int DA_XANH_LAM_ID = 935;
     private static final int REQUIRED_HON_BONG_TAI = 99;
+    // Option ngẫu nhiên khi mở chỉ số (tên theo item_option_template):
+    // 77 = HP +#%, 80 = hồi HP +#% mỗi 30 giây, 81 = hồi KI +#% mỗi 30 giây, 103 = KI +#%,
+    // 50 = sức đánh +#%, 94 = giảm #% sát thương, 5 = +#% sức đánh chí mạng
     private static final byte[] UPGRADE_OPTIONS = {77, 80, 81, 103, 50, 94, 5};
     private static final byte PARAM_MIN = 5;
     private static final byte PARAM_MAX = 15;

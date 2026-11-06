@@ -465,3 +465,22 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Khi đã đủ lượt, **mỗi lần** lẽ ra rơi mảnh hồn (tức mỗi lần tung trúng 20% mà hết lượt) server báo "Hôm nay ngươi đã nhận đủ Mảnh hồn bông tai, hãy quay lại vào ngày mai" (không ghi số), mảnh không rơi. Ra khỏi map hoặc ngừng đánh thì không báo nữa.
 - Chưa sửa: lượt còn lại lưu trong bộ nhớ (`ItemEvent`), không lưu DB, nên đăng xuất rồi đăng nhập lại là reset về đủ 500.
 - Kiểm tra (tạm hạ 500 xuống 2 để test): giết quái ở map 156–159 tới khi đủ 2 mảnh hồn thì hiện thông báo, sau đó không rơi thêm.
+
+
+## 54. Mảnh vỡ bông tai mua ở Santa có option 31 (đuôi 31) — 6/11/2026, máy nhà
+
+- Build: không. Client: không. **SQL: có** (chạy lại ở máy kia, DB không theo git):
+  ```sql
+  INSERT INTO item_shop_option (item_shop_id, option_id, param) VALUES (911, 31, 1);
+  INSERT INTO shop_reload_request () VALUES ();   -- server đang chạy tự nạp lại shop
+  ```
+- Lý do: logic nâng bông tai cấp 2 đọc số mảnh vỡ từ option 31 (`InventoryService.getParam`), món mua ở Santa (item_shop 911, 50 ngọc) không có option nên đếm ra 0. Giờ mỗi mảnh mua có `31:1` và tự gộp vào 1 ô như mảnh nhặt từ quái. Đá xanh lam (item_shop 910) đếm theo số lượng ô nên không cần.
+- Chưa sửa: ô Mảnh vỡ/Mảnh hồn **cũ** không có option 31 mà người chơi đang giữ (lúc kiểm tra chỉ có `hoang`, đã sửa tay) vẫn đếm 0; mua thêm vào ô cũ đó thì món mua biến mất (hàm gộp không có option 31 để cộng). Nếu có người khác bị thì đổi ô đó sang dạng `[933,1,option 31 = số mảnh]` như mục chuyển của `hoang`.
+- Kiểm tra: mua 1 Mảnh vỡ bông tai ở Santa, xem chi tiết có dòng "Số lượng 1"; mua thêm thì thành "Số lượng 2" trong cùng 1 ô; vào Bà Hạt Mít nâng bông tai thì đếm đúng.
+
+
+## 55. Mảnh vỡ bông tai cấp 3 (1820) rơi 30% ở map Thánh địa, không giới hạn mỗi ngày — 6/11/2026, máy nhà
+
+- Build: có (`mob/Mob.java`, cùng khối map 156–159 với mục 53). SQL: không. Client: không.
+- Mỗi quái giết ở Tây/Đông/Bắc/Nam thánh địa: tung **riêng** 30% rơi 1 Mảnh vỡ bông tai cấp 3 (item 1820, option `31:1` nên tự gộp vào 1 ô), không phụ thuộc 3 lần tung của 933/934/935 và không có giới hạn mỗi ngày. Không tính Cổ Bồn La. Dùng để nâng bông tai cấp 2 → 3 (`NangCapBongTai3`: 20000 mảnh, 200 triệu vàng, 1000 ngọc).
+- Kiểm tra: giết quái ở map 156–159, nhặt thấy "Mảnh vỡ bông tai cấp 3", giết thêm thì "Số lượng" cộng dồn trong cùng 1 ô; vào Bà Hạt Mít nâng bông tai cấp 2 thì đếm đúng.
