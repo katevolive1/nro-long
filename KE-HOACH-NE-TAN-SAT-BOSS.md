@@ -1,4 +1,4 @@
-# Kế hoạch: Né boss và Tàn sát boss trong tab BOSS (6/11/2026, chờ duyệt)
+# Né boss và Tàn sát boss trong tab BOSS (6/11/2026, đã làm theo các đề xuất, chưa thử trong game)
 
 Thêm 2 ô vào tab BOSS của menu mod (phím X). Chỉ sửa client, **server không đổi**. Chưa vá gì. Offset dưới đây là Game1 (runtime dùng Game1), lấy theo tên hàm trong `script.json`.
 
@@ -62,3 +62,11 @@ Không làm trong: màn hình tải map, lúc đang chết, phó bản và map c
 3. **Né cả boss khi đang đánh chính boss đó không?** Đề xuất có, đã bật Né là luôn né.
 4. **Lọc tên boss:** đổi sang loại đúng "Đệ tử" để không sót "Đội trưởng-5", "Đracula"?
 5. **Lưu trạng thái:** đề xuất không lưu, mỗi lần mở game đều tắt, giống Focus BOSS.
+
+## Đã làm (6/11/2026) và khác gì kế hoạch
+User xem lại và bảo làm ("tôi chưa thấy"), nên làm theo toàn bộ đề xuất ở mục "Cần chốt": bật cái này tự tắt cái kia; khu đích là khu kế tiếp (vòng về 0, bỏ qua khu đang đứng); né cả khi đang đánh boss; lọc tên chỉ loại "Đệ…" (nên "Đội trưởng-5", "Đracula" được tính là boss); không lưu trạng thái.
+- Script `client-patch/patch-ne-tan-sat-boss.ps1`, đã thêm vào `cap-nhat-client.bat`. Chi tiết offset, cờ, id lệnh: `client-patch/CLIENT-UNITY.md` mục cuối.
+- Thêm lệnh chat `tsboss`, `neboss` (bảng ở ID-GAME.md), và **bỏ nút "Hướng Dẫn Xài Mod"** khỏi menu phím X (user yêu cầu thêm).
+- Khác kế hoạch: Tàn sát Boss ưu tiên boss đang trỏ (nhờ giữ `charFocus`), còn không trỏ thì chọn **boss cuối danh sách khu**, không phải gần nhất. Tàn sát Boss bật còn tắt thêm tàn sát quái/người. Thời gian chờ đổi khu lưu ở .bss của hàm Game2 không chạy (static `PickMob` hết chỗ).
+- Giới hạn còn lại: server chặn đổi khu 5 giây (client chờ 5,2 giây); khu đích có thể đầy hoặc có boss khác thì lần sau đổi tiếp; map 1 khu thì Né không làm gì. Bật tsBoss rồi bấm `t`/`ts` (tàn sát quái) thì tsBoss vẫn được ưu tiên.
+- Chưa thử trong game: mở menu X, bấm 2 nút, lệnh chat, boss vào khu, đổi khu.

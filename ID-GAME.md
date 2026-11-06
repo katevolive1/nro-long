@@ -25,6 +25,8 @@ Lệnh có tham số chỉ khớp khi sau tên lệnh là hết câu, dấu các
 | `ak` | Bật/tắt tự đánh |
 | `ts` | Bật/tắt tàn sát (tự đánh quái quanh mình) |
 | `tsnguoi` | Tàn sát người (chưa thử, đoán theo tên) |
+| `tsboss` | Bật/tắt Tàn sát Boss (chỉ đánh boss, ưu tiên boss đang trỏ; bật thì tự tắt Né Boss, tàn sát quái/người) |
+| `neboss` | Bật/tắt Né Boss (có boss trong khu thì tự đổi khu; bật thì tự tắt Tàn sát Boss) |
 | `ahs` | Bật/tắt tự hồi sinh |
 | `vqmm` | Bật/tắt tự quay vòng quay may mắn |
 | `ukhu` | Bật/tắt tự cập nhật danh sách khu |

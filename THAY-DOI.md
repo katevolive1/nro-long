@@ -427,3 +427,16 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
   2. Đánh Goku, Cadic...: không bao giờ rơi Bình.
   3. Đồ shop rơi từ boss: xem số sao trong chi tiết, có thể tới 7–8 sao. Pha lê hóa vẫn lên được tối đa 9 sao (`MAX_STAR_ITEM`).
   4. Tăng `SHOP_BOSS_12H` lên `10000` để test thì mọi boss 12h đều rơi đồ shop, nhớ trả về `15`.
+
+
+## 50. Client: Né Boss, Tàn sát Boss (tab BOSS, lệnh chat neboss / tsboss), bỏ nút Hướng Dẫn Xài Mod — 6/11/2026, máy nhà
+
+- Build: không. SQL: không. **Client: có.**
+- Chạy `client-patch\cap-nhat-client.bat` (đã thêm `patch-ne-tan-sat-boss`). Tắt game và manager đang mở slot trước; slot của manager tự dựng lại khi client gốc đổi. Sao lưu `GameAssembly.dll.truoc-ne-tan-sat-boss`.
+- Kiểm tra trong game (chưa thử):
+  1. Phím X → menu không còn tab "Hướng Dẫn Xài Mod".
+  2. Tab BOSS có thêm "Tàn sát Boss [Tắt]" và "Né Boss [Tắt]" sau "Focus BOSS"; bấm thì hiện thông báo Bật/Tắt, mở lại menu thấy chữ đổi.
+  3. Chat `tsboss` và `neboss` cũng bật/tắt được.
+  4. Bật Né Boss + tàn sát quái (`ts`), gọi boss vào khu: tự đổi khu. Sang map có boss: tự đổi khu.
+  5. Bật Tàn sát Boss, trỏ vào boss: đánh boss đó; boss chết thì đứng yên.
+  6. Map chỉ 1 khu: Né Boss không gửi đổi khu liên tục.

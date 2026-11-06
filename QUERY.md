@@ -1,13 +1,35 @@
 # Câu SQL hay dùng
 
-Chạy trong phpMyAdmin hoặc từ file `.sql` UTF-8 (gõ trong Git Bash thì chữ có dấu thành `?`). Sửa đồ/đệ của nhân vật thì cho nhân vật offline trước.
-
 ## Đổi loại đệ
-
-Kid Beer → Mabư (số đầu: 0 thường, 1 Mabư, 2 Uub, 3 Kid Beer, 4 Jiren):
 
 ```sql
 UPDATE player
 SET pet = REPLACE(REPLACE(pet, '["[3,', '["[1,'), '$Kid Beer', '$Mabư')
 WHERE name = 'hoang';
+```
+
+## Cho buff Ngọc rồng sao đen (bù khi quên 20h)
+
+### Một nhân vật
+
+```sql
+SET @t = UNIX_TIMESTAMP() * 1000 + 79200000;
+UPDATE player
+SET data_black_ball = CONCAT('[', REPEAT(CONCAT('"[', @t, ',0,0]",'), 6), '"[', @t, ',0,0]"]')
+WHERE name = 'Tên nhân vật';
+```
+
+### Cả bang
+
+```sql
+SET @t = UNIX_TIMESTAMP() * 1000 + 79200000;
+UPDATE player
+SET data_black_ball = CONCAT('[', REPEAT(CONCAT('"[', @t, ',0,0]",'), 6), '"[', @t, ',0,0]"]')
+WHERE clan_id = 123;
+```
+
+### Kiểm tra
+
+```sql
+SELECT name, data_black_ball FROM player WHERE name = 'Tên nhân vật';
 ```
