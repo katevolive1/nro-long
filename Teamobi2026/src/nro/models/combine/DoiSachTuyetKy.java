@@ -98,6 +98,7 @@ public class DoiSachTuyetKy {
         InventoryService.gI().addItemBag(player, sachTuyetKy);
 
         CombineService.gI().sendEffSuccessVip(player, sachTuyetKy.template.iconID);
+        InventoryService.gI().sendItemBags(player);
 
         Util.setTimeout(() -> {
             Service.gI().sendServerMessage(player, "Bạn nhận được " + sachTuyetKy.template.name);
@@ -110,6 +111,7 @@ public class DoiSachTuyetKy {
         InventoryService.gI().subQuantityItemsBag(player, kimBamGiay, REQUIRED_KIM_BAM_GIAY);
 
         CombineService.gI().sendEffFailVip(player);
+        InventoryService.gI().sendItemBags(player);
 
         String[] failMessages = {
             "Chúc con may mắn lần sau, đừng buồn con nhé.",

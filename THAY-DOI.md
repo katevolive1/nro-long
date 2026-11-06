@@ -440,3 +440,28 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
   4. Bật Né Boss + tàn sát quái (`ts`), gọi boss vào khu: tự đổi khu. Sang map có boss: tự đổi khu.
   5. Bật Tàn sát Boss, trỏ vào boss: đánh boss đó; boss chết thì đứng yên.
   6. Map chỉ 1 khu: Né Boss không gửi đổi khu liên tục.
+
+
+## 51. Mua số lượng trong shop tối đa 10000 mỗi lần (trước là 1000) — 6/11/2026, máy nhà
+
+- Build: có (`ShopService.buyItemQuantity`, `Math.min(quantity, 10000)`). SQL: không. Client: không.
+- Kiểm tra: mua món thường (vd Trang sách cũ) nhập 9999, thấy "Mua thành công x9999" nếu đủ tiền và đủ ô hành trang.
+- **Bổ sung mục 51 (client)**: khung nhập số lượng khi mua ở shop đổi chữ thành "Mua (tối đa 10000)" (`client-patch/patch-nhap-so-luong.ps1`, sửa `global-metadata.dat`). **Client: có**, chạy `client-patch\cap-nhat-client.bat` trên mỗi máy (tắt game trước).
+
+
+## 52. Chế tạo Cuốn sách cũ cần 999 Trang sách cũ (trước là 9999) — 6/11/2026, máy nhà
+
+- Build: có (`combine/CheTaoCuonSachCu.java`, `REQUIRED_TRANG_SACH_CU` 9999 → 999, user tự sửa). SQL: không. Client: không.
+- Sửa thêm: chế tạo Cuốn sách cũ và Đổi Sách Tuyệt kỹ (`DoiSachTuyetKy`) trước đây **không gửi lại hành trang** sau khi trừ/thêm đồ (hiệu ứng `-81` không kèm hành trang), nên client còn hiện số cũ tới khi vào lại. Đã thêm `InventoryService.gI().sendItemBags(player)` sau hiệu ứng thành công/thất bại ở cả 2 file, giống các combine khác.
+- Các chỗ khác không phải sửa: số cần được hiện từ hằng số này (`formatRequirement`), mô tả item 1281/1282/1283 trong DB không ghi số lượng. Thất bại vẫn mất 99 trang + 1 bìa (`TRANG_SACH_CU_LOSS_ON_FAIL`, chữ "mất 99 trang sách" trong menu ghi cứng, khớp).
+- Kiểm tra: Bà Hạt Mít → chế tạo Cuốn sách cũ, menu hiện `Trang sách cũ x/999`; đủ 999 trang + 1 bìa thì nút Đồng ý sáng.
+
+
+## 53. Mảnh hồn bông tai rơi 20%, tối đa 500 mỗi ngày, báo khi đủ lượt — 6/11/2026, máy nhà
+
+- Build: có (`mob/Mob.java`, `player/ItemEvent.java`). SQL: không. Client: không.
+- Rơi từ quái map Thánh địa 156–159 (map `isMapUpPorata`). Mỗi quái giết: 10% Mảnh vỡ bông tai (933); nếu không trúng thì **20%** Mảnh hồn bông tai (934, trước 5%) nhưng chỉ khi người đó còn lượt trong ngày; nếu không thì 1/500 Đá xanh lam (935). Cổ Bồn La vẫn cộng +5/+3/+1 (934 thành 23%). Vì chỉ tung 934 khi 933 không trúng nên thực tế ≈ 18% mỗi quái.
+- Giới hạn **500** mảnh hồn mỗi ngày mỗi người (trước 150, `canDropManhVo(500)`), tính lại sau nửa đêm. Sửa luôn lỗi cũ: lần đầu trong ngày không bị trừ lượt nên cho được 151 thay vì 150.
+- Khi đã đủ lượt, **mỗi lần** lẽ ra rơi mảnh hồn (tức mỗi lần tung trúng 20% mà hết lượt) server báo "Hôm nay ngươi đã nhận đủ Mảnh hồn bông tai, hãy quay lại vào ngày mai" (không ghi số), mảnh không rơi. Ra khỏi map hoặc ngừng đánh thì không báo nữa.
+- Chưa sửa: lượt còn lại lưu trong bộ nhớ (`ItemEvent`), không lưu DB, nên đăng xuất rồi đăng nhập lại là reset về đủ 500.
+- Kiểm tra (tạm hạ 500 xuống 2 để test): giết quái ở map 156–159 tới khi đủ 2 mảnh hồn thì hiện thông báo, sau đó không rơi thêm.

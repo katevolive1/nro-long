@@ -18,7 +18,7 @@ public class CheTaoCuonSachCu {
     private static final int TRANG_SACH_CU_ID = 1281;
     private static final int BIA_SACH_ID = 1282;
     private static final int CUON_SACH_CU_ID = 1283;
-    private static final int REQUIRED_TRANG_SACH_CU = 9999;
+    private static final int REQUIRED_TRANG_SACH_CU = 999;
     private static final int REQUIRED_BIA_SACH = 1;
     private static final int SUCCESS_RATE_PERCENT = 20;
     private static final int TRANG_SACH_CU_LOSS_ON_FAIL = 99;
@@ -92,6 +92,7 @@ public class CheTaoCuonSachCu {
         InventoryService.gI().addItemBag(player, cuonSachCu);
 
         CombineService.gI().sendEffSuccessVip(player, cuonSachCu.template.iconID);
+        InventoryService.gI().sendItemBags(player);
         Util.setTimeout(() -> {
             Service.gI().sendServerMessage(player, "Bạn nhận được " + cuonSachCu.template.name);
             CombineService.gI().baHatMit.npcChat(player, "Chúc mừng con nhé");
@@ -103,6 +104,7 @@ public class CheTaoCuonSachCu {
         InventoryService.gI().subQuantityItemsBag(player, biaSach, REQUIRED_BIA_SACH);
 
         CombineService.gI().sendEffFailVip(player);
+        InventoryService.gI().sendItemBags(player);
         Util.setTimeout(() -> {
             CombineService.gI().baHatMit.npcChat(player, "Chúc con may mắn lần sau, đừng buồn con nhé");
         }, 2000);

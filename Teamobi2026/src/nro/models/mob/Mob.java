@@ -638,7 +638,7 @@ public class Mob {
         //========================Map Bang Hội========================
         if (MapService.gI().isMapUpPorata(mapid)) {
             int dropRate1 = 10;
-            int dropRate2 = 5;
+            int dropRate2 = 20; // Mảnh hồn bông tai 20% (trước 5%, đổi 6/11/2026)
             int dropRate3 = 1;
 
             if (player.itemTime.isUseCoBonLa) {
@@ -651,7 +651,7 @@ public class Mob {
                 ItemMap it = new ItemMap(zone, 933, 1, x, yEnd, player.id);
                 it.options.add(new Item.ItemOption(31, 1));
                 list.add(it);
-            } else if (Util.isTrue(dropRate2, 100) && player.itemEvent.canDropManhVo(150)) {
+            } else if (Util.isTrue(dropRate2, 100) && player.itemEvent.canDropManhVo(500)) { // tối đa 500 mảnh hồn mỗi ngày (trước 150)
                 ItemMap it = new ItemMap(zone, 934, 1, x, yEnd, player.id);
                 it.options.add(new Item.ItemOption(31, 1));
                 list.add(it);

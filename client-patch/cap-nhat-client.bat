@@ -25,6 +25,8 @@ for %%S in (patch patch-khu-map patch-mac-dinh patch-khung-nhap patch-thoi-vang 
 )
 echo === patch-port
 powershell -NoProfile -ExecutionPolicy Bypass -File "patch-port.ps1" "%CLIENT%" || goto loi
+echo === patch-nhap-so-luong
+powershell -NoProfile -ExecutionPolicy Bypass -File "patch-nhap-so-luong.ps1" "%CLIENT%" || goto loi
 
 echo === Nen %OUT%
 if not exist "%RAREXE%" ( echo Khong thay WinRAR & goto loi )

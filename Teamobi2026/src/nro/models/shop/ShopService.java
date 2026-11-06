@@ -511,7 +511,7 @@ public class ShopService {
     // Mua số lượng trong 1 gói: món thường trừ tiền và thêm vào hành trang N lần, gửi hành trang và báo 1 lần.
     // Món ở tab/shop đặc biệt (phiếu giảm giá, danh hiệu, kỹ năng, điểm sự kiện, Capsule bang, luyện tập...) gọi buyItem N lần như cũ.
     private void buyItemQuantity(Player player, int itemTempId, int quantity) {
-        quantity = Math.min(quantity, 1000);
+        quantity = Math.min(quantity, 10000);
         Shop shop = player.idMark.getShopOpen();
         ItemShop is = shop.getItemShop(itemTempId);
         if (is == null) {

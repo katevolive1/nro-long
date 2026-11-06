@@ -1,5 +1,6 @@
 package nro.models.player;
 
+import nro.models.services.Service;
 import nro.models.utils.Util;
 
 /**
@@ -27,7 +28,7 @@ public class ItemEvent {
     public int remainingKeoNguoiTuyetCount;
     public int remainingTVGSCount;
     public int remainingManhVo;
-    
+
     public long lastHHTime;
 
     public int remainingHHCount;
@@ -136,15 +137,17 @@ public class ItemEvent {
         return false;
     }
 
-   public boolean canDropManhVo(int maxCount) {
-    if (Util.isAfterMidnight(lastItemManhVo)) {
-        remainingManhVo = maxCount;
-        lastItemManhVo = System.currentTimeMillis();
-        return true;
-    } else if (remainingManhVo > 0) {
-        remainingManhVo--;
-        return true;
+    // Mảnh hồn bông tai: tối đa maxCount mỗi ngày (reset sau nửa đêm). Đủ lượt rồi thì mỗi lần lẽ ra rơi đều báo người chơi (hết lượt thì không rơi nữa).
+    public boolean canDropManhVo(int maxCount) {
+        if (Util.isAfterMidnight(lastItemManhVo)) {
+            remainingManhVo = maxCount;
+            lastItemManhVo = System.currentTimeMillis();
+        }
+        if (remainingManhVo > 0) {
+            remainingManhVo--;
+            return true;
+        }
+        Service.gI().sendThongBao(player, "Hôm nay ngươi đã nhận đủ Mảnh hồn bông tai, hãy quay lại vào ngày mai");
+        return false;
     }
-    return false;
-}
 }
