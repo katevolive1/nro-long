@@ -37,3 +37,6 @@ manager/state.ini
 manager/config.ini
 manager/slots/
 manager/NroManager.exe
+
+# Kho icon gộp từ nhiều bộ (nặng, dựng lại bằng tools/kho-anh/hop-nhat.php)
+/kho-anh/
