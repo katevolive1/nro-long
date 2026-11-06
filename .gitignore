@@ -30,3 +30,10 @@ mcp.json
 .codegraph/
 version/.dang-chay
 version/_dang-dung.sql
+
+# Manager nhieu tai khoan: du lieu rieng tung may (mat khau, slot client, cau hinh, file build)
+manager/accounts.txt
+manager/state.ini
+manager/config.ini
+manager/slots/
+manager/NroManager.exe

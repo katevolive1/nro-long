@@ -1,6 +1,16 @@
 # Kế hoạch: nro-long-manager (quản lý nhiều tài khoản, mở nhiều cửa sổ game)
 
-Trạng thái: **chờ duyệt** (lập 3/11/2026). Code sẽ nằm ở `F:\nro-long-manager`.
+Trạng thái: **đang làm** (lập và duyệt 3/11/2026). Code nằm trong repo này ở `manager\` (đổi từ `F:\nro-long-manager` theo yêu cầu dùng chung 1 git), hướng dẫn: [manager/README.md](manager/README.md). Các điểm ở mục 4 chưa được trả lời nên làm theo mặc định đề xuất: C# WinForms, vá tự đăng nhập chỉ trong slot, mật khẩu DPAPI, bỏ qua giai đoạn 3; giai đoạn 2 (thông tin nhân vật từ DB, hẹn giờ, chụp màn hình) chưa làm.
+
+## 0. Kết quả đã chạy (3/11/2026)
+- **Bước 0 đạt**: slot hard link + đổi `DefaultCompany` → `NROSLOT0000001` cho thư mục RMS riêng `LocalLow\NROSLOT0000001\DragonBoy`; mở được slot cùng client gốc.
+- Tham số Unity `-screen-width/-height` **bị client bỏ qua** (luôn ra 1024x600 trong, 1040x639 ngoài). Kéo cửa sổ bằng `SetWindowPos` thì **được** (thử 800x480, sau 6 giây vẫn giữ, không crash), nhưng user không cần đổi cỡ cửa sổ game nên đã bỏ ô "Kích thước" (4/11/2026); chỉ cửa sổ manager co giãn.
+- Giao diện 2 tab theo ảnh QLTK + Control Manager của AutoMax (4/11/2026 theo yêu cầu): tab 1 chạy được, tab 2 chỉ dựng giao diện, chờ duyệt mục 6.
+- Slot không vá chạy bình thường và kết nối `192.168.1.11:14446`.
+- Bản vá tự đăng nhập: lần 1 **crash** vì ô `AutoLogin_TypeInfo` (`0xCA45E0`) chưa được nạp lười (mọi hàm IL2CPP gọi `0x99030` với địa chỉ ô trước khi dùng; `ModFunc.AutoLogin()` chưa dùng kiểu này). Lần 2 thêm `lea rcx,[ô]; call 0x99030` đầu cave: **chạy được**, slot mở lên tự vào game (DB `account.last_time_login` đổi đúng lúc mở, cửa sổ chạy 35 giây không crash).
+- **Chưa thử**: tự đăng nhập lại sau khi rớt mạng/bảo trì (cờ `AutoLogin.waitToNextLogin` +10h bị đặt true sau lần `doLogin` đầu, chưa dò chỗ nào đặt lại về false); mở 2 tài khoản cùng lúc; giao diện `NroManager.exe` (mới build, chưa bấm thử).
+- Lỗi `shader == null` ở `mGraphics.CreateLineMaterial` và dòng `host: ngocrongprivate.kozow.com:14446` trong Player.log **có cả ở client gốc**, không phải lỗi của slot.
+- Tool thử: `manager\tools\thu-slot.ps1` (không chụp màn hình vì `CopyFromScreen` bắt cả vùng màn hình ngoài game; kiểm tra đăng nhập bằng `account.last_time_login` trong DB).
 
 ## 1. Đã dò: AutoMax / AutoManager (bản 0.1.3)
 
@@ -60,7 +70,7 @@ Thư mục: `C:\Users\nguye\OneDrive\Desktop\game\giainenvr\AutoMax [version 0.1
 3. Đặt tiêu đề cửa sổ = tên tài khoản (`SetWindowText`) để biết cửa sổ nào là ai.
 4. Xếp cửa sổ thành lưới theo số cột; đưa cửa sổ lên trước khi bấm đúp vào dòng; thu nhỏ / hiện tất cả.
 5. Đóng cửa sổ đã chọn / đóng tất cả.
-6. Tự mở lại: cửa sổ bị tắt hay crash thì mở lại sau N giây (bật/tắt được).
+6. ~~Tự mở lại cửa sổ bị tắt~~: đã làm rồi bỏ (4/11/2026, user không cần).
 
 **Giai đoạn 2**
 7. Thông tin nhân vật đọc từ DB (`account` + `player`): tên nhân vật, hành tinh, sức mạnh, vàng/ngọc/thỏi vàng, đang online hay không (`last_time_login` > `last_time_logout`). Cách lấy: xem mục 4.
@@ -86,3 +96,37 @@ Thư mục: `C:\Users\nguye\OneDrive\Desktop\game\giainenvr\AutoMax [version 0.1
 3. Tắt server bằng `bt`, xem 2 cửa sổ có tự đăng nhập lại đúng tài khoản không (khi đã bật ô "Tự Động Đăng Nhập" bằng tay).
 
 Bước 0 hỏng ở điểm 1 thì chuyển sang phương án dự phòng: vá client đọc `acc`/`pass` từ biến môi trường (`System.Environment.GetEnvironmentVariable` còn trong GameAssembly, RVA `0x91C3F0`) do manager đặt riêng cho từng cửa sổ.
+
+## 6. Tab Control (gửi lệnh vào các cửa sổ game) — **đã chốt 4/11/2026, đã làm**
+
+Chốt: (1) chỉ cách A (gửi phím), **không thêm DB/không sửa server**; (2) ai dùng manager cũng dùng được hết; (3) danh sách tích riêng trong tab Control, mặc định tích mọi cửa sổ vừa bật; (4) thêm khung "Phím tùy chỉnh" như ảnh AutoMax (nhập rồi Thêm nút, mặc định F J K L). Vì không có server làm hộ nên bỏ các nút AutoMax không có tương ứng trong mod: Auto vào khu / Khu tìm kiếm / Vào vị trí, Dùng itemID, Dịch tới CharID, Bom boss, Capsule Goback, Ngọc Rồng Đen. Có thêm 2 cách gửi (nền / bật cửa sổ lên) vì chưa thử được Unity có nhận phím gửi nền không. Hướng dẫn: [manager/README.md](manager/README.md). Bảng dưới là phương án ban đầu để tham khảo.
+
+Giao diện đã dựng theo ảnh "Control Manager" của AutoMax (tab 2 trong `NroManager.exe`), các nút đang khóa. Client `nr-long` không có kênh nhận lệnh như AutoMax (họ thêm socket vào client), nên phải chọn cách gửi lệnh:
+
+| Cách | Làm gì | Ưu | Nhược |
+|---|---|---|---|
+| **A. Gửi phím vào cửa sổ** (`PostMessage` `WM_KEYDOWN`/`WM_CHAR` tới cửa sổ Unity) | Bấm phím số chọn kỹ năng, mở ô chat gõ lệnh mod có sẵn (`k <khu>`, `ak`, `ts`, `ahs`...) | Không sửa client, không sửa server; dùng lại phím/lệnh mod có sẵn | **Chưa biết Unity có nhận phím gửi vào cửa sổ không được chọn không** (phải thử trước); gõ chat chậm, không biết lệnh có chạy không |
+| **B. Server làm hộ** (manager ghi lệnh vào bảng DB mới `manager_lenh`, server đọc mỗi giây, như `giftcode_reload_request`) | Đổi khu, dịch tới map ID / CharID / boss, hồi sinh, về nhà, dùng item theo ID, chạy lệnh chat, ngắt kết nối | Chắc chắn chạy, biết kết quả, không phụ thuộc client | Phải sửa + build server; không bấm được kỹ năng hay bật auto phía client (`ak`, `ts`) |
+| C. Vá client thêm socket như AutoMax | Mọi thứ | Mạnh nhất | Vá GameAssembly bằng mã máy, khối lượng rất lớn; **không đề xuất** |
+
+**Đề xuất: B + A.** Nút nào server làm được thì đi đường B (chắc chắn), còn Kỹ năng 1–10 và các lệnh auto phía client (`ak`, `ts`, `ahs`) đi đường A sau khi thử được gửi phím. Bảng nút:
+
+| Nút trên tab Control | Đường | Ghi chú |
+|---|---|---|
+| Kỹ năng 1–10 | A | phím số |
+| Khu 0–10, OK (nhập số) | B (`ChangeMapService` đổi khu) hoặc A (`k <số>`) | |
+| Auto vào khu / Dừng vào khu, Khu tìm kiếm, Vào vị trí, Đổi khu | B | server thử lần lượt các khu trong danh sách đến khi vào được |
+| Nhập itemID → Dùng | B (`UseItem` món đầu tiên có id đó trong túi) | |
+| Hồi sinh tại chỗ / Về nhà (Die) | B | |
+| Capsule / Capsule Goback | B (mở menu capsule) | cần dò thêm |
+| Trở đến Boss / Dịch đến mục tiêu / Nhập CharID | B (dịch tới boss gần nhất / nhân vật theo id) | |
+| Bom Boss, Hồi Skill | B | Hồi skill: server có lệnh admin `hs`; mở cho manager thì **chỉ dùng cho nhân vật của manager trên máy chủ nhà** |
+| Nhập map ID | B (`m<id>` là lệnh admin) | như trên |
+| Nhập mã lệnh (chat) | A (lệnh mod) hoặc B (lệnh server) | |
+| Disconnect All | B (server ngắt phiên) hoặc đóng cửa sổ | |
+| Ngọc Rồng Đen (ảnh AutoMax) | — | server long chưa rõ có NRĐ, chưa làm |
+
+Cần chốt:
+1. Chọn B + A như trên, hay chỉ B (bỏ nút kỹ năng), hay chỉ A?
+2. Các thao tác kiểu admin (dịch map tùy ý, hồi skill, dịch tới boss) qua manager: có giới hạn cho tài khoản admin / máy chủ nhà không, hay ai chạy manager cũng dùng được? (Manager chạy trên máy người chơi thì bảng DB phải qua server, không cho ghi thẳng DB.)
+3. Chọn cửa sổ nhận lệnh: tích chọn trong danh sách ở tab 1, hay thêm danh sách tích riêng trong tab Control?

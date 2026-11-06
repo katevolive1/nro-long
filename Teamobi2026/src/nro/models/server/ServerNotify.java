@@ -49,7 +49,7 @@ public class ServerNotify extends Thread {
                     ThongBao(notifies.remove(0));
                 }
                 if (Util.canDoWithTime(this.lastTimeGK, 500000)) {
-                    ThongBao("Chào mừng bạn đã đến server Ngọc Rồng Online");
+                    ThongBao("FA thì hãy tìm người yêu, đừng chơi game nữa!");
                     this.lastTimeGK = System.currentTimeMillis();
                 }
             } catch (Exception ignored) {
