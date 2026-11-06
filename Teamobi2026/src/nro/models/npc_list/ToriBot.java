@@ -95,7 +95,7 @@ public class ToriBot extends Npc {
                                 "150.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 3 ->
-                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nCải trang hắc mị vĩnh viễn\nTặng 1 đệ tử mabu, 50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
+                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nCải trang hắc mị hsd 30 ngày\nTặng 1 đệ tử mabu, 50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
                                 "200.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                 }
@@ -332,8 +332,9 @@ public class ToriBot extends Npc {
         Item CaiTrang = ItemService.gI().createNewItem((short) 1557);
         CaiTrang.itemOptions.add(new ItemOption(50, 25));
         CaiTrang.itemOptions.add(new ItemOption(77, 25));
-        CaiTrang.itemOptions.add(new ItemOption(117, 25)); // HP
-        CaiTrang.itemOptions.add(new ItemOption(236, 25)); // Kháng tất cả
+        CaiTrang.itemOptions.add(new ItemOption(117, 25)); // Đẹp +#% SĐ (không phải HP)
+        CaiTrang.itemOptions.add(new ItemOption(5, nro.models.utils.Util.nextInt(25, 30))); // Sức đánh chí mạng 25-30%
+        CaiTrang.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item capsule = ItemService.gI().createNewItem((short) 1655, 5); // 5 viên capsule kích hoạt
         capsule.itemOptions.add(new ItemOption(30, 0));

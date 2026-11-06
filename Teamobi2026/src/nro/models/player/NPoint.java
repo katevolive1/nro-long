@@ -1294,9 +1294,7 @@ public class NPoint {
             }
         }
 
-        dame += (dame * tlSexyDame / 100L);
-
-        //Sức đánh đẹp
+        // Sức đánh đẹp (option 117/226), chỉ cộng 1 lần (trước 7/11/2026 bị cộng 2 lần)
         dame += (dame * tlSexyDame / 100L);
 
         // Xử lý giảm dame

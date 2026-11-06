@@ -232,3 +232,17 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
 
 ## Mảnh bông tai rơi ở Thánh địa (sửa 6/11/2026)
 - Quái map 156–159 (Tây/Đông/Bắc/Nam thánh địa, `MapService.isMapUpPorata`, `Mob` hàm rơi đồ): 10% Mảnh vỡ bông tai 933, không trúng thì 20% Mảnh hồn bông tai 934 (tối đa 500 mỗi người mỗi ngày, `ItemEvent.canDropManhVo`, đủ lượt thì mỗi lần lẽ ra rơi đều báo người chơi), không trúng thì 1/500 Đá xanh lam 935. Cổ Bồn La cộng +5/+3/+1. Ngoài ra tung riêng 30% rơi Mảnh vỡ bông tai cấp 3 (1820, không giới hạn mỗi ngày, mục 55). Số mảnh trong túi nằm ở option 31 (`InventoryService.getParam`), lấy bằng lệnh admin phải `i 934 1 31:<số>`. Lượt trong ngày không lưu DB (đăng nhập lại là reset). Chi tiết: THAY-DOI.md mục 53.
+
+## Option 117 "Đẹp +#% SĐ" và 236 "+#% May mắn" (dò 7/11/2026)
+
+- **117** (và 226): `NPoint.addOption` lấy `tlSexyDame` = param lớn nhất trong các món mặc, cộng thêm 117 từ danh hiệu; `EffectSkin.updateThoBulma` cứ 10 giây buff thêm cùng % sức đánh 11 giây cho người trong 120 px. Trong `NPoint.setDame` phần cộng `dame += dame * tlSexyDame / 100` từng được viết **2 lần liên tiếp** (có từ commit đầu), nên 117 = p% thực tế cho (1+p/100)², vd 25% → +56,25%. **Đã sửa 7/11/2026 còn 1 lần** (sức đánh các cải trang có 117 giảm về đúng mức ghi: Em xinh em đẹp 1514, CT Frieren 1567, quà VIP 4 của ToriBot).
+- **236** (May mắn): server **không có code nào dùng**, chỉ hiện chữ trên item (trong `NPoint` không có case 236; `ChuyenHoaTrangBi_*` chỉ bỏ qua nó khi chuyển hóa). Item shop đang có 236: 1713, 1682, 1698, 1711, 1631. Muốn có tác dụng phải tự định nghĩa (vd cộng tỉ lệ rơi/nâng cấp).
+- Hắc Mị Nương (1557): shop `item_shop` 875 (300 thỏi vàng) có 50/77/103/5 = 30 và 106:1, **không có 117/236**. Bản quà VIP 4 của `ToriBot` (dòng ~332) từ 7/11/2026 cho 50/77/117 = 25, chí mạng (5) 25–30 và hsd 30 ngày (93:30); trước đó là 50/77/117/236 = 25 vĩnh viễn (117 là Đẹp +SĐ, không phải HP). `tata2`, `hoang` giữ bản vĩnh viễn nhưng đã đổi 236 thành 5:30.
+
+## Sổ sưu tầm (thẻ rada): cách tính cấp, "xanh" và chỉ số (dò 7/11/2026)
+
+- Dữ liệu: bảng `radar` (`options` JSON `{id, param, activeCard}`), nhân vật `player.data_card` (`level`, `amount/max`, `used`). Thẻ mới dùng lần đầu: `level = -1`; đủ `max` (120) thẻ thì `level` 1, rồi 2 (tối đa, báo "Thẻ này đã đạt cấp tối đa"). Code: `UseItem.UseCard`, `Controller` gói 127 (bấm "Dùng"/bỏ dùng), `RadarService`, `NPoint` (dòng ~255).
+- **Chỉ 1 thẻ được "Dùng" (Used = 1) cùng lúc** ("Số thẻ sử dụng đã đạt tối đa"); `NPoint` chỉ cộng chỉ số của thẻ đang Dùng. Level 0 không Dùng được.
+- Client (`Info_RadaScr.addItemDetail`, Game1 RVA `0x3AED70`) tô **xanh** dòng option khi: level ≠ 0 và (`activeCard` = 0, hoặc thẻ đang Dùng và `level ≥ activeCard`). Nghĩa là **thẻ chưa Dùng chỉ xanh được các dòng `activeCard = 0`** (thường đúng 1 dòng), thẻ đang Dùng xanh theo kiểu cộng dồn.
+- Server (`NPoint`): áp option khi `active == level` (hoặc level -1 và `active == 0`), **không cộng dồn**, khác kiểu cộng dồn client hiển thị. Vd Thẻ Oozaru 1791 level 2 chỉ ra 77/103/94 (active 2), không có 14 (active 0) và 50 (active 1) dù client tô xanh cả 5 dòng.
+- Tình trạng DB 7/11/2026: `hoang` có 1791 level 2 nhưng **không Dùng** (đang Dùng 1204 Rồng Thần Namek level 1).

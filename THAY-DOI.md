@@ -491,3 +491,18 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Build: có (`boss/thien_su/ThienSuHuyDietReward.dropHuyDiet`). SQL: không. Client: không.
 - Nhánh 38% Thỏi vàng (457) trước rơi 1, giờ rơi ngẫu nhiên 5–20 (`Util.nextInt(5, 20)`). Thiên sứ Whis/Vados không rơi thỏi vàng nên không đổi. Đã cập nhật BOSS-ROI-DO.md mục 3b.
 - Kiểm tra: giết Beerus hoặc Champa nhiều lần, khi rơi thỏi vàng thì số lượng nằm trong 5–20.
+
+
+## 57. Cải trang Hắc Mị Nương trong quà VIP 4: hsd 30 ngày, May mắn → chí mạng 25–30% — 7/11/2026, máy nhà
+
+- Build: có (`npc_list/ToriBot.java`, bản quà VIP 4). SQL: có (2 nick test). Client: không.
+- Quà VIP 4 của ToriBot: Hắc Mị Nương (1557) từ vĩnh viễn thành **hạn 30 ngày** (option `93:30`, như quà VIP 1/2), option `236:25` (May mắn, server không dùng) đổi thành `5` (+% sức đánh chí mạng) ngẫu nhiên 25–30. Giữ `50:25`, `77:25`, `117:25` (117 là "Đẹp +SĐ", không phải HP; lỗi nhân đôi 117 xem CO-CHE.md). Đã sửa chữ trong menu VIP 4 ("hsd 30 ngày").
+- SQL đã chạy cho 2 nick `tata2` và `hoang` (mỗi nick 2 cải trang 1557 trong hành trang, vẫn vĩnh viễn, không thêm option 93), chạy lại ở máy khác nếu có 2 nick này, lúc không ai đang online: `UPDATE player SET items_bag = REPLACE(items_bag,'[236,25]','[5,30]') WHERE name IN ('tata2','hoang') AND items_bag LIKE '%[1557,%';`
+- Kiểm tra: nâng VIP 4 nick mới, cải trang có "Hạn sử dụng 30 ngày" và chí mạng 25–30%; nick `tata2`/`hoang` thấy dòng sức đánh chí mạng 30%, không còn May mắn.
+
+
+## 58. Sửa lỗi option 117 "Đẹp +#% SĐ" bị cộng 2 lần vào sức đánh — 7/11/2026, máy nhà
+
+- Build: có (`player/NPoint.setDame`). SQL: không. Client: không.
+- Trước: `dame += dame * tlSexyDame / 100` viết 2 lần, nên 117 = 25% cho +56,25% sức đánh. Giờ cộng 1 lần đúng p%. Ảnh hưởng mọi món có 117 (Em xinh em đẹp 1514, CT Frieren 1567, Hắc Mị Nương quà VIP 4) ; buff 11 giây cho người xung quanh không đổi (tính riêng). Người chơi đang mặc các cải trang này sẽ thấy sức đánh giảm.
+- Kiểm tra: mặc Hắc Mị Nương quà VIP 4 (50:25, 117:25), sức đánh so với lúc tháo ra tăng khoảng +56% (1,25 × 1,25), không còn khoảng +95% (1,25 × 1,5625).
