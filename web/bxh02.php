@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/config.php";
+require_once __DIR__ . "/view/layout.php";
 
 function getAvatar($gender) {
     return match((int)$gender){
@@ -90,238 +90,55 @@ top10($hpBXH);
 top10($kiBXH);
 
 function renderTable($title, $data, $icon){
-    echo "<div class='title'>$title</div>";
-    echo "<table class='table'>";
-    echo "<tr><th>TOP</th><th>Thông Tin Hiện Tại</th><th></th></tr>";
-
-    foreach($data as $i=>$p){
-        echo "<tr class='top$i'>
-        <td class='name'>".($i+1).". {$p['name']}</td>
-        <td class='value'>
-            <div class='value-box'>
-                <img src='$icon'>
-                ".formatK($p['value'])."
-            </div>
-        </td>
-        <td><div class='avatar'><img src='".getAvatar($p['gender'])."'></div></td>
-        </tr>";
-    }
-    echo "</table><br>";
+    ?>
+    <section class="card">
+        <h2><?= site_e($title) ?></h2>
+        <table class="rank-table">
+            <thead><tr><th scope="col">Hạng</th><th scope="col">Nhân vật</th><th scope="col" class="num">Số lượng</th></tr></thead>
+            <tbody>
+            <?php foreach ($data as $i => $p): ?>
+                <tr class="is-<?= $i + 1 ?>">
+                    <td><span class="rank-no"><?= $i + 1 ?></span></td>
+                    <td>
+                        <span class="rank-player">
+                            <img src="/<?= site_e(getAvatar($p['gender'])) ?>" alt="" width="38" height="38" loading="lazy">
+                            <strong><?= site_e($p['name']) ?></strong>
+                        </span>
+                    </td>
+                    <td class="num"><?= site_e(formatK($p['value'])) ?> <img src="/<?= site_e($icon) ?>" alt="" width="20" height="20" style="vertical-align: middle"></td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    </section>
+    <?php
 }
+
+$tab = ($_GET['tab'] ?? '') === 'cs' ? 'cs' : 'tn';
+site_head('Bảng xếp hạng tài nguyên', 'rank');
 ?>
-
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bảng Xếp Hạng Tài Nguyên</title>
-<link rel="icon" type="image/jpeg" href="img/icon.jpg">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<meta http-equiv="refresh" content="30">
-
-<style>
-/* --- PHẦN BACK GROUND ĐỒNG BỘ PANEL --- */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial;
-    background: linear-gradient(135deg, #bae6fd, #60a5fa);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-    font-size: 90%;
-}
-
-.wrapper {
-    max-width: 720px;
-    width: 100%;
-    background: linear-gradient(160deg, #4a4a4a, #2b2b2b 65%, #1b1b1b);
-    border-radius: 28px;
-    padding: 22px;
-    box-shadow: 0 25px 60px rgba(0,0,0,.5), inset 0 2px 8px rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white;
-    margin: 0 12px;
-}
-/* -------------------------------------- */
-
-* { box-sizing: border-box; }
-
-.topbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.home-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 26px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 800;
-    box-shadow: 0 8px 20px rgba(0,0,0,.4);
-    transition: .2s;
-}
-
-.home-btn:hover { transform: scale(1.08); }
-
-.tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.tabs button {
-    flex: 1;
-    padding: 15px;
-    font-weight: 800;
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 110%;
-    cursor: pointer;
-}
-
-.tabs button:nth-child(1) { background: #f43f5e; }
-.tabs button:nth-child(2) { background: #4caf50; }
-
-.bxh-box {
-    padding: 5px;
-    border-radius: 16px;
-    /* Giữ màu xanh nhẹ bao quanh card nếu muốn, hoặc để trong suốt */
-    background: rgba(30, 64, 175, 0.3); 
-}
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 15px;
-    color: #333; /* Chữ trong bảng vẫn để màu tối cho dễ đọc */
-}
-
-.title {
-    text-align: center;
-    font-weight: 800;
-    color: #fff;
-    padding: 8px;
-    border-radius: 10px;
-    margin: 8px 0;
-    background: #2196f3;
-    text-transform: uppercase;
-    font-size: 95%;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th, .table td {
-    padding: 8px;
-    text-align: center;
-}
-
-.table th {
-    background: #f1f5f9;
-    color: #475569;
-    font-size: 85%;
-    border-bottom: 2px solid #e2e8f0;
-}
-
-.value-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 700;
-}
-
-.value-box img {
-    height: 20px;
-    width: auto;
-    object-fit: contain;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: auto;
-    border: 1px solid #ddd;
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.name { font-weight: 700; }
-
-/* Styles cho Top 1, 2, 3 */
-.top0 td { background: #fff8e1; }
-.top1 td { background: #f1f5f9; }
-.top2 td { background: #fff5f5; }
-
-.tab { display: none; }
-.tab.active { display: block; }
-
-@media(min-width:769px){
-    body { font-size: 110%; }
-}
-</style>
-
-<script>
-function openTab(id){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-}
-</script>
-</head>
-
-<body>
-
-<div class="wrapper">
-
-    <div class="topbar">
-        <a href="admin/panel.php" class="home-btn">
-            <i class="fa-solid fa-house"></i> Trang Chủ
-        </a>
+<div class="wrap">
+    <div class="page-head">
+        <h1>Bảng xếp hạng tài nguyên</h1>
+        <p>Top 10 người chơi theo từng loại. <a href="/bxh01.php">Về bảng xếp hạng chính</a></p>
     </div>
-
-    <div class="tabs">
-        <button onclick="openTab('tn')">💰 Tài Nguyên</button>
-        <button onclick="openTab('cs')">⚡ Chỉ Số</button>
+    <nav class="tabs" aria-label="Loại bảng xếp hạng">
+        <a href="?tab=tn"<?= $tab === 'tn' ? ' aria-current="page"' : '' ?>>Tài nguyên</a>
+        <a href="?tab=cs"<?= $tab === 'cs' ? ' aria-current="page"' : '' ?>>Chỉ số</a>
+    </nav>
+    <div class="rank-grid">
+        <?php
+        if ($tab === 'tn') {
+            renderTable('Vàng Nổi', $vangTuoi, 'img/4028.png');
+            renderTable('Vàng Chìm', $vangChim, 'img/930.png');
+            renderTable('Ngọc Xanh', $ngocXanh, 'img/932.png');
+            renderTable('Hồng Ngọc', $hongNgoc, 'img/7743.png');
+        } else {
+            renderTable('Sức Đánh', $sdBXH, 'img/2754.png');
+            renderTable('3 Sao', $hpBXH, 'img/421.png');
+            renderTable('7 Sao', $kiBXH, 'img/425.png');
+        }
+        ?>
     </div>
-
-    <div class="bxh-box">
-        <div class="card">
-            <div id="tn" class="tab active">
-                <?php
-                renderTable("Vàng Nổi",$vangTuoi,"img/4028.png");
-                renderTable("Vàng Chìm",$vangChim,"img/930.png");
-                renderTable("Ngọc Xanh",$ngocXanh,"img/932.png");
-                renderTable("Hồng Ngọc",$hongNgoc,"img/7743.png");
-                ?>
-            </div>
-
-            <div id="cs" class="tab">
-                <?php
-                renderTable("Sức Đánh",$sdBXH,"img/2754.png");
-                renderTable("3 Sao",$hpBXH,"img/421.png");
-                renderTable("7 Sao",$kiBXH,"img/425.png");
-                ?>
-            </div>
-        </div>
-    </div>
-
 </div>
-
-</body>
-</html>
+<?php site_foot(); ?>

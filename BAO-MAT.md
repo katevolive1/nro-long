@@ -1,6 +1,6 @@
 # Bảo mật và chống DDoS (dò 6/11/2026)
 
-Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Lúc dò server, MySQL và Apache trên máy đều tắt nên chưa xem được tài khoản trong `mysql.user`, cổng đang nghe, hay rule firewall/router thật.
+Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Chưa xem được cổng đang nghe khi server chạy thật, rule firewall và router. Cách sửa server từng bước: [KE-HOACH-SUA-SERVER-BAO-MAT.md](KE-HOACH-SUA-SERVER-BAO-MAT.md).
 
 **Kết luận:** không có lớp chống DDoS nào. Có một số giới hạn cơ bản, trong đó giới hạn theo IP đang có lỗi. Client và manager không chống được DDoS vì tấn công đánh vào server.
 
@@ -20,6 +20,7 @@ Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Lú
 
 ## Lỗi chống DDoS và làm sập server
 
+0. **Một kết nối chưa đăng nhập có thể làm đầy RAM (nặng nhất).** Gói `-74` type 2 chỉ vài byte, `DataGame.sendRes` đọc cả `data/res/x<zoom>` (1.413 file, 13–28 MB) vào heap rồi xếp hàng gửi, không giới hạn số lần. Client gửi lặp mà không đọc socket thì khoảng 20 lần là đầy `-Xmx512m`.
 1. **Không có lớp chịu DDoS lưu lượng.** Không có proxy, scrubbing hay rate limit ở mạng. Game chạy TCP thô cổng `14446` qua tên DDNS `ngocrongprivate.kozow.com`, lộ thẳng IP máy chủ. Nghẽn đường truyền thì code không cứu được.
 2. **Đếm kết nối theo IP bị trừ 2 lần** khi client tự ngắt: `Collector.run` → `sessionDisconnect` → `Client.kickSession` → `remove` → `ServerManager.disconnect` (trừ lần 1), rồi `sessionDisconnect` gọi `disconnect` lần nữa (`ServerManager.java:234`). Đóng 1 mở 2 lặp lại là vượt giới hạn 5 kết nối.
 3. **Không có trần tổng số kết nối.** `maxplayer` chỉ xét lúc đăng nhập. Mỗi kết nối 2 thread (`Session`), thêm buffer 1 MB (yêu cầu với OS). Botnet nhiều IP vượt được giới hạn theo IP.
@@ -33,14 +34,15 @@ Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Lú
 
 1. **Mật khẩu lưu chữ thường** trong `account.password`. Lộ DB là lộ hết. Game so `password = ?` trực tiếp, đổi sang bcrypt phải sửa cả `MrBlue.login`.
 2. **Mật khẩu truyền đi coi như chữ thường.** `Network.randomKey` không ai bật nên khóa XOR luôn là `"NRO"`, và khóa còn được gửi lên đường truyền. Không có TLS, không xác thực server. Web long chạy HTTP, không HTTPS.
-3. **Tài khoản admin yếu nằm trong git.** `Teamobi2026/team10_long.sql` (có theo dõi) có 3 tài khoản đều `is_admin=1`, mật khẩu dài 1 ký tự. Repo private nhưng DB thật mà giữ các mật khẩu này thì đoán ra ngay.
+3. **Tài khoản admin yếu nằm trong git.** `Teamobi2026/team10_long.sql` (có theo dõi) có 3 tài khoản đều `is_admin=1`, mật khẩu dài 1 ký tự. DB trên máy này có 5/6 tài khoản là admin: 1 mật khẩu 1 ký tự, 4 mật khẩu 6 ký tự. Repo private nhưng mật khẩu ngắn thế này đoán ra rất nhanh.
 4. **Đăng nhập web không giới hạn số lần thử** (`dang-nhap.php`), không dùng `AntiLogin` của game. Dò mật khẩu qua đây không bị chặn.
 5. **Vượt được `AntiLogin` của game**: `al.reset()` chạy khi đăng nhập đúng bất kỳ tài khoản nào, nên kẻ tấn công xen kẽ tài khoản của mình giữa các lần đoán. Giới hạn tính theo IP, nên nhiều IP cũng vượt được.
 6. **Captcha đổi mật khẩu dùng lại được** (`doimatkhau.php` không xóa `$_SESSION['captcha']` sau khi kiểm tra), và câu báo lộ tài khoản có tồn tại hay không.
 7. **Giới hạn đăng ký theo session** (`dangky.php`): bỏ cookie là hết giới hạn; `token`/`fp` chỉ kiểm tra không rỗng; không captcha. Mỗi tài khoản mới có sẵn `vnd` 1.000.000 (giá trị test).
-8. **MySQL `root` không mật khẩu** (`Config.properties`, `web/config.php`), `bind-address` trong `C:\xampp\mysql\bin\my.ini` đang tắt nên nghe mọi card mạng. Web dùng luôn `root`. Chưa kiểm tra được `root` có được đăng nhập từ xa không.
+8. **MySQL `root` không mật khẩu** (`Config.properties`, `web/config.php`), `bind-address` trong `C:\xampp\mysql\bin\my.ini` đang tắt nên nghe mọi card mạng. Web dùng luôn `root`. Máy này `root` chỉ có `localhost`, `127.0.0.1`, `::1` nên từ xa không vào bằng `root` được; rủi ro còn lại là lỗi ở web hoặc phần mềm trên máy chủ dùng được toàn quyền DB.
 9. **Trang admin thiếu CSRF** ở `account.php`, `item.php`, `itemshop.php`, `map.php`, `player.php`… (chỉ `ajax_update_shop`, `giftcode`, `ngoc`, `vang` có). Trình duyệt mới mặc định cookie `SameSite=Lax` nên giảm bớt rủi ro. `web/get_cols.php` công khai danh sách cột của `history_transaction`.
-10. **Web phần forum**: tiêu đề và tên có `htmlspecialchars`, chưa rà hết các trường khác.
+10. **Đã sửa 6/11/2026 khi làm lại giao diện web:** bỏ câu khẳng định sai "Mã hóa chuẩn quân đội, HTTPS SSL 256-bit, Anti DDoS, Firewall" ở `tai-khoan.php`; bỏ giấy phép Bộ TT&TT và bản quyền Gomobi ở chân trang; bỏ script tải từ `ngocrongonline.com`, `pay.teamobi.com`, Google Analytics của site khác, ảnh `my.teamobi.com`; escape tên nhân vật ở `bxh01.php`/`bxh02.php` (trước đó in thẳng, có nguy cơ XSS); các trang công khai đều escape qua `site_e`. Trang admin giữ nguyên, chưa rà XSS.
+11. **`web/counter.php` nhân đôi số lượt truy cập** (`* 2`). Web mới không hiển thị số này.
 
 ## Gian lận game (server tin client)
 
@@ -66,8 +68,8 @@ Không có bảo vệ thật:
 
 ## Thứ tự nên làm
 
-1. **Ngay**: đổi mật khẩu 3 tài khoản admin; đặt mật khẩu MySQL, tạo user riêng cho web/game, bật `bind-address=127.0.0.1`; không mở `3306` ra router. Xóa mật khẩu đó khỏi file SQL trong git (lịch sử git vẫn còn).
-2. **Sửa lỗi code nhỏ**: trừ đếm 2 lần; rò session khi từ chối (kiểm tra trước khi tạo session hoặc `putSession` trước); trần tổng kết nối; trần `Sender.messages`; giới hạn gói/giây rồi đá; chặn gói nặng khi chưa đăng nhập; tăng `database.max` (khoảng 10–20).
+1. **Ngay**: đổi mật khẩu các tài khoản admin; đặt mật khẩu MySQL, tạo user riêng cho web/game, bật `bind-address=127.0.0.1`; không mở `3306` ra router. Xóa mật khẩu đó khỏi file SQL trong git (lịch sử git vẫn còn).
+2. **Sửa lỗi server**: theo các đợt trong [KE-HOACH-SUA-SERVER-BAO-MAT.md](KE-HOACH-SUA-SERVER-BAO-MAT.md).
 3. **Web**: giới hạn đăng nhập theo tài khoản và IP, xóa captcha sau khi dùng, đăng ký giới hạn theo IP, thêm CSRF cho admin, tắt `Indexes`, xóa `get_cols.php`, khóa `/admin` theo IP, bật HTTPS.
 4. **Mật khẩu**: chuyển bcrypt (web và `MrBlue.login`), dùng khóa ngẫu nhiên `randomKey(true)` chỉ che được người xem lén, muốn chắc phải có TLS/trao đổi khóa trong client.
 5. **Chống DDoS thật**: chạy trên VPS có anti-DDoS hoặc proxy TCP chuyên cho game, không để lộ IP thật. Web đặt sau Cloudflare; game TCP thô không đi qua được gói Cloudflare miễn phí. Thêm firewall/`netsh` chặn IP theo log nếu cần.

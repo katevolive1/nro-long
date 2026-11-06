@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/config.php";
+require_once __DIR__ . "/view/layout.php";
 
 function getAvatar($gender) {
     return match((int)$gender){
@@ -78,255 +78,71 @@ while($row = $res->fetch_assoc()){
 usort($topNap, fn($a,$b)=>$b['tongnap'] <=> $a['tongnap']);
 $topNap = array_slice($topNap,0,20);
 ?>
+<?php
+$tab = in_array($_GET['tab'] ?? '', ['sm', 'task', 'nap'], true) ? $_GET['tab'] : 'sm';
+$tabs = ['sm' => 'Sức Mạnh', 'task' => 'Nhiệm Vụ', 'nap' => 'Tiết Kiệm'];
 
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bảng Xếp Hạng</title>
-<link rel="icon" type="image/jpg" href="img/icon.jpg">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-/* --- PHẦN SỬA ĐỂ GIỐNG PANEL --- */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Arial;
-    /* Background gradient xanh từ panel */
-    background: linear-gradient(135deg, #bae6fd, #60a5fa);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 20px 0;
-    font-size: 90%;
+function bxh_player(array $p): void
+{
+    ?>
+    <span class="rank-player">
+        <img src="/<?= site_e(getAvatar($p['gender'])) ?>" alt="" width="38" height="38" loading="lazy">
+        <strong><?= site_e($p['name']) ?></strong>
+    </span>
+    <?php
 }
 
-.wrapper {
-    max-width: 720px;
-    width: 100%;
-    /* Khung tối bo góc từ panel */
-    background: linear-gradient(160deg, #4a4a4a, #2b2b2b 65%, #1b1b1b);
-    border-radius: 28px;
-    padding: 22px;
-    box-shadow: 0 25px 60px rgba(0,0,0,.5), inset 0 2px 8px rgba(255,255,255,.1);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: white; /* Đổi màu chữ mặc định trong khung thành trắng */
-    margin: 0 12px;
-}
-/* ---------------------------------- */
-
-/* --- TẤT CẢ PHẦN CÒN LẠI GIỮ NGUYÊN --- */
-* { box-sizing: border-box; }
-
-.topbar { text-align: center; margin-bottom: 20px; }
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 22px;
-    border-radius: 30px;
-    background: linear-gradient(135deg,#3b82f6,#2563eb);
-    color: #fff;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 110%;
-    box-shadow: 0 6px 15px rgba(0,0,0,.3);
-    transition: .2s;
-}
-
-.back-btn:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 10px 25px rgba(0,0,0,.4);
-}
-
-@media(min-width:769px){
-    body{font-size:115%;}
-}
-
-.tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.tabs button {
-    flex: 1;
-    padding: 15px;
-    font-weight: 700;
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 125%;
-    cursor: pointer;
-    transition: opacity 0.2s;
-}
-
-.tabs button:hover { opacity: 0.9; }
-
-/* Màu sắc các nút Tab */
-.btn-sm{background:#f43f5e !important;}
-.btn-task{background:#2196f3 !important;}
-.btn-nap{background:#4caf50 !important;}
-
-.bxh-box {
-    padding: 5px;
-    border-radius: 16px;
-    transition: background 0.3s ease;
-}
-
-/* Màu khung đồng bộ với Tab đang active */
-.bg-sm{background:#f43f5e;}
-.bg-task{background:#2196f3;}
-.bg-nap{background:#4caf50;}
-
-.card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 10px;
-    color: #333; /* Giữ màu chữ tối cho nội dung bảng */
-}
-
-.title {
-    text-align: center;
-    font-weight: 800;
-    color: #fff;
-    padding: 8px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-}
-
-#sm .title{background:#f43f5e;}
-#task .title{background:#2196f3;}
-#nap .title{background:#4caf50;}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table th, .table td {
-    padding: 8px;
-    text-align: center;
-}
-
-.table th {
-    background: #f8fafc;
-    border-bottom: 2px solid #edf2f7;
-    color: #333;
-}
-
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: auto;
-}
-
-.avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-.power span{display:block; font-size: 0.9em;}
-.name{font-weight:700;}
-
-.top0 td{background:#fff8e1;}
-.top1 td{background:#f1f5f9;}
-.top2 td{background:#fff5f5;}
-
-.tab { display: none; }
-.tab.active { display: block; }
-</style>
-
-<script>
-function openTab(id, colorClass){
-    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    
-    // Đổi màu khung bxh-box
-    const box = document.querySelector('.bxh-box');
-    box.className = 'bxh-box ' + colorClass;
-}
-document.addEventListener('DOMContentLoaded', () => {
-    const tab = new URLSearchParams(location.search).get('tab');
-    if (tab === 'task') openTab('task', 'bg-task');
-    if (tab === 'nap') openTab('nap', 'bg-nap');
-});
-</script>
-</head>
-
-<body>
-
-<div class="wrapper">
-
-<div class="topbar">
-    <a href="/forum.php" class="back-btn">
-        <i class="fa-solid fa-house"></i> Trang Chủ
-    </a>
+site_head('Bảng xếp hạng', 'rank', 'Bảng xếp hạng sức mạnh, nhiệm vụ và tiết kiệm của ' . SITE_NAME . '.');
+?>
+<div class="wrap wrap--narrow">
+    <div class="page-head">
+        <h1>Bảng xếp hạng</h1>
+        <p>Top 20 người chơi mạnh nhất máy chủ.</p>
+    </div>
+    <nav class="tabs" aria-label="Loại bảng xếp hạng">
+        <?php foreach ($tabs as $key => $label): ?>
+            <a href="?tab=<?= $key ?>"<?= $key === $tab ? ' aria-current="page"' : '' ?>><?= $label ?></a>
+        <?php endforeach; ?>
+    </nav>
+    <div class="card">
+        <table class="rank-table">
+            <?php if ($tab === 'sm'): ?>
+                <thead><tr><th scope="col">Hạng</th><th scope="col">Nhân vật</th><th scope="col" class="num">Tổng sức mạnh</th></tr></thead>
+                <tbody>
+                <?php foreach ($topSM as $i => $p): ?>
+                    <tr class="is-<?= $i + 1 ?>">
+                        <td><span class="rank-no"><?= $i + 1 ?></span></td>
+                        <td><?php bxh_player($p); ?></td>
+                        <td class="num"><?= site_e(formatK($p['total'])) ?>
+                            <span class="sub">Sư <?= site_e(formatK($p['sm'])) ?> · Đệ <?= site_e(formatK($p['pet'])) ?></span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php elseif ($tab === 'task'): ?>
+                <thead><tr><th scope="col">Hạng</th><th scope="col">Nhân vật</th><th scope="col" class="num">Nhiệm vụ</th></tr></thead>
+                <tbody>
+                <?php foreach ($topTask as $i => $p): ?>
+                    <tr class="is-<?= $i + 1 ?>">
+                        <td><span class="rank-no"><?= $i + 1 ?></span></td>
+                        <td><?php bxh_player($p); ?></td>
+                        <td class="num"><?= (int)$p['main'] ?>-<?= (int)$p['sub'] ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php else: ?>
+                <thead><tr><th scope="col">Hạng</th><th scope="col">Nhân vật</th><th scope="col" class="num">Tổng</th></tr></thead>
+                <tbody>
+                <?php foreach ($topNap as $i => $p): ?>
+                    <tr class="is-<?= $i + 1 ?>">
+                        <td><span class="rank-no"><?= $i + 1 ?></span></td>
+                        <td><?php bxh_player($p); ?></td>
+                        <td class="num"><?= number_format($p['tongnap'] / 10) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            <?php endif; ?>
+        </table>
+    </div>
 </div>
-
-<div class="tabs">
-    <button class="btn-sm" onclick="openTab('sm', 'bg-sm')">Sức Mạnh</button>
-    <button class="btn-task" onclick="openTab('task', 'bg-task')">Nhiệm Vụ</button>
-    <button class="btn-nap" onclick="openTab('nap', 'bg-nap')">Tiết Kiệm</button>
-</div>
-
-<div class="bxh-box bg-sm"> <div class="card">
-
-<div id="sm" class="tab active">
-<div class="title">🏆 BXH Sức Mạnh</div>
-<table class="table">
-<tr><th>TOP</th><th>Tổng</th><th>Chi tiết</th><th></th></tr>
-<?php foreach ($topSM as $i=>$p): ?>
-<tr class="<?= 'top'.$i ?>">
-<td class="name"><?= ($i+1)."." ?> <?= $p['name'] ?></td>
-<td><?= formatK($p['total']) ?></td>
-<td class="power">
-<span>Sư: <?= formatK($p['sm']) ?></span>
-<span>Đệ: <?= formatK($p['pet']) ?></span>
-</td>
-<td><div class="avatar"><img src="<?= getAvatar($p['gender']) ?>"></div></td>
-</tr>
-<?php endforeach; ?>
-</table>
-</div>
-
-<div id="task" class="tab">
-<div class="title">📜 BXH Nhiệm Vụ</div>
-<table class="table">
-<tr><th>TOP</th><th>Nhiệm vụ</th><th></th></tr>
-<?php foreach ($topTask as $i=>$p): ?>
-<tr class="<?= 'top'.$i ?>">
-<td class="name"><?= ($i+1)."." ?> <?= $p['name'] ?></td>
-<td><?= $p['main'] ?>-<?= $p['sub'] ?></td>
-<td><div class="avatar"><img src="<?= getAvatar($p['gender']) ?>"></div></td>
-</tr>
-<?php endforeach; ?>
-</table>
-</div>
-
-<div id="nap" class="tab">
-<div class="title">💰 BXH Tiết Kiệm</div>
-<table class="table">
-<tr><th>TOP</th><th>Tổng</th><th></th></tr>
-<?php foreach ($topNap as $i=>$p): ?>
-<tr class="<?= 'top'.$i ?>">
-<td class="name"><?= ($i+1)."." ?> <?= $p['name'] ?></td>
-<td><?= number_format($p['tongnap'] / 10) ?></td>
-<td><div class="avatar"><img src="<?= getAvatar($p['gender']) ?>"></div></td>
-</tr>
-<?php endforeach; ?>
-</table>
-</div>
-
-</div>
-</div>
-
-</div>
-
-</body>
-</html>
+<?php site_foot(); ?>
