@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once __DIR__ . '/../connect.php';
 
 const SITE_NAME = 'Chú Bé Rồng Online';
-const SITE_ASSET_VER = '1';
+const SITE_ASSET_VER = '2';
 
 function site_e($text): string
 {
@@ -46,6 +46,7 @@ function site_head(string $title, string $active = '', string $description = '')
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= site_e($title) ?> | <?= SITE_NAME ?></title>
     <meta name="description" content="<?= site_e($description) ?>">
+    <meta name="author" content="hnam">
     <meta name="theme-color" content="#13294b">
     <link rel="icon" href="/favicon.ico?v=3" type="image/x-icon">
     <link rel="icon" type="image/png" href="/favicon-32x32.png?v=3" sizes="32x32">
@@ -96,6 +97,7 @@ function site_foot(): void
         <div>
             <strong><?= SITE_NAME ?></strong>
             <p>Dành cho người chơi trên 18 tuổi. Chơi quá 180 phút mỗi ngày sẽ hại sức khỏe.</p>
+            <p class="site-footer__credit">Phát triển bởi @hnam</p>
         </div>
         <ul>
             <li><a href="<?= site_e(site_client_url()) ?>" download>Tải bản PC</a></li>

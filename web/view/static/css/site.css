@@ -108,6 +108,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .site-footer { margin-top: 64px; padding: 30px 0; background: var(--ink); color: #dfe7f3; font-size: 14px; }
 .site-footer strong { font: 800 20px var(--font-title); color: #fff; }
 .site-footer p { margin: 4px 0 0; }
+.site-footer .site-footer__credit { color: var(--sun); font-weight: 700; }
 .site-footer__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; }
 .site-footer ul { display: flex; flex-wrap: wrap; gap: 6px 20px; }
 .site-footer a { color: #fff; }
