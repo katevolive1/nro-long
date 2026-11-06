@@ -407,3 +407,23 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Trước đây `PlayerService.dailyLogin` lấy mốc hết mùa 5/7 nên từ 6/7 ngày nào cũng xóa lượt mua, cấp VIP và `timevip`. Giờ mùa khai báo một chỗ trong `ToriBot` (`VIP_SEASON_ID` = 1, mở 1/11/2026 đến hết 30/4/2027, ngoài khoảng đó đóng). `data_vip` thêm phần tử thứ 9 là mã mùa; nạp nhân vật thấy khác mã mùa thì reset lượt mua và cấp VIP, giữ `timevip`.
 - VIP không cộng kinh nghiệm nữa (bỏ +3 của `timevip` và của cột `account.vip` trong `NPoint`), bỏ dòng "X3 Kinh nghiệm" trong menu Tori Bot và thông báo lúc đăng nhập.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
+
+## 49. Boss 12h giảm rơi đồ Thần Linh và đồ shop, Mabu rơi Bình 1795, đồ shop boss tối đa 8 sao — 6/11/2026, máy nhà
+
+- Build: có. SQL: không. Client: không.
+- Tỉ lệ nằm ở 1 chỗ, đầu `Teamobi2026/src/nro/models/boss/Boss.java` (số tính trên 10000):
+
+| Hằng số | Giá trị | Nghĩa | Trước |
+|---|---|---|---|
+| `TL_BOSS_12H` | 5 = 0,05% | Đồ Thần Linh, 8 boss 12h | 0,15% |
+| `TL_MABU_12H` | 30 = 0,3% | Đồ Thần Linh, riêng Mabu | 0,15% |
+| `SHOP_BOSS_12H` | 15 = 0,15% | Đồ shop, cả 9 boss 12h | 1% |
+| `BINH_KILIS_MABU_12H` | 500 = 5% | Bình 1795, riêng Mabu | không có |
+
+- `Boss.randSaoDoShop` dùng chung cho 14 boss rơi đồ shop (9 boss 12h, Baby, Black Goku, Cooler, Cumber, Siêu bọ hung): 1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%. Đã mô phỏng 20 triệu lần, ra đúng các tỉ lệ này.
+- `SHOP_BOSS_12H`: yêu cầu ghi "5%" rồi dòng dưới "0,15%". Đang hiểu là 0,15% vì đồ shop gốc 1% và yêu cầu là giảm. Muốn 5% thì đổi thành `500`.
+- Kiểm tra sau khi build và bật lại server (tỉ lệ thấp nên muốn thấy nhanh thì tạm tăng hằng số, nhớ trả về):
+  1. Đánh Mabu 12h nhiều lần: thỉnh thoảng rơi Bình hút năng lượng, nhặt được, xem chi tiết có dòng Kilis.
+  2. Đánh Goku, Cadic...: không bao giờ rơi Bình.
+  3. Đồ shop rơi từ boss: xem số sao trong chi tiết, có thể tới 7–8 sao. Pha lê hóa vẫn lên được tối đa 9 sao (`MAX_STAR_ITEM`).
+  4. Tăng `SHOP_BOSS_12H` lên `10000` để test thì mọi boss 12h đều rơi đồ shop, nhớ trả về `15`.

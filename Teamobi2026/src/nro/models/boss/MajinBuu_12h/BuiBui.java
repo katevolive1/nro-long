@@ -39,7 +39,7 @@ public class BuiBui extends Boss {
         int drop = 190; // 100% rơi item ID 190
         int quantity = Util.nextInt(20000, 30000);
         // Tạo itemMap cho item ID 190
-        if (Util.isTrue(15, 10000)) { // đồ Thần Linh 0,15%
+        if (Util.isTrue(TL_BOSS_12H, 10000)) { // đồ Thần Linh
         ItemMap it = ItemService.gI().randDoTLBoss(this.zone, 1, x, y, plKill.id);
         if (it != null) {
         Service.gI().dropItemMap(zone, it);
@@ -48,8 +48,7 @@ public class BuiBui extends Boss {
         ItemMap itemMap = new ItemMap(this.zone, drop, quantity, x, y, plKill.id);
         Item item = ItemService.gI().createNewItem((short) drop);
         Service.gI().dropItemMap(zone, itemMap);
-        // 30% xác suất để rơi đồ
-        if (Util.isTrue(1, 100)) {
+        if (Util.isTrue(SHOP_BOSS_12H, 10000)) {
             int group = Util.nextInt(1, 100) <= 70 ? 0 : 1;  // 70% chọn Áo Quần Giày (group = 0), 30% chọn Găng Rada (group = 1)
 
             // Các vật phẩm rơi từ nhóm Áo Quần Giày và Găng Rada
@@ -65,16 +64,8 @@ public class BuiBui extends Boss {
             List<Item.ItemOption> optionalOps = ItemService.gI().getListOptionItemShop((short) dropOptional);
             optionalOps.forEach(option -> option.param = (int) (option.param * Util.nextInt(100, 115) / 100.0));
             optionalItemMap.options.addAll(optionalOps);
-            // Thêm chỉ số sao pha lê (80% từ 1-3 sao, 17% từ 4-5 sao, 3% sao 6)
-            int rand = Util.nextInt(1, 100);
-            int value = 0;
-            if (rand <= 80) {
-                value = Util.nextInt(1, 3); // 80% xác suất: sao từ 1 đến 3
-            } else if (rand <= 97) {
-                value = Util.nextInt(4, 5); // 17% xác suất: sao từ 4 đến 5
-            } else {
-                value = 6; // 3% xác suất: sao 6
-            }
+            // Sao pha lê: xem Boss.randSaoDoShop
+            int value = randSaoDoShop();
             optionalItemMap.options.add(new Item.ItemOption(107, value));
             // Drop vật phẩm tùy chọn xuống bản đồ
             Service.gI().dropItemMap(zone, optionalItemMap);

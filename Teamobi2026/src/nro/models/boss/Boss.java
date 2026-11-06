@@ -685,6 +685,30 @@ public class Boss extends Player implements IBoss {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
     }
 
+    // Tỉ lệ rơi của boss Mabu 12h, tính trên 10000 (BOSS-ROI-DO.md)
+    protected static final int TL_BOSS_12H = 5; // đồ Thần Linh 0,05%
+    protected static final int TL_MABU_12H = 30; // đồ Thần Linh, riêng Mabu 0,3%
+    protected static final int SHOP_BOSS_12H = 500; // đồ shop 5%
+    protected static final int BINH_KILIS_MABU_12H = 500; // Bình hút năng lượng 1795, riêng Mabu 5%
+
+    // Số sao pha lê của đồ shop boss rơi: 8 sao 0,01%, 7 sao 0,5%, 6 sao 3%, 4-5 sao 17%, còn lại 1-3 sao
+    protected static int randSaoDoShop() {
+        int rand = Util.nextInt(1, 10000);
+        if (rand <= 1) {
+            return 8;
+        }
+        if (rand <= 51) {
+            return 7;
+        }
+        if (rand <= 351) {
+            return 6;
+        }
+        if (rand <= 2051) {
+            return Util.nextInt(4, 5);
+        }
+        return Util.nextInt(1, 3);
+    }
+
     // Boss lớn: 10% rơi 1 viên Ngọc rồng, 70% 2 sao (15), 30% 3 sao (16)
     protected void dropNgocRong23(Player plKill, int x, int y) {
         if (Util.isTrue(10, 100)) {

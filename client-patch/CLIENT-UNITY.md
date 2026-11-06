@@ -214,3 +214,12 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 ## Số sát thương / hồi máu bay lên có dấu chấm (31/10/2026, `patch-so-sat-thuong.ps1`, chỉ Game1)
 - Chữ bay lên dùng `GameScr.startFlyText(string, x, y, dx, dy, color)` (Game1 `0x381E00`), 24 chỗ gọi (`Char.doInjure` `0x2B5FA0`/`0x2B60B0`, `Char.update`, `Controller.onMessage`, `Controller.messageSubCommand`, `Hint.update`). Chuỗi số HP/sát thương = `"-"`/`"+"` + `System.Double.ToString(&so)` (`0x8B95F0`, `rcx` = con trỏ tới `double`, `rdx` = 0) rồi `String.Concat`; vài chỗ khác dùng `Int32.ToString` (`0x8C99F0`, chưa sửa).
 - Patch: cave `0x59C120`–`0x59C12A` (sau cave của `patch-ty-10`, thân `Game2.ModFunc.UpdateKey`, đã quét không ai gọi vào): `movsd xmm0,[rcx]; xor edx,edx; jmp NinjaUtil.getMoneysPower (0x3F50A0)`. 11 lệnh `call Double.ToString` đổi đích sang cave: `0x2B5EF5`, `0x2D0103`, `0x2D021E`, `0x2FFF75`, `0x30332A`, `0x3033BA`, `0x303DEE`, `0x303E89`, `0x316BB6`, `0x316E88`, `0x317106`. Sao lưu `*.truoc-so-sat-thuong`. Đã thêm vào `cap-nhat-client.bat`. Thân `Game2.ModFunc.UpdateKey` còn trống: `0x59C130`–`0x59C3A0`.
+
+## Tàn sát và tab BOSS (dò 6/11/2026, chưa patch)
+Kế hoạch Né boss / Tàn sát boss: [KE-HOACH-NE-TAN-SAT-BOSS.md](../KE-HOACH-NE-TAN-SAT-BOSS.md), bảng hàm đã dò nằm trong đó.
+- `ModFunc.OpenMenu` `0x3DBA70`: tab gồm Chuyển Tab, Hướng Dẫn Xài Mod, Luyện tập, Nhặt đồ, Đệ tử, BOSS, Khác. Nội dung tab tạo trong `ModFunc.perform` `0x3E9C20` (`Command..ctor` `0x309060`, `MyVector.addElement` `0x1BEA50`). Focus BOSS: cờ `+0C1h`, lệnh `0x34`, ở `0x3EB014`.
+- Game1 `PickMob` static: `tanSat +10h`, `tsPlayer +11h`, `neSieuQuai +12h`, `vuotDiaHinh +13h`, `telePem +14h`, `isGoBack +15h`, `mapGoback +18h`. `PickMobController`: `Update` `0x4CD700`, `Move` `0x4CD430`, `GetMobTanSat` `0x4CC360`, `GetCharTanSat` `0x4CBF40`, `GetMobNext` `0x4CC1B0`, `FilterMobTanSat` `0x4CBDF0`, `IsMobTanSat` `0x4CD0E0`, `IsCharTanSat` `0x4CCE50`, `IsMobNext` `0x4CCEB0`, `GetSkillAttack2` `0x4CC6B0`. Trong `dump.cs` dòng `// RVA` nằm **trên** tên hàm, lấy RVA theo tên thì tra `script.json` (`ScriptMethod`), đừng ghép dòng bằng `paste` kẻo lệch 1 hàm.
+- Trong `Update`: `0x4CDE36` kiểm tra `tanSat`, `0x4CDE5F` kiểm tra `tsPlayer`, `0x4CE046` `Char.isMeCanAttackOtherPlayer`, `0x4CE175` `GameScr.doSelectSkill`.
+- Đổi khu: `Service.requestChangeZone` `0x4908E0`, server chặn 5 giây/lần.
+- Chạy `build.bat` từ `cmd /c` phải ghi `.\build.bat`, ghi `build.bat` trơn bị báo không nhận ra lệnh.
+

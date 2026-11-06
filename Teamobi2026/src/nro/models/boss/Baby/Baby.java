@@ -72,16 +72,8 @@ public class Baby extends Boss {
             List<Item.ItemOption> optionalOps = ItemService.gI().getListOptionItemShop((short) dropOptional);
             optionalOps.forEach(option -> option.param = (int) (option.param * Util.nextInt(100, 115) / 100.0));
             optionalItemMap.options.addAll(optionalOps);
-            // Thêm chỉ số sao pha lê (80% từ 1-3 sao, 17% từ 4-5 sao, 3% sao 6)
-            int rand = Util.nextInt(1, 100);
-            int value = 0;
-            if (rand <= 80) {
-                value = Util.nextInt(1, 3); // 80% xác suất: sao từ 1 đến 3
-            } else if (rand <= 97) {
-                value = Util.nextInt(4, 5); // 17% xác suất: sao từ 4 đến 5
-            } else {
-                value = 6; // 3% xác suất: sao 6
-            }
+            // Sao pha lê: xem Boss.randSaoDoShop
+            int value = randSaoDoShop();
             optionalItemMap.options.add(new Item.ItemOption(107, value));
             // Drop vật phẩm tùy chọn xuống bản đồ
             Service.gI().dropItemMap(zone, optionalItemMap);

@@ -56,15 +56,8 @@ public class Cumber extends Boss {
             List<Item.ItemOption> optionalOps = ItemService.gI().getListOptionItemShop((short) dropOptional);
             optionalOps.forEach(option -> option.param = (int) (option.param * Util.nextInt(100, 115) / 100.0));
             optionalItemMap.options.addAll(optionalOps);
-            int rand = Util.nextInt(1, 100);
-            int value = 0;
-            if (rand <= 80) {
-                value = Util.nextInt(1, 3);
-            } else if (rand <= 97) {
-                value = Util.nextInt(4, 5);
-            } else {
-                value = 6;
-            }
+            // Sao pha lê: xem Boss.randSaoDoShop
+            int value = randSaoDoShop();
             optionalItemMap.options.add(new Item.ItemOption(107, value));
             Service.gI().dropItemMap(zone, optionalItemMap);
         }
