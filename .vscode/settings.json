@@ -1,0 +1,5 @@
+{
+    "java.project.sourcePaths": ["Teamobi2026/src"],
+    "java.project.referencedLibraries": ["Teamobi2026/lib/**/*.jar"],
+    "java.project.outputPath": "build/classes-cli"
+}

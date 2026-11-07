@@ -69,6 +69,7 @@ public class RadarService {
             pl.sendMessage(m);
             m.cleanup();
         } catch (Exception e) {
+            nro.models.utils.Logger.logException(RadarService.class, e); // trước đây nuốt lỗi im lặng, client mở sổ sưu tầm không nhận được danh sách
         }
     }
 

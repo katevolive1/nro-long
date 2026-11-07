@@ -150,16 +150,20 @@ public class Controller implements IMessageHandler {
                                         return;
                                     }
                                     if (card.Used == 0) {
-                                        if (player.Cards.stream().anyMatch(c -> c != null && c.Used == 1)) {
+                                        if (player.Cards.stream().filter(c -> c != null && c.Used == 1).count() >= Card.MAX_USED) {
                                             Service.gI().sendThongBao(player, "Số thẻ sử dụng đã đạt tối đa");
                                             return;
                                         }
                                         card.Used = 1;
+                                        // Đưa thẻ vừa Dùng lên đầu danh sách: hào quang (Player.getAura) lấy thẻ Dùng đầu tiên nên theo thẻ Dùng gần nhất, thứ tự này cũng được lưu vào DB
+                                        player.Cards.remove(card);
+                                        player.Cards.add(0, card);
                                     } else {
                                         card.Used = 0;
                                     }
                                     RadarService.gI().Radar1(player, idC, card.Used);
                                     Service.gI().point(player);
+                                    RadarService.gI().sendAura(player, player.getAura(), player.getEffFront()); // đổi hào quang theo thẻ đang Dùng
                                 }
                                 break;
                         }

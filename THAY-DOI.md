@@ -506,3 +506,26 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Build: có (`player/NPoint.setDame`). SQL: không. Client: không.
 - Trước: `dame += dame * tlSexyDame / 100` viết 2 lần, nên 117 = 25% cho +56,25% sức đánh. Giờ cộng 1 lần đúng p%. Ảnh hưởng mọi món có 117 (Em xinh em đẹp 1514, CT Frieren 1567, Hắc Mị Nương quà VIP 4) ; buff 11 giây cho người xung quanh không đổi (tính riêng). Người chơi đang mặc các cải trang này sẽ thấy sức đánh giảm.
 - Kiểm tra: mặc Hắc Mị Nương quà VIP 4 (50:25, 117:25), sức đánh so với lúc tháo ra tăng khoảng +56% (1,25 × 1,25), không còn khoảng +95% (1,25 × 1,5625).
+
+
+## 59. Sổ sưu tầm: Dùng tối đa 3 thẻ cùng lúc (trước 1) — 7/11/2026, máy nhà
+
+- Build: có (`radar/Card.MAX_USED = 3`, `server/Controller` gói 127, `player/NPoint` cộng chỉ số của mọi thẻ đang Dùng). SQL: không. Client: không cần cập nhật (client chỉ hiển thị trạng thái Dùng từng thẻ, server quyết định giới hạn).
+- Cách tính chỉ số của từng thẻ không đổi (vẫn áp dòng có `activeCard` bằng đúng cấp thẻ, chưa cộng dồn, xem CO-CHE.md mục "Sổ sưu tầm"). Aura chỉ lấy của 1 thẻ (`Player.getAura`, không đổi).
+- Kiểm tra: bấm Dùng 3 thẻ liên tiếp đều được, thẻ thứ 4 báo "Số thẻ sử dụng đã đạt tối đa"; chỉ số cộng từ cả 3 thẻ (xem sức đánh/HP trước và sau khi Dùng).
+
+
+## 60. Sổ sưu tầm: chỉ số cộng dồn theo cấp thẻ, hào quang theo thẻ đang Dùng — 7/11/2026, máy nhà
+
+- Build: có (`player/NPoint`, `player/Player.getAura`, `server/Controller` gói 127, `services_func/UseItem.UseCard`). SQL: không. Client: không.
+- Trước: `NPoint` chỉ áp dòng có `activeCard` bằng đúng cấp thẻ (thẻ cấp 2 mất dòng cấp 0, 1, nên sức đánh/chí mạng không tăng dù client tô xanh). Giờ cộng dồn: cấp -1 chỉ dòng 0; cấp 1 dòng 0–1; cấp 2 dòng 0–2. Mọi thẻ đang Dùng (tối đa 3, mục 59) đều mạnh lên.
+- Hào quang trước lấy thẻ cấp 2 đầu tiên dù chưa Dùng, giờ chỉ xét thẻ đang Dùng và lấy thẻ **Dùng gần nhất** (bấm Dùng đưa thẻ lên đầu `player.Cards`, thứ tự lưu DB); Dùng/bỏ Dùng thì gửi lại hào quang cho cả map.
+- Kiểm tra: Dùng Oozaru/Oozarun 1/2 cấp 2 thấy sức đánh, chí mạng, HP, KI, giáp đều tăng (so lúc chưa Dùng); thấy hào quang đổi khi Dùng/bỏ Dùng (người khác trong map cũng thấy).
+
+
+## 61. Sửa crash client khi nhìn nhân vật mang hào quang thẻ Oozaru / Rồng Thần Namek — 7/11/2026, máy nhà
+
+- Build: không (cần `bt` để server nạp lại bảng `img_by_name`). SQL: có. Client: không.
+- Nguyên nhân: bảng `img_by_name` thiếu `aura_1_1` và `aura_2_1` nên server gửi `n_frame` = 0, client chia cho 0 khi vẽ hào quang (crash `Char$$paintAuraFront` → `getFraImage`). Chi tiết ở CO-CHE.md mục "Ảnh theo tên".
+- SQL đã chạy (chạy lại ở máy khác, rồi `bt`): `INSERT INTO img_by_name (NAME, n_frame) VALUES ('aura_1_1', 1), ('aura_2_1', 4);` (kiểm tra trước `SELECT NAME FROM img_by_name WHERE NAME IN ('aura_1_1','aura_2_1')` để khỏi trùng).
+- Kiểm tra: nick mang thẻ Oozaru (cấp 2, đang Dùng, đứng đầu danh sách) đứng trong khu, nick khác vào khu đó không bị thoát game, thấy hào quang.

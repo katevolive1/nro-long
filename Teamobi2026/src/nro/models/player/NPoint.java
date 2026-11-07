@@ -252,10 +252,12 @@ public class NPoint {
             }
         }
 
-        Card card = player.Cards.stream().filter(r -> r != null && r.Used == 1).findFirst().orElse(null);
-        if (card != null) {
+        // Sổ sưu tầm: dùng tối đa Card.MAX_USED (3) thẻ cùng lúc, cộng chỉ số của từng thẻ đang Dùng
+        for (Card card : new java.util.ArrayList<>(player.Cards)) {
+            if (card != null && card.Used == 1) {
             for (OptionCard io : card.Options) {
-                if (io.active == card.Level || (card.Level == -1 && io.active == 0)) {
+                // Cộng dồn theo cấp thẻ (khớp cách client tô xanh): cấp -1 chỉ dòng activeCard 0, cấp 1/2 mọi dòng activeCard <= cấp
+                if (card.Level == -1 ? io.active == 0 : io.active <= card.Level) {
                     switch (io.id) {
                         case 0: //Tấn công +#
                             this.dameAdd += io.param;
@@ -416,6 +418,7 @@ public class NPoint {
                             break;
                     }
                 }
+            }
             }
         }
 

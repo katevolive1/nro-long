@@ -11,6 +11,9 @@ import java.util.List;
 
 public class Card {
 
+    // Số thẻ được "Dùng" cùng lúc (trước 7/11/2026 là 1)
+    public static final int MAX_USED = 3;
+
     public short Id;
     public byte Amount;
     public byte MaxAmount;

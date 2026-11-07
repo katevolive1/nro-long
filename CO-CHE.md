@@ -242,7 +242,20 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
 ## Sổ sưu tầm (thẻ rada): cách tính cấp, "xanh" và chỉ số (dò 7/11/2026)
 
 - Dữ liệu: bảng `radar` (`options` JSON `{id, param, activeCard}`), nhân vật `player.data_card` (`level`, `amount/max`, `used`). Thẻ mới dùng lần đầu: `level = -1`; đủ `max` (120) thẻ thì `level` 1, rồi 2 (tối đa, báo "Thẻ này đã đạt cấp tối đa"). Code: `UseItem.UseCard`, `Controller` gói 127 (bấm "Dùng"/bỏ dùng), `RadarService`, `NPoint` (dòng ~255).
-- **Chỉ 1 thẻ được "Dùng" (Used = 1) cùng lúc** ("Số thẻ sử dụng đã đạt tối đa"); `NPoint` chỉ cộng chỉ số của thẻ đang Dùng. Level 0 không Dùng được.
+- **Tối đa 3 thẻ được "Dùng" (Used = 1) cùng lúc** từ 7/11/2026 (hằng `Card.MAX_USED`, trước là 1; quá thì báo "Số thẻ sử dụng đã đạt tối đa"); `NPoint` cộng chỉ số của từng thẻ đang Dùng. Level 0 không Dùng được.
 - Client (`Info_RadaScr.addItemDetail`, Game1 RVA `0x3AED70`) tô **xanh** dòng option khi: level ≠ 0 và (`activeCard` = 0, hoặc thẻ đang Dùng và `level ≥ activeCard`). Nghĩa là **thẻ chưa Dùng chỉ xanh được các dòng `activeCard = 0`** (thường đúng 1 dòng), thẻ đang Dùng xanh theo kiểu cộng dồn.
 - Server (`NPoint`): áp option khi `active == level` (hoặc level -1 và `active == 0`), **không cộng dồn**, khác kiểu cộng dồn client hiển thị. Vd Thẻ Oozaru 1791 level 2 chỉ ra 77/103/94 (active 2), không có 14 (active 0) và 50 (active 1) dù client tô xanh cả 5 dòng.
 - Tình trạng DB 7/11/2026: `hoang` có 1791 level 2 nhưng **không Dùng** (đang Dùng 1204 Rồng Thần Namek level 1).
+- **Đã sửa 7/11/2026**: `NPoint` giờ cộng dồn theo cấp (thẻ cấp -1 chỉ dòng `activeCard` 0; cấp 1/2 mọi dòng `activeCard` ≤ cấp), khớp cách client tô xanh; mục "Server (NPoint)" phía trên là hành vi cũ. Hào quang (`Player.getAura`) chỉ lấy thẻ **đang Dùng** (Used = 1, cấp > 1, thuộc 956/1204/1142/1791/1792/1793), thẻ đầu tiên trong danh sách; bấm Dùng đưa thẻ đó lên **đầu danh sách** `player.Cards` (lưu vào DB theo thứ tự, nên hào quang theo thẻ Dùng gần nhất, không còn kẹt thẻ sưu tầm đầu tiên như Oozaru 1791); bấm Dùng/bỏ Dùng hoặc lên cấp thì gửi lại hào quang cho cả map bằng `RadarService.sendAura` (gói 127 sub 4).
+
+## Ảnh theo tên (`img_by_name`) và lỗi crash hào quang (dò 7/11/2026)
+
+- Client tải ảnh theo tên lúc cần (gói 66): server trả tên, `n_frame` và file `data/img_by_name/x<zoom>/<tên>.png`. `n_frame` lấy từ bảng `img_by_name` (nạp vào `Manager.IMAGES_BY_NAME` **lúc khởi động**, sửa DB phải `bt`). **Thiếu dòng trong bảng thì `n_frame` = 0** và client chia cho 0 ở `mSystem.getFraImage` (`idiv` RVA `0x402D46`) → **crash cả game** khi vẽ ảnh đó (log client: `Crash!!!` kèm khung `Char$$paintAuraFront` → `mSystem$$getFraImage`, ở `%USERPROFILE%\AppData\LocalLow\NROSLOT000000N\DragonBoy\Player.log`).
+- Hào quang (`Char.paintAuraFront`) vẽ ảnh `aura_<idAura>_1` (và phía sau `aura_<id>_0`) nên mỗi aura cần cả 2 dòng. Thiếu `aura_1_1` và `aura_2_1` (aura của thẻ Rồng Thần Namek 1204 / Khủng long 828 và Oozaru 1791) làm người khác vào khu thấy nhân vật đang mang hào quang đó là crash. Đã thêm 7/11/2026: `aura_1_1` = 1 (ảnh 1x1 trong suốt), `aura_2_1` = 4 (ảnh 140x720, 4 khung 180). Số khung xem bằng cách quét dải hàng pixel không trong suốt của ảnh.
+- Còn nhiều file `aura_5…94` trong `data/img_by_name` chưa có dòng trong bảng: dùng aura nào thì phải thêm dòng `<tên>` với `n_frame` đúng trước.
+
+## Crash client khi mở sổ sưu tầm (dò 7/11/2026, chưa rõ nguyên nhân gốc)
+
+- Log `NROSLOT0000001` (acc `nm`, nhân vật `hoang`, 01:25): crash ở `Game1.RadarScr$$update` +0x318 (RVA `0x476F28`, lệnh `idiv`): client tính `num * 100 / RadarScr.list.size()` mà `list` (static `+0F8h`) rỗng → chia cho 0. Nghĩa là màn hình sổ sưu tầm đang mở trong khi danh sách thẻ chưa có/đã bị xóa.
+- Luồng client: `Panel.doRada` gửi `SendRada` (gói 127 sub 0) → server `RadarService.sendRadar` trả danh sách → `Controller2.readInfoRada` (RVA `0x4E6A50`, sub 0 tạo `MyVector` rồi `SetRadarScr`). Server trước đây **nuốt lỗi im lặng** trong `sendRadar` (đã thêm `Logger.logException` 7/11/2026): nếu `sendRadar` ném lỗi thì client không nhận danh sách.
+- Cùng ngày log client có `EndOfFile` ở `MessageCollector.readMessage` rồi `ModFunc.AutoLogin` kết nối lại: crash có thể xảy ra khi mở/đang mở sổ sưu tầm sau khi mất kết nối và tự đăng nhập lại.

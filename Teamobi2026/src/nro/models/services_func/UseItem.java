@@ -2897,6 +2897,7 @@ public class UseItem {
                     card.Level++;
                 }
                 Service.gI().point(pl);
+                RadarService.gI().sendAura(pl, pl.getAura(), pl.getEffFront());
             }
             RadarService.gI().RadarSetAmount(pl, card.Id, card.Amount, card.MaxAmount);
             RadarService.gI().RadarSetLevel(pl, card.Id, card.Level);
