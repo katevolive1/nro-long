@@ -13,7 +13,7 @@ import nro.models.skill.Skill;
 // Hồi sinh: chỉ đếm 20 phút khi cả 2 con trong cặp đã chết, rồi cả cặp xuất hiện lại.
 public class HuyDiet extends Boss {
 
-    public static final int DAME = 100_000;
+    public static final int DAME = 140_000;
     public static final long HP = 3_000_000_000L; // gốc 2 tỷ
     public static final int REST_SECONDS = 1200;
 

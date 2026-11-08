@@ -30,10 +30,13 @@ public class Android14 extends Boss {
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
         Service.gI().dropItemMap(this.zone, new ItemMap(this.zone, 190, Util.nextInt(20000, 30001),
           this.location.x, this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
-        if (Util.isTrue(80, 100)) {
-            int[] items = Util.isTrue(50, 100) ? new int[]{18, 19, 20} : new int[]{18,19,20};
-            int randomItem = items[new Random().nextInt(items.length)];
-            Service.gI().dropItemMap(this.zone, new ItemMap(this.zone, randomItem, 1,
+        if (Util.isTrue(90, 100)) {
+            int r = Util.nextInt(1, 100);
+            int ngoc = r <= 70 ? 18 : r <= 90 ? 19 : 20;
+            Service.gI().dropItemMap(this.zone, new ItemMap(this.zone, ngoc, 1,
+          this.location.x, this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
+        } else {
+            Service.gI().dropItemMap(this.zone, new ItemMap(this.zone, 457, Util.nextInt(2, 5),
           this.location.x, this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
         }
     }

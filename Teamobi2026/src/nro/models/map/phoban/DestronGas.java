@@ -29,7 +29,7 @@ public class DestronGas implements Runnable {
     public static final int TIME_KHI_GAS_HUY_DIET = 1800000;
     public static final int N_PLAYER_CLAN = 0;
     // Chia máu + sát thương quái và Dr Lychee/Hatchiyack (thử nghiệm = 20, gốc 1; xem GIA-TRI-GOC.md)
-    public static final int GIAM = 20;
+    public static final int GIAM = 10;
 
     public int id;
     public byte level;

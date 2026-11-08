@@ -115,6 +115,9 @@ public class SieuBoHung extends Boss {
             // Drop vật phẩm tùy chọn xuống bản đồ
             Service.gI().dropItemMap(zone, optionalItemMap);
         }
+        if (Util.isTrue(20, 100)) {
+            Service.gI().dropItemMap(zone, new ItemMap(this.zone, 457, Util.nextInt(2, 5), x, y, plKill.id));
+        }
         dropNgocRong23(plKill, x, y);
         int diem = 5;
         plKill.event.addEventPoint(diem);

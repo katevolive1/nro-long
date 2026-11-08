@@ -64,6 +64,6 @@ public class ThienSu extends Boss {
     @Override
     public void reward(Player plKill) {
         super.reward(plKill);
-        ThienSuHuyDietReward.drop(this, plKill);
+        // Không rơi đồ riêng, Thiên sứ chỉ có phần thưởng chung của Boss
     }
 }

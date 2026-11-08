@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 6/11/2026, thêm mục "Giáp boss").
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 7/11/2026: đổi đồ rơi boss thường, boss lớn, doanh trại, Hủy diệt, TĐST Namek).
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -11,32 +11,37 @@ Ghi chú chung:
 ## 1. Boss thường (Android, Cell, Fide, Nappa, Tiểu đội sát thủ TĐ)
 Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hung, Fide, Kuku, Mập đầu đinh, Rambo, Số 1–4, Tiểu đội trưởng.
 - 100%: 20.000–30.000 vàng (id 190)
-- 80%: 1 viên Ngọc rồng 5/6/7 sao (id 18/19/20)
+- 90%: 1 viên Ngọc rồng: 70% 5 sao (id 18), 20% 6 sao (id 19), 10% 7 sao (id 20)
+- 10%: 2–5 Thỏi vàng (id 457)
+- (Đổi 7/11/2026; trước đó 80% ngọc 5/6/7 sao chia đều, không có thỏi vàng.)
 
 ## 2. Boss lớn
 | Boss | Vàng 20–30k | Đồ Thần Linh | Đồ Goku + sao pha lê | Ngọc rồng | Thêm |
 |---|---|---|---|---|---|
 | Baby | 100% | dạng 1 3%, dạng 2 4%, dạng 3 5% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | 1%: CT Baby/Vegeta Baby/Baby khỉ (1785/1786/1788) |
 | Black Goku | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
-| Cumber | 100% | 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
+| Cumber | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
 | Cooler | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
 | Siêu bọ hung | 100% | dạng 1 3%, dạng 2 5% | 30% | 10% x1 (2 sao 70%, 3 sao 30%) | +5 điểm sự kiện mỗi dạng |
 | Mabu 12h (Bui Bui 1/2, Cadic, Drabura 1/2/3, Goku, Yacon) | 100% | 0,05% | 0,15% | không rơi | điểm Mabu +10 (Drabura3 +20) |
 | Mabu (12h) | 100% | 0,3% | 0,15% | không rơi | 5% Bình hút năng lượng (1795, `250:0`); điểm Mabu +25 |
 
+- Cập nhật 7/11/2026: Baby, Black Goku, Cumber, Cooler, Siêu bọ hung cùng thêm 20% rơi 2–5 Thỏi vàng (id 457), đặt trước `dropNgocRong23`; Cumber đổi Thần Linh từ 7% sang dạng 1 5%, dạng 2 7%.
 - Cập nhật 31/10/2026: Thần Linh theo dạng (`Boss.isDropDoTL`, mỗi dạng chết đều gọi `reward`), ngọc rồng chung `Boss.dropNgocRong23` (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ (`BossesData`).
 - Đồ Thần Linh (`ItemService.randDoTLBoss`, id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
 - Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115%; sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) (`Boss.randSaoDoShop`, 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở `Boss.java`: `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
 
 ## 3. Doanh trại
-| Boss | NR 4 hoặc 5 sao (17/18, mỗi loại 50%) | Bản đồ kho báu (611) | Cậu Vàng (1824) |
-|---|---|---|---|
-| Trung úy Trắng | 50% | – | 100% |
-| Trung úy Thép | 50% | 30% (x1–2) | 100% |
-| Trung úy Xanh Lơ | 50% | 100% (x1–3) | 100% |
-| Ninja áo tím | 50% | 30% (x1–2) | 100% |
-| Robot vệ sĩ | 30% | – | 100% |
-| Ninja clone | 10% | – | – |
+| Boss | NR 4 hoặc 5 sao (17/18, mỗi loại 50%) | Bản đồ kho báu (611) |
+|---|---|---|
+| Trung úy Trắng | 50% | – |
+| Trung úy Thép | 50% | 30% (x1–2) |
+| Trung úy Xanh Lơ | 50% | 100% (x1–3) |
+| Ninja áo tím | 50% | 30% (x1–2) |
+| Robot vệ sĩ | 30% | – |
+| Ninja clone | 10% | – |
+
+(Bỏ Cậu Vàng 1824 khỏi 5 boss doanh trại ngày 7/11/2026.)
 
 Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
@@ -54,7 +59,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 | Mục | Giá trị |
 |---|---|
 | HP | 2 tỷ |
-| Sức đánh | 100.000 |
+| Sức đánh | 140.000 (`HuyDiet.DAME`, trước 100.000, đổi 7/11/2026) |
 | Giới hạn sát thương mỗi đòn | không có |
 | Chiêu | đấm / chưởng cấp 7 |
 | Khu xuất hiện | mỗi cặp vào cùng một khu ngẫu nhiên (2 cặp có thể chung khu) |
@@ -66,19 +71,15 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 | Tỉ lệ | Rơi |
 |---|---|
 | 2% | 1 món đồ Thần Linh (`randDoTLBoss`) |
-| 30% | 1 món Hủy Diệt, hành tinh ngẫu nhiên (áo / quần / găng / giày / nhẫn đều nhau). Chỉ số lấy từ shop Bill, cộng thêm 0–15% như `buyItemHD`; option 21:60 và 30 |
+| 25% | 1 món Hủy Diệt, hành tinh ngẫu nhiên (áo / quần / găng / giày / nhẫn đều nhau). Chỉ số lấy từ shop Bill, cộng thêm 0–15% như `buyItemHD`; option 21:60 và 30 |
 | 20% | Ngọc rồng 2 sao (id 15) |
 | 10% | Ngọc rồng 3 sao (id 16) |
-| 38% | 5–20 Thỏi vàng (id 457), số lượng ngẫu nhiên (trước 1, đổi 7/11/2026) |
+| 5% | Một trong Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (id 1150–1153), số lượng 1–5 |
+| 38% | 2–10 Thỏi vàng (id 457), số lượng ngẫu nhiên |
 
-**Rơi đồ Thiên sứ Whis / Vados** (`ThienSuHuyDietReward.drop`, giữ như cũ, tổng 100%):
+(Cập nhật 7/11/2026: đồ Hủy Diệt 30% → 25%, thêm 5% Cuồng nộ/Bổ khí/Bổ huyết/Giáp Xên 2, thỏi vàng 5–20 → 2–10.)
 
-| Tỉ lệ | Rơi |
-|---|---|
-| 40% | 1 món Hủy Diệt, theo hành tinh của người giết |
-| 20% | Ngọc rồng 2 hoặc 3 sao |
-| 20% | Một trong Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (id 1150–1153), số lượng 1–5 |
-| 20% | Không rơi gì |
+**Thiên sứ Whis / Vados**: từ 7/11/2026 không rơi đồ riêng (đã bỏ `ThienSuHuyDietReward.drop`), chỉ còn phần thưởng chung của `Boss.reward`.
 
 **Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít (`DoiDoBaHatMit`).
 - 3 món không được trùng món (cùng id), nhưng được khác hành tinh.
@@ -100,7 +101,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 |---|---|---|
 | Bujin/Kogu/Zangya/Bido/Bojack | 7–9 cục × 5–20 | CT id 423/424/425/426/427 + NR 6 sao + NR 7 sao |
 | Super Bojack | 7–9 cục × 5–15 | CT 428 + NR 6s + NR 7s |
-| TĐST Namek: Số 4/3/2/1, Đội trưởng | 7–9 cục × 1–5 | CT 429/430/431/432/433 + NR 6s + NR 7s |
+| TĐST Namek: Số 4/3/2/1, Đội trưởng | 1 đống 1–5 Thỏi vàng (id 457), không còn ngọc xanh (đổi 7/11/2026) | CT 429/430/431/432/433 + NR 6s + NR 7s |
 
 (DB chỉ ghi tên "Cải trang"; ứng với boss nào là suy theo code.)
 
@@ -108,7 +109,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 - Hatchiyack / Dr Lychee (Khí Gas): CT Hatchiyack (729) / CT Dr Lychee (738), số lượng 1 + 2×số người trong khu, ai nhặt cũng được; chỉ số theo level Khí Gas → chi tiết mục 7a.
 
 ### 7a. Khí Gas Hủy Diệt – boss và phần thưởng (`boss/khi_gas/DrLychee.java`, `Hatchiyack.java`)
-Cơ chế phó bản: mục "Khí Gas Hủy Diệt" trong [CO-CHE.md](CO-CHE.md). Lv = cấp độ chọn lúc mở (1–110). Số máu/sát thương dưới đây là gốc; đang thử nghiệm chia 20 (`DestronGas.GIAM`, [GIA-TRI-GOC.md](GIA-TRI-GOC.md)). Phần thưởng không đổi.
+Cơ chế phó bản: mục "Khí Gas Hủy Diệt" trong [CO-CHE.md](CO-CHE.md). Lv = cấp độ chọn lúc mở (1–110). Số máu/sát thương dưới đây là gốc; đang thử nghiệm chia 10 (`DestronGas.GIAM`, [GIA-TRI-GOC.md](GIA-TRI-GOC.md)). Phần thưởng không đổi.
 - Dr Lychee (ngoại hình 742/743/744): sát thương 10.000 + 1.000×Lv, máu 1 triệu + 15 triệu×Lv (gốc ở `DestronGas.update()`, phần +10.000/+1 triệu ở constructor DrLychee). Né "Xí hụt" Lv/1000, giảm sát thương nhận (Lv/10)% và trừ thêm ngẫu nhiên 0–100×Lv.
 - Hatchiyack (639/640/641, tên trống): hiện khi Dr Lychee rời map, ×1,5 sát thương (tối đa 200 triệu) và ×1,5 máu (tối đa 2 tỷ) của Dr Lychee (`DrLychee.leaveMap()`). Né (Lv+10)/1000, giảm (Lv/5)% và trừ thêm 0–200×Lv. Chết → 60 giây sau đưa về làng Aru.
 - Cả 2: chiêu Demon cấp 1–7; đòn xuyên giáp không bị né và phá khiên; đang khiên thì đòn thường = 1; người cầm NR Namek đánh = 1.

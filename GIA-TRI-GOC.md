@@ -12,7 +12,7 @@ Danh sách những chỗ đang chỉnh để test. Khi mở bản chính thức,
 | `player/NPoint.java` TNSM Bản đồ kho báu 135–138 (`tiemNang *= 3`) | ×3 | ×1,5 |
 | `mob_bigboss/Hirudegarn.java` `DISABLED` | true | false |
 | DB `account.vnd` mặc định | 1000000 | 0 (`ALTER TABLE account ALTER vnd SET DEFAULT 0`) |
-| `map/phoban/DestronGas.java` `GIAM` (Khí Gas: chia máu + sát thương quái và Dr Lychee/Hatchiyack) | 20 | 1 |
+| `map/phoban/DestronGas.java` `GIAM` (Khí Gas: chia máu + sát thương quái và Dr Lychee/Hatchiyack) | 10 | 1 |
 | `services/shenron/SummonDragon.java` `timeResummonShenron` (chờ gọi rồng lần sau, chung cả server) | 180000 (3 phút) | 600000 (10 phút) |
 | `boss/Boss_Manager/BossManager.loadBoss` Mặt Trời (`createBoss(BossID.MAT_TROI, 5)`) | comment (tắt) | 5 con |
 | `player/NPoint.java` `setPointWhenWearClothes`: sao đen 5 | `tlTNSM` +35 (TN/SM) | `tlDameCrit` + `tlSDCM` +35 (SĐ chí mạng) |

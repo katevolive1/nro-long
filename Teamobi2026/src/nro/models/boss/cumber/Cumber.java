@@ -34,7 +34,7 @@ public class Cumber extends Boss {
         int y = this.zone.map.yPhysicInTop(x, this.location.y - 24);
         int drop = 190;
         int quantity = Util.nextInt(20000, 30000);
-        if (isDropDoTL(7)) { // đồ Thần Linh 7%
+        if (isDropDoTL(5, 7)) { // đồ Thần Linh: dạng 1 5%, dạng 2 7%
         ItemMap it = ItemService.gI().randDoTLBoss(this.zone, 1, x, y, plKill.id);
         if (it != null) {
         Service.gI().dropItemMap(zone, it);
@@ -60,6 +60,9 @@ public class Cumber extends Boss {
             int value = randSaoDoShop();
             optionalItemMap.options.add(new Item.ItemOption(107, value));
             Service.gI().dropItemMap(zone, optionalItemMap);
+        }
+        if (Util.isTrue(20, 100)) {
+            Service.gI().dropItemMap(zone, new ItemMap(this.zone, 457, Util.nextInt(2, 5), x, y, plKill.id));
         }
         dropNgocRong23(plKill, x, y);
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);

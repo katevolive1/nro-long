@@ -16,38 +16,24 @@ public class ThienSuHuyDietReward {
 
     private static final int THOI_VANG = 457;
 
-    // Thiên sứ: 40% 1 món Hủy Diệt theo hành tinh người giết, 20% Ngọc rồng 2 hoặc 3 sao,
-    // 20% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1-5 cái), 20% không rơi gì
-    public static void drop(Boss boss, Player plKill) {
-        int rd = Util.nextInt(1, 100);
-        ItemMap it;
-        if (rd <= 40) {
-            it = createHuyDiet(boss, plKill, Math.max(0, Math.min(2, plKill.gender)));
-        } else if (rd <= 60) {
-            it = new ItemMap(boss.zone, Util.nextInt(15, 16), 1, boss.location.x, y(boss), plKill.id);
-        } else if (rd <= 80) {
-            it = new ItemMap(boss.zone, Util.nextInt(1150, 1153), Util.nextInt(1, 5), boss.location.x, y(boss), plKill.id);
-        } else {
-            return;
-        }
-        Service.gI().dropItemMap(boss.zone, it);
-    }
-
-    // Hủy diệt (tổng 100%): 2% đồ Thần Linh (randDoTLBoss), 30% 1 món Hủy Diệt hành tinh ngẫu nhiên,
-    // 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% 5-20 thỏi vàng (457)
+    // Hủy diệt (tổng 100%): 2% đồ Thần Linh (randDoTLBoss), 25% 1 món Hủy Diệt hành tinh ngẫu nhiên,
+    // 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 5% Cuồng nộ 2 / Bổ khí 2 / Bổ huyết 2 / Giáp Xên 2 (1-5 cái),
+    // 38% 2-10 thỏi vàng (457). Thiên sứ không rơi đồ riêng.
     public static void dropHuyDiet(Boss boss, Player plKill) {
         int rd = Util.nextInt(100);
         ItemMap it;
         if (rd < 2) {
             it = ItemService.gI().randDoTLBoss(boss.zone, 1, boss.location.x, y(boss), plKill.id);
-        } else if (rd < 32) {
+        } else if (rd < 27) {
             it = createHuyDiet(boss, plKill, Util.nextInt(3));
-        } else if (rd < 52) {
+        } else if (rd < 47) {
             it = new ItemMap(boss.zone, 15, 1, boss.location.x, y(boss), plKill.id);
-        } else if (rd < 62) {
+        } else if (rd < 57) {
             it = new ItemMap(boss.zone, 16, 1, boss.location.x, y(boss), plKill.id);
+        } else if (rd < 62) {
+            it = new ItemMap(boss.zone, Util.nextInt(1150, 1153), Util.nextInt(1, 5), boss.location.x, y(boss), plKill.id);
         } else {
-            it = new ItemMap(boss.zone, THOI_VANG, Util.nextInt(5, 20), boss.location.x, y(boss), plKill.id); // 5-20 thỏi vàng (trước 1)
+            it = new ItemMap(boss.zone, THOI_VANG, Util.nextInt(2, 10), boss.location.x, y(boss), plKill.id);
         }
         Service.gI().dropItemMap(boss.zone, it);
     }
