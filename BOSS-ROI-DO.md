@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 7/11/2026: đổi đồ rơi boss thường, boss lớn, doanh trại, Hủy diệt, TĐST Namek).
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 11/11/2026: Cooler rơi Ngọc rồng băng; 7/11/2026: đổi đồ rơi boss thường, boss lớn, doanh trại, Hủy diệt, TĐST Namek).
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -21,7 +21,7 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 | Baby | 100% | dạng 1 3%, dạng 2 4%, dạng 3 5% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | 1%: CT Baby/Vegeta Baby/Baby khỉ (1785/1786/1788) |
 | Black Goku | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
 | Cumber | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
-| Cooler | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | – |
+| Cooler | 100% | dạng 1 5%, dạng 2 7% | 5% | 10% x1 (2 sao 70%, 3 sao 30%) | 100% mỗi dạng: 1 Ngọc rồng băng 1–7 sao ngẫu nhiên (925–931) |
 | Siêu bọ hung | 100% | dạng 1 3%, dạng 2 5% | 30% | 10% x1 (2 sao 70%, 3 sao 30%) | +5 điểm sự kiện mỗi dạng |
 | Mabu 12h (Bui Bui 1/2, Cadic, Drabura 1/2/3, Goku, Yacon) | 100% | 0,05% | 0,15% | không rơi | điểm Mabu +10 (Drabura3 +20) |
 | Mabu (12h) | 100% | 0,3% | 0,15% | không rơi | 5% Bình hút năng lượng (1795, `250:0`); điểm Mabu +25 |

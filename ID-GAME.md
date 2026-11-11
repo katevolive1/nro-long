@@ -1782,7 +1782,7 @@ Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử 
 | 1727 | Pet Ma cầu mưa | 27 | 3 | Dùng |
 | 1728 | Túi mù Halloween | 27 | 3 | Không |
 | 1729 | Pet Rồng Xanh | 27 | 3 | Dùng |
-| 1730 | Vé ước miễn phí | 27 | 3 | Không |
+| 1730 | Vé đổi nội tại tự chọn | 27 | 3 | Dùng |
 | 1731 | CT Black Goku Rose | 5 | 3 | Mặc |
 | 1732 | CT Black Goku | 5 | 3 | Mặc |
 | 1733 | Thú cưỡi Thích Kim Quy | 23 | 3 | Dùng |
@@ -1919,10 +1919,10 @@ Cột **Dùng**: `Mặc` = trang bị mặc vào người; `Dùng` = bấm Sử 
 | 1864 | Cải trang Gốc 5 | 5 | 3 | Mặc |
 | 1865 | Cải trang Gốc 6 | 5 | 3 | Mặc |
 | 1866 | Cải trang Gốc 7 | 5 | 3 | Mặc |
-| 1867 | Cải trang Gốc 8 | 5 | 3 | Mặc |
-| 1868 | Cải trang Gốc 9 | 5 | 3 | Mặc |
+| 1867 | Cải trang Gốc 8 | 5 | 3 | Mặc | ok
+| 1868 | Cải trang Gốc 9 | 5 | 3 | Mặc | 
 | 1869 | Giáp tập luyện cấp 5 | 32 | 3 | Mặc |
-| 1870 | Cải trang Gốc 10 | 5 | 3 | Mặc |
+| 1870 | Cải trang Gốc 10 | 5 | 3 | Mặc |ok
 | 1871 |  | 75 | 3 | Không |
 | 1872 |  | 75 | 3 | Không |
 | 1873 |  | 75 | 3 | Không |

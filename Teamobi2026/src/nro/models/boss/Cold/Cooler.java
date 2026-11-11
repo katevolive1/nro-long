@@ -73,6 +73,8 @@ public class Cooler extends Boss {
             Service.gI().dropItemMap(zone, new ItemMap(this.zone, 457, Util.nextInt(2, 5), x, y, plKill.id));
         }
         dropNgocRong23(plKill, x, y);
+        // 100% 1 viên Ngọc rồng băng 1-7 sao ngẫu nhiên (925-931), mỗi dạng chết đều rơi (11/11/2026)
+        Service.gI().dropItemMap(zone, new ItemMap(this.zone, Util.nextInt(925, 931), 1, x, y, plKill.id));
     }
 
     @Override

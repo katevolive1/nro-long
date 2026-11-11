@@ -44,6 +44,7 @@ import nro.models.services.PetService;
 import nro.models.services.RewardService;
 import nro.models.services.PlayerService;
 import nro.models.services.TaskService;
+import nro.models.services.IntrinsicService;
 import nro.models.services.InventoryService;
 import nro.models.map.service.MapService;
 import nro.models.services_dungeon.NgocRongNamecService;
@@ -677,6 +678,9 @@ public class UseItem {
                                 } else {
                                     Service.gI().sendThongBao(pl, "Bạn đã hoàn thành hết nhiệm vụ");
                                 }
+                                break;
+                            case IntrinsicService.VE_DOI_NOI_TAI: // vé đổi nội tại tự chọn (trừ vé khi chọn xong)
+                                IntrinsicService.gI().showMenuVeNoiTai(pl, 0);
                                 break;
                             case 718: // vé tặng ngọc
                                 UseItem.gI().VeTangNgoc(pl, item);

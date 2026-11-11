@@ -50,7 +50,7 @@ public class Shenron_Event {
     public static int timeShenronWait = 60000;
 
     public static final String SHENRONEVENT_SAY
-            = "Ta sẽ ban cho người 1 điều ước, ngươi có 5 phút, hãy chọn đi:\n1) Đổi skill 3, 4 đệ tử (có thể trùng skill trước đó).\n2) Thay đổi nội tại.\n3) Cải trang siêu thần HSD 90 ngày.\n4) Cải trang Black Gohan Rose HSD 90 ngày.";
+            = "Ta sẽ ban cho người 1 điều ước, ngươi có 5 phút, hãy chọn đi:\n1) Đổi skill 3, 4 đệ tử (có thể trùng skill trước đó).\n2) Vé đổi nội tại tự chọn (chỉ số tối đa).\n3) Cải trang siêu thần HSD 90 ngày.\n4) Cải trang Black Gohan Rose HSD 90 ngày.";
 
     public static final String[] SHENRON_WISHES
             = new String[]{"Điều ước 1", "Điều ước 2", "Điều ước 3", "Điều ước 4"};
@@ -152,12 +152,17 @@ public class Shenron_Event {
                             return;
                         }
                         break;
-                    case 1:
-                        if (player.getSession().player.nPoint.power >= 10_000_000_000L) {
-                        IntrinsicService.gI().doinoitai(player);
-                          } else {
-                            Service.gI().sendThongBao(player, "10Tỷ Sức Mạnh?");
-                            sendBlackGokuhesShenron();
+                    case 1: // Vé đổi nội tại tự chọn 1730 (khóa giao dịch), dùng vé cần 10 tỷ SM
+                        if (InventoryService.gI().getCountEmptyBag(player) > 0
+                                || InventoryService.gI().findItemBag(player, IntrinsicService.VE_DOI_NOI_TAI) != null) {
+                            Item ve = ItemService.gI().createNewItem(IntrinsicService.VE_DOI_NOI_TAI);
+                            ve.itemOptions.add(new Item.ItemOption(30, 0));
+                            InventoryService.gI().addItemBag(player, ve);
+                            InventoryService.gI().sendItemBags(player);
+                            Service.gI().sendThongBao(player, "Bạn nhận được " + ve.template.name);
+                        } else {
+                            Service.gI().sendThongBao(player, "Hành trang đã đầy");
+                            reSummonShenron();
                             return;
                         }
                         break;

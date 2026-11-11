@@ -202,6 +202,7 @@ public class ConstNpc {
     public static final int INTRINSIC = 507;
     public static final int CONFIRM_OPEN_INTRINSIC = 508;
     public static final int CONFIRM_OPEN_INTRINSIC_VIP = 509;
+    public static final int VE_DOI_NOI_TAI = 31720400; // menu chọn nội tại của vé 1730, trang lưu ở NpcFactory.PLAYERID_OBJECT
     public static final int CONFIRM_LEAVE_CLAN = 510;
     public static final int CONFIRM_NHUONG_PC = 511;
     public static final int MENU_ADMIN = 512;

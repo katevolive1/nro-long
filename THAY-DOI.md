@@ -529,3 +529,21 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 - Nguyên nhân: bảng `img_by_name` thiếu `aura_1_1` và `aura_2_1` nên server gửi `n_frame` = 0, client chia cho 0 khi vẽ hào quang (crash `Char$$paintAuraFront` → `getFraImage`). Chi tiết ở CO-CHE.md mục "Ảnh theo tên".
 - SQL đã chạy (chạy lại ở máy khác, rồi `bt`): `INSERT INTO img_by_name (NAME, n_frame) VALUES ('aura_1_1', 1), ('aura_2_1', 4);` (kiểm tra trước `SELECT NAME FROM img_by_name WHERE NAME IN ('aura_1_1','aura_2_1')` để khỏi trùng).
 - Kiểm tra: nick mang thẻ Oozaru (cấp 2, đang Dùng, đứng đầu danh sách) đứng trong khu, nick khác vào khu đó không bị thoát game, thấy hào quang.
+
+## 62. Cooler rơi Ngọc rồng băng; Rồng băng điều ước 2 cho Vé đổi nội tại tự chọn (1730) — 11/11/2026, máy công ty
+
+- Build: có (`boss/Cold/Cooler.reward`, `shenron/Shenron_Event` điều ước 2, `IntrinsicService.showMenuVeNoiTai/selectVeNoiTai`, `UseItem` case 1730, `NpcFactory` menu `ConstNpc.VE_DOI_NOI_TAI` 31720400, `DataGame.vsItem` = 24). Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
+- Cooler và Cooler 2 (Hang băng, map 110): mỗi dạng chết rơi thêm 100% 1 Ngọc rồng băng 1–7 sao ngẫu nhiên (925–931), của người giết.
+- Rồng băng điều ước 2 trước là đổi nội tại ngẫu nhiên, giờ cho 1 Vé đổi nội tại tự chọn (1730, khóa giao dịch `30:0`, cộng dồn). Dùng vé (cần 10 tỷ SM): menu Con mèo liệt kê nội tại của hành tinh mình + 3 nội tại chung (23–25), 6 món/trang; chọn là nhận nội tại đó với `param1 = param_to_1`, `param2 = param_to_2`, trừ 1 vé.
+- SQL:
+```sql
+SET NAMES utf8mb4;
+UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description='Chọn 1 nội tại hành tinh mình, chỉ số tối đa. Cần 10 tỷ SM', is_up_to_up=1 WHERE id=1730;
+```
+- Kiểm tra: `SELECT NAME, is_up_to_up FROM item_template WHERE id=1730;` ra tên trên và `1`. Trong game: giết Cooler thấy rơi 1 viên Ngọc rồng băng; gọi Rồng băng ước điều 2 nhận vé; dùng vé chọn nội tại thì thông báo nội tại đó với số tối đa (vd Chiêu đấm Dragon +25%).
+
+## 63. Client: tự nhặt ưu tiên món vừa click chuột — 11/11/2026, máy công ty
+
+- Build: không. SQL: không. **Client: có** (`client-patch/patch-click-nhat.ps1`, đã thêm vào `cap-nhat-client.bat`; chạy `client-patch\cap-nhat-client.bat` trên mỗi máy).
+- Trước: bật tự nhặt (phím N) thì mod gửi lệnh nhặt từ xa lần lượt theo danh sách nó tự lập, mỗi món 0,5 giây; click vào một món dưới đất thì món đó vẫn phải chờ tới lượt. Giờ món vừa click được nhặt trước (thử tối đa 3 lần, món của người khác trong 45 giây thì bỏ qua), xong tự nhặt chạy tiếp. Chi tiết offset ở `client-patch/CLIENT-UNITY.md` mục "Tự nhặt đồ".
+- Kiểm tra: bật tự nhặt, giết quái cho rơi nhiều món, click một món ở xa trong đống đồ thì món đó vào túi trước các món khác.

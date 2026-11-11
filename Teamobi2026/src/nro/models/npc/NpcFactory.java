@@ -468,6 +468,12 @@ public class NpcFactory {
                             IntrinsicService.gI().openVip(player);
                         }
                     }
+                    case ConstNpc.VE_DOI_NOI_TAI -> {
+                        Object page = PLAYERID_OBJECT.get(player.id);
+                        if (page instanceof Integer) {
+                            IntrinsicService.gI().selectVeNoiTai(player, (Integer) page, select);
+                        }
+                    }
                     case ConstNpc.CONFIRM_LEAVE_CLAN -> {
                         if (select == 0) {
                             ClanService.gI().leaveClan(player);
