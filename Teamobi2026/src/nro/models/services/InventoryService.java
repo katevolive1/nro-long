@@ -1190,7 +1190,11 @@ public class InventoryService {
                 int option210Index = i;
                 item.itemOptions.remove(i);
                 int numberOfOptionsToAdd = io.param;
-                int[] allOptions = {8, 14, 108, 94, 108, 16, 80, 81, 97, 100, 101, 104, 106};
+                // Bỏ 106 (không lạnh) 16/11/2026: dễ trùng dòng gốc của cải trang, trùng thì vô dụng
+                // 16/11/2026 thêm: 50 SĐ, 77 HP, 103 KI, 5 SĐCM, 96 biến tấn công thành KI, 251 chiêu đặc biệt,
+                // 175 giảm thời gian bị mù, 252 sát thương lên boss, 19 sát thương lên quái
+                int[] allOptions = {8, 14, 108, 94, 108, 16, 80, 81, 97, 100, 101, 104,
+                    50, 77, 103, 5, 96, 251, 175, 252, 19};
                 List<Integer> selectedOptions = new ArrayList<>();
                 while (selectedOptions.size() < numberOfOptionsToAdd && selectedOptions.size() < allOptions.length) {
                     int randomIndex = (int) (Math.random() * allOptions.length);
@@ -1204,10 +1208,15 @@ public class InventoryService {
                     int newParam = 0;
                     if (option == 8 || option == 14 || option == 108 || option == 94 || option == 108) {
                         newParam = 3 + (int) (Math.random() * 3);
-                    } else if (option == 16 || option == 80 || option == 81 || option == 97 || option == 100 || option == 101 || option == 104) {
-                        newParam = 10 + (int) (Math.random() * 16);
-                    } else if (option == 106) {
-                        newParam = 0;
+                    } else if (option == 16 || option == 80 || option == 81 || option == 97 || option == 100 || option == 101 || option == 104
+                            || option == 175 || option == 19) {
+                        newParam = 10 + (int) (Math.random() * 16); // 10-25
+                    } else if (option == 77 || option == 103 || option == 252) {
+                        newParam = 3 + (int) (Math.random() * 3); // 3-5
+                    } else if (option == 50 || option == 96 || option == 251) {
+                        newParam = 5 + (int) (Math.random() * 6); // 5-10
+                    } else if (option == 5) {
+                        newParam = 5 + (int) (Math.random() * 11); // 5-15
                     }
                     newOptions.add(new Item.ItemOption(option, newParam));
                 }

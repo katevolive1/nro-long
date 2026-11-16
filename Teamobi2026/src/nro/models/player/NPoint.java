@@ -156,6 +156,8 @@ public class NPoint {
 
     public short tlBom;
     public int tlChieuDacBiet; // option 251: +#% sát thương Laze, Bom, Quả cầu kênh khi
+    public int tlDameBoss; // option 252: +#% sát thương lên boss
+    public int tlGiamMu; // option 175: giảm #% thời gian bị mù (choáng), tối đa 90%
 
     public short tlGiap;
 
@@ -747,6 +749,12 @@ public class NPoint {
                 break;
             case 251: //+#% sát thương chiêu đặc biệt (Laze, Bom, Quả cầu kênh khi)
                 this.tlChieuDacBiet += io.param;
+                break;
+            case 252: //+#% sát thương lên boss
+                this.tlDameBoss += io.param;
+                break;
+            case 175: //Giảm #% thời gian bị mù
+                this.tlGiamMu += io.param;
                 break;
         }
     }
@@ -1386,6 +1394,8 @@ public class NPoint {
         this.tlNeDonXinbato = 0;
         this.tlBom = 0;
         this.tlChieuDacBiet = 0;
+        this.tlDameBoss = 0;
+        this.tlGiamMu = 0;
         this.tlGiap = 0;
         this.tlxgcc = 0;
         this.tlxgc = 0;

@@ -626,3 +626,21 @@ UPDATE map_template SET zones=19 WHERE zones=10;
 
 - Build: có (`SkillService` `Skill.TU_SAT`). SQL: không. Client: không.
 - Trước: vòng lặp gán đè `dame` (boss /2, khỉ /3) nên mỗi boss trúng bom làm mục tiêu sau nhận ít dần. Nay mỗi mục tiêu tính từ cùng sát thương gốc: boss 1/2 (người nổ đang khỉ 1/3), người chơi nhận đủ (giữ như cũ theo user).
+
+## 74. Bỏ "Không lạnh" (106) khỏi nhóm chỉ số ẩn — 16/11/2026, máy công ty
+
+- Build: có (`InventoryService.handleOption210`). SQL: không. Client: không.
+- Option 210 (N dòng chỉ số ẩn, lộ khi mặc) bốc từ `{8, 14, 108, 94, 108, 16, 80, 81, 97, 100, 101, 104}` (bỏ 106). Trước có 106 nên cải trang Goku SSJ (đã có 106) hay ra 2 dòng không lạnh. Đồ đã mặc (đã lộ dòng) giữ nguyên.
+
+## 75. Thêm dòng chỉ số ẩn; option 252 sát thương lên boss; option 175 giảm thời gian bị mù có tác dụng — 16/11/2026, máy công ty
+
+- Build: có (`InventoryService.handleOption210`, `NPoint.tlDameBoss`/`tlGiamMu`, `SkillService.playerAttackPlayer` + Bom, `EffectSkillService.startStun`, `DataGame.vsItem` = 26). Client: không.
+- Option 210 (chỉ số ẩn) thêm 9 dòng: 50 SĐ 5–10, 77 HP 3–5, 103 KI 3–5, 5 SĐCM 5–15, 96 biến tấn công thành KI 5–10, 251 chiêu đặc biệt 5–10, 175 giảm thời gian bị mù 10–25, 252 sát thương lên boss 3–5, 19 sát thương lên quái 10–25. Dùng chung cho cải trang Goku SSJ và hộp quà Goku Day.
+- Option 252 mới "+#% sát thương lên boss": cộng vào đòn đánh/chưởng/Laze/QCKK (`playerAttackPlayer`) và Bom khi mục tiêu là boss.
+- Option 175 "Giảm #% thời gian bị mù" trước chỉ có tên, nay giảm thời gian choáng (`startStun`: Thái dương hạ san, boss gây choáng…), tối đa 90%.
+- SQL:
+```sql
+SET NAMES utf8mb4;
+INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên boss');
+```
+- Kiểm tra: `SELECT id, NAME FROM item_option_template WHERE id=252;` ra 1 dòng.

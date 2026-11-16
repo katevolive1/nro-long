@@ -138,6 +138,9 @@ public class EffectSkillService {
     }
 
     public void startStun(Player player, long lastTimeStartBlind, int timeBlind) {
+        if (player.nPoint != null && player.nPoint.tlGiamMu > 0) { // option 175, giảm tối đa 90%
+            timeBlind = timeBlind * (100 - Math.min(player.nPoint.tlGiamMu, 90)) / 100;
+        }
         player.effectSkill.lastTimeStartStun = lastTimeStartBlind;
         player.effectSkill.timeStun = timeBlind;
         player.effectSkill.isStun = true;

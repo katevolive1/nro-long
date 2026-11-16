@@ -773,6 +773,9 @@ public class SkillService {
                             if (!player.equals(pl) && canAttackPlayer(player, pl) && Util.getDistance(player, pl) <= rangeBom) {
                                 // Mỗi mục tiêu tính từ cùng một sát thương gốc (trước gán đè dame nên mục tiêu sau bị giảm dần, sửa 16/11/2026)
                                 long damePl = pl.isBoss ? player.effectSkill.isMonkey ? dame / 3 : dame / 2 : dame;
+                                if (pl.isBoss) { // option 252
+                                    damePl += damePl * player.nPoint.tlDameBoss / 100;
+                                }
                                 pl.injured(player, damePl, MapService.gI().isMapYardart(player.zone.map.mapId), false);
                                 PlayerService.gI().sendInfoHpMpMoney(pl);
                                 Service.gI().Send_Info_NV(pl);
@@ -916,6 +919,9 @@ public class SkillService {
             if (plInjure.isBoss) {
                 dameAttack /= 3;
             }
+        }
+        if (plInjure.isBoss && plAtt.nPoint.tlDameBoss > 0) { // option 252
+            dameAttack += dameAttack * plAtt.nPoint.tlDameBoss / 100;
         }
         int dameHit = plInjure.injured(plAtt, miss ? 0 : dameAttack, false, false);
         if (plAtt.playerSkill == null) {
