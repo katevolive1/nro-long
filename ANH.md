@@ -68,3 +68,28 @@ php tools/kho-anh/xuat-icon.php
 - **187 ID thiếu mức zoom không cần sửa**: 151 ID có x4 thiếu x2/x3 (15917–16036, 16672–16673, 16901–16935), 36 ID có x2 thiếu x4 (14523–14566). Tất cả là ảnh giữ chỗ 1x1 hoặc 2x2, không có ảnh thật. Đã thử bù rồi gỡ vì chỉ thêm file rác. `lam-du-zoom.ps1` nay tự bỏ qua ảnh giữ chỗ.
 
 Icon mới chỉ cần chép vào `data/icon/x2..x4` (và x2 sang `web/icon`): `DataGame.sendIcon` đọc file mỗi lần client xin, không cần build lại server.
+
+## Hình boss / cải trang SSJ (dò 16/11/2026)
+
+Boss lấy hình bằng `outfit {head, body, leg}` = id dòng bảng `part` (cột `DATA` = `[[idẢnh,dx,dy],...]`, ảnh trong `data/icon`). Cải trang lấy hình từ cột `item_template.head/body/leg`. Ảnh `2955` (119–120 byte) là ảnh trống cố ý ở cuối nhiều part, không phải thiếu.
+
+Đã kiểm tra đủ ảnh x2/x3/x4 cho các bộ sau (head, body, leg):
+
+| Cải trang | Part | Ảnh đầu |
+|---|---|---|
+| 1589 Goku SSJ | 1454, 1450, 1451 | 13218 |
+| 1595 Goku SSJ2 | 1455, 1450, 1451 | 13214 |
+| 1587 Goku SSJ3 | 1449, 1450, 1451 | 13177 |
+| 1590 Goku SSJ Blue | 1457, 1459, 1460 | 13221 |
+| 1553 Goku SSJ4 | 1431, 1432, 1433 | 12866 |
+| 1742 Cađíc SSJ | 1630, 1642, 1633 | 14382 |
+| 1743 Cađíc SSJ2 | 1634, 1632, 1633 | 14386 |
+| 1745 Cađíc SSJ3 | 1643, 1632, 1633 | 14396 |
+| 1746 Cađíc SSJ Blue | 1646, 1648, 1649 | 14462 |
+| 1693 Cađíc SSJ4 | 1575, 1576, 1577 | 13960 |
+| 904 Black Goku SSJ White | 906, 904, 905 | 8248 |
+| 1442 Super Xayda God | 1362, 1363, 1364 | 12273 |
+| 1807 Goku SSJ4 kid | 1755, 1756, 1757 | 14954 |
+| 1275 Cumber SSJ (boss Cumber đã dùng) | 1257, 1255, 1256 | 11410 |
+
+Lỗi: 1593 CT Goku SSJ God có body part 1470 toàn ảnh trống và leg part 1471 có 16/17 ảnh trống, không dùng cho boss được. 1145 Black goku ssj 3 White không có head/body/leg.

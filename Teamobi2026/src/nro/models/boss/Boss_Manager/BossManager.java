@@ -30,6 +30,7 @@ import nro.models.boss.Cell.XENCON6;
 import nro.models.boss.Cell.XENCON7;
 import nro.models.boss.Cell.XenBoHung;
 import nro.models.boss.Cold.Cooler;
+import nro.models.boss.Cold.GokuSSJ;
 import nro.models.boss.trai_dat.BIDO;
 import nro.models.boss.trai_dat.BOJACK;
 import nro.models.boss.trai_dat.BUJIN;
@@ -174,6 +175,10 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.BABY, 2);
 //        this.createBoss(BossID.MAT_TROI, 5); // tạm tắt boss Mặt Trời (31/10/2026)
         this.createBoss(BossID.MABU_NGOAI, 2);
+        // Goku SSJ 1/2/3 map Cold
+        this.createBoss(BossID.GOKU_SSJ);
+        this.createBoss(BossID.GOKU_SSJ2);
+        this.createBoss(BossID.GOKU_SSJ3);
         // Trạm hủy diệt 186 (TĐ), 187 (Namếc), 188 (Xayda): mỗi map 1 cặp Beerus + Whis và 1 cặp Champa + Vados
         for (int mapId = 186; mapId <= 188; mapId++) {
             try {
@@ -199,6 +204,8 @@ public class BossManager implements Runnable {
                     new Broly();
                 case BossID.MABU_NGOAI ->
                     new MabuNgoai();
+                case BossID.GOKU_SSJ, BossID.GOKU_SSJ2, BossID.GOKU_SSJ3 ->
+                    new GokuSSJ(bossID);
                 case BossID.THIEN_SU_WHIS, BossID.THIEN_SU_VADOS ->
                     new ThienSu(bossID);
                 case BossID.TAP_SU_0 ->

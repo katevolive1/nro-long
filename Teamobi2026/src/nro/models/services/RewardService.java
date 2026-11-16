@@ -55,6 +55,28 @@ public class RewardService {
         return it;
     }
 
+    // Cải trang Goku SSJ rơi từ boss Goku SSJ 1/2/3 (map Cold), xem KE-HOACH-BOSS-GOKU-SSJ.md
+    // 0,075% jackpot vĩnh viễn chỉ số trần, 3% vĩnh viễn chỉ số thường, còn lại hạn 1-3 ngày
+    public Item createCaiTrangGokuSSJ(int itemId) {
+        int roll = Util.nextInt(100000);
+        boolean jackpot = roll < 75;
+        boolean vinhVien = roll < 3075;
+        Item it = ItemService.gI().createNewItem((short) itemId);
+        it.itemOptions.clear();
+        it.itemOptions.add(new ItemOption(50, jackpot ? Util.nextInt(68, 70) : Util.nextInt(40, 70))); // Sức đánh
+        it.itemOptions.add(new ItemOption(106, 0)); // Không ảnh hưởng bởi cái lạnh
+        int dongPhu = Util.isTrue(1, 2) ? 5 : 251; // Sức đánh chí mạng hoặc sát thương chiêu đặc biệt
+        it.itemOptions.add(new ItemOption(dongPhu, jackpot ? Util.nextInt(28, 30) : Util.nextInt(10, 30)));
+        it.itemOptions.add(new ItemOption(148, Util.nextInt(5, 10))); // Tốc độ chạy
+        it.itemOptions.add(new ItemOption(210, Util.nextInt(4, 5))); // Dòng chỉ số ẩn, lộ ra khi mặc
+        it.itemOptions.add(new Item.ItemOption(154, 0)); // Không bán lại
+        if (!vinhVien) {
+            it.itemOptions.add(new Item.ItemOption(93, Util.nextInt(1, 3))); // HSD
+        }
+        it.quantity = 1;
+        return it;
+    }
+
     public List<Item> getListItemLuckyRound(Player player, int num, boolean vip) {
         List<Item> list = new ArrayList<>();
         for (int i = 0; i < num; i++) {

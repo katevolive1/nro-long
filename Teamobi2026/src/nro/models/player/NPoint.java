@@ -155,6 +155,7 @@ public class NPoint {
     public short tlNeDonXinbato;
 
     public short tlBom;
+    public int tlChieuDacBiet; // option 251: +#% sát thương Laze, Bom, Quả cầu kênh khi
 
     public short tlGiap;
 
@@ -743,6 +744,9 @@ public class NPoint {
                 break;
             case 153: //% phát nổ sau khi chết
                 this.tlBom += io.param;
+                break;
+            case 251: //+#% sát thương chiêu đặc biệt (Laze, Bom, Quả cầu kênh khi)
+                this.tlChieuDacBiet += io.param;
                 break;
         }
     }
@@ -1381,6 +1385,7 @@ public class NPoint {
         this.tlNeDon = 0;
         this.tlNeDonXinbato = 0;
         this.tlBom = 0;
+        this.tlChieuDacBiet = 0;
         this.tlGiap = 0;
         this.tlxgcc = 0;
         this.tlxgc = 0;
@@ -1552,6 +1557,9 @@ public class NPoint {
                 if (this.player.setClothes.picolo == 5) {
                     dameSkill *= 3 / 2;
                 }
+                if (this.tlChieuDacBiet > 0) { // option 251
+                    dameSkill = (int) Math.min(2_147_483_647L, (long) dameSkill * (100 + this.tlChieuDacBiet) / 100);
+                }
                 return dameSkill;
             case Skill.QUA_CAU_KENH_KHI:
                 long hpmob = 0;
@@ -1575,6 +1583,7 @@ public class NPoint {
                 if (this.player.setClothes.kirin == 5) {
                     dameqckk *= 2;
                 }
+                dameqckk = dameqckk * (100 + this.tlChieuDacBiet) / 100; // option 251
 
                 dameqckk = dameqckk + (Util.nextInt(-5, 5) * dameqckk / 100);
                 if (dameqckk > 2_147_483_647) {

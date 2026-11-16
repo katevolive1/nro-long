@@ -4,7 +4,7 @@ Nhật ký những thay đổi **không tự theo git**: lệnh SQL (DB không t
 
 ## Cách dùng (cho Claude)
 
-- **Sau khi `git pull` hoặc đầu phiên làm việc**: đọc file `.thay-doi-da-chay` ở thư mục gốc repo (bị gitignore, mỗi máy một file, mỗi dòng một số mục đã chạy ở máy này; chưa có file thì coi như chưa chạy mục nào). Mục nào có trong file này mà chưa có trong `.thay-doi-da-chay` thì làm theo thứ tự số tăng dần:
+- **Sau khi `git pull` hoặc đầu phiên làm việc**: đọc file `.thay-doi-da-chay` ở thư mục gốc repo (bị gitignore, mỗi máy một file, mỗi dòng một số mục đã chạy ở máy này; chưa có file thì coi như chưa chạy mục nào). Mục nào có trong file này mà chưa có trong `.thay-doi-da-chay` thì **báo user trước** (liệt kê số mục, tên, có SQL / build / client không) và **hỏi user**: Claude tự chạy SQL + build, hay user tự làm. Không tự chạy khi chưa hỏi (user chốt 16/11/2026). User đồng ý thì làm theo thứ tự số tăng dần:
   1. **SQL**: ghi khối SQL ra file UTF-8 trong scratchpad rồi chạy `C:\xampp\mysql\bin\mysql.exe -u root --default-character-set=utf8mb4 team10_long < file.sql` (mật khẩu lấy từ `database.pass` trong `Teamobi2026/Config.properties`, trống thì bỏ `-p`). Không gõ tiếng Việt thẳng trong dòng lệnh Git Bash vì sẽ thành `?`. MySQL chưa chạy thì nhắc user bật trong XAMPP. Chạy xong kiểm tra lại bằng `SELECT`.
   2. **Build**: mục có "Build: có" thì chạy `cmd /c "<thư mục repo>\Teamobi2026\build.bat < NUL"` (phải ghi đường dẫn đầy đủ, gọi `build.bat` trần thì cmd báo không tìm thấy) một lần sau khi đã áp hết các mục, rồi nhắc user gõ `bt` trong console server hoặc chạy `run.bat`.
   3. **Client**: mục có "Client: có" thì nhắc user chạy `client-patch\cap-nhat-client.bat` (không tự chạy).

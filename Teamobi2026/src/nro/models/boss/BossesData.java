@@ -2274,6 +2274,67 @@ public class BossesData {
             AppearType.ANOTHER_LEVEL //type appear
     );
 
+    //========================GOKU SSJ 1/2/3 (map Cold, boss/Cold/GokuSSJ) — câu chat sửa ở đây========================
+    // text chat 1: lúc xuất hiện, text chat 2: lúc đánh (ngẫu nhiên), text chat 3: lúc chết
+    private static final int[][] GOKU_SSJ_SKILL = {
+        {Skill.DRAGON, 7, 1000}, {Skill.DEMON, 7, 1000}, {Skill.GALICK, 7, 1000},
+        {Skill.KAMEJOKO, 7, 1000}, {Skill.MASENKO, 7, 1000}, {Skill.ANTOMIC, 7, 1000},
+        {Skill.TAI_TAO_NANG_LUONG, 7, 300000}, {Skill.KHIEN_NANG_LUONG, 1, 300000},};
+
+    public static final BossData GOKU_SSJ = new BossData(
+            "Goku SSJ", //name
+            ConstPlayer.XAYDA, //gender
+            new short[]{1454, 1450, 1451, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
+            250000, //dame
+            new long[]{3_000_000_000L}, //hp
+            new int[]{105, 106, 107, 108, 109, 110}, //map join
+            GOKU_SSJ_SKILL,
+            new String[]{"|-1|Lạnh thế này mà vẫn có đứa dám ra đây à"}, //text chat 1
+            new String[]{"|-1|Chỉ có vậy thôi sao?",
+                "|-1|Đánh mạnh lên chứ!",
+                "|-1|Kamê... hamê... ha!",
+                "|-1|Ta còn chưa nóng người đâu",
+                "|-1|Lên hết một lượt đi"}, //text chat 2
+            new String[]{"|-1|Khá lắm... lần sau ta không nương tay đâu"}, //text chat 3
+            REST_30_M //second rest
+    );
+
+    public static final BossData GOKU_SSJ2 = new BossData(
+            "Goku SSJ2", //name
+            ConstPlayer.XAYDA, //gender
+            new short[]{1455, 1450, 1451, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
+            250000, //dame
+            new long[]{3_000_000_000L}, //hp
+            new int[]{105, 106, 107, 108, 109, 110}, //map join
+            GOKU_SSJ_SKILL,
+            new String[]{"|-1|Chuẩn bị tinh thần đi"}, //text chat 1
+            new String[]{"|-1|Nhanh nữa lên!",
+                "|-1|Tia sét này là thật đấy",
+                "|-1|Né được chiêu này không?",
+                "|-1|Hơi yếu đấy nhé",
+                "|-1|Ha!"}, //text chat 2
+            new String[]{"|-1|Hừ... ta sẽ quay lại"}, //text chat 3
+            REST_30_M //second rest
+    );
+
+    public static final BossData GOKU_SSJ3 = new BossData(
+            "Goku SSJ3", //name
+            ConstPlayer.XAYDA, //gender
+            new short[]{1449, 1450, 1451, -1, -1, -1}, //outfit {head, body, leg, bag, aura, eff}
+            250000, //dame
+            new long[]{3_000_000_000L}, //hp
+            new int[]{105, 106, 107, 108, 109, 110}, //map join
+            GOKU_SSJ_SKILL,
+            new String[]{"|-1|Tóc dài thế này mới đánh sướng tay"}, //text chat 1
+            new String[]{"|-1|Dạng này tốn sức lắm, xong nhanh thôi",
+                "|-1|Rồng lửa đâu, ra đây!",
+                "|-1|Đứng yên đó!",
+                "|-1|Mạnh hơn nữa đi!",
+                "|-1|Hây aaaa!"}, //text chat 2
+            new String[]{"|-1|Hừ... ta sẽ quay lại"}, //text chat 3
+            REST_30_M //second rest
+    );
+
     public static final BossData ONG_GIA_NOEL = new BossData(
             "Ông già Noel", //name
             ConstPlayer.XAYDA, //gender

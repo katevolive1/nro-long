@@ -72,6 +72,11 @@ public class BossID {
     public static final int THIEN_SU_WHIS = -1826;
     public static final int THIEN_SU_VADOS = -1827;
 
+    // Goku SSJ 1/2/3 ở map Cold 105-110, xem boss/Cold/GokuSSJ
+    public static final int GOKU_SSJ = -1828;
+    public static final int GOKU_SSJ2 = -1829;
+    public static final int GOKU_SSJ3 = -1830;
+
     //================MINIBOSSS=============
     public static final int SOI_HEC_QUYN1 = -77;
     public static final int O_DO1 = -78;
