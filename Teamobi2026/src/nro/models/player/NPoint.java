@@ -234,6 +234,11 @@ public class NPoint {
 
     private void setPointWhenWearClothes() {
         resetPoint();
+        // Đếm lại set mỗi lần tính chỉ số (16/11/2026): trước chỉ đếm lúc đăng nhập (Controller), mặc/tháo set phải vào lại
+        if (!this.player.isBoss && this.player.setClothes != null && this.player.inventory != null
+                && this.player.inventory.itemsBody != null && this.player.inventory.itemsBody.size() > 5) {
+            this.player.setClothes.setup();
+        }
         if (this.player.rewardBlackBall.timeOutOfDateReward[2] > System.currentTimeMillis()) {
             tlHutHp += RewardBlackBall.R3S_1;
         }
@@ -498,6 +503,10 @@ public class NPoint {
                     option200EquipmentCount++;
                 }
             }
+        }
+        // Set Gohan đủ 5 món: +30% vàng từ quái (16/11/2026; +150 may mắn tính ở ItemService.tongMayMan)
+        if (this.player.setClothes != null && this.player.setClothes.gohan >= 5) {
+            this.tlGold += 30;
         }
         // Sức đánh áp dụng từng mốc riêng để cộng nối tiếp như các option 50.
         int option200CriticalDamagePercent = 0;

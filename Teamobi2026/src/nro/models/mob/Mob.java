@@ -816,23 +816,8 @@ public class Mob {
         if (MapService.gI().isMapRiengTu(mapid)) {
             double tileDrop = 0.5; // % rơi đồ kích hoạt (trước 2/9999, sửa 16/11/2026)
 
-            int totalOption236Param = 0;
-            for (Item item : player.inventory.itemsBody) {
-                if (item != null && item.itemOptions != null) {
-                    for (Item.ItemOption op : item.itemOptions) {
-                        if (op.optionTemplate.id == 236) {
-                            totalOption236Param += op.param;
-                        }
-                    }
-                }
-            }
-
-            if (totalOption236Param > 100) {
-                totalOption236Param = 100;
-            }
-
-            double percentFromOption236 = Math.pow(totalOption236Param / 100.0, 1.5) * 20.0; // max 20%
-            tileDrop *= (1 + percentFromOption236 / 100.0);
+            // May mắn: option 236 + set Gohan, tối đa 200 điểm (ItemService.heSoMayMan, 16/11/2026)
+            tileDrop *= ItemService.gI().heSoMayMan(player);
 
             if (player.itemTime.isUseCoBonLa) {
                 tileDrop *= 1.15; // Cỏ bốn lá (trước ×1,5)
@@ -862,23 +847,8 @@ public class Mob {
         if (MapService.gI().isMapUpSKH(mapid)) {
             double tileDrop = 0.5; // % rơi đồ kích hoạt (trước 2/9999, sửa 16/11/2026)
 
-            int totalOption236Param = 0;
-            for (Item item : player.inventory.itemsBody) {
-                if (item != null && item.itemOptions != null) {
-                    for (Item.ItemOption op : item.itemOptions) {
-                        if (op.optionTemplate.id == 236) {
-                            totalOption236Param += op.param;
-                        }
-                    }
-                }
-            }
-
-            if (totalOption236Param > 100) {
-                totalOption236Param = 100;
-            }
-
-            double percentFromOption236 = Math.pow(totalOption236Param / 100.0, 1.5) * 20.0; // max 20%
-            tileDrop *= (1 + percentFromOption236 / 100.0);
+            // May mắn: option 236 + set Gohan, tối đa 200 điểm (ItemService.heSoMayMan, 16/11/2026)
+            tileDrop *= ItemService.gI().heSoMayMan(player);
 
             if (player.itemTime.isUseCoBonLa) {
                 tileDrop *= 1.15; // Cỏ bốn lá (trước ×1,5)
@@ -1091,6 +1061,15 @@ public class Mob {
 
             if (Util.isTrue(dropRate, 100)) { // spl
                 list.add(new ItemMap(Util.spl(zone, Util.nextInt(441, 447), 1, x, this.location.y, player.id)));
+            }
+        }
+
+        // +% vàng từ quái: option 100 + set Gohan 30% (NPoint.tlGold). Trước 16/11/2026 tlGold được cộng nhưng không dùng.
+        if (player != null && player.nPoint != null && player.nPoint.tlGold > 0) {
+            for (ItemMap im : list) {
+                if (im != null && im.itemTemplate != null && im.itemTemplate.type == 9) {
+                    im.quantity = (int) Math.min(Integer.MAX_VALUE, (long) im.quantity * (100 + player.nPoint.tlGold) / 100);
+                }
             }
         }
 

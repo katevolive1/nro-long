@@ -66,8 +66,16 @@ Ngoài mục 1–3 còn có:
 | ~~Đồ sao "3 map đầu"~~ (**tạm tắt 16/11/2026**, comment trong code, thay bằng mục 15) | ≈ 1/4.080 nếu sức mạnh < 100k, giảm theo sức mạnh (bảng dưới) | |
 | ~~Đồ sao "khác vải thô"~~ (**tạm tắt 16/11/2026**) | 1/8000 × 1/19999 × 50% ≈ 1/320 triệu (coi như không rơi) | |
 
-**Đồ kích hoạt** (`randTempItemKichHoat` + [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L860)):
-- Tỉ lệ = 0,5% × (1 + option 236) × Cỏ 1,15, tính trên 1 triệu nên không bị làm tròn. Option 236 (May mắn): tổng param trên đồ đang mặc (tối đa 100) → cộng (param/100)^1,5 × 20%, tối đa +20% → 0,6% (cùng Cỏ 0,69%). Trước 16/11/2026 tính trên 9999 nên 236 và phần lẻ của Cỏ bị cắt mất, Cỏ khi đó ×1,5.
+**Đồ kích hoạt** (`randTempItemKichHoat` + [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L883)):
+- Tỉ lệ = 0,5% × hệ số may mắn × Cỏ 1,15, tính trên 1 triệu nên không bị làm tròn. Trước 16/11/2026 tính trên 9999 nên may mắn và phần lẻ của Cỏ bị cắt mất, Cỏ khi đó ×1,5.
+- **May mắn** ([`ItemService.tongMayMan`](Teamobi2026/src/nro/models/services/ItemService.java#L678) / [`ItemService.heSoMayMan`](Teamobi2026/src/nro/models/services/ItemService.java#L701)): điểm = tổng option 236 "+#% May mắn" trên đồ đang mặc (chữ % chỉ là tên, # là điểm) + 150 nếu đủ 5 món set Gohan; **tối đa 200 điểm** (trước 100, nâng 16/11/2026). Hệ số = 1 + (điểm/100)^1,5 × 20%. Dùng chung cho mục 4, mục 5 và phần đồ kích hoạt ở mục 15.
+
+| Điểm may mắn | 0 | 50 | 100 | 150 (set Gohan) | 200 (tối đa) |
+|---|---|---|---|---|---|
+| Hệ số | ×1 | ×1,071 | ×1,2 | ×1,367 | ×1,566 |
+| Đồ kích hoạt mục 4/5 (không Cỏ / có Cỏ) | 0,5% / 0,575% | 0,54% / 0,62% | 0,6% / 0,69% | 0,68% / 0,79% | 0,78% / 0,9% |
+
+- Nguồn option 236 (dò 16/11/2026): shop CT Urôn Trư Bát Giới 1698, Pet Hải Ly 1682, Khủng Long Thơ Mộng 1713 mỗi món 15; Pet Zịt vàng bối rối 1631, Cân Đẩu Vân Thơ Mộng 1711 mỗi món 10; [`ToriBot`](Teamobi2026/src/nro/models/npc_list/ToriBot.java) pet rồng nhí 1771 và búa 1772 mỗi món 15; [`UseItem.OpenHopQuaVip`](Teamobi2026/src/nro/models/services_func/UseItem.java#L2154) (1761, 1731, 1732) 10.
 - Loại: giày 41,1%, găng 20,7%, quần 15,9%, áo 12,3%, rađa 10%. Món theo hành tinh người giết, cấp 1 hoặc cấp 2 (50/50): áo 0/33 TĐ, 1/41 NM, 2/49 XD; quần 6/35, 7/43, 8/51; găng 21/24, 22/46, 23/53; giày 27/30, 28/47, 29/55; rađa 12/57.
 - Set: 30% set loại 4 option (TĐ Thần Vũ Trụ Kaio 245–248, NM Nail 237–240, XD Cađic M 241–244), 70% còn lại chia 50/25/12,5/12,5. Tổng:
   - Trái Đất: Kaio 30%, Kirin 35%, Thên Xin Hăng 17,5%, Gohan 8,75%, Sôngôku 8,75%.
@@ -145,7 +153,7 @@ Map 164 không thuộc `AllMap` nên không có đồ ăn mục 2.
 - Kilis (option 250) không phải đồ rơi: xem CLAUDE.md mục đệ tử.
 
 ## 15. Đồ shop làng theo map (từ 16/11/2026)
-Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703) + [`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672), gọi trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613). Kế hoạch: [KE-HOACH-QUAI-ROI-DO-SHOP.md](KE-HOACH-QUAI-ROI-DO-SHOP.md).
+Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L736) + [`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L705), gọi trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613). Kế hoạch: [KE-HOACH-QUAI-ROI-DO-SHOP.md](KE-HOACH-QUAI-ROI-DO-SHOP.md).
 
 **Tỉ lệ và cấp theo vùng** (tỉ lệ mỗi con quái, Cỏ bốn lá ×1,15)
 
@@ -158,23 +166,23 @@ Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/It
 | ~~Tương lai~~ (tắt) | 92–94, 96–100, 102, 103 | 0,3% | 9–11 | 1–11 |
 | ~~Lạnh~~ (tắt) | 105–110 | 0,3% | 11–12 | 1–12 |
 
-Đổi 16/11/2026: tỉ lệ từ 2% mọi vùng (Tương lai/lạnh 1%) thành đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai/lạnh 0,3%; đồ kích hoạt từ cấp 1 (trước cùng cấp với đồ sao), đồ sao / kích hoạt 85% / 15% (trước 70% / 30%). **Tương lai và lạnh đang tắt** (chỉ rơi tới map Fide): 2 khối trong [`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672) bị comment, cần thì bỏ comment là chạy lại với số trong bảng. Dòng Ký gửi bên dưới chỉ có tác dụng khi bật lại.
+Đổi 16/11/2026: tỉ lệ từ 2% mọi vùng (Tương lai/lạnh 1%) thành đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai/lạnh 0,3%; đồ kích hoạt từ cấp 1 (trước cùng cấp với đồ sao), đồ sao / kích hoạt 85% / 15% (trước 70% / 30%). **Tương lai và lạnh đang tắt** (chỉ rơi tới map Fide): 2 khối trong [`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L705) bị comment, cần thì bỏ comment là chạy lại với số trong bảng. Dòng Ký gửi bên dưới chỉ có tác dụng khi bật lại.
 
 **Khi rơi**
 
 | | Đồ sao | Đồ kích hoạt |
 |---|---|---|
-| Tỉ lệ | Phần còn lại (79,3–85%) | 15% × may mắn × Cỏ (15–20,7%, bảng dưới) |
+| Tỉ lệ | Phần còn lại (73–85%) | 15% × may mắn × Cỏ (15–27%, bảng dưới) |
 | Chọn cấp | Thấp nhất vùng 50%, kế 35%, cao 15% (lạnh: 11 và 12 mỗi cấp 50%) | Ngẫu nhiên đều từ cấp 1 tới cấp cao nhất vùng |
-| Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), bảng dưới) | Set theo [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L860) (tỉ lệ set như mục 4) |
+| Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), bảng dưới) | Set theo [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L883) (tỉ lệ set như mục 4) |
 | Giao dịch | Được | Không (option 30), không có lỗ sao |
 
-**Phần đồ kích hoạt khi đã rơi** (từ 16/11/2026; may mắn = tổng option 236 trên đồ đang mặc, tối đa 100, cùng công thức mục 4)
+**Phần đồ kích hoạt khi đã rơi** (từ 16/11/2026; điểm may mắn và hệ số xem mục 4, tối đa 200 điểm)
 
-| May mắn | 0 | 25 | 50 | 75 | 100 |
+| Điểm may mắn | 0 | 50 | 100 | 150 (set Gohan) | 200 (tối đa) |
 |---|---|---|---|---|---|
-| Không Cỏ | 15% | 15,4% | 16,1% | 16,9% | 18% |
-| Có Cỏ ×1,15 | 17,3% | 17,7% | 18,5% | 19,5% | 20,7% |
+| Không Cỏ | 15% | 16,1% | 18% | 20,5% | 23,5% |
+| Có Cỏ ×1,15 | 17,3% | 18,5% | 20,7% | 23,6% | 27% |
 
 **Số sao pha lê của đồ sao**
 

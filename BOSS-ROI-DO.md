@@ -29,7 +29,7 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 
 - Cập nhật 7/11/2026: Baby, Black Goku, Cumber, Cooler, Siêu bọ hung cùng thêm 20% rơi 2–5 Thỏi vàng (id 457), đặt trước `dropNgocRong23`; Cumber đổi Thần Linh từ 7% sang dạng 1 5%, dạng 2 7%.
 - Cập nhật 31/10/2026: Thần Linh theo dạng ([`Boss.isDropDoTL`](Teamobi2026/src/nro/models/boss/Boss.java#L726), mỗi dạng chết đều gọi `reward`), ngọc rồng chung [`Boss.dropNgocRong23`](Teamobi2026/src/nro/models/boss/Boss.java#L718) (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ ([`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java)).
-- Đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1067), id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
+- Đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1090), id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
 - Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115% (trước 16/11/2026 nhân thẳng vào option shop nên shop tăng dần, đã sửa ở `getListOptionItemShop`); sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở [`Boss.java`](Teamobi2026/src/nro/models/boss/Boss.java): `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
 
 ## 3. Doanh trại
@@ -94,7 +94,7 @@ Mỗi lần chết rơi **đúng 1 món** cho người giết:
 
 | Tỉ lệ | Đồ |
 |---|---|
-| 2% | 1 món Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1067)) |
+| 2% | 1 món Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1090)) |
 | 25% | Hộp quà giáng sinh (648) |
 | 20% | Ngọc rồng 2 sao (15) |
 | 10% | Ngọc rồng 3 sao (16) |
@@ -176,4 +176,4 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 - Yardrat: né 10%, tối đa **1% HP**. Võ đài Hạt Mít (Bông Băng, Dracula, Người vô hình, Thỏ đầu bạc, Vua quỷ Sa Tăng…): né 10%, tối đa **10% HP**.
 - Luyện tập tự động (TrainingBoss, Tàu Pảy Pảy luyện tập, Whis): né 40%; Whis ÷ cấp.
 - Khí gas (Dr Lychee, Hatchiyack): mục 7a. Quái to: Hirudegarn mỗi đòn 1% HP còn lại; Gấu tướng cướp 5% sát thương.
-- **Đã sửa 31/10/2026** (trả về `long`): [`NPoint.subDameInjureWithDeff`](Teamobi2026/src/nro/models/player/NPoint.java#L1819) trước trả về `int`, nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).
+- **Đã sửa 31/10/2026** (trả về `long`): [`NPoint.subDameInjureWithDeff`](Teamobi2026/src/nro/models/player/NPoint.java#L1828) trước trả về `int`, nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).

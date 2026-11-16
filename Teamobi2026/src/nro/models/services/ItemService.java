@@ -669,6 +669,39 @@ public class ItemService {
     /**
      * Khoảng cấp đồ shop làng quái rơi theo map: {cấp thấp, cấp cao}, null nếu map không rơi.
      */
+    public static final int MAY_MAN_TOI_DA = 200; // trước 100, nâng 16/11/2026
+
+    /**
+     * Tổng điểm may mắn: option 236 "+#% May mắn" trên đồ đang mặc (# là điểm) + 150 nếu đủ 5 món set Gohan,
+     * tối đa MAY_MAN_TOI_DA.
+     */
+    public int tongMayMan(Player player) {
+        int mayMan = 0;
+        if (player != null && player.inventory != null) {
+            for (Item it : player.inventory.itemsBody) {
+                if (it != null && it.itemOptions != null) {
+                    for (ItemOption op : it.itemOptions) {
+                        if (op.optionTemplate.id == 236) {
+                            mayMan += op.param;
+                        }
+                    }
+                }
+            }
+        }
+        if (player != null && player.setClothes != null && player.setClothes.gohan >= 5) {
+            mayMan += 150;
+        }
+        return Math.min(mayMan, MAY_MAN_TOI_DA);
+    }
+
+    /**
+     * Hệ số nhân tỉ lệ rơi đồ kích hoạt theo may mắn: 1 + (điểm/100)^1,5 × 20%.
+     * 100 điểm ×1,2; 150 ×1,367; 200 ×1,566.
+     */
+    public double heSoMayMan(Player player) {
+        return 1 + Math.pow(tongMayMan(player) / 100.0, 1.5) * 0.2;
+    }
+
     public int[] capDoShopTheoMap(int mapId) {
         if ((mapId >= 1 && mapId <= 3) || mapId == 8 || mapId == 9 || mapId == 11 || (mapId >= 15 && mapId <= 17)) {
             return new int[]{1, 3};
@@ -729,17 +762,7 @@ public class ItemService {
         }
         // Đồ kích hoạt gốc 15% (trước 30%), còn lại đồ sao. Từ 16/11/2026 nhân may mắn (option 236 trên đồ đang mặc,
         // tối đa 100 → +(n/100)^1,5 × 20%, giống Mob map up SKH) và Cỏ bốn lá ×1,15: tối đa 15% × 1,2 × 1,15 = 20,7%
-        int mayMan = 0;
-        for (Item itBody : chu.inventory.itemsBody) {
-            if (itBody != null && itBody.itemOptions != null) {
-                for (ItemOption op : itBody.itemOptions) {
-                    if (op.optionTemplate.id == 236) {
-                        mayMan += op.param;
-                    }
-                }
-            }
-        }
-        double tlKichHoat = 15.0 * (1 + Math.pow(Math.min(mayMan, 100) / 100.0, 1.5) * 0.2);
+        double tlKichHoat = 15.0 * heSoMayMan(chu);
         if (chu.itemTime != null && chu.itemTime.isUseCoBonLa) {
             tlKichHoat *= 1.15;
         }
