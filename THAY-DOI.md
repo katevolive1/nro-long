@@ -655,3 +655,8 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 - Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
 - Tỉ lệ: Fide 63–83 2% → 1%, Tương lai và lạnh 1% → 0,5% (vùng đầu, giữa, xa giữ 2%; Cỏ ×1,15 như cũ).
 - Đồ kích hoạt (30% khi rơi): cấp ngẫu nhiên đều từ 1 tới cấp cao nhất của vùng map (Fide 1–9, Tương lai 1–11, lạnh 1–12). Đồ sao (70%) giữ cấp theo vùng. Chi tiết QUAI-ROI-DO.md mục 15.
+
+## 78. Quái rơi đồ shop chỉ tới map Fide — 16/11/2026, máy công ty
+
+- Build: có (`ItemService.capDoShopTheoMap`). SQL: không. Client: không.
+- Tắt rơi đồ shop ở map Tương lai và lạnh: 2 khối trả cấp 9–11 / 11–12 bị comment (giữ lại để bật lại khi cần, tỉ lệ 0,5% vẫn để sẵn). Vùng đầu, giữa, xa 2%, Fide 1% như mục 77.

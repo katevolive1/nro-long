@@ -32,7 +32,7 @@ Trạng thái: **đã làm 16/11/2026** (THAY-DOI mục 67, rơi đồ BOSS-ROI-
 - **Boss mẫu**: `boss/Cold/Cooler.java` (reward, injured, autoLeaveMap "Không tự rời map"), khai báo `BossesData`, `BossID`, tạo trong `BossManager.loadBoss` (dòng ~339 `new Cooler()`). Hồi sinh qua `secondsRest` = 1800.
 - **Chiêu** (`Skill.*`, cấp 7): DRAGON, DEMON, GALICK (đấm), KAMEJOKO, MASENKO, ANTOMIC (chưởng), TAI_TAO_NANG_LUONG 7, KHIEN_NANG_LUONG 1.
 - **Cải trang Hit** (`RewardService.createCaiTrangHit`): 0,5% jackpot vĩnh viễn + chỉ số đẹp nhất, 5% vĩnh viễn, còn lại có hạn.
-- **Chỉ số ẩn** = option `210` "# Dòng chỉ số ẩn" (`InventoryService.handleOption210`): lúc **mặc vào** mới lộ ra N dòng ngẫu nhiên không trùng nhau, lấy từ `{8, 14, 108 (ghi 2 lần nên ra nhiều hơn), 94, 16, 80, 81, 97, 100, 101, 104}` (bỏ 106 THAY-DOI 74), thêm 16/11/2026 (THAY-DOI 75) `50, 77, 103, 5, 96, 251, 175, 252, 19`. Giá trị: 8, 14, 108, 94, 77, 103, 252 ra 3–5; 50, 96, 251 ra 5–10; 5 ra 5–15; 16, 80, 81, 97, 100, 101, 104, 175, 19 ra 10–25.
+- **Chỉ số ẩn** = option `210` "# Dòng chỉ số ẩn" ([`InventoryService.handleOption210`](Teamobi2026/src/nro/models/services/InventoryService.java#L1186)): lúc **mặc vào** mới lộ ra N dòng ngẫu nhiên không trùng nhau, lấy từ `{8, 14, 108 (ghi 2 lần nên ra nhiều hơn), 94, 16, 80, 81, 97, 100, 101, 104}` (bỏ 106 THAY-DOI 74), thêm 16/11/2026 (THAY-DOI 75) `50, 77, 103, 5, 96, 251, 175, 252, 19`. Giá trị: 8, 14, 108, 94, 77, 103, 252 ra 3–5; 50, 96, 251 ra 5–10; 5 ra 5–15; 16, 80, 81, 97, 100, 101, 104, 175, 19 ra 10–25.
 - Option có sẵn: `50` sức đánh %, `5` sức đánh chí mạng %, `106` không ảnh hưởng bởi cái lạnh, `148` +#% tốc độ chạy, `93` hạn sử dụng (ngày), `154` không bán lại.
 - **Chưa có option "% sát thương Laze / Bom / Quả cầu kênh khi"** trong `item_option_template`. Chỉ có option set 5 món (140, 141…), không dùng được cho 1 cải trang. Cũng không có option "% chiêu đặc biệt" chung. Gần nhất là `216` "Tuyệt kỹ +#% sát thương", `214` "Phạm vi tuyệt kỹ +#%", `181` "Dịch chuyển tức thời +#% sát thương", nhưng **không code nào đọc 3 option này** (216/214 chỉ được gán ngẫu nhiên khi giám định sách, `GiamDinhSach.java:74`): hiện chữ trên đồ mà không có tác dụng.
 
@@ -50,7 +50,7 @@ Trạng thái: **đã làm 16/11/2026** (THAY-DOI mục 67, rơi đồ BOSS-ROI-
 
 1. `BossID`: thêm `GOKU_SSJ`, `GOKU_SSJ2`, `GOKU_SSJ3` (số âm chưa dùng).
 2. `BossesData`: 3 `BossData` (tên, gender Xayda, outfit trên, dame 250000, hp `{3_000_000_000L}`, mapJoin `{105..110}`, chiêu trên, câu chat, `secondsRest` 1800).
-3. Lớp mới `boss/Cold/GokuSSJ.java` (một lớp, nhận dạng 1/2/3 qua tham số):
+3. Lớp mới [`boss/Cold/GokuSSJ.java`](Teamobi2026/src/nro/models/boss/Cold/GokuSSJ.java) (một lớp, nhận dạng 1/2/3 qua tham số):
    - `getMapJoin()`: chọn map trong 105–110 chưa có con SSJ khác còn sống; khu ngẫu nhiên.
    - `reward()`: quay 1–100 theo bảng tỉ lệ, rơi 1 món cho `plKill.id`.
    - `autoLeaveMap()`: không tự rời map (giống Cooler).

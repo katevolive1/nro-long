@@ -66,7 +66,7 @@ Ngoài mục 1–3 còn có:
 | ~~Đồ sao "3 map đầu"~~ (**tạm tắt 16/11/2026**, comment trong code, thay bằng mục 15) | ≈ 1/4.080 nếu sức mạnh < 100k, giảm theo sức mạnh (bảng dưới) | |
 | ~~Đồ sao "khác vải thô"~~ (**tạm tắt 16/11/2026**) | 1/8000 × 1/19999 × 50% ≈ 1/320 triệu (coi như không rơi) | |
 
-**Đồ kích hoạt** (`randTempItemKichHoat` + `randOptionItemKichHoat`):
+**Đồ kích hoạt** (`randTempItemKichHoat` + [`randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L833)):
 - Tỉ lệ = 0,5% × (1 + option 236) × Cỏ 1,15, tính trên 1 triệu nên không bị làm tròn. Option 236 (May mắn): tổng param trên đồ đang mặc (tối đa 100) → cộng (param/100)^1,5 × 20%, tối đa +20% → 0,6% (cùng Cỏ 0,69%). Trước 16/11/2026 tính trên 9999 nên 236 và phần lẻ của Cỏ bị cắt mất, Cỏ khi đó ×1,5.
 - Loại: giày 41,1%, găng 20,7%, quần 15,9%, áo 12,3%, rađa 10%. Món theo hành tinh người giết, cấp 1 hoặc cấp 2 (50/50): áo 0/33 TĐ, 1/41 NM, 2/49 XD; quần 6/35, 7/43, 8/51; găng 21/24, 22/46, 23/53; giày 27/30, 28/47, 29/55; rađa 12/57.
 - Set: 30% set loại 4 option (TĐ Thần Vũ Trụ Kaio 245–248, NM Nail 237–240, XD Cađic M 241–244), 70% còn lại chia 50/25/12,5/12,5. Tổng:
@@ -145,19 +145,42 @@ Map 164 không thuộc `AllMap` nên không có đồ ăn mục 2.
 - Kilis (option 250) không phải đồ rơi: xem CLAUDE.md mục đệ tử.
 
 ## 15. Đồ shop làng theo map (từ 16/11/2026)
-Code: `ItemService.randDoShopRoiTuQuai` + `capDoShopTheoMap`, gọi trong `Mob.getItemMobReward`. Kế hoạch: [KE-HOACH-QUAI-ROI-DO-SHOP.md](KE-HOACH-QUAI-ROI-DO-SHOP.md).
+Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703) + [`capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672), gọi trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613). Kế hoạch: [KE-HOACH-QUAI-ROI-DO-SHOP.md](KE-HOACH-QUAI-ROI-DO-SHOP.md).
 
-| Vùng | Map | Cấp | Tỉ lệ (Cỏ ×1,15) |
-|---|---|---|---|
-| Đầu | 1, 2, 3, 8, 9, 11, 15, 16, 17 | 1–3 | 2% |
-| Giữa | 4, 5, 6, 10, 12, 13, 18, 19, 20 | 3–5 | 2% |
-| Xa | 27–38 | 5–7 | 2% |
-| Fide | 63–83 | 7–9 | 1% |
-| Tương lai | 92–94, 96–100, 102, 103 | 9–11 | 0,5% |
-| Lạnh | 105–110 | 11–12 | 0,5% |
+**Tỉ lệ và cấp theo vùng** (tỉ lệ mỗi con quái, Cỏ bốn lá ×1,15)
 
-- Cấp (cột "Cấp" ở bảng): **đồ sao** theo vùng, thấp 50%, giữa 35%, cao 15% (lạnh: 11 là 50%, 12 là 50%); **đồ kích hoạt** ngẫu nhiên đều từ cấp 1 tới cấp cao nhất của vùng (vd Fide 1–9, lạnh 1–12). Tỉ lệ Fide 1%, Tương lai/lạnh 0,5% từ 16/11/2026 (trước 2% / 1%). Loại: áo, quần, găng, giày, rađa mỗi loại 20%. Hành tinh theo người kết liễu (đệ giết thì theo sư phụ, Cỏ cũng của sư phụ). Không giới hạn sức mạnh người chơi (bỏ chặn 16/11/2026).
-- Chỉ số = option shop × 100–115% (mỗi option tung riêng).
-- 70% **đồ sao**: thêm option 107 theo `Boss.randSaoDoShop` (1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%), giao dịch được.
-- 30% **đồ kích hoạt**: set theo `randOptionItemKichHoat` (tỉ lệ set như mục 4), option 30 không giao dịch, không có lỗ sao.
-- Tương lai / lạnh: thêm 10% Ký gửi vàng (86) hoặc Ký gửi ngọc (87), 50/50, cho cả hai loại.
+| Vùng | Map | Tỉ lệ rơi | Cấp đồ sao | Cấp đồ kích hoạt |
+|---|---|---|---|---|
+| Đầu | 1, 2, 3, 8, 9, 11, 15, 16, 17 | 2% | 1–3 | 1–3 |
+| Giữa | 4, 5, 6, 10, 12, 13, 18, 19, 20 | 2% | 3–5 | 1–5 |
+| Xa | 27–38 | 2% | 5–7 | 1–7 |
+| Fide | 63–83 | 1% | 7–9 | 1–9 |
+| ~~Tương lai~~ (tắt) | 92–94, 96–100, 102, 103 | 0,5% | 9–11 | 1–11 |
+| ~~Lạnh~~ (tắt) | 105–110 | 0,5% | 11–12 | 1–12 |
+
+Đổi 16/11/2026: Fide 2% → 1%, đồ kích hoạt từ cấp 1 (trước cùng cấp với đồ sao). **Tương lai và lạnh đang tắt** (chỉ rơi tới map Fide): 2 khối trong [`capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672) bị comment, cần thì bỏ comment là chạy lại với số trong bảng. Dòng Ký gửi bên dưới chỉ có tác dụng khi bật lại.
+
+**Khi rơi**
+
+| | Đồ sao | Đồ kích hoạt |
+|---|---|---|
+| Tỉ lệ | 70% | 30% |
+| Chọn cấp | Thấp nhất vùng 50%, kế 35%, cao 15% (lạnh: 11 và 12 mỗi cấp 50%) | Ngẫu nhiên đều từ cấp 1 tới cấp cao nhất vùng |
+| Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), bảng dưới) | Set theo [`randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L833) (tỉ lệ set như mục 4) |
+| Giao dịch | Được | Không (option 30), không có lỗ sao |
+
+**Số sao pha lê của đồ sao**
+
+| Số sao | 1–3 | 4–5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|
+| Tỉ lệ | 79,49% | 17% | 3% | 0,5% | 0,01% |
+
+**Quy tắc chung**
+
+| Mục | Cách tính |
+|---|---|
+| Loại đồ | Áo, quần, găng, giày, rađa, mỗi loại 20% |
+| Chỉ số | Option shop × 100–115% (mỗi option tung riêng) |
+| Hành tinh | Theo người kết liễu (đệ giết thì theo sư phụ, Cỏ cũng tính của sư phụ) |
+| Sức mạnh | Không giới hạn (bỏ chặn 16/11/2026) |
+| Ký gửi | Tương lai / lạnh: thêm 10% có Ký gửi vàng (86) hoặc Ký gửi ngọc (87), 50/50, cho cả đồ sao và đồ kích hoạt |

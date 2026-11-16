@@ -682,12 +682,13 @@ public class ItemService {
         if (mapId >= 63 && mapId <= 83) {
             return new int[]{7, 9};
         }
-        if (nro.models.map.service.MapService.gI().isMapTuongLai(mapId)) {
-            return new int[]{9, 11};
-        }
-        if (nro.models.map.service.MapService.gI().isMapCold(mapId)) {
-            return new int[]{11, 12};
-        }
+        // Chỉ rơi tới map Fide: tắt Tương lai và lạnh từ 16/11/2026, bật lại thì bỏ comment
+//        if (nro.models.map.service.MapService.gI().isMapTuongLai(mapId)) {
+//            return new int[]{9, 11};
+//        }
+//        if (nro.models.map.service.MapService.gI().isMapCold(mapId)) {
+//            return new int[]{11, 12};
+//        }
         return null;
     }
 
