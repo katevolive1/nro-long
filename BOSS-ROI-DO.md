@@ -29,7 +29,7 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 - Cập nhật 7/11/2026: Baby, Black Goku, Cumber, Cooler, Siêu bọ hung cùng thêm 20% rơi 2–5 Thỏi vàng (id 457), đặt trước `dropNgocRong23`; Cumber đổi Thần Linh từ 7% sang dạng 1 5%, dạng 2 7%.
 - Cập nhật 31/10/2026: Thần Linh theo dạng (`Boss.isDropDoTL`, mỗi dạng chết đều gọi `reward`), ngọc rồng chung `Boss.dropNgocRong23` (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ (`BossesData`).
 - Đồ Thần Linh (`ItemService.randDoTLBoss`, id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
-- Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115%; sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) (`Boss.randSaoDoShop`, 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở `Boss.java`: `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
+- Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115% (trước 16/11/2026 nhân thẳng vào option shop nên shop tăng dần, đã sửa ở `getListOptionItemShop`); sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) (`Boss.randSaoDoShop`, 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở `Boss.java`: `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
 
 ## 3. Doanh trại
 | Boss | NR 4 hoặc 5 sao (17/18, mỗi loại 50%) | Bản đồ kho báu (611) |

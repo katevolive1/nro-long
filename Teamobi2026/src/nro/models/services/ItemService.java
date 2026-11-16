@@ -634,10 +634,110 @@ public class ItemService {
         List<Item.ItemOption> list = new ArrayList<>();
         Manager.SHOPS.forEach(shop -> shop.tabShops.forEach(tabShop -> tabShop.itemShops.forEach(itemShop -> {
             if (itemShop.temp.id == id && list.isEmpty()) {
-                list.addAll(itemShop.options);
+                // Trả bản sao: nơi gọi (boss rơi đồ Goku…) nhân param, không được sửa option gốc của shop (sửa 16/11/2026)
+                itemShop.options.forEach(op -> list.add(new Item.ItemOption(op)));
             }
         })));
         return list;
+    }
+
+    // ===== Đồ shop làng rơi từ quái theo map (16/11/2026, KE-HOACH-QUAI-ROI-DO-SHOP.md) =====
+    // [hành tinh TĐ/NM/XD][loại: áo, quần, găng, giày][cấp 1..12], lấy theo thứ tự item_shop của BUNMA/DENDE/APPULE
+    private static final int[][][] DO_SHOP_LANG = {
+        {
+            {0, 33, 3, 34, 136, 137, 138, 139, 230, 231, 232, 233},
+            {6, 35, 9, 36, 140, 141, 142, 143, 242, 243, 244, 245},
+            {21, 24, 37, 38, 144, 145, 146, 147, 254, 255, 256, 257},
+            {27, 30, 39, 40, 148, 149, 150, 151, 266, 267, 268, 269}
+        },
+        {
+            {1, 41, 4, 42, 152, 153, 154, 155, 234, 235, 236, 237},
+            {7, 43, 10, 44, 156, 157, 158, 159, 246, 247, 248, 249},
+            {22, 46, 25, 45, 160, 161, 162, 163, 258, 259, 260, 261},
+            {28, 47, 31, 48, 164, 165, 166, 167, 270, 271, 272, 273}
+        },
+        {
+            {2, 49, 5, 50, 168, 169, 170, 171, 238, 239, 240, 241},
+            {8, 51, 11, 52, 172, 173, 174, 175, 250, 251, 252, 253},
+            {23, 53, 26, 54, 176, 177, 178, 179, 262, 263, 264, 265},
+            {29, 55, 32, 56, 180, 181, 182, 183, 274, 275, 276, 277}
+        }
+    };
+    // Rađa cấp 1..12, dùng chung 3 hành tinh
+    private static final int[] RADA_SHOP_LANG = {12, 57, 58, 59, 184, 185, 186, 187, 278, 279, 280, 281};
+
+    /**
+     * Khoảng cấp đồ shop làng quái rơi theo map: {cấp thấp, cấp cao}, null nếu map không rơi.
+     */
+    public int[] capDoShopTheoMap(int mapId) {
+        if ((mapId >= 1 && mapId <= 3) || mapId == 8 || mapId == 9 || mapId == 11 || (mapId >= 15 && mapId <= 17)) {
+            return new int[]{1, 3};
+        }
+        if ((mapId >= 4 && mapId <= 6) || mapId == 10 || mapId == 12 || mapId == 13 || (mapId >= 18 && mapId <= 20)) {
+            return new int[]{3, 5};
+        }
+        if (mapId >= 27 && mapId <= 38) {
+            return new int[]{5, 7};
+        }
+        if (mapId >= 63 && mapId <= 83) {
+            return new int[]{7, 9};
+        }
+        if (nro.models.map.service.MapService.gI().isMapTuongLai(mapId)) {
+            return new int[]{9, 11};
+        }
+        if (nro.models.map.service.MapService.gI().isMapCold(mapId)) {
+            return new int[]{11, 12};
+        }
+        return null;
+    }
+
+    /**
+     * Tung rơi 1 món đồ shop làng khi giết quái. Trả null nếu không rơi.
+     * chu: người tính hành tinh / sức mạnh / Cỏ bốn lá (đệ giết thì truyền sư phụ). ownerId: người được nhặt.
+     * Tỉ lệ 2% (Tương lai, lạnh 1%), Cỏ ×1,15. Khi rơi: 70% đồ sao (giao dịch được), 30% đồ kích hoạt (khóa giao dịch).
+     * Tương lai / lạnh: thêm 10% Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
+     * Không giới hạn theo sức mạnh người chơi (bỏ 16/11/2026).
+     */
+    public ItemMap randDoShopRoiTuQuai(Zone zone, Player chu, int mapId, int x, int y, long ownerId) {
+        int[] cap = capDoShopTheoMap(mapId);
+        if (cap == null || chu == null || chu.gender < 0 || chu.gender > 2) {
+            return null;
+        }
+        boolean mapCao = nro.models.map.service.MapService.gI().isMapTuongLai(mapId)
+                || nro.models.map.service.MapService.gI().isMapCold(mapId);
+        long tiLe = mapCao ? 10000 : 20000; // tính trên 1.000.000: 1% / 2%
+        if (chu.itemTime != null && chu.itemTime.isUseCoBonLa) {
+            tiLe = tiLe * 115 / 100;
+        }
+        if (!Util.isTrue(tiLe, 1000000)) {
+            return null;
+        }
+        // Cấp trong vùng: thấp nhất 50%, kế 35%, cao 15% (vùng chỉ 2 cấp thì cấp cao 50%)
+        int r = Util.nextInt(100);
+        int level = Math.min(cap[0] + (r < 50 ? 0 : (r < 85 ? 1 : 2)), cap[1]);
+        int loai = Util.nextInt(5); // 0 áo, 1 quần, 2 găng, 3 giày, 4 rađa
+        int tempId = loai == 4 ? RADA_SHOP_LANG[level - 1] : DO_SHOP_LANG[chu.gender][loai][level - 1];
+
+        ItemMap it = new ItemMap(zone, tempId, 1, x, y, ownerId);
+        it.options.clear();
+        // Chép option shop ra object mới rồi mới nhân, không sửa option gốc của shop
+        for (ItemOption op : getListOptionItemShop((short) tempId)) {
+            it.options.add(new ItemOption(op.optionTemplate.id, (int) (op.param * Util.nextInt(100, 115) / 100.0)));
+        }
+        if (Util.isTrue(70, 100)) {
+            it.options.add(new ItemOption(107, nro.models.boss.Boss.randSaoDoShop()));
+        } else {
+            for (int opId : randOptionItemKichHoat(chu.gender)) {
+                if (opId > 0) {
+                    it.options.add(new ItemOption(opId, 0));
+                }
+            }
+            it.options.add(new ItemOption(30, 0));
+        }
+        if (mapCao && Util.isTrue(10, 100)) {
+            it.options.add(new ItemOption(Util.isTrue(50, 100) ? 86 : 87, 0));
+        }
+        return it;
     }
 
     public int randTempItemDoSao(int gender) {

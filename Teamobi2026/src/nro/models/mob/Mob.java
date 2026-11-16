@@ -814,8 +814,7 @@ public class Mob {
             }
         }
         if (MapService.gI().isMapRiengTu(mapid)) {
-            int baseTileDrop = 2;
-            double tileDrop = baseTileDrop;
+            double tileDrop = 0.5; // % rơi đồ kích hoạt (trước 2/9999, sửa 16/11/2026)
 
             int totalOption236Param = 0;
             for (Item item : player.inventory.itemsBody) {
@@ -836,11 +835,11 @@ public class Mob {
             tileDrop *= (1 + percentFromOption236 / 100.0);
 
             if (player.itemTime.isUseCoBonLa) {
-                tileDrop *= 1.5;
+                tileDrop *= 1.15; // Cỏ bốn lá (trước ×1,5)
             }
 
             // Check rơi đồ kích hoạt
-            if (Util.isTrue((int) tileDrop, 9999)) {
+            if (Util.isTrue((long) (tileDrop * 10000), 1000000)) { // tính trên 1 triệu để không làm tròn mất Cỏ / option 236
                 short itTemp = (short) ItemService.gI().randTempItemKichHoat(player.gender);
                 ItemMap it = new ItemMap(zone, itTemp, 1, x, yEnd, player.id);
                 List<Item.ItemOption> ops = ItemService.gI().getListOptionItemShop(itTemp);
@@ -861,8 +860,7 @@ public class Mob {
             }
         }
         if (MapService.gI().isMapUpSKH(mapid)) {
-            int baseTileDrop = 2;
-            double tileDrop = baseTileDrop;
+            double tileDrop = 0.5; // % rơi đồ kích hoạt (trước 2/9999, sửa 16/11/2026)
 
             int totalOption236Param = 0;
             for (Item item : player.inventory.itemsBody) {
@@ -883,11 +881,11 @@ public class Mob {
             tileDrop *= (1 + percentFromOption236 / 100.0);
 
             if (player.itemTime.isUseCoBonLa) {
-                tileDrop *= 1.5;
+                tileDrop *= 1.15; // Cỏ bốn lá (trước ×1,5)
             }
 
             // Check rơi đồ kích hoạt
-            if (Util.isTrue((int) tileDrop, 9999)) {
+            if (Util.isTrue((long) (tileDrop * 10000), 1000000)) { // tính trên 1 triệu để không làm tròn mất Cỏ / option 236
                 short itTemp = (short) ItemService.gI().randTempItemKichHoat(player.gender);
                 ItemMap it = new ItemMap(zone, itTemp, 1, x, yEnd, player.id);
                 List<Item.ItemOption> ops = ItemService.gI().getListOptionItemShop(itTemp);
@@ -908,6 +906,16 @@ public class Mob {
             }
         }
 
+        //========================Đồ shop làng theo map (16/11/2026, KE-HOACH-QUAI-ROI-DO-SHOP.md)========================
+        Player chuDoShop = player.isPet ? ((Pet) player).master : player;
+        if (chuDoShop != null) {
+            ItemMap doShop = ItemService.gI().randDoShopRoiTuQuai(zone, chuDoShop, mapid, x, yEnd, player.id);
+            if (doShop != null) {
+                list.add(doShop);
+            }
+        }
+
+        /* Tạm tắt 16/11/2026: đã có đồ shop làng theo map ở trên (đồ sao + đồ kích hoạt)
         //========================Đồ Sao Khác Vải Thô========================
         if (((Util.isTrue(1, 8000))) && MapService.gI().isMapUpSKH(mapid)) {
             int baseDropRate = 1;
@@ -989,6 +997,8 @@ public class Mob {
             }
         }
 
+        */
+
         //========================Đồ Thần + Thức Ăn========================
         if (MapService.gI().isMapCold(mapid)) {
             if (player.isPet) {
@@ -1008,7 +1018,8 @@ public class Mob {
         if (player.itemTime.isUseCoBonLa) {
             rate1 = (int) (rate1 * 1.15);
         }
-        if (Util.isTrue(3, 333)) {
+        // Thức ăn 663–667: 5%, chỉ map Tương lai và map lạnh (trước 3/333 mọi map, sửa 16/11/2026)
+        if (Util.isTrue(5, 100) && (MapService.gI().isMapTuongLai(mapid) || MapService.gI().isMapCold(mapid))) {
             if (player.setClothes.checkSetGod()) {
                 ItemMap it = new ItemMap(zone, Util.nextInt(663, 667), 1, x, yEnd, player.id);
                 list.add(it);

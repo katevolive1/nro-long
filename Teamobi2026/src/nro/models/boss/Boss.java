@@ -692,7 +692,8 @@ public class Boss extends Player implements IBoss {
     protected static final int BINH_KILIS_MABU_12H = 500; // Bình hút năng lượng 1795, riêng Mabu 5%
 
     // Số sao pha lê của đồ shop boss rơi: 8 sao 0,01%, 7 sao 0,5%, 6 sao 3%, 4-5 sao 17%, còn lại 1-3 sao
-    protected static int randSaoDoShop() {
+    public static int randSaoDoShop() { // public: Mob dùng chung cho đồ shop làng rơi từ quái
+
         int rand = Util.nextInt(1, 10000);
         if (rand <= 1) {
             return 8;

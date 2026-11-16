@@ -547,3 +547,24 @@ UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description=
 - Build: không. SQL: không. **Client: có** (`client-patch/patch-click-nhat.ps1`, đã thêm vào `cap-nhat-client.bat`; chạy `client-patch\cap-nhat-client.bat` trên mỗi máy).
 - Trước: bật tự nhặt (phím N) thì mod gửi lệnh nhặt từ xa lần lượt theo danh sách nó tự lập, mỗi món 0,5 giây; click vào một món dưới đất thì món đó vẫn phải chờ tới lượt. Giờ món vừa click được nhặt trước (thử tối đa 3 lần, món của người khác trong 45 giây thì bỏ qua), xong tự nhặt chạy tiếp. Chi tiết offset ở `client-patch/CLIENT-UNITY.md` mục "Tự nhặt đồ".
 - Kiểm tra: bật tự nhặt, giết quái cho rơi nhiều món, click một món ở xa trong đống đồ thì món đó vào túi trước các món khác.
+
+## 64. Quái rơi đồ: đồ kích hoạt 0,5%, thức ăn chỉ map Tương lai / lạnh — 16/11/2026
+
+- Build: có (`Mob.getItemMobReward`). SQL: không. Client: không.
+- Đồ kích hoạt ở map up SKH (1, 2, 3, 8, 9, 11, 15, 16, 17) và map 164: 0,5% mỗi con quái (trước 2/9999). Cỏ bốn lá ×1,15 (trước ×1,5), option 236 cộng tối đa +20%; tính trên 1 triệu nên không còn bị làm tròn.
+- Thức ăn 663–667 (mặc đủ set Thần Linh): 5%, chỉ map Tương lai (92–94, 96–100, 102, 103) và map lạnh 105–110 (trước 3/333 mọi map).
+- Kiểm tra: đánh quái map 1 khoảng vài trăm con thấy rơi đồ kích hoạt; mặc set Thần Linh đánh quái map 105 thấy thức ăn, map 1 không thấy.
+
+## 65. Quái rơi đồ shop làng theo map; tắt đồ sao 3 map đầu — 16/11/2026
+
+- Build: có (`ItemService.randDoShopRoiTuQuai`/`capDoShopTheoMap`, `Mob.getItemMobReward`, `Boss.randSaoDoShop` thành `public`). SQL: không. Client: không.
+- Quái map 1–6, 8–13, 15–20, 27–38, 63–83 rơi đồ shop làng 2%, Tương lai và lạnh 1%, cấp theo vùng; 70% đồ sao, 30% đồ kích hoạt khóa giao dịch. Chi tiết QUAI-ROI-DO.md mục 15.
+- Comment hai khối "Đồ Sao Khác Vải Thô" và "Đồ Sao 3 Map Đầu" trong `Mob.getItemMobReward`.
+- Kiểm tra: nhân vật sức mạnh thấp đánh quái map 1 khoảng 100 con thấy rơi áo/quần/găng/giày/rađa cấp 1–3 có sao hoặc có set kích hoạt.
+
+## 66. Sửa lỗi chỉ số đồ shop tăng dần khi boss rơi đồ Goku — 16/11/2026
+
+- Build: có (`ItemService.getListOptionItemShop`). SQL: không. Client: không.
+- Trước: hàm trả về chính các option của shop; code boss rơi đồ shop (14 boss, `option.param *= 100–115%`) sửa thẳng vào đó, nên mỗi lần boss rơi đồ Goku chỉ số món đó trong shop (và đồ rơi sau) tăng tới 15%, cộng dồn tới khi khởi động lại server. Giờ hàm trả bản sao.
+- Đồ đã mua hoặc nhặt trong lúc lỗi vẫn giữ chỉ số cao; khởi động lại server là shop về đúng giá trị DB.
+- Kiểm tra: xem chỉ số áo cấp 9 (230) trong shop Bunma, giết vài boss rơi đồ Goku, chỉ số trong shop không đổi.

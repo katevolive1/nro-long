@@ -52,6 +52,8 @@
 
 ## Bảng rơi đồ boss
 
+- Đánh quái rơi đồ theo map (tỉ lệ, điều kiện, Cỏ bốn lá): [QUAI-ROI-DO.md](QUAI-ROI-DO.md). Hỏi quái rơi gì thì đọc file này; sửa `Mob.getItemMobReward` thì cập nhật. Quái rơi đồ shop làng theo map (đã làm 16/11/2026, QUAI-ROI-DO.md mục 15): [KE-HOACH-QUAI-ROI-DO-SHOP.md](KE-HOACH-QUAI-ROI-DO-SHOP.md).
+
 - Bảng boss rơi đồ và tỉ lệ nằm ở [BOSS-ROI-DO.md](BOSS-ROI-DO.md). Khi hỏi về đồ rơi từ boss, đọc file này trước, không quét lại code.
 - Khi sửa code làm thay đổi đồ rơi hoặc tỉ lệ rơi của boss (hàm `reward()`, `afk()`, `dropCt()` trong `Teamobi2026/src/nro/models/boss/**`, `ItemService.randDoTLBoss`, `rewardRatio`…), phải cập nhật luôn phần tương ứng trong `BOSS-ROI-DO.md` ngay trong cùng lượt sửa.
 - Boss thường không tự rời map (đã bỏ đồng hồ 15 phút trong `autoLeaveMap`/`active`, có comment "Không tự rời map"), chỉ biến mất khi bị giết. Còn giữ hẹn giờ: Mặt Trời (đang tắt, xem GIA-TRI-GOC.md), An Trộm, Ô Đỏ, Virut (15 phút, trong `active()`), Golden Frieza (21h), boss Mabư 12h, Pocolo, Nhân Bản, DeathBeam. `Boss.remindNotify` thông báo lại 15 phút/lần khi boss còn sống. Thông báo boss (gói 93) phải giữ đúng câu `BOSS <tên> vừa xuất hiện tại <tên map>`: mod client chỉ nhận câu này vào tab Thông báo và khung góc phải, câu khác chỉ chạy dưới màn hình. Lúc đăng nhập, `BossManager.sendBossAlive` gửi riêng các boss đang sống với `\t` ở đầu câu (client đã chạy `patch-thong-bao-boss.ps1` thì không chạy chữ dưới màn hình).
