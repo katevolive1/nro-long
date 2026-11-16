@@ -613,3 +613,16 @@ UPDATE map_template SET zones=19 WHERE zones=10;
 - Build: có (`MapService.isMapKhongDoiKhu`, `ChangeMapService.openZoneUI`/`changeZone`). SQL: không. Client: không.
 - Người thường không đổi khu được ở: map offline, phó bản (doanh trại, kho báu, rắn độc, khí gas), Mabư 12h 114–120, Mabư 2h 127–128, **thêm** ngọc rồng đen 85–91 và Sa mạc hoang vu 165. Admin và boss vẫn đổi được. Mở bảng khu ở các map này giờ báo "Không thể đổi khu vực trong map này" (trước chỉ offline/phó bản báo ngay, Mabư thì mở được bảng rồi mới bị chặn).
 - Kiểm tra: tài khoản thường vào map 85 hoặc 165, mở bảng khu thấy thông báo chặn.
+
+## 72. Nhặt hộp quà giáng sinh không cần tất vớ; khiên boss có tác dụng; boss đuổi nhanh — 16/11/2026, máy công ty
+
+- Build: có (`Zone.pickItem`, `Boss.injured`, `Boss.attack`). SQL: không. Client: không.
+- Hộp quà giáng sinh 648: bỏ điều kiện có Tất, vớ giáng sinh (649) khi nhặt và bỏ trừ 1 tất vớ sau khi nhặt.
+- `Boss.injured` (hàm chung) trước bỏ qua khiên năng lượng nên boss bật khiên vẫn mất máu (không liên quan admin). Nay khiên giảm mọi đòn không xuyên còn 1, đòn > HP tối đa thì vỡ khiên (giống Black Goku). Boss có khiên dùng hàm chung: Goku SSJ 1/2/3, Siêu Bojack (2 con này trâu hơn trước). Black Goku, Cumber, Xên… tự xử lý khiên từ trước; Cooler 2 có chiêu khiên nhưng `Cooler.injured` riêng vẫn bỏ qua khiên.
+- `Boss.attack` (hàm chung): mục tiêu cách > 450px thì boss lao 150–250px mỗi lượt (0,1 giây) thay vì 50% nhích 40–60px, nên map dài (Núi tuyết…) boss không còn đứng một đầu map. Boss tự viết `attack()` riêng (Black Goku, Mabư ngoài…) không đổi.
+- Kiểm tra: nhặt hộp quà 648 khi không có 649; đứng cuối map Núi tuyết thấy Goku SSJ bay tới; đánh lúc Goku SSJ bật khiên chỉ trừ 1 HP.
+
+## 73. Bom không còn giảm dần khi trúng nhiều boss — 16/11/2026, máy công ty
+
+- Build: có (`SkillService` `Skill.TU_SAT`). SQL: không. Client: không.
+- Trước: vòng lặp gán đè `dame` (boss /2, khỉ /3) nên mỗi boss trúng bom làm mục tiêu sau nhận ít dần. Nay mỗi mục tiêu tính từ cùng sát thương gốc: boss 1/2 (người nổ đang khỉ 1/3), người chơi nhận đủ (giữ như cũ theo user).

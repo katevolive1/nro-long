@@ -771,8 +771,9 @@ public class SkillService {
                     if (!MapService.gI().isMapOffline(player.zone.map.mapId)) {
                         for (Player pl : playersMap) {
                             if (!player.equals(pl) && canAttackPlayer(player, pl) && Util.getDistance(player, pl) <= rangeBom) {
-                                dame = pl.isBoss ? player.effectSkill.isMonkey ? dame / 3 : dame / 2 : dame;
-                                pl.injured(player, dame, MapService.gI().isMapYardart(player.zone.map.mapId), false);
+                                // Mỗi mục tiêu tính từ cùng một sát thương gốc (trước gán đè dame nên mục tiêu sau bị giảm dần, sửa 16/11/2026)
+                                long damePl = pl.isBoss ? player.effectSkill.isMonkey ? dame / 3 : dame / 2 : dame;
+                                pl.injured(player, damePl, MapService.gI().isMapYardart(player.zone.map.mapId), false);
                                 PlayerService.gI().sendInfoHpMpMoney(pl);
                                 Service.gI().Send_Info_NV(pl);
                             }

@@ -52,6 +52,7 @@ import nro.models.skill.Skill;
 import nro.models.server.ServerNotify;
 import nro.models.map.service.MapService;
 import nro.models.services.PlayerService;
+import nro.models.services.EffectSkillService;
 import nro.models.services.Service;
 import nro.models.services.SkillService;
 import nro.models.services.TaskService;
@@ -630,6 +631,11 @@ public class Boss extends Player implements IBoss {
                     }
                     SkillService.gI().useSkill(this, pl, null, -1, null);
                     checkPlayerDie(pl);
+                } else if (Util.getDistance(this, pl) > 450) {
+                    // Ở xa: lao nhanh 150-250px mỗi lượt (trước chỉ nhích 40-60px, 50% mỗi lượt, map dài boss không tới kịp; 16/11/2026)
+                    int dx = pl.location.x - this.location.x;
+                    int step = Math.min(Math.max(Math.abs(dx) - 24, 0), Util.nextInt(150, 250));
+                    PlayerService.gI().playerMove(this, this.location.x + (dx >= 0 ? step : -step), pl.location.y);
                 } else {
                     if (Util.isTrue(1, 2)) {
                         this.moveToPlayer(pl);
@@ -773,6 +779,13 @@ public class Boss extends Player implements IBoss {
 
             if (plAtt != null && plAtt.idNRNM != -1) {
                 return 1;
+            }
+            // Khiên năng lượng: trước 16/11/2026 hàm này bỏ qua khiên nên boss bật khiên vẫn mất máu
+            if (!piercing && effectSkill != null && effectSkill.isShielding) {
+                if (damage > nPoint.hpMax) {
+                    EffectSkillService.gI().breakShield(this);
+                }
+                damage = 1;
             }
             this.nPoint.subHP(damage);
 

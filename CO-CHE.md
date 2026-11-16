@@ -265,3 +265,9 @@ Công thức ở mục "Tiềm năng sức mạnh". Giá: shop thường `type_s
 
 - Map lạnh: `MapService.isMapCold(Map)` = 105–110 và 152 (bản theo `int mapId` chỉ 105–110). Ở map lạnh, người chơi/đệ không có option `106` "Không ảnh hưởng bởi cái lạnh" (`NPoint.isKhongLanh`) bị **HP tối đa /2** (`NPoint` "Xử lý map lạnh") và **sức đánh /2** ("Xử lý map cold"). Vào/rời hành tinh Cold có thông báo (`ChangeMapService`, không gửi cho boss). Boss: trước 16/11/2026 cũng bị /2 mỗi khi `calPoint` chạy lại (dùng khiên, dính hiệu ứng…), nay `!this.player.isBoss` nên boss không bị lạnh (THAY-DOI mục 69).
 - Số khu: cột `map_template.zones` = 19 cho cả 172 map (trước 10, đổi 16/11/2026 THAY-DOI mục 70; chỉ map thường type 0 dùng, map đặc biệt tự đặt trong `Map.initZone`); mỗi khu có quái riêng theo `mobs` của map. Boss ra khu ngẫu nhiên từ 16/11/2026 (THAY-DOI mục 69).
+
+## Boss: khiên và đuổi theo (dò 16/11/2026)
+
+- Hàm chung `Boss.injured` không có khiên trước 16/11/2026 (boss khiên vẫn mất máu, mọi người kể cả admin). Nay có (THAY-DOI 72). Boss tự viết `injured` thì phải tự xử lý khiên (`effectSkill.isShielding`, mẫu `BlackGoku.injured`); `Cooler.injured` chưa có.
+- Hàm chung `Boss.attack`: mỗi 0,1 giây chọn ngẫu nhiên 1 chiêu; trong tầm (đấm 100px, chưởng 300px, chiêu khác 500px) thì đánh, ngoài tầm thì đuổi (> 450px lao 150–250px/lượt, gần hơn 50% nhích 40–60px). Mục tiêu đổi ngẫu nhiên 5–7 giây/lần trong người chơi + đệ tử trong khu (`Zone.getRandomPlayerInMap`, bỏ người đang vô hình option 105 khi không đánh).
+- Bom (`SkillService` `Skill.TU_SAT`): đánh người/boss với `piercing` = `isMapYardart` (map 131–133). Nên **khiên chặn Bom** (còn 1 HP) ở mọi map, trừ Yardrat 131–133 thì Bom xuyên khiên (người lẫn boss). Quái luôn nhận đủ. Boss nhận 1/2 (người nổ đang biến khỉ thì 1/3), người chơi nhận đủ (user chốt giữ 16/11/2026). Trước 16/11/2026 vòng lặp gán đè `dame` nên mục tiêu sau mỗi boss bị giảm dần; nay mỗi mục tiêu tính từ cùng sát thương gốc (THAY-DOI 73).

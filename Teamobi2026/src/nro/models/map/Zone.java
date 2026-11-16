@@ -336,12 +336,7 @@ public class Zone {
                             Item item = ItemService.gI().createItemFromItemMap(itemMap);
                             boolean picked = false;  // Variable to track if the item was successfully picked
 
-                            if (item.template.id == 648) {
-                                if (!InventoryService.gI().findItemTatVoGiangSinh(player)) {
-                                    Service.gI().sendThongBao(player, "Cần thêm Tất,vớ giáng sinh");
-                                    return;
-                                }
-                            }
+                            // Hộp quà giáng sinh 648: bỏ điều kiện cần Tất, vớ giáng sinh (649) để nhặt (16/11/2026)
 
                             if (InventoryService.gI().addItemBag(player, item)) {
                                 int itemType = item.template.type;
@@ -365,9 +360,6 @@ public class Zone {
                                                 default -> {
                                                     if (item.template.type >= 0 && item.template.type < 5) {
                                                         msg.writer().writeUTF("Bạn nhận được " + item.template.name);
-                                                    }
-                                                    if (item.template.id == 648) {
-                                                        InventoryService.gI().subQuantityItemsBag(player, InventoryService.gI().findItemBag(player, 649), 1);
                                                     }
                                                     InventoryService.gI().sendItemBags(player);
                                                 }
