@@ -121,11 +121,7 @@ public class ChangeMapService {
             return;
         }
         if (!pl.isAdmin()) {
-            if (MapService.gI().isMapOffline(pl.zone.map.mapId)) {
-                Service.gI().sendThongBaoOK(pl, "Không thể đổi khu vực trong map này");
-                return;
-            }
-            if (MapService.gI().isMapPhoBan(pl.zone.map.mapId)) {
+            if (MapService.gI().isMapKhongDoiKhu(pl.zone.map.mapId)) {
                 Service.gI().sendThongBaoOK(pl, "Không thể đổi khu vực trong map này");
                 return;
             }
@@ -174,19 +170,7 @@ public class ChangeMapService {
             return;
         }
         if (!pl.isAdmin() && !pl.isBoss) {
-            if (MapService.gI().isMapOffline(pl.zone.map.mapId)) {
-                NpcService.gI().createTutorial(pl, -1, "Không thể đến khu vực này");
-                return;
-            }
-            if (MapService.gI().isMapPhoBan(pl.zone.map.mapId)) {
-                NpcService.gI().createTutorial(pl, -1, "Không thể đến khu vực này");
-                return;
-            }
-            if (MapService.gI().isMapMaBu(pl.zone.map.mapId)) {
-                NpcService.gI().createTutorial(pl, -1, "Không thể đến khu vực này");
-                return;
-            }
-            if (MapService.gI().isMapMabu2H(pl.zone.map.mapId)) {
+            if (MapService.gI().isMapKhongDoiKhu(pl.zone.map.mapId)) {
                 NpcService.gI().createTutorial(pl, -1, "Không thể đến khu vực này");
                 return;
             }

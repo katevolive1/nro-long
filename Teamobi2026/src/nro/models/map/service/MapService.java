@@ -576,6 +576,13 @@ public class MapService {
         return mapId == 127 || mapId == 128;
     }
 
+    // Map người thường không đổi khu được (admin, boss bỏ qua): offline, phó bản, Mabư 12h/2h,
+    // ngọc rồng đen 85-91, Sa mạc hoang vu 165 (thêm 2 loại cuối 16/11/2026)
+    public boolean isMapKhongDoiKhu(int mapId) {
+        return isMapOffline(mapId) || isMapPhoBan(mapId) || isMapMaBu(mapId) || isMapMabu2H(mapId)
+                || isMapBlackBallWar(mapId) || mapId == 165;
+    }
+
     public boolean isMapUpPorata(int mapId) {
         return mapId == 156 || mapId == 157 || mapId == 158 || mapId == 159;
     }

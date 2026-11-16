@@ -590,3 +590,26 @@ INSERT INTO item_option_template (id, NAME) VALUES (251, '+#% sát thương chi�
 UPDATE part SET DATA='[[13218,2,-7],[13219,2,-8],[2955,0,0]]' WHERE id=1454;
 ```
 - Kiểm tra: vào map Cold xem Goku SSJ, đầu nằm đúng trên cổ như SSJ2.
+
+## 69. Mọi boss xuất hiện ở khu ngẫu nhiên — 16/11/2026, máy công ty
+
+- Build: có (`Boss.joinMap`). SQL: không. Client: không.
+- Trước: `joinMap` bỏ khu đã chọn và luôn dò từ khu 0 (chỉ Baby có `isZoneRandom`), nên mở server/bảo trì xong boss nào cũng ở khu 0. Giờ mọi boss bắt đầu dò từ khu ngẫu nhiên (0 tới số khu − 1, hiện mọi map 10 khu), vẫn tránh khu > 10 người và khu đã có boss. Boss có khu riêng (Mabư ngoài từ khu 2 `isZone01SpawnDisabled`, boss đặt `zoneFinal`, boss con theo boss cha) không đổi.
+- Boss không bị lạnh nữa (`NPoint` 2 chỗ "map lạnh"/"map cold" thêm `!this.player.isBoss`): trước đó boss ở map 105–110 (Cooler, Goku SSJ) bị /2 HP tối đa và sức đánh mỗi lần tính lại chỉ số (dùng khiên, dính hiệu ứng). Cooler vì vậy cũng trâu hơn trước.
+- Kiểm tra: `bt` vài lần, thông báo boss ra nhiều khu khác nhau.
+
+## 70. Map thường lên 19 khu — 16/11/2026, máy công ty
+
+- Build: không. SQL: có. Client: không (gói 29 gửi số khu thật, client tự hiện).
+- `map_template.zones` 10 → 19 cho cả 172 map. Chỉ map thường (type 0, 119 map) dùng cột này; map offline, doanh trại, kho báu, rắn độc, khí gas, Mabư, ngọc rồng đen tự đặt số khu (`Map.initZone`). Mỗi khu có quái riêng nên số quái map thường tăng ~90%. Server nạp lúc khởi động, phải `bt`.
+- SQL:
+```sql
+UPDATE map_template SET zones=19 WHERE zones=10;
+```
+- Kiểm tra: `SELECT zones, COUNT(*) FROM map_template GROUP BY zones;` ra `19 | 172`; trong game mở danh sách khu thấy 0–18.
+
+## 71. Chặn đổi khu ở ngọc rồng đen và Sa mạc hoang vu — 16/11/2026, máy công ty
+
+- Build: có (`MapService.isMapKhongDoiKhu`, `ChangeMapService.openZoneUI`/`changeZone`). SQL: không. Client: không.
+- Người thường không đổi khu được ở: map offline, phó bản (doanh trại, kho báu, rắn độc, khí gas), Mabư 12h 114–120, Mabư 2h 127–128, **thêm** ngọc rồng đen 85–91 và Sa mạc hoang vu 165. Admin và boss vẫn đổi được. Mở bảng khu ở các map này giờ báo "Không thể đổi khu vực trong map này" (trước chỉ offline/phó bản báo ngay, Mabư thì mở được bảng rồi mới bị chặn).
+- Kiểm tra: tài khoản thường vào map 85 hoặc 165, mở bảng khu thấy thông báo chặn.

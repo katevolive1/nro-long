@@ -1015,7 +1015,7 @@ public class NPoint {
         }
 
         // Xử lý map lạnh
-        if (this.player.zone != null && MapService.gI().isMapCold(this.player.zone.map) && !this.isKhongLanh) {
+        if (this.player.zone != null && MapService.gI().isMapCold(this.player.zone.map) && !this.isKhongLanh && !this.player.isBoss) { // boss không bị lạnh (16/11/2026)
             hpMax /= 2;
         }
 
@@ -1308,7 +1308,7 @@ public class NPoint {
         dame -= (dame * tlSubSD / 100L);
 
         // Xử lý map cold
-        if (this.player.zone != null && MapService.gI().isMapCold(this.player.zone.map) && !this.isKhongLanh) {
+        if (this.player.zone != null && MapService.gI().isMapCold(this.player.zone.map) && !this.isKhongLanh && !this.player.isBoss) { // boss không bị lạnh (16/11/2026)
             dame /= 2;
         }
 

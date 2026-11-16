@@ -462,10 +462,8 @@ public class Boss extends Player implements IBoss {
                                 return;
                             }
                         } else {
-                            // Boss khu ngẫu nhiên: bắt đầu dò từ một khu bất kỳ 0-9 thay vì khu 0
-                            if (this.isZoneRandom) {
-                                zoneid = Util.nextInt(0, Math.min(9, this.zone.map.zones.size() - 1));
-                            }
+                            // Mọi boss: bắt đầu dò từ một khu ngẫu nhiên thay vì khu 0 (16/11/2026, trước chỉ Baby có isZoneRandom)
+                            zoneid = Util.nextInt(0, this.zone.map.zones.size() - 1);
                             // Check trong khu lớn hơn 10 người chuyển sang khu n + 1
                             while (zoneid < this.zone.map.zones.size() && this.zone.map.zones.get(zoneid).getNumOfPlayers() > 10) {
                                 zoneid++;
