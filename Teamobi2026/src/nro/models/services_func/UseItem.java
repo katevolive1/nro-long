@@ -2446,8 +2446,8 @@ public class UseItem {
                     it.quantity = Util.nextInt(1, 5);
                 } else if (temp[index] >= 381 && temp[index] <= 384) { // da nang cap
                     it.quantity = Util.nextInt(1, 5);
-                } else if (temp[index] >= 1066 && temp[index] <= 1070) { // mảnh thiên sứ
-                    it.quantity = Util.nextInt(50, 100);
+                } else if (temp[index] >= 1066 && temp[index] <= 1070) { // mảnh thiên sứ (50-100 → 10-30 từ 16/11/2026)
+                    it.quantity = Util.nextInt(10, 30);
 
                     /*
                    # Item Cải Trang
@@ -2500,6 +2500,9 @@ public class UseItem {
                 icon[1] = it.template.iconID;
                 InventoryService.gI().addItemBag(pl, it);
                 InventoryService.gI().sendItemBags(pl);
+                // Trước 16/11/2026 không báo gì nên mở hộp tưởng không ra đồ
+                Service.gI().sendThongBao(pl, "Bạn đã nhận được x" + it.quantity + " " + it.template.name);
+                CombineService.gI().sendEffectOpenItem(pl, icon[0], icon[1]);
             }
         } else {
             Service.gI().sendThongBao(pl, "Hàng trang đã đầy");

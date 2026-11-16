@@ -644,3 +644,14 @@ SET NAMES utf8mb4;
 INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên boss');
 ```
 - Kiểm tra: `SELECT id, NAME FROM item_option_template WHERE id=252;` ra 1 dòng.
+
+## 76. Mở hộp quà giáng sinh có thông báo và hiệu ứng — 16/11/2026, máy công ty
+
+- Build: có (`UseItem.NoelItemBox`). SQL: không. Client: không.
+- Hộp 648 dùng `UseItem.NoelItemBox` (không phải `ItemService.OpenItem648`): ra 1/3 mỗi nhóm Cuồng nộ/Bổ huyết/Bổ khí/Giáp Xên 381–384 (1–5 cái), ngọc rồng băng 925–931, mảnh thiên sứ 1066–1070 (10–30, trước 50–100). Trước không gửi thông báo / hiệu ứng mở hộp nên trông như không ra gì; nay báo "Bạn đã nhận được xN <tên>" và chạy hiệu ứng mở.
+
+## 77. Quái rơi đồ shop: giảm tỉ lệ Fide / Tương lai / lạnh; đồ kích hoạt cấp 1 tới cấp cao nhất vùng — 16/11/2026, máy công ty
+
+- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Tỉ lệ: Fide 63–83 2% → 1%, Tương lai và lạnh 1% → 0,5% (vùng đầu, giữa, xa giữ 2%; Cỏ ×1,15 như cũ).
+- Đồ kích hoạt (30% khi rơi): cấp ngẫu nhiên đều từ 1 tới cấp cao nhất của vùng map (Fide 1–9, Tương lai 1–11, lạnh 1–12). Đồ sao (70%) giữ cấp theo vùng. Chi tiết QUAI-ROI-DO.md mục 15.

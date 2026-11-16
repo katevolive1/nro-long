@@ -152,11 +152,11 @@ Code: `ItemService.randDoShopRoiTuQuai` + `capDoShopTheoMap`, gọi trong `Mob.g
 | Đầu | 1, 2, 3, 8, 9, 11, 15, 16, 17 | 1–3 | 2% |
 | Giữa | 4, 5, 6, 10, 12, 13, 18, 19, 20 | 3–5 | 2% |
 | Xa | 27–38 | 5–7 | 2% |
-| Fide | 63–83 | 7–9 | 2% |
-| Tương lai | 92–94, 96–100, 102, 103 | 9–11 | 1% |
-| Lạnh | 105–110 | 11–12 | 1% |
+| Fide | 63–83 | 7–9 | 1% |
+| Tương lai | 92–94, 96–100, 102, 103 | 9–11 | 0,5% |
+| Lạnh | 105–110 | 11–12 | 0,5% |
 
-- Cấp trong vùng: thấp 50%, giữa 35%, cao 15% (lạnh: 11 là 50%, 12 là 50%). Loại: áo, quần, găng, giày, rađa mỗi loại 20%. Hành tinh theo người kết liễu (đệ giết thì theo sư phụ, Cỏ cũng của sư phụ). Không giới hạn sức mạnh người chơi (bỏ chặn 16/11/2026).
+- Cấp (cột "Cấp" ở bảng): **đồ sao** theo vùng, thấp 50%, giữa 35%, cao 15% (lạnh: 11 là 50%, 12 là 50%); **đồ kích hoạt** ngẫu nhiên đều từ cấp 1 tới cấp cao nhất của vùng (vd Fide 1–9, lạnh 1–12). Tỉ lệ Fide 1%, Tương lai/lạnh 0,5% từ 16/11/2026 (trước 2% / 1%). Loại: áo, quần, găng, giày, rađa mỗi loại 20%. Hành tinh theo người kết liễu (đệ giết thì theo sư phụ, Cỏ cũng của sư phụ). Không giới hạn sức mạnh người chơi (bỏ chặn 16/11/2026).
 - Chỉ số = option shop × 100–115% (mỗi option tung riêng).
 - 70% **đồ sao**: thêm option 107 theo `Boss.randSaoDoShop` (1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%), giao dịch được.
 - 30% **đồ kích hoạt**: set theo `randOptionItemKichHoat` (tỉ lệ set như mục 4), option 30 không giao dịch, không có lỗ sao.

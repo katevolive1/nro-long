@@ -694,7 +694,8 @@ public class ItemService {
     /**
      * Tung rơi 1 món đồ shop làng khi giết quái. Trả null nếu không rơi.
      * chu: người tính hành tinh / sức mạnh / Cỏ bốn lá (đệ giết thì truyền sư phụ). ownerId: người được nhặt.
-     * Tỉ lệ 2% (Tương lai, lạnh 1%), Cỏ ×1,15. Khi rơi: 70% đồ sao (giao dịch được), 30% đồ kích hoạt (khóa giao dịch).
+     * Tỉ lệ 2% (Fide 1%, Tương lai / lạnh 0,5%), Cỏ ×1,15. Khi rơi: 70% đồ sao cấp theo vùng (giao dịch được),
+     * 30% đồ kích hoạt cấp 1 tới cấp cao nhất của vùng (khóa giao dịch).
      * Tương lai / lạnh: thêm 10% Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
      * Không giới hạn theo sức mạnh người chơi (bỏ 16/11/2026).
      */
@@ -705,16 +706,25 @@ public class ItemService {
         }
         boolean mapCao = nro.models.map.service.MapService.gI().isMapTuongLai(mapId)
                 || nro.models.map.service.MapService.gI().isMapCold(mapId);
-        long tiLe = mapCao ? 10000 : 20000; // tính trên 1.000.000: 1% / 2%
+        boolean mapFide = mapId >= 63 && mapId <= 83;
+        // tính trên 1.000.000: Tương lai / lạnh 0,5%, Fide 1%, còn lại 2% (đổi 16/11/2026, trước 1% / 2% / 2%)
+        long tiLe = mapCao ? 5000 : (mapFide ? 10000 : 20000);
         if (chu.itemTime != null && chu.itemTime.isUseCoBonLa) {
             tiLe = tiLe * 115 / 100;
         }
         if (!Util.isTrue(tiLe, 1000000)) {
             return null;
         }
-        // Cấp trong vùng: thấp nhất 50%, kế 35%, cao 15% (vùng chỉ 2 cấp thì cấp cao 50%)
-        int r = Util.nextInt(100);
-        int level = Math.min(cap[0] + (r < 50 ? 0 : (r < 85 ? 1 : 2)), cap[1]);
+        boolean doSao = Util.isTrue(70, 100); // 70% đồ sao, 30% đồ kích hoạt
+        int level;
+        if (doSao) {
+            // Cấp trong vùng: thấp nhất 50%, kế 35%, cao 15% (vùng chỉ 2 cấp thì cấp cao 50%)
+            int r = Util.nextInt(100);
+            level = Math.min(cap[0] + (r < 50 ? 0 : (r < 85 ? 1 : 2)), cap[1]);
+        } else {
+            // Đồ kích hoạt: cấp ngẫu nhiên đều từ cấp 1 tới cấp cao nhất của vùng map (16/11/2026)
+            level = Util.nextInt(1, cap[1]);
+        }
         int loai = Util.nextInt(5); // 0 áo, 1 quần, 2 găng, 3 giày, 4 rađa
         int tempId = loai == 4 ? RADA_SHOP_LANG[level - 1] : DO_SHOP_LANG[chu.gender][loai][level - 1];
 
@@ -724,7 +734,7 @@ public class ItemService {
         for (ItemOption op : getListOptionItemShop((short) tempId)) {
             it.options.add(new ItemOption(op.optionTemplate.id, (int) (op.param * Util.nextInt(100, 115) / 100.0)));
         }
-        if (Util.isTrue(70, 100)) {
+        if (doSao) {
             it.options.add(new ItemOption(107, nro.models.boss.Boss.randSaoDoShop()));
         } else {
             for (int opId : randOptionItemKichHoat(chu.gender)) {
