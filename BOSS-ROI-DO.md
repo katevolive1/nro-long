@@ -5,6 +5,7 @@ Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code bos
 
 Ghi chú chung:
 - Đồ rơi thuộc về người kết liễu (`plKill.id`), trừ Khí Gas (ai nhặt cũng được).
+- Cỏ bốn lá và may mắn (option 236) **không ảnh hưởng đồ rơi từ boss** (dò 16/11/2026: không file boss nào đọc `isUseCoBonLa` hay 236). Hai thứ này chỉ dùng cho quái (QUAI-ROI-DO.md).
 - Hầu hết boss cộng thêm +5 điểm sự kiện (không ghi lại bên dưới).
 - [`Util.isTrue(a, b)`](Teamobi2026/src/nro/models/utils/Util.java#L209) = tỉ lệ a/b.
 

@@ -151,20 +151,20 @@ Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/It
 
 | Vùng | Map | Tỉ lệ rơi | Cấp đồ sao | Cấp đồ kích hoạt |
 |---|---|---|---|---|
-| Đầu | 1, 2, 3, 8, 9, 11, 15, 16, 17 | 2% | 1–3 | 1–3 |
+| Đầu | 1, 2, 3, 8, 9, 11, 15, 16, 17 | 5% | 1–3 | 1–3 |
 | Giữa | 4, 5, 6, 10, 12, 13, 18, 19, 20 | 2% | 3–5 | 1–5 |
-| Xa | 27–38 | 2% | 5–7 | 1–7 |
-| Fide | 63–83 | 1% | 7–9 | 1–9 |
-| ~~Tương lai~~ (tắt) | 92–94, 96–100, 102, 103 | 0,5% | 9–11 | 1–11 |
-| ~~Lạnh~~ (tắt) | 105–110 | 0,5% | 11–12 | 1–12 |
+| Xa | 27–38 | 1% | 5–7 | 1–7 |
+| Fide | 63–83 | 0,5% | 7–9 | 1–9 |
+| ~~Tương lai~~ (tắt) | 92–94, 96–100, 102, 103 | 0,3% | 9–11 | 1–11 |
+| ~~Lạnh~~ (tắt) | 105–110 | 0,3% | 11–12 | 1–12 |
 
-Đổi 16/11/2026: Fide 2% → 1%, đồ kích hoạt từ cấp 1 (trước cùng cấp với đồ sao). **Tương lai và lạnh đang tắt** (chỉ rơi tới map Fide): 2 khối trong [`capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672) bị comment, cần thì bỏ comment là chạy lại với số trong bảng. Dòng Ký gửi bên dưới chỉ có tác dụng khi bật lại.
+Đổi 16/11/2026: tỉ lệ từ 2% mọi vùng (Tương lai/lạnh 1%) thành đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai/lạnh 0,3%; đồ kích hoạt từ cấp 1 (trước cùng cấp với đồ sao), đồ sao / kích hoạt 85% / 15% (trước 70% / 30%). **Tương lai và lạnh đang tắt** (chỉ rơi tới map Fide): 2 khối trong [`capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672) bị comment, cần thì bỏ comment là chạy lại với số trong bảng. Dòng Ký gửi bên dưới chỉ có tác dụng khi bật lại.
 
 **Khi rơi**
 
 | | Đồ sao | Đồ kích hoạt |
 |---|---|---|
-| Tỉ lệ | 70% | 30% |
+| Tỉ lệ | 85% | 15% |
 | Chọn cấp | Thấp nhất vùng 50%, kế 35%, cao 15% (lạnh: 11 và 12 mỗi cấp 50%) | Ngẫu nhiên đều từ cấp 1 tới cấp cao nhất vùng |
 | Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), bảng dưới) | Set theo [`randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L833) (tỉ lệ set như mục 4) |
 | Giao dịch | Được | Không (option 30), không có lỗ sao |

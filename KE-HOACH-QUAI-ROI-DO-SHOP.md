@@ -3,7 +3,7 @@
 Viết 16/11/2026. Tỉ lệ rơi hiện tại: [QUAI-ROI-DO.md](QUAI-ROI-DO.md).
 
 ## Đã chốt (16/11/2026)
-1. Tỉ lệ mỗi con quái: **2%**, riêng Fide **1%**, Tương lai và lạnh **0,5% nhưng đang tắt** (comment trong `capDoShopTheoMap`, chỉ rơi tới Fide) (đổi 16/11/2026, THAY-DOI 77; trước Fide 2%, Tương lai/lạnh 1%); Cỏ bốn lá ×1,15. Đồ kích hoạt cấp ngẫu nhiên từ 1 tới cấp cao nhất của vùng. Khi rơi: **70% đồ sao** (chỉ số shop ×100–115% + sao pha lê [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), giao dịch được), **30% đồ kích hoạt** (chỉ số shop ×100–115% + set `randOptionItemKichHoat`, option 30 không giao dịch). Map Tương lai / lạnh: thêm 10% có Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
+1. Tỉ lệ mỗi con quái: đầu **5%**, giữa **2%**, xa **1%**, Fide **0,5%**, Tương lai và lạnh **0,3% nhưng đang tắt** (THAY-DOI 80) (comment trong `capDoShopTheoMap`, chỉ rơi tới Fide) (đổi 16/11/2026, THAY-DOI 77; trước Fide 2%, Tương lai/lạnh 1%); Cỏ bốn lá ×1,15. Đồ kích hoạt cấp ngẫu nhiên từ 1 tới cấp cao nhất của vùng. Khi rơi: **85% đồ sao** (trước 70%, THAY-DOI 79) (chỉ số shop ×100–115% + sao pha lê [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), giao dịch được), **15% đồ kích hoạt** (chỉ số shop ×100–115% + set `randOptionItemKichHoat`, option 30 không giao dịch). Map Tương lai / lạnh: thêm 10% có Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
 2. Bảng map → cấp như bên dưới. Map khác không rơi.
 3. Đồ sao giao dịch được, đồ kích hoạt khóa giao dịch.
 4. Lỗ sao dùng [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) (như boss rơi đồ Goku), đổi thành `public static`.

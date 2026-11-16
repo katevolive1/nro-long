@@ -660,3 +660,13 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 - Build: có ([`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672)). SQL: không. Client: không.
 - Tắt rơi đồ shop ở map Tương lai và lạnh: 2 khối trả cấp 9–11 / 11–12 bị comment (giữ lại để bật lại khi cần, tỉ lệ 0,5% vẫn để sẵn). Vùng đầu, giữa, xa 2%, Fide 1% như mục 77.
+
+## 79. Quái rơi đồ shop: 85% đồ sao / 15% đồ kích hoạt — 16/11/2026, máy công ty
+
+- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Khi quái rơi đồ shop: đồ sao 70% → 85%, đồ kích hoạt 30% → 15%. Tỉ lệ rơi và cấp giữ như mục 77–78.
+
+## 80. Quái rơi đồ shop: tỉ lệ theo vùng 5% / 2% / 1% / 0,5% — 16/11/2026, máy công ty
+
+- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Tỉ lệ mỗi con quái: đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai / lạnh 0,3% (2 vùng này vẫn tắt, mục 78). Cỏ ×1,15 như cũ. Thay cho mục 77 (2% / Fide 1% / Tương lai lạnh 0,5%).

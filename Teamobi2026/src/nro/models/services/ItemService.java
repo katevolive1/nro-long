@@ -695,8 +695,8 @@ public class ItemService {
     /**
      * Tung rơi 1 món đồ shop làng khi giết quái. Trả null nếu không rơi.
      * chu: người tính hành tinh / sức mạnh / Cỏ bốn lá (đệ giết thì truyền sư phụ). ownerId: người được nhặt.
-     * Tỉ lệ 2% (Fide 1%, Tương lai / lạnh 0,5%), Cỏ ×1,15. Khi rơi: 70% đồ sao cấp theo vùng (giao dịch được),
-     * 30% đồ kích hoạt cấp 1 tới cấp cao nhất của vùng (khóa giao dịch).
+     * Tỉ lệ: đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai / lạnh 0,3% (đang tắt), Cỏ ×1,15. Khi rơi: 85% đồ sao cấp theo vùng (giao dịch được),
+     * 15% đồ kích hoạt cấp 1 tới cấp cao nhất của vùng (khóa giao dịch).
      * Tương lai / lạnh: thêm 10% Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
      * Không giới hạn theo sức mạnh người chơi (bỏ 16/11/2026).
      */
@@ -707,16 +707,27 @@ public class ItemService {
         }
         boolean mapCao = nro.models.map.service.MapService.gI().isMapTuongLai(mapId)
                 || nro.models.map.service.MapService.gI().isMapCold(mapId);
-        boolean mapFide = mapId >= 63 && mapId <= 83;
-        // tính trên 1.000.000: Tương lai / lạnh 0,5%, Fide 1%, còn lại 2% (đổi 16/11/2026, trước 1% / 2% / 2%)
-        long tiLe = mapCao ? 5000 : (mapFide ? 10000 : 20000);
+        // Tỉ lệ theo vùng (cấp thấp nhất của vùng), tính trên 1.000.000 (đổi 16/11/2026):
+        // đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai / lạnh 0,3% (2 vùng này đang tắt trong capDoShopTheoMap)
+        long tiLe;
+        if (mapCao) {
+            tiLe = 3000;
+        } else if (cap[0] >= 7) { // Fide
+            tiLe = 5000;
+        } else if (cap[0] >= 5) { // xa
+            tiLe = 10000;
+        } else if (cap[0] >= 3) { // giữa
+            tiLe = 20000;
+        } else { // đầu
+            tiLe = 50000;
+        }
         if (chu.itemTime != null && chu.itemTime.isUseCoBonLa) {
             tiLe = tiLe * 115 / 100;
         }
         if (!Util.isTrue(tiLe, 1000000)) {
             return null;
         }
-        boolean doSao = Util.isTrue(70, 100); // 70% đồ sao, 30% đồ kích hoạt
+        boolean doSao = Util.isTrue(85, 100); // 85% đồ sao, 15% đồ kích hoạt (trước 70/30, đổi 16/11/2026)
         int level;
         if (doSao) {
             // Cấp trong vùng: thấp nhất 50%, kế 35%, cao 15% (vùng chỉ 2 cấp thì cấp cao 50%)
