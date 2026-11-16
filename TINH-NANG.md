@@ -54,6 +54,7 @@ Lập ngày 30/10/2026 từ các thư mục `Teamobi2026/src/nro/models/`. Đán
 - Không tự rời map trừ boss theo giờ, thông báo 15 phút/lần, gửi danh sách boss lúc đăng nhập **[đã sửa]** (ghi trong CLAUDE.md)
 - Mặt Trời (5 con, hồi 30 phút) **[đã sửa]**, Baby (khu ngẫu nhiên 0–9) **[đã sửa]**
 - Hirudegarn (map 126) **[đã sửa]** tạm tắt bằng `Hirudegarn.DISABLED`
+- Goku SSJ 1/2/3 map Cold 105–110 (`boss/Cold/GokuSSJ.java`, option 251 chiêu đặc biệt) **[đã sửa]** 16/11/2026
 - Chưa xem kỹ: Yardrat, Tàu Pảy Pảy, Mabư ngoài map, Nhân bản, Broly
 
 ## Client mod (chi tiết: `client-patch/CLIENT-UNITY.md`)

@@ -1,6 +1,6 @@
 # Boss rơi đồ – NRO Teamobi2026
 
-Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 11/11/2026: Cooler rơi Ngọc rồng băng; 7/11/2026: đổi đồ rơi boss thường, boss lớn, doanh trại, Hủy diệt, TĐST Namek).
+Tổng hợp từ hàm `reward()` trong `Teamobi2026/src/nro/models/boss/**` (đọc ngày 28/10/2026, cập nhật 16/11/2026: thêm Goku SSJ 1/2/3 mục 3c; 11/11/2026: Cooler rơi Ngọc rồng băng; 7/11/2026: đổi đồ rơi boss thường, boss lớn, doanh trại, Hủy diệt, TĐST Namek).
 Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code boss thì đọc lại file tương ứng để cập nhật.
 
 Ghi chú chung:
@@ -84,6 +84,23 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 **Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít (`DoiDoBaHatMit`).
 - 3 món không được trùng món (cùng id), nhưng được khác hành tinh.
 - Loại món kích hoạt theo món đặt đầu tiên, hành tinh theo người chơi.
+
+## 3c. Goku SSJ / SSJ2 / SSJ3 (map Cold 105–110, thêm 16/11/2026, `boss/Cold/GokuSSJ.java`)
+
+3 con, mỗi con 1 mạng, HP 3 tỷ, dame 250.000, luôn ở 3 map Cold khác nhau (khu có thể trùng), chết 30 phút hồi sinh. Chiêu đấm + chưởng 3 hành tinh cấp 7, Tái tạo năng lượng 7, Khiên năng lượng 1. Không giới hạn sát thương mỗi đòn. Kế hoạch: KE-HOACH-BOSS-GOKU-SSJ.md.
+
+Mỗi lần chết rơi **đúng 1 món** cho người giết:
+
+| Tỉ lệ | Đồ |
+|---|---|
+| 2% | 1 món Thần Linh (`ItemService.randDoTLBoss`) |
+| 25% | Hộp quà giáng sinh (648) |
+| 20% | Ngọc rồng 2 sao (15) |
+| 10% | Ngọc rồng 3 sao (16) |
+| 28% | 2–10 Thỏi vàng (457) |
+| 15% | Cải trang cùng tên: SSJ → 1589, SSJ2 → 1595, SSJ3 → 1587 |
+
+Cải trang (`RewardService.createCaiTrangGokuSSJ`): SĐ (50) 40–70%, không lạnh (106), một dòng 10–30% sức đánh chí mạng (5) hoặc sát thương chiêu đặc biệt (251) mỗi loại 50%, tốc độ chạy (148) 5–10%, 4–5 dòng chỉ số ẩn (210, lộ khi mặc), không bán lại (154). 0,075% jackpot vĩnh viễn chỉ số trần (SĐ 68–70%, dòng phụ 28–30%); 3% vĩnh viễn chỉ số thường; còn lại hạn 1–3 ngày.
 
 ## 4. Boss mini
 - Ăn Trộm: chỉ khi đã trộm vàng → trả 80% vàng đã trộm + 100% Hộp quà Goku Day (1591, 1594).

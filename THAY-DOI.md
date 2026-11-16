@@ -568,3 +568,25 @@ UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description=
 - Trước: hàm trả về chính các option của shop; code boss rơi đồ shop (14 boss, `option.param *= 100–115%`) sửa thẳng vào đó, nên mỗi lần boss rơi đồ Goku chỉ số món đó trong shop (và đồ rơi sau) tăng tới 15%, cộng dồn tới khi khởi động lại server. Giờ hàm trả bản sao.
 - Đồ đã mua hoặc nhặt trong lúc lỗi vẫn giữ chỉ số cao; khởi động lại server là shop về đúng giá trị DB.
 - Kiểm tra: xem chỉ số áo cấp 9 (230) trong shop Bunma, giết vài boss rơi đồ Goku, chỉ số trong shop không đổi.
+
+## 67. Boss Goku SSJ 1/2/3 ở map Cold + option 251 "% sát thương chiêu đặc biệt" — 16/11/2026, máy công ty
+
+- Build: có (`boss/Cold/GokuSSJ.java` mới, `BossID`, `BossesData`, `BossManager`, `RewardService.createCaiTrangGokuSSJ`, `NPoint.tlChieuDacBiet`, `SkillService` Bom, `DataGame.vsItem` = 25). Client: không (client tự tải lại option khi `vsItem` đổi).
+- 3 boss Goku SSJ/SSJ2/SSJ3 ở 3 map khác nhau trong 105–110, rơi đồ ở BOSS-ROI-DO.md mục 3c, kế hoạch KE-HOACH-BOSS-GOKU-SSJ.md.
+- Option 251 cộng % sát thương Laze, Bom, Quả cầu kênh khi (chỉ tính từ đồ).
+- SQL:
+```sql
+SET NAMES utf8mb4;
+INSERT INTO item_option_template (id, NAME) VALUES (251, '+#% sát thương chiêu đặc biệt');
+```
+- Kiểm tra: `SELECT id, NAME FROM item_option_template WHERE id=251;` ra 1 dòng. Bật server thấy 3 thông báo `BOSS Goku SSJ… vừa xuất hiện tại <map Cold>` ở 3 map khác nhau.
+
+## 68. Sửa đầu Goku SSJ bị lún (part 1454) — 16/11/2026, máy công ty
+
+- Build: có (`DataGame.vsData` = 10 để client tải lại part). Client: không (tự tải lại khi `vsData` đổi).
+- Đầu Goku SSJ (boss Goku SSJ và cải trang 1589) đặt thấp hơn SSJ2/Blue ~6 px nên lún vào thân. Nâng dy ảnh 13218 từ -1 lên -7, 13219 từ -2 lên -8 (gốc `[[13218,2,-1],[13219,2,-2],[2955,0,0]]`). Server tạo file `data/update_data/part` từ bảng `part` lúc khởi động, nên phải khởi động lại server.
+- SQL:
+```sql
+UPDATE part SET DATA='[[13218,2,-7],[13219,2,-8],[2955,0,0]]' WHERE id=1454;
+```
+- Kiểm tra: vào map Cold xem Goku SSJ, đầu nằm đúng trên cổ như SSJ2.

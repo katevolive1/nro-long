@@ -93,3 +93,5 @@ Boss lấy hình bằng `outfit {head, body, leg}` = id dòng bảng `part` (c�
 | 1275 Cumber SSJ (boss Cumber đã dùng) | 1257, 1255, 1256 | 11410 |
 
 Lỗi: 1593 CT Goku SSJ God có body part 1470 toàn ảnh trống và leg part 1471 có 16/17 ảnh trống, không dùng cho boss được. 1145 Black goku ssj 3 White không có head/body/leg.
+
+Part lưu ở bảng `part` (DB), server ghi ra `data/update_data/part` lúc khởi động và gửi cho client theo `DataGame.vsData`. Sửa part: `UPDATE part`, tăng `vsData`, khởi động lại server. dx/dy tính theo pixel x1 (ảnh x2 chia 2). Part 1454 (đầu Goku SSJ) gốc bị lún, đã nâng dy 16/11/2026 (THAY-DOI mục 68).

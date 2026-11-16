@@ -2309,6 +2309,7 @@ Dấu `#` trong tên là chỗ thay bằng giá trị. Dùng trong lệnh `i` d�
 | 248 | $[5] Tăng mạnh sát thương và giảm mạnh hao HP,KI chiêu Kaioken |
 | 249 | Hắc hóa: +#% HP cho người chơi xung quanh |
 | 250 | # Kilis |
+| 251 | +#% sát thương chiêu đặc biệt (Laze, Bom, Quả cầu kênh khi; thêm 16/11/2026) |
 
 ## Map
 | ID | Tên | Hành tinh |

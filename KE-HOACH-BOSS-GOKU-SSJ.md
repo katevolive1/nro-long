@@ -1,6 +1,6 @@
 # Kế hoạch: Boss Goku SSJ 1/2/3 ở map Cold
 
-Trạng thái: **đã duyệt, đang làm** (viết 16/11/2026). Tài liệu nội bộ, không đưa tỉ lệ/HP/cơ chế ra game hay web.
+Trạng thái: **đã làm 16/11/2026** (THAY-DOI mục 67, rơi đồ BOSS-ROI-DO.md mục 3c) (viết 16/11/2026). Tài liệu nội bộ, không đưa tỉ lệ/HP/cơ chế ra game hay web.
 
 ## Yêu cầu user
 
