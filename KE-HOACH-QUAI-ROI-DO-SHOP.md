@@ -3,13 +3,13 @@
 Viết 16/11/2026. Tỉ lệ rơi hiện tại: [QUAI-ROI-DO.md](QUAI-ROI-DO.md).
 
 ## Đã chốt (16/11/2026)
-1. Tỉ lệ mỗi con quái: **2%**, riêng Fide **1%**, Tương lai và lạnh **0,5% nhưng đang tắt** (comment trong `capDoShopTheoMap`, chỉ rơi tới Fide) (đổi 16/11/2026, THAY-DOI 77; trước Fide 2%, Tương lai/lạnh 1%); Cỏ bốn lá ×1,15. Đồ kích hoạt cấp ngẫu nhiên từ 1 tới cấp cao nhất của vùng. Khi rơi: **70% đồ sao** (chỉ số shop ×100–115% + sao pha lê `Boss.randSaoDoShop`, giao dịch được), **30% đồ kích hoạt** (chỉ số shop ×100–115% + set `randOptionItemKichHoat`, option 30 không giao dịch). Map Tương lai / lạnh: thêm 10% có Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
+1. Tỉ lệ mỗi con quái: **2%**, riêng Fide **1%**, Tương lai và lạnh **0,5% nhưng đang tắt** (comment trong `capDoShopTheoMap`, chỉ rơi tới Fide) (đổi 16/11/2026, THAY-DOI 77; trước Fide 2%, Tương lai/lạnh 1%); Cỏ bốn lá ×1,15. Đồ kích hoạt cấp ngẫu nhiên từ 1 tới cấp cao nhất của vùng. Khi rơi: **70% đồ sao** (chỉ số shop ×100–115% + sao pha lê [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), giao dịch được), **30% đồ kích hoạt** (chỉ số shop ×100–115% + set `randOptionItemKichHoat`, option 30 không giao dịch). Map Tương lai / lạnh: thêm 10% có Ký gửi vàng (86) hoặc Ký gửi ngọc (87).
 2. Bảng map → cấp như bên dưới. Map khác không rơi.
 3. Đồ sao giao dịch được, đồ kích hoạt khóa giao dịch.
-4. Lỗ sao dùng `Boss.randSaoDoShop` (như boss rơi đồ Goku), đổi thành `public static`.
+4. Lỗ sao dùng [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) (như boss rơi đồ Goku), đổi thành `public static`.
 5. Bán lại cho NPC giữ `gold / 4`.
 6. ~~Chặn theo sức mạnh~~: đã làm rồi bỏ theo yêu cầu user (16/11/2026), ai đánh cũng rơi.
-7. Comment hai khối cũ "Đồ sao khác vải thô" và "Đồ sao 3 map đầu" trong `Mob.getItemMobReward`.
+7. Comment hai khối cũ "Đồ sao khác vải thô" và "Đồ sao 3 map đầu" trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613).
 8. Không cộng dồn (đồ mặc vốn không cộng dồn, không đổi DB).
 - Đệ tử kết liễu: hành tinh và sức mạnh lấy theo sư phụ; đồ thuộc người kết liễu như các đồ khác.
 
@@ -34,12 +34,12 @@ Viết 16/11/2026. Tỉ lệ rơi hiện tại: [QUAI-ROI-DO.md](QUAI-ROI-DO.md)
 | 12 | 233 | 245 | 257 | 269 | 281 | 520 triệu | 52 triệu |
 
   Namếc và Xayda lấy ID theo cùng thứ tự trong `item_shop` (tab 4–5 Namếc, 7–8 Xayda).
-- Bán lại cho NPC được `item_template.gold / 4` (`ShopService.sellItem`). Ví dụ áo cấp 12 bán được khoảng 13 triệu vàng. Tỉ lệ rơi cao thì người chơi cày quái bán đồ lấy vàng, nên phải cân với vàng rơi sẵn (map lạnh: 30% × 150–250k).
-- Đồ rơi tự hút vào túi khi đánh gần (`Mob.hutItem`), nên rơi nhiều sẽ làm đầy túi nhanh.
+- Bán lại cho NPC được `item_template.gold / 4` ([`ShopService.sellItem`](Teamobi2026/src/nro/models/shop/ShopService.java#L1121)). Ví dụ áo cấp 12 bán được khoảng 13 triệu vàng. Tỉ lệ rơi cao thì người chơi cày quái bán đồ lấy vàng, nên phải cân với vàng rơi sẵn (map lạnh: 30% × 150–250k).
+- Đồ rơi tự hút vào túi khi đánh gần ([`Mob.hutItem`](Teamobi2026/src/nro/models/mob/Mob.java#L567)), nên rơi nhiều sẽ làm đầy túi nhanh.
 
 ## Cách làm
-1. Thêm hàm `ItemService.randDoShopTheoMap(int mapId, int gender)`. Hàm có bảng ID 12 cấp × 5 loại × 3 hành tinh như trên, và bảng map → khoảng cấp (bên dưới). Map không có trong bảng thì trả -1.
-2. Trong `Mob.getItemMobReward`, tung thêm một lần: trúng thì tạo `ItemMap` của món đó. Chỉ số món lấy như shop (`getListOptionItemShop`, giống đoạn rơi đồ kích hoạt), có thể thêm lỗ sao (option 107) theo điểm cần chốt 4.
+1. Thêm hàm [`ItemService.randDoShopTheoMap(int mapId, int gender)`](Teamobi2026/src/nro/models/services/ItemService.java). Hàm có bảng ID 12 cấp × 5 loại × 3 hành tinh như trên, và bảng map → khoảng cấp (bên dưới). Map không có trong bảng thì trả -1.
+2. Trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), tung thêm một lần: trúng thì tạo [`ItemMap`](Teamobi2026/src/nro/models/map/ItemMap.java) của món đó. Chỉ số món lấy như shop (`getListOptionItemShop`, giống đoạn rơi đồ kích hoạt), có thể thêm lỗ sao (option 107) theo điểm cần chốt 4.
 3. Hành tinh của món theo người kết liễu. Nếu đệ tử kết liễu thì lấy hành tinh sư phụ, đồ vẫn rơi cho đệ như các đồ khác.
 4. Cập nhật QUAI-ROI-DO.md và THAY-DOI.md. Không đổi DB, không đổi client.
 

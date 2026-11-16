@@ -6,7 +6,7 @@ Tên item tra từ bảng `team10_long.item_template`. Nếu đã sửa code bos
 Ghi chú chung:
 - Đồ rơi thuộc về người kết liễu (`plKill.id`), trừ Khí Gas (ai nhặt cũng được).
 - Hầu hết boss cộng thêm +5 điểm sự kiện (không ghi lại bên dưới).
-- `Util.isTrue(a, b)` = tỉ lệ a/b.
+- [`Util.isTrue(a, b)`](Teamobi2026/src/nro/models/utils/Util.java#L209) = tỉ lệ a/b.
 
 ## 1. Boss thường (Android, Cell, Fide, Nappa, Tiểu đội sát thủ TĐ)
 Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hung, Fide, Kuku, Mập đầu đinh, Rambo, Số 1–4, Tiểu đội trưởng.
@@ -27,8 +27,8 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 | Mabu (12h) | 100% | 0,3% | 0,15% | không rơi | 5% Bình hút năng lượng (1795, `250:0`); điểm Mabu +25 |
 
 - Cập nhật 7/11/2026: Baby, Black Goku, Cumber, Cooler, Siêu bọ hung cùng thêm 20% rơi 2–5 Thỏi vàng (id 457), đặt trước `dropNgocRong23`; Cumber đổi Thần Linh từ 7% sang dạng 1 5%, dạng 2 7%.
-- Cập nhật 31/10/2026: Thần Linh theo dạng (`Boss.isDropDoTL`, mỗi dạng chết đều gọi `reward`), ngọc rồng chung `Boss.dropNgocRong23` (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ (`BossesData`).
-- Đồ Thần Linh (`ItemService.randDoTLBoss`, id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
+- Cập nhật 31/10/2026: Thần Linh theo dạng ([`Boss.isDropDoTL`](Teamobi2026/src/nro/models/boss/Boss.java#L726), mỗi dạng chết đều gọi `reward`), ngọc rồng chung [`Boss.dropNgocRong23`](Teamobi2026/src/nro/models/boss/Boss.java#L718) (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ ([`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java)).
+- Đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1040), id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
 - Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115% (trước 16/11/2026 nhân thẳng vào option shop nên shop tăng dần, đã sửa ở `getListOptionItemShop`); sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở `Boss.java`: `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
 
 ## 3. Doanh trại
@@ -59,14 +59,14 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 | Mục | Giá trị |
 |---|---|
 | HP | 2 tỷ |
-| Sức đánh | 140.000 (`HuyDiet.DAME`, trước 100.000, đổi 7/11/2026) |
+| Sức đánh | 140.000 ([`HuyDiet.DAME`](Teamobi2026/src/nro/models/boss/thien_su/HuyDiet.java#L16), trước 100.000, đổi 7/11/2026) |
 | Giới hạn sát thương mỗi đòn | không có |
 | Chiêu | đấm / chưởng cấp 7 |
 | Khu xuất hiện | mỗi cặp vào cùng một khu ngẫu nhiên (2 cặp có thể chung khu) |
 | Thiên sứ hồi cho Hủy diệt | mỗi 10 giây hồi 10% HP tối đa, chỉ cho Hủy diệt cùng cặp, cùng khu, còn sống |
 | Hồi sinh | chết cả 2 con mới đếm 10 phút, rồi cả cặp xuất hiện lại |
 
-**Rơi đồ Hủy diệt Beerus / Champa** (`ThienSuHuyDietReward.dropHuyDiet`, cập nhật 31/10/2026, tổng 100%):
+**Rơi đồ Hủy diệt Beerus / Champa** ([`ThienSuHuyDietReward.dropHuyDiet`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java#L22), cập nhật 31/10/2026, tổng 100%):
 
 | Tỉ lệ | Rơi |
 |---|---|
@@ -79,9 +79,9 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
 (Cập nhật 7/11/2026: đồ Hủy Diệt 30% → 25%, thêm 5% Cuồng nộ/Bổ khí/Bổ huyết/Giáp Xên 2, thỏi vàng 5–20 → 2–10.)
 
-**Thiên sứ Whis / Vados**: từ 7/11/2026 không rơi đồ riêng (đã bỏ `ThienSuHuyDietReward.drop`), chỉ còn phần thưởng chung của `Boss.reward`.
+**Thiên sứ Whis / Vados**: từ 7/11/2026 không rơi đồ riêng (đã bỏ [`ThienSuHuyDietReward.drop`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java)), chỉ còn phần thưởng chung của [`Boss.reward`](Teamobi2026/src/nro/models/boss/Boss.java#L688).
 
-**Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít (`DoiDoBaHatMit`).
+**Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít ([`DoiDoBaHatMit`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java)).
 - 3 món không được trùng món (cùng id), nhưng được khác hành tinh.
 - Loại món kích hoạt theo món đặt đầu tiên, hành tinh theo người chơi.
 
@@ -93,7 +93,7 @@ Mỗi lần chết rơi **đúng 1 món** cho người giết:
 
 | Tỉ lệ | Đồ |
 |---|---|
-| 2% | 1 món Thần Linh (`ItemService.randDoTLBoss`) |
+| 2% | 1 món Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1040)) |
 | 25% | Hộp quà giáng sinh (648) |
 | 20% | Ngọc rồng 2 sao (15) |
 | 10% | Ngọc rồng 3 sao (16) |
@@ -105,10 +105,10 @@ Cải trang ([`RewardService.createCaiTrangGokuSSJ`](Teamobi2026/src/nro/models/
 ## 4. Boss mini
 - Ăn Trộm: chỉ khi đã trộm vàng → trả 80% vàng đã trộm + 100% Hộp quà Goku Day (1591, 1594).
 - Ô Đô, Sói Hẹc Quyn, Virut: 100% 2 Hộp quà Goku Day (1591 + 1594).
-- Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày). **Đang tắt từ 31/10/2026** (dòng tạo boss trong `BossManager.loadBoss` bị comment).
+- Mặt Trời: 50% Mặt trời tí hon (1562, +7–10% HP/KI/SĐ, HSD 2–5 ngày). **Đang tắt từ 31/10/2026** (dòng tạo boss trong [`BossManager.loadBoss`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java#L154) bị comment).
 - Rồng Nhí: 20% có rơi → 4% Trứng vàng rồng nhí (1821), 16% NR 5/6/7 sao.
-- Mabư ngoài map (`Mabu_ngoai/MabuNgoai.java`, 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
-- **Đang tạm tắt** (`Hirudegarn.DISABLED = true`, luôn chết, không rơi gì). Hirudegarn (quái to, `mob_bigboss/Hirudegarn.java`, map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
+- Mabư ngoài map ([`Mabu_ngoai/MabuNgoai.java`](Teamobi2026/src/nro/models/boss/Mabu_ngoai/MabuNgoai.java), 2 con, hồi sinh 15 phút): 20% Quả Trứng (568, trứng đệ tử Mabư).
+- **Đang tạm tắt** (`Hirudegarn.DISABLED = true`, luôn chết, không rơi gì). Hirudegarn (quái to, [`mob_bigboss/Hirudegarn.java`](Teamobi2026/src/nro/models/mob_bigboss/Hirudegarn.java), map 126 Thành phố Santa, mỗi khu 1 con, 3 mạng, hồi sinh 10 phút): mỗi lần mất mạng rơi 30 đống vàng × 32.000, 20% Quả Trứng (568), 20% Bình hút năng lượng (1795), 1/40 Áo/Quần/Găng Thần Linh (555/557/559). Ai nhặt cũng được.
 
 ## 5. Golden Frieza + Death Beam 1–5
 - 100% Cải trang Fide vàng (629, +20% HP/KI/SĐ, HSD 20 ngày).
@@ -125,10 +125,10 @@ Cải trang ([`RewardService.createCaiTrangGokuSSJ`](Teamobi2026/src/nro/models/
 ## 7. Phó bản / sự kiện
 - Hatchiyack / Dr Lychee (Khí Gas): CT Hatchiyack (729) / CT Dr Lychee (738), số lượng 1 + 2×số người trong khu, ai nhặt cũng được; chỉ số theo level Khí Gas → chi tiết mục 7a.
 
-### 7a. Khí Gas Hủy Diệt – boss và phần thưởng (`boss/khi_gas/DrLychee.java`, `Hatchiyack.java`)
-Cơ chế phó bản: mục "Khí Gas Hủy Diệt" trong [CO-CHE.md](CO-CHE.md). Lv = cấp độ chọn lúc mở (1–110). Số máu/sát thương dưới đây là gốc; đang thử nghiệm chia 10 (`DestronGas.GIAM`, [GIA-TRI-GOC.md](GIA-TRI-GOC.md)). Phần thưởng không đổi.
-- Dr Lychee (ngoại hình 742/743/744): sát thương 10.000 + 1.000×Lv, máu 1 triệu + 15 triệu×Lv (gốc ở `DestronGas.update()`, phần +10.000/+1 triệu ở constructor DrLychee). Né "Xí hụt" Lv/1000, giảm sát thương nhận (Lv/10)% và trừ thêm ngẫu nhiên 0–100×Lv.
-- Hatchiyack (639/640/641, tên trống): hiện khi Dr Lychee rời map, ×1,5 sát thương (tối đa 200 triệu) và ×1,5 máu (tối đa 2 tỷ) của Dr Lychee (`DrLychee.leaveMap()`). Né (Lv+10)/1000, giảm (Lv/5)% và trừ thêm 0–200×Lv. Chết → 60 giây sau đưa về làng Aru.
+### 7a. Khí Gas Hủy Diệt – boss và phần thưởng ([`boss/khi_gas/DrLychee.java`](Teamobi2026/src/nro/models/boss/khi_gas/DrLychee.java), [`Hatchiyack.java`](Teamobi2026/src/nro/models/boss/khi_gas/Hatchiyack.java))
+Cơ chế phó bản: mục "Khí Gas Hủy Diệt" trong [CO-CHE.md](CO-CHE.md). Lv = cấp độ chọn lúc mở (1–110). Số máu/sát thương dưới đây là gốc; đang thử nghiệm chia 10 ([`DestronGas.GIAM`](Teamobi2026/src/nro/models/map/phoban/DestronGas.java#L32), [GIA-TRI-GOC.md](GIA-TRI-GOC.md)). Phần thưởng không đổi.
+- Dr Lychee (ngoại hình 742/743/744): sát thương 10.000 + 1.000×Lv, máu 1 triệu + 15 triệu×Lv (gốc ở [`DestronGas.update()`](Teamobi2026/src/nro/models/map/phoban/DestronGas.java#L66), phần +10.000/+1 triệu ở constructor DrLychee). Né "Xí hụt" Lv/1000, giảm sát thương nhận (Lv/10)% và trừ thêm ngẫu nhiên 0–100×Lv.
+- Hatchiyack (639/640/641, tên trống): hiện khi Dr Lychee rời map, ×1,5 sát thương (tối đa 200 triệu) và ×1,5 máu (tối đa 2 tỷ) của Dr Lychee ([`DrLychee.leaveMap()`](Teamobi2026/src/nro/models/boss/khi_gas/DrLychee.java#L139)). Né (Lv+10)/1000, giảm (Lv/5)% và trừ thêm 0–200×Lv. Chết → 60 giây sau đưa về làng Aru.
 - Cả 2: chiêu Demon cấp 1–7; đòn xuyên giáp không bị né và phá khiên; đang khiên thì đòn thường = 1; người cầm NR Namek đánh = 1.
 - Cải trang rơi (`dropCt()`): P = 14 nếu Lv < 10, còn lại 14 + Lv/10. Sức đánh/HP/KI mỗi cái +(P+8 đến P+11)%; Dr Lychee thêm giảm sát thương nhận +(P đến P+3)% (option 94, cộng vào tlGiap, bị xuyên giáp trừ), Hatchiyack thêm sát thương chí mạng +(P đến P+3)% (option 5, không phải tỉ lệ chí mạng option 14); HSD 3–P ngày (tối đa 21); không giao dịch. Số lượng 1 + 2×số người trong khu, mỗi boss rơi riêng.
 
@@ -154,14 +154,14 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 ## Tỉ lệ né của boss (dò 31/10/2026)
 
 - Boss né đòn theo 2 cách trong `injured()`:
-  - Chung: `Util.isTrue(this.nPoint.tlNeDon, 1000)` (Boss, Baby, Broly, SuperBroly, Cumber, XenBoHung, SieuBoHung, RobotVeSi, MabuNgoai, Drabura3, SonTinh, ThuyTinh, NhatThan, NguyetThan, KhiDot, GoldenFrieza, BlackGoku, SAIBAMEN, CADICH). Cadic, Goku, TaoPaiPai dùng `isTrue(tlNeDon, 1)`.
+  - Chung: [`Util.isTrue(this.nPoint.tlNeDon, 1000)`](Teamobi2026/src/nro/models/utils/Util.java#L209) (Boss, Baby, Broly, SuperBroly, Cumber, XenBoHung, SieuBoHung, RobotVeSi, MabuNgoai, Drabura3, SonTinh, ThuyTinh, NhatThan, NguyetThan, KhiDot, GoldenFrieza, BlackGoku, SAIBAMEN, CADICH). Cadic, Goku, TaoPaiPai dùng `isTrue(tlNeDon, 1)`.
   - Riêng: DrLychee `isTrue(level, 1000)`, Hatchiyack `isTrue(level + 10, 1000)`.
 - `nPoint.tlNeDon` chỉ được cộng từ option 108/111 (NPoint `calPoint`, option danh hiệu, vật phẩm, đá đen R7S) và bị reset về 0 khi tính lại. Code boss không gán giá trị nào cho `tlNeDon`, nên boss dùng `tlNeDon` hiện tại né 0% (trừ khi sau này có gán).
 - Dr Lychee: né Lv/1000. Hatchiyack: né (Lv+10)/1000.
 
 ## Giáp boss = cách giảm sát thương nhận trong `injured()` (dò 31/10/2026)
 
-`BossData` không có chỉ số giáp; `nPoint.def` của boss = 0 nên `subDameInjureWithDeff` không trừ gì. "Giáp" thực tế nằm trong `injured()` từng boss. Né `tlNeDon` = 0% (mục trên). "Khiên": đang khiên năng lượng thì sát thương chia thêm (ghi trong ngoặc). Xuyên giáp (`piercing`) bỏ qua né, khiên và phần lớn giới hạn.
+[`BossData`](Teamobi2026/src/nro/models/boss/BossData.java) không có chỉ số giáp; `nPoint.def` của boss = 0 nên `subDameInjureWithDeff` không trừ gì. "Giáp" thực tế nằm trong `injured()` từng boss. Né `tlNeDon` = 0% (mục trên). "Khiên": đang khiên năng lượng thì sát thương chia thêm (ghi trong ngoặc). Xuyên giáp (`piercing`) bỏ qua né, khiên và phần lớn giới hạn.
 - **Nhận đủ** (không override, [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773)): Fide, Kuku, Mập đầu đinh, Rambo, Tiểu đội trưởng, Bojack, Super Bojack, King Kong, Android 13/14/15… Android 19: Kamejoko/Masenko/Antomic bị hấp thụ (hồi 80% sát thương, nhận 0). Dr Kore: 3 chiêu đó hồi 100%.
 - Broly: tối đa **1% HP**/đòn (trừ Tự sát). Super Broly, Mabư ngoài map: tối đa **10% HP**/đòn.
 - Cooler: né 1%, nhận đủ. Golden Frieza: tối đa **50 triệu**/đòn.
@@ -175,4 +175,4 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 - Yardrat: né 10%, tối đa **1% HP**. Võ đài Hạt Mít (Bông Băng, Dracula, Người vô hình, Thỏ đầu bạc, Vua quỷ Sa Tăng…): né 10%, tối đa **10% HP**.
 - Luyện tập tự động (TrainingBoss, Tàu Pảy Pảy luyện tập, Whis): né 40%; Whis ÷ cấp.
 - Khí gas (Dr Lychee, Hatchiyack): mục 7a. Quái to: Hirudegarn mỗi đòn 1% HP còn lại; Gấu tướng cướp 5% sát thương.
-- **Đã sửa 31/10/2026** (trả về `long`): `NPoint.subDameInjureWithDeff` trước trả về `int`, nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).
+- **Đã sửa 31/10/2026** (trả về `long`): [`NPoint.subDameInjureWithDeff`](Teamobi2026/src/nro/models/player/NPoint.java#L1819) trước trả về `int`, nên đòn > 2,147 tỷ bị tràn số (ra số âm hoặc sai) ở mọi boss dùng hàm này (Baby, Black Goku, Broly, Super Broly, Xên, Cooler, Cumber, doanh trại, Halloween, Khỉ Đột, Golden Frieza, khí gas, Mabư ngoài, Yacon, Saibamen, Lân con…).

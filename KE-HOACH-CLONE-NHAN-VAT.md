@@ -4,7 +4,7 @@ Lập 31/10/2026. Chỉ làm trong DB `team10_long`, không sửa code, không b
 
 **Đã chạy 31/10/2026 (máy nhà)**, theo đề xuất bên dưới, user chốt: mật khẩu (không ghi vào git, hỏi user) cho cả 2 account (`xd`, `nm`), tên nhân vật Xayda `tata2`, Namek `hoang`; set Namek = Ốc tiêu (Liên Hoàn); kỹ năng, nội tại (về chưa mở), vị trí như đề xuất. Kết quả: account 3735 `xd` → player 1370 `tata2` (gender 2, head 27); account 3736 `nm` → player 1371 `hoang` (gender 1, head 29). Head Namek 29 = kiểu tóc tương ứng head 30 của TĐ (TĐ 64/30/31, Namek 9/29/32, Xayda 6/27/28). SQL: [THAY-DOI.md](THAY-DOI.md) mục 34.
 
-**Sửa thêm (mục 35):** `tata2` đổi sao pha lê từ SĐ sang HP. Mỗi lỗ: đá SĐ (Ngọc rồng 16) `[50,3]`, đá HP (Ngọc rồng 20) `[77,5]` (`Item.getOptionDaPhaLe`). 7 sao ép gộp thành 1 option (`[50,21]` → `[77,35]`), lỗ 8/9 cường hóa là 2 option riêng (`[50,3]` → `[77,5]`). Trên cải trang Hit, sao ép SĐ cộng thẳng vào SĐ gốc (`[50,51]` = 30 gốc + 21).
+**Sửa thêm (mục 35):** `tata2` đổi sao pha lê từ SĐ sang HP. Mỗi lỗ: đá SĐ (Ngọc rồng 16) `[50,3]`, đá HP (Ngọc rồng 20) `[77,5]` ([`Item.getOptionDaPhaLe`](Teamobi2026/src/nro/models/item/Item.java#L218)). 7 sao ép gộp thành 1 option (`[50,21]` → `[77,35]`), lỗ 8/9 cường hóa là 2 option riêng (`[50,3]` → `[77,5]`). Trên cải trang Hit, sao ép SĐ cộng thẳng vào SĐ gốc (`[50,51]` = 30 gốc + 21).
 
 ## Nguồn
 - Tài khoản `11` (id 3729, `is_admin`=1, `vnd` 9.890.000) → nhân vật id 1368 tên `3313`, Trái Đất (gender 0), head 30.
@@ -12,7 +12,7 @@ Lập 31/10/2026. Chỉ làm trong DB `team10_long`, không sửa code, không b
 
 ## Đã dò ở nhân vật 1368
 - Đang mặc (`items_body`): áo 136 (Áo vải Kame, cấp 5), quần 242 (Quần bạc Goku, cấp 9), găng 257 (Găng jean Calic, cấp 12), giày 268 (Giày da Calic, cấp 11), rada 280 (dùng chung, gender 3), cải trang Hit 884, 1766, 1254, 1252. Mỗi món có option set `129` (Set Sôngôku) + `141` (5 món +100% sát thương Kamejoko), sao pha lê (`107:9`, `102:9`, `228:9`…) và chỉ số gốc (`47` giáp, `6`+`27` HP, `0` sức đánh, `7`+`28` KI, `14` chí mạng).
-- Set theo hành tinh (bảng `ACTIVATION_SET` trong `RewardService`): TĐ Sôngôku **129+141**; Xayda Nappa **135+138** (5 món +80% HP), Kakarot 133+136, Ca Đíc 134+137; Namek Ốc tiêu **131+143** (5 món +100% sát thương Liên Hoàn), Pikkoro Daimao 132+144, Picolo 130+142.
+- Set theo hành tinh (bảng `ACTIVATION_SET` trong [`RewardService`](Teamobi2026/src/nro/models/services/RewardService.java)): TĐ Sôngôku **129+141**; Xayda Nappa **135+138** (5 món +80% HP), Kakarot 133+136, Ca Đíc 134+137; Namek Ốc tiêu **131+143** (5 món +100% sát thương Liên Hoàn), Pikkoro Daimao 132+144, Picolo 130+142.
 - Kỹ năng đang có cấp 7: Dragon 0, Kamejoko 1, Thái Dương Hạ San 6, Dịch chuyển 20, Khiên 19. Chưa học (cấp 0): Kaioken 9, Quả cầu kênh khí 10, Thôi miên 22. Phím tắt `[0,1,6,20,19]`.
 - `BoughtSkill` là danh sách ID sách kỹ năng đã học (lv2–lv7 của Dragon, Kamejoko, Thái Dương Hạ San, Dịch chuyển, Khiên).
 - Nội tại hiện tại là id 6 "Dịch chuyển tức thời" (chỉ Trái Đất).
@@ -21,7 +21,7 @@ Lập 31/10/2026. Chỉ làm trong DB `team10_long`, không sửa code, không b
 ## Cách làm
 1. **Nhân vật 1368 phải offline** lúc clone (server lưu bản trong RAM mỗi 5 phút, DB có thể cũ). Tạo 2 account/nhân vật mới là thêm dòng, không sửa dòng cũ nên không cần tắt server.
 2. Mỗi hành tinh, cho `account` mới: `INSERT ... SELECT` từ account 3729 (giữ `vnd`, `is_admin`, `active`…), đổi `username`, `password`, `ip_address`/`token` rỗng, `id` mới.
-3. `player` mới: `INSERT ... SELECT` từ player 1368 (mọi cột y chang: `data_point`, `data_inventory`, `items_bag`, `items_box`, `pet`, nhiệm vụ…), đổi `id` mới, `account_id` mới, `name` mới, `gender` 2 (Xayda) hoặc 1 (Namek), `head` đúng hành tinh (Xayda 27 như player 1369; Namek sẽ đọc `PlayerDAO.createNewPlayer` để lấy đúng head), `clan_id` 0.
+3. `player` mới: `INSERT ... SELECT` từ player 1368 (mọi cột y chang: `data_point`, `data_inventory`, `items_bag`, `items_box`, `pet`, nhiệm vụ…), đổi `id` mới, `account_id` mới, `name` mới, `gender` 2 (Xayda) hoặc 1 (Namek), `head` đúng hành tinh (Xayda 27 như player 1369; Namek sẽ đọc [`PlayerDAO.createNewPlayer`](Teamobi2026/src/nro/models/database/PlayerDAO.java#L37) để lấy đúng head), `clan_id` 0.
 4. Đổi đồ mặc (`items_body`) bằng cách thay ID món + option set, giữ nguyên mọi option khác và cấp độ:
 
 | Cấp | Món | Trái Đất (nguồn) | Xayda | Namek |

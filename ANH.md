@@ -67,7 +67,7 @@ php tools/kho-anh/xuat-icon.php
 - **4 item ảnh trống**: 1752, 1753, 1754 Đai lưng (icon 14524, 14523, 14525) và 673 "abcd" (icon 15313). Ở mọi nơi chỉ có ảnh giữ chỗ 1x1, tức icon chưa từng được vẽ.
 - **187 ID thiếu mức zoom không cần sửa**: 151 ID có x4 thiếu x2/x3 (15917–16036, 16672–16673, 16901–16935), 36 ID có x2 thiếu x4 (14523–14566). Tất cả là ảnh giữ chỗ 1x1 hoặc 2x2, không có ảnh thật. Đã thử bù rồi gỡ vì chỉ thêm file rác. `lam-du-zoom.ps1` nay tự bỏ qua ảnh giữ chỗ.
 
-Icon mới chỉ cần chép vào `data/icon/x2..x4` (và x2 sang `web/icon`): `DataGame.sendIcon` đọc file mỗi lần client xin, không cần build lại server.
+Icon mới chỉ cần chép vào `data/icon/x2..x4` (và x2 sang `web/icon`): [`DataGame.sendIcon`](Teamobi2026/src/nro/models/data/DataGame.java#L299) đọc file mỗi lần client xin, không cần build lại server.
 
 ## Hình boss / cải trang SSJ (dò 16/11/2026)
 
@@ -94,4 +94,4 @@ Boss lấy hình bằng `outfit {head, body, leg}` = id dòng bảng `part` (c�
 
 Lỗi: 1593 CT Goku SSJ God có body part 1470 toàn ảnh trống và leg part 1471 có 16/17 ảnh trống, không dùng cho boss được. 1145 Black goku ssj 3 White không có head/body/leg.
 
-Part lưu ở bảng `part` (DB), server ghi ra `data/update_data/part` lúc khởi động và gửi cho client theo `DataGame.vsData`. Sửa part: `UPDATE part`, tăng `vsData`, khởi động lại server. dx/dy tính theo pixel x1 (ảnh x2 chia 2). Part 1454 (đầu Goku SSJ) gốc bị lún, đã nâng dy 16/11/2026 (THAY-DOI mục 68).
+Part lưu ở bảng `part` (DB), server ghi ra `data/update_data/part` lúc khởi động và gửi cho client theo [`DataGame.vsData`](Teamobi2026/src/nro/models/data/DataGame.java#L34). Sửa part: `UPDATE part`, tăng `vsData`, khởi động lại server. dx/dy tính theo pixel x1 (ảnh x2 chia 2). Part 1454 (đầu Goku SSJ) gốc bị lún, đã nâng dy 16/11/2026 (THAY-DOI mục 68).

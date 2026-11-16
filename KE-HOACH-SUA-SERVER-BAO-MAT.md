@@ -34,13 +34,13 @@ New-NetFirewallRule -DisplayName "Chan MySQL" -Direction Inbound -Protocol TCP -
 
 ## Đợt 1: chặn sập server bằng 1 kết nối (ưu tiên cao nhất)
 
-**Lỗi:** gói `-74` type 2 chỉ vài byte nhưng gọi được khi chưa đăng nhập. `DataGame.sendRes` đọc toàn bộ `data/res/x<zoom>` (1.413 file, 13–28 MB) vào RAM và xếp hàng. Client không đọc socket mà gửi lặp lại khoảng 20 lần là đầy heap 512 MB.
+**Lỗi:** gói `-74` type 2 chỉ vài byte nhưng gọi được khi chưa đăng nhập. [`DataGame.sendRes`](Teamobi2026/src/nro/models/data/DataGame.java#L454) đọc toàn bộ `data/res/x<zoom>` (1.413 file, 13–28 MB) vào RAM và xếp hàng. Client không đọc socket mà gửi lặp lại khoảng 20 lần là đầy heap 512 MB.
 
 ### 1a. `-74` type 2 mỗi kết nối chỉ một lần
 
-`MySession.java`: thêm `public boolean sentRes;`
+[`MySession.java`](Teamobi2026/src/nro/models/network/MySession.java): thêm `public boolean sentRes;`
 
-`Controller.java` (case `-74`):
+[`Controller.java`](Teamobi2026/src/nro/models/server/Controller.java) (case `-74`):
 
 ```java
 } else if (type == 2 && !_session.sentRes) {
@@ -53,7 +53,7 @@ New-NetFirewallRule -DisplayName "Chan MySQL" -Direction Inbound -Protocol TCP -
 
 Tính theo byte, không theo số gói, vì một lần tải dữ liệu hợp lệ đã có hơn 1.400 gói.
 
-`Message.java`:
+[`Message.java`](Teamobi2026/src/nro/models/network/Message.java):
 
 ```java
 public int size() {
@@ -61,7 +61,7 @@ public int size() {
 }
 ```
 
-`Sender.java`:
+[`Sender.java`](Teamobi2026/src/nro/models/network/Sender.java):
 
 ```java
 private static final long MAX_QUEUE_BYTES = 64L * 1024 * 1024; // lớn hơn bộ res x4 (28 MB)
@@ -86,9 +86,9 @@ public void sendMessage(Message msg) {
 
 Trong `run()`, sau `doSendMessage(message)`: `queuedBytes.addAndGet(-message.size());` (lấy `size` trước khi gửi, vì `doSendMessage` gọi `msg.cleanup()`; `os` vẫn còn nhưng nên lấy trước cho chắc).
 
-`Session.java`: thêm `public boolean isOverflow() { return sender != null && sender.overflow; }`
+[`Session.java`](Teamobi2026/src/nro/models/network/Session.java): thêm `public boolean isOverflow() { return sender != null && sender.overflow; }`
 
-`Client.update()`: nếu `session.isOverflow()` thì `kickSession(session)`, ghi log kèm IP.
+[`Client.update()`](Teamobi2026/src/nro/models/server/Client.java#L195): nếu `session.isOverflow()` thì `kickSession(session)`, ghi log kèm IP.
 
 **Thử:** xóa cache client (`%USERPROFILE%\AppData\LocalLow\DefaultCompany\DragonBoy\`), mở game ở cấu hình cao nhất, phải tải xong dữ liệu mà không bị đá.
 
@@ -98,9 +98,9 @@ Trong `run()`, sau `doSendMessage(message)`: `queuedBytes.addAndGet(-message.siz
 
 **Lỗi:** client tự ngắt thì bị trừ 2 lần; session bị từ chối thì bị trừ dù chưa từng cộng.
 
-`MySession.java`: thêm `public boolean countedIp;`
+[`MySession.java`](Teamobi2026/src/nro/models/network/MySession.java): thêm `public boolean countedIp;`
 
-`ServerManager.java`, thay `CLIENTS` bằng `ConcurrentHashMap<String, Integer>` (hiện là `HashMap` dùng từ nhiều luồng):
+[`ServerManager.java`](Teamobi2026/src/nro/models/server/ServerManager.java), thay `CLIENTS` bằng `ConcurrentHashMap<String, Integer>` (hiện là `HashMap` dùng từ nhiều luồng):
 
 ```java
 public static final Map<String, Integer> CLIENTS = new ConcurrentHashMap<>();
@@ -137,20 +137,20 @@ public void disconnect(MySession session) {
 
 ### 2b. Trần tổng kết nối
 
-`Manager.java`: `public static int MAX_CONNECTION = 3000;`, đọc từ `server.maxconnection` như `server.maxperip`. `Config.properties`: `server.maxconnection=1500` (khoảng 1,5 lần `maxplayer`).
+[`Manager.java`](Teamobi2026/src/nro/models/server/Manager.java): `public static int MAX_CONNECTION = 3000;`, đọc từ `server.maxconnection` như `server.maxperip`. `Config.properties`: `server.maxconnection=1500` (khoảng 1,5 lần `maxplayer`).
 
 ### 2c. Hết rò session bị từ chối
 
-`Network.run()`, đảo thứ tự để `removeSession` trong `disconnect` có tác dụng:
+[`Network.run()`](Teamobi2026/src/nro/models/network/Network.java#L108), đảo thứ tự để `removeSession` trong `disconnect` có tác dụng:
 
 ```java
 SessionManager.gI().putSession(session);
 this.acceptHandler.sessionInit(session);
 ```
 
-`Sender.close()`: `if (this.messages != null) this.messages.clear();`
+[`Sender.close()`](Teamobi2026/src/nro/models/network/Sender.java#L87): `if (this.messages != null) this.messages.clear();`
 
-`Session.disconnect()`: thoát sớm nếu đã ngắt, tránh chạy lần 2 trên object đã `dispose`.
+[`Session.disconnect()`](Teamobi2026/src/nro/models/network/Session.java#L155): thoát sớm nếu đã ngắt, tránh chạy lần 2 trên object đã `dispose`.
 
 ```java
 if (!this.connected) {
@@ -158,7 +158,7 @@ if (!this.connected) {
 }
 ```
 
-Sau khi sửa, `Client.update` không còn gặp NPE làm dừng vòng lặp. Lưu ý `getNumSession` đếm cả session vừa thêm nên trần thực tế thấp hơn 1, không đáng kể.
+Sau khi sửa, [`Client.update`](Teamobi2026/src/nro/models/server/Client.java#L195) không còn gặp NPE làm dừng vòng lặp. Lưu ý `getNumSession` đếm cả session vừa thêm nên trần thực tế thấp hơn 1, không đáng kể.
 
 ## Đợt 3: giới hạn gói và đăng nhập
 
@@ -166,7 +166,7 @@ Sau khi sửa, `Client.update` không còn gặp NPE làm dừng vòng lặp. L�
 
 Mod client gửi rất nhanh (AutoItem 50 ms/lần, cộng di chuyển, đánh, nhặt đồ). **Phải đo trước**: chạy bản thử chỉ ghi log số gói/giây cao nhất khi bật hết auto, sau đó đặt ngưỡng gấp 3 lần con số đó. Ngưỡng ghi trong code là tạm.
 
-`Collector.run()`:
+[`Collector.run()`](Teamobi2026/src/nro/models/network/Collector.java#L32):
 
 ```java
 long windowStart = System.currentTimeMillis();
@@ -190,21 +190,21 @@ Thêm `server.maxpacket` trong `Config.properties`, bắt đầu 300.
 
 ### 3b. `AntiLogin` khó vượt hơn
 
-- Đổi `ANTILOGIN` trong `MySession` sang `ConcurrentHashMap` (hiện `HashMap` không đồng bộ, không bao giờ xóa).
+- Đổi `ANTILOGIN` trong [`MySession`](Teamobi2026/src/nro/models/network/MySession.java) sang `ConcurrentHashMap` (hiện `HashMap` không đồng bộ, không bao giờ xóa).
 - Thêm một bộ đếm theo **tên tài khoản**, không chỉ theo IP. Đăng nhập đúng chỉ reset bộ đếm của chính tài khoản đó, không reset bộ đếm IP. Như vậy không còn xen kẽ tài khoản của mình để xóa đếm.
-- Sửa giới hạn `al.reset()` trong `MrBlue.login`: hiện chạy cả khi tài khoản bị `ban`.
+- Sửa giới hạn `al.reset()` trong [`MrBlue.login`](Teamobi2026/src/nro/models/database/MrBlue.java#L60): hiện chạy cả khi tài khoản bị `ban`.
 - Dọn mục cũ định kỳ để map không lớn mãi.
 
 ## Đợt 4: pool DB
 
-`Config.properties`: `database.max=10`, `database.min=2`. `LocalManager.createConfig`: thêm `config.setConnectionTimeout(5000);`
+`Config.properties`: `database.max=10`, `database.min=2`. [`LocalManager.createConfig`](Teamobi2026/src/nro/models/data/LocalManager.java#L179): thêm `config.setConnectionTimeout(5000);`
 
 **Rủi ro:** pool 1 kết nối đang vô tình xếp hàng mọi truy vấn. Tăng lên có thể lộ lỗi đua dữ liệu (lưu người chơi chen với đọc lại khi đăng nhập, ký gửi `TRUNCATE`). Thử nhiều tài khoản đăng nhập, đăng xuất, giao dịch, tự lưu cùng lúc rồi so dữ liệu.
 
 ## Đợt 5: mật khẩu bcrypt
 
 - Thêm thư viện `jbcrypt` vào `lib/` (`lib` hiện chưa có), chỉnh `build.bat` nếu cần.
-- `MrBlue.login`: đổi `where username = ? and password = ?` thành tìm theo `username` rồi so ở Java. Chấp nhận cả chuỗi cũ: nếu cột là chữ thường và khớp thì băm và ghi lại ngay. Tài khoản tự chuyển dần khi đăng nhập.
+- [`MrBlue.login`](Teamobi2026/src/nro/models/database/MrBlue.java#L60): đổi `where username = ? and password = ?` thành tìm theo `username` rồi so ở Java. Chấp nhận cả chuỗi cũ: nếu cột là chữ thường và khớp thì băm và ghi lại ngay. Tài khoản tự chuyển dần khi đăng nhập.
 - Web: `dangky.php` và `doimatkhau.php` dùng `password_hash`; `dang-nhap.php` đã đọc được cả hai dạng. Bản `$2y$` của PHP phải được jBCrypt đọc (đổi tiền tố sang `$2a$` khi so).
 - Cột `password` phải đủ 60 ký tự. Có SQL, ghi vào THAY-DOI.md khi làm.
 - Web và game phải lên cùng lúc.

@@ -38,7 +38,7 @@ Thư mục: `C:\Users\nguye\OneDrive\Desktop\game\giainenvr\AutoMax [version 0.1
 - `LoginScr..ctor`, `LoginScr.setUserPass` và **`LoginScr.doLogin` (Game1 `0x3B84B0`) đều đọc lại `acc`/`pass` từ RMS** mỗi lần đăng nhập. Vì vậy cách "ghi acc/pass rồi mở thêm cửa sổ" chỉ đúng lúc mở; khi rớt mạng (bảo trì 4h30) mọi cửa sổ tự đăng nhập lại sẽ cùng vào tài khoản ghi sau cùng.
 - Mod có sẵn `ModFunc.accounts` (đọc `accManager` trong `LoadAcc`), `AddAccount`, `ModFunc.AutoLogin()` (`0x3D44E0`: nếu `autoLogin.accAutoLogin` có tên thì tìm trong danh sách, ghi `acc`/`pass` vào RMS rồi `doLogin`), ô tích "Tự Động Đăng Nhập" (`isAutoLogin`, static `+68h`, **mặc định tắt, không lưu RMS**).
 - Thư mục RMS = `LocalLow\<companyName>\<productName>`, hai tên này nằm trong `DragonBoy_Data\globalgamemanagers` (`DefaultCompany` offset 1176, `DragonBoy` offset 1196) và `app.info`.
-- Server không giới hạn số kết nối cùng IP (`AntiLogin.canLogin` luôn true), chỉ giới hạn tổng `Manager.MAX_PLAYER`.
+- Server không giới hạn số kết nối cùng IP (`AntiLogin.canLogin` luôn true), chỉ giới hạn tổng [`Manager.MAX_PLAYER`](Teamobi2026/src/nro/models/server/Manager.java#L76).
 
 ## 3. Cách làm đề xuất
 
@@ -114,9 +114,9 @@ Giao diện đã dựng theo ảnh "Control Manager" của AutoMax (tab 2 trong 
 | Nút trên tab Control | Đường | Ghi chú |
 |---|---|---|
 | Kỹ năng 1–10 | A | phím số |
-| Khu 0–10, OK (nhập số) | B (`ChangeMapService` đổi khu) hoặc A (`k <số>`) | |
+| Khu 0–10, OK (nhập số) | B ([`ChangeMapService`](Teamobi2026/src/nro/models/map/service/ChangeMapService.java) đổi khu) hoặc A (`k <số>`) | |
 | Auto vào khu / Dừng vào khu, Khu tìm kiếm, Vào vị trí, Đổi khu | B | server thử lần lượt các khu trong danh sách đến khi vào được |
-| Nhập itemID → Dùng | B (`UseItem` món đầu tiên có id đó trong túi) | |
+| Nhập itemID → Dùng | B ([`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java) món đầu tiên có id đó trong túi) | |
 | Hồi sinh tại chỗ / Về nhà (Die) | B | |
 | Capsule / Capsule Goback | B (mở menu capsule) | cần dò thêm |
 | Trở đến Boss / Dịch đến mục tiêu / Nhập CharID | B (dịch tới boss gần nhất / nhân vật theo id) | |

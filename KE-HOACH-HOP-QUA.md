@@ -6,18 +6,18 @@ Trạng thái: **chờ duyệt** (31/10/2026). Chưa code. Đã đổi tên 3 it
 Mỗi loại 1 hộp: mở ra ngẫu nhiên 1 món thuộc loại đó. Hình: lấy trong tài nguyên có sẵn, không có thì dùng hình hộp cải trang Hit.
 
 ## Đã dò
-- Hộp Hit 1747 là mẫu: tái dùng item bỏ không, `UseItem` case 1747 → `openHopCaiTrangHit`, tăng `DataGame.vsItem` để client tải lại tên/mô tả (không phải sửa client).
-- Item tái dùng (không có code, không có shop, không có trong giftcode): **1135** Capsule World Cup (loại 27) → **Hộp thú cưng**, **1136** Capsule World Cup VIP (loại 27) → **Hộp đồ đeo lưng**, **1397** Rương radar (loại 29, `UseItem` vẫn rẽ theo id) → **Hộp thú cưỡi**. **Không dùng 1453** Rương sao pha lê VIP (user để dành). Đã đổi tên, mô tả, icon 14514, cộng dồn (`is_up_to_up = 1`), `vsItem` 23.
+- Hộp Hit 1747 là mẫu: tái dùng item bỏ không, [`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java) case 1747 → `openHopCaiTrangHit`, tăng [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) để client tải lại tên/mô tả (không phải sửa client).
+- Item tái dùng (không có code, không có shop, không có trong giftcode): **1135** Capsule World Cup (loại 27) → **Hộp thú cưng**, **1136** Capsule World Cup VIP (loại 27) → **Hộp đồ đeo lưng**, **1397** Rương radar (loại 29, [`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java) vẫn rẽ theo id) → **Hộp thú cưỡi**. **Không dùng 1453** Rương sao pha lê VIP (user để dành). Đã đổi tên, mô tả, icon 14514, cộng dồn (`is_up_to_up = 1`), `vsItem` 23.
 - Hình: không có item hộp nào mang chủ đề thú cưng / thú cưỡi / đeo lưng (đã tìm theo tên). Đề xuất dùng icon **14514** (hộp Hit) cho cả 3.
 - Nguồn đồ (bảng `item_template`):
-  - **Thú cưng** (loại 27, ô 8): 69 món có code tạo con đi theo trong `Player.sendNewPet` (892 Thỏ xám, 893 Thỏ trắng, 908 Ma phong ba, 1039–1046, 1107, 1114, 1188, 1202–1226, 1243–1256, 1318, 1347, 1414–1458, 1482–1497, 1550–1633, 1654–1771…). Loại 27 còn lẫn đồ ăn, capsule… nên chỉ lấy danh sách này.
+  - **Thú cưng** (loại 27, ô 8): 69 món có code tạo con đi theo trong [`Player.sendNewPet`](Teamobi2026/src/nro/models/player/Player.java#L1334) (892 Thỏ xám, 893 Thỏ trắng, 908 Ma phong ba, 1039–1046, 1107, 1114, 1188, 1202–1226, 1243–1256, 1318, 1347, 1414–1458, 1482–1497, 1550–1633, 1654–1771…). Loại 27 còn lẫn đồ ăn, capsule… nên chỉ lấy danh sách này.
   - **Đồ đeo lưng** (loại 11, ô 9): 173 món có hình (`part > 0`), lẫn cờ bang, khăn, lồng đèn, Đứa bé (78, đồ nhiệm vụ)…
   - **Thú cưỡi** (loại 23/24, chỉ sư phụ mặc): 55 món; 346–351 (Cân đẩu vân / Phi Long / Ván bay và bản VIP) theo hành tinh, còn lại dùng chung.
 - Xuất xứ (code, shop, giftcode) và chỉ số từng món: bảng ở cuối file (dò 1/11/2026, công cụ `tools/xuat-xu-item/`). Có nguồn: thú cưng 25/69, đồ đeo lưng 66/173, thú cưỡi 22/55; còn lại không tìm thấy cách nào lấy được trong game. Bảng cũ chỉ xét shop nên thiếu (vd Bé Rồng Cute có ở Tori Bot VIP 4 và Trứng vàng rồng nhí).
 
 ## Cách làm
 1. SQL đổi tên (đã làm, THAY-DOI mục 47).
-2. `UseItem`: case 1135 / 1136 / 1397 → hàm mở hộp (cần 1 ô trống, trừ 1 hộp, báo tên món nhận được, hiệu ứng mở như hộp Hit).
+2. [`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java): case 1135 / 1136 / 1397 → hàm mở hộp (cần 1 ô trống, trừ 1 hộp, báo tên món nhận được, hiệu ứng mở như hộp Hit).
 3. Danh sách món mỗi hộp để trong code (mảng id), lọc theo hành tinh với món có giới hạn hành tinh.
 4. Chỉ số món nhận được: theo điểm chốt bên dưới.
 5. Ghi CO-CHE (tỉ lệ chỉ ghi nội bộ).
@@ -37,7 +37,7 @@ Nguồn đã quét: code server (mọi chỗ tạo item: `createNewItem`, `new I
 
 Tổng: thú cưng 25/69 món có nguồn, đồ đeo lưng 66/173, thú cưỡi 22/55.
 
-### Thú cưng (ô 8, loại 27, 69 món theo `Player.sendNewPet`)
+### Thú cưng (ô 8, loại 27, 69 món theo [`Player.sendNewPet`](Teamobi2026/src/nro/models/player/Player.java#L1334))
 
 | ID | Tên | Hành tinh | Xuất xứ | Chỉ số |
 |---|---|---|---|---|

@@ -8,32 +8,32 @@ Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Ch�
 
 | Lớp | Bảo vệ | Ở đâu |
 |---|---|---|
-| Server | Giới hạn kết nối mỗi IP (`server.maxperip=5`) | `ServerManager.canConnectWithIp` |
-| Server | Kết nối chưa đăng nhập bị đá sau 100 giây | `MySession.timeWait`, `Client.update` |
-| Server | Sai mật khẩu 5 lần thì khóa IP 60 giây | `AntiLogin`, `MySession.login` |
-| Server | Chờ giữa 2 lần đăng nhập (`server.waitlogin=3`), giới hạn `server.maxplayer=1000` khi đăng nhập | `MrBlue.login` |
-| Server | SQL tham số hóa; 4 chỗ ghép chuỗi đều chỉ ghép số hoặc IP lấy từ socket, không do người chơi nhập | `LocalManager`, `MrBlue:127`, `SuperRankDAO:158,190`, `ClanService:890` |
-| Server | Lệnh admin chặn theo `account.is_admin`; kiểm tra hồi chiêu, mana, tầm đánh cận chiến, số lượng âm khi giao dịch | `Command:284`, `SkillService`, `TransactionService:127` |
-| Server | Mã bảo vệ tài khoản (`mbv`, `baovetaikhoan`) | `Service.mabaove` |
+| Server | Giới hạn kết nối mỗi IP (`server.maxperip=5`) | [`ServerManager.canConnectWithIp`](Teamobi2026/src/nro/models/server/ServerManager.java#L249) |
+| Server | Kết nối chưa đăng nhập bị đá sau 100 giây | [`MySession.timeWait`](Teamobi2026/src/nro/models/network/MySession.java#L28), [`Client.update`](Teamobi2026/src/nro/models/server/Client.java#L195) |
+| Server | Sai mật khẩu 5 lần thì khóa IP 60 giây | `AntiLogin`, [`MySession.login`](Teamobi2026/src/nro/models/network/MySession.java#L94) |
+| Server | Chờ giữa 2 lần đăng nhập (`server.waitlogin=3`), giới hạn `server.maxplayer=1000` khi đăng nhập | [`MrBlue.login`](Teamobi2026/src/nro/models/database/MrBlue.java#L60) |
+| Server | SQL tham số hóa; 4 chỗ ghép chuỗi đều chỉ ghép số hoặc IP lấy từ socket, không do người chơi nhập | [`LocalManager`](Teamobi2026/src/nro/models/data/LocalManager.java), `MrBlue:127`, `SuperRankDAO:158,190`, `ClanService:890` |
+| Server | Lệnh admin chặn theo `account.is_admin`; kiểm tra hồi chiêu, mana, tầm đánh cận chiến, số lượng âm khi giao dịch | `Command:284`, [`SkillService`](Teamobi2026/src/nro/models/services/SkillService.java), `TransactionService:127` |
+| Server | Mã bảo vệ tài khoản (`mbv`, `baovetaikhoan`) | [`Service.mabaove`](Teamobi2026/src/nro/models/services/Service.java#L1933) |
 | Web | Prepared statement ở đăng nhập, đăng ký, đổi mật khẩu; CSRF ở đăng nhập; `session_regenerate_id`; 13 trang admin đều kiểm tra `is_admin` (`logout.php` không cần); phpMyAdmin `Require local`; không có upload file; `.gitignore` chặn `db/*.sql`, `mcp.json` | `web/` |
 | Manager | `accounts.txt` mã hóa DPAPI theo user Windows, gitignore; không gọi mạng; không ghi vào client gốc | `manager/src/Core.cs` |
 
 ## Lỗi chống DDoS và làm sập server
 
-0. **Một kết nối chưa đăng nhập có thể làm đầy RAM (nặng nhất).** Gói `-74` type 2 chỉ vài byte, `DataGame.sendRes` đọc cả `data/res/x<zoom>` (1.413 file, 13–28 MB) vào heap rồi xếp hàng gửi, không giới hạn số lần. Client gửi lặp mà không đọc socket thì khoảng 20 lần là đầy `-Xmx512m`.
+0. **Một kết nối chưa đăng nhập có thể làm đầy RAM (nặng nhất).** Gói `-74` type 2 chỉ vài byte, [`DataGame.sendRes`](Teamobi2026/src/nro/models/data/DataGame.java#L454) đọc cả `data/res/x<zoom>` (1.413 file, 13–28 MB) vào heap rồi xếp hàng gửi, không giới hạn số lần. Client gửi lặp mà không đọc socket thì khoảng 20 lần là đầy `-Xmx512m`.
 1. **Không có lớp chịu DDoS lưu lượng.** Không có proxy, scrubbing hay rate limit ở mạng. Game chạy TCP thô cổng `14446` qua tên DDNS `ngocrongprivate.kozow.com`, lộ thẳng IP máy chủ. Nghẽn đường truyền thì code không cứu được.
-2. **Đếm kết nối theo IP bị trừ 2 lần** khi client tự ngắt: `Collector.run` → `sessionDisconnect` → `Client.kickSession` → `remove` → `ServerManager.disconnect` (trừ lần 1), rồi `sessionDisconnect` gọi `disconnect` lần nữa (`ServerManager.java:234`). Đóng 1 mở 2 lặp lại là vượt giới hạn 5 kết nối.
-3. **Không có trần tổng số kết nối.** `maxplayer` chỉ xét lúc đăng nhập. Mỗi kết nối 2 thread (`Session`), thêm buffer 1 MB (yêu cầu với OS). Botnet nhiều IP vượt được giới hạn theo IP.
-4. **Rò bộ nhớ khi từ chối kết nối.** `Network.run` gọi `sessionInit` (từ chối → `disconnect` → `removeSession`) rồi mới `putSession`, nên session đã hủy vẫn nằm trong danh sách. `startCleanupThread` có định nghĩa nhưng không ai gọi. 100 giây sau `Client.update` gọi `kickSession` → `Sender.close()` gặp `messages == null` → NPE: session ở lại vĩnh viễn, IP bị trừ đếm sai, vòng `update` tick đó dừng giữa chừng. `SessionManager.sessions` là `CopyOnWriteArrayList` nên mỗi lần thêm chép cả danh sách, luồng nhận kết nối chậm dần. Heap chỉ `-Xmx512m`.
-5. **Hàng đợi gửi không giới hạn.** `Sender.messages` là `LinkedBlockingDeque` không trần, không ai xét `getNumMessages`. Client gửi yêu cầu dữ liệu lớn mà không đọc socket làm đầy heap. Chưa đăng nhập vẫn gọi được: `-111`, `-74`, `-28` sub 6/7/8/10 (`Controller.onMessage` không kiểm tra `player`).
-6. **Không giới hạn tần suất gói.** `Collector` xử lý từng gói ngay trên thread của kết nối, không đếm, không có cơ chế đá hay chặn IP spam.
+2. **Đếm kết nối theo IP bị trừ 2 lần** khi client tự ngắt: [`Collector.run`](Teamobi2026/src/nro/models/network/Collector.java#L32) → `sessionDisconnect` → [`Client.kickSession`](Teamobi2026/src/nro/models/server/Client.java#L165) → `remove` → [`ServerManager.disconnect`](Teamobi2026/src/nro/models/server/ServerManager.java#L266) (trừ lần 1), rồi `sessionDisconnect` gọi `disconnect` lần nữa (`ServerManager.java:234`). Đóng 1 mở 2 lặp lại là vượt giới hạn 5 kết nối.
+3. **Không có trần tổng số kết nối.** `maxplayer` chỉ xét lúc đăng nhập. Mỗi kết nối 2 thread ([`Session`](Teamobi2026/src/nro/models/network/Session.java)), thêm buffer 1 MB (yêu cầu với OS). Botnet nhiều IP vượt được giới hạn theo IP.
+4. **Rò bộ nhớ khi từ chối kết nối.** [`Network.run`](Teamobi2026/src/nro/models/network/Network.java#L108) gọi `sessionInit` (từ chối → `disconnect` → `removeSession`) rồi mới `putSession`, nên session đã hủy vẫn nằm trong danh sách. `startCleanupThread` có định nghĩa nhưng không ai gọi. 100 giây sau [`Client.update`](Teamobi2026/src/nro/models/server/Client.java#L195) gọi `kickSession` → [`Sender.close()`](Teamobi2026/src/nro/models/network/Sender.java#L87) gặp `messages == null` → NPE: session ở lại vĩnh viễn, IP bị trừ đếm sai, vòng `update` tick đó dừng giữa chừng. [`SessionManager.sessions`](Teamobi2026/src/nro/models/network/SessionManager.java#L12) là `CopyOnWriteArrayList` nên mỗi lần thêm chép cả danh sách, luồng nhận kết nối chậm dần. Heap chỉ `-Xmx512m`.
+5. **Hàng đợi gửi không giới hạn.** [`Sender.messages`](Teamobi2026/src/nro/models/network/Sender.java#L18) là `LinkedBlockingDeque` không trần, không ai xét `getNumMessages`. Client gửi yêu cầu dữ liệu lớn mà không đọc socket làm đầy heap. Chưa đăng nhập vẫn gọi được: `-111`, `-74`, `-28` sub 6/7/8/10 ([`Controller.onMessage`](Teamobi2026/src/nro/models/server/Controller.java#L76) không kiểm tra `player`).
+6. **Không giới hạn tần suất gói.** [`Collector`](Teamobi2026/src/nro/models/network/Collector.java) xử lý từng gói ngay trên thread của kết nối, không đếm, không có cơ chế đá hay chặn IP spam.
 7. **Pool DB chỉ 1 kết nối** (`database.max=1`, Hikari `maximumPoolSize`, chờ mặc định 30 giây). Lặp đăng nhập (mỗi lần một `SELECT`) làm mọi truy vấn khác phải xếp hàng, kể cả lưu người chơi.
 8. **Web không chống spam.** Apache không có `mod_evasive`/giới hạn tần suất. `Options Indexes` bật liệt kê thư mục, `web/` không có `.htaccess`.
 
 ## Lỗi bảo mật tài khoản và dữ liệu
 
-1. **Mật khẩu lưu chữ thường** trong `account.password`. Lộ DB là lộ hết. Game so `password = ?` trực tiếp, đổi sang bcrypt phải sửa cả `MrBlue.login`.
-2. **Mật khẩu truyền đi coi như chữ thường.** `Network.randomKey` không ai bật nên khóa XOR luôn là `"NRO"`, và khóa còn được gửi lên đường truyền. Không có TLS, không xác thực server. Web long chạy HTTP, không HTTPS.
+1. **Mật khẩu lưu chữ thường** trong `account.password`. Lộ DB là lộ hết. Game so `password = ?` trực tiếp, đổi sang bcrypt phải sửa cả [`MrBlue.login`](Teamobi2026/src/nro/models/database/MrBlue.java#L60).
+2. **Mật khẩu truyền đi coi như chữ thường.** [`Network.randomKey`](Teamobi2026/src/nro/models/network/Network.java#L155) không ai bật nên khóa XOR luôn là `"NRO"`, và khóa còn được gửi lên đường truyền. Không có TLS, không xác thực server. Web long chạy HTTP, không HTTPS.
 3. **Tài khoản admin yếu nằm trong git.** `Teamobi2026/team10_long.sql` (có theo dõi) có 3 tài khoản đều `is_admin=1`, mật khẩu dài 1 ký tự. DB trên máy này có 5/6 tài khoản là admin: 1 mật khẩu 1 ký tự, 4 mật khẩu 6 ký tự. Repo private nhưng mật khẩu ngắn thế này đoán ra rất nhanh.
 4. **Đăng nhập web không giới hạn số lần thử** (`dang-nhap.php`), không dùng `AntiLogin` của game. Dò mật khẩu qua đây không bị chặn.
 5. **Vượt được `AntiLogin` của game**: `al.reset()` chạy khi đăng nhập đúng bất kỳ tài khoản nào, nên kẻ tấn công xen kẽ tài khoản của mình giữa các lần đoán. Giới hạn tính theo IP, nên nhiều IP cũng vượt được.
@@ -47,7 +47,7 @@ Kết quả đọc code và cấu hình, **chưa chạy thử tấn công**. Ch�
 ## Gian lận game (server tin client)
 
 - `-7` di chuyển nhận `x,y` từ client, chỉ map Ngọc Rồng Đen giới hạn 500 đơn vị (`Controller:386`). Không kiểm tra tốc độ, dịch chuyển tức thời được.
-- `Zone.pickItem` không thấy kiểm tra khoảng cách (chỉ chờ 1 giây giữa 2 lần nhặt).
+- [`Zone.pickItem`](Teamobi2026/src/nro/models/map/Zone.java#L325) không thấy kiểm tra khoảng cách (chỉ chờ 1 giây giữa 2 lần nhặt).
 - Mọi tính năng auto có trong mod (tàn sát, bay tới boss, tự nhặt) chạy được vì server không phân biệt.
 
 ## Client Unity
@@ -71,6 +71,6 @@ Không có bảo vệ thật:
 1. **Ngay**: đổi mật khẩu các tài khoản admin; đặt mật khẩu MySQL, tạo user riêng cho web/game, bật `bind-address=127.0.0.1`; không mở `3306` ra router. Xóa mật khẩu đó khỏi file SQL trong git (lịch sử git vẫn còn).
 2. **Sửa lỗi server**: theo các đợt trong [KE-HOACH-SUA-SERVER-BAO-MAT.md](KE-HOACH-SUA-SERVER-BAO-MAT.md).
 3. **Web**: giới hạn đăng nhập theo tài khoản và IP, xóa captcha sau khi dùng, đăng ký giới hạn theo IP, thêm CSRF cho admin, tắt `Indexes`, xóa `get_cols.php`, khóa `/admin` theo IP, bật HTTPS.
-4. **Mật khẩu**: chuyển bcrypt (web và `MrBlue.login`), dùng khóa ngẫu nhiên `randomKey(true)` chỉ che được người xem lén, muốn chắc phải có TLS/trao đổi khóa trong client.
+4. **Mật khẩu**: chuyển bcrypt (web và [`MrBlue.login`](Teamobi2026/src/nro/models/database/MrBlue.java#L60)), dùng khóa ngẫu nhiên `randomKey(true)` chỉ che được người xem lén, muốn chắc phải có TLS/trao đổi khóa trong client.
 5. **Chống DDoS thật**: chạy trên VPS có anti-DDoS hoặc proxy TCP chuyên cho game, không để lộ IP thật. Web đặt sau Cloudflare; game TCP thô không đi qua được gói Cloudflare miễn phí. Thêm firewall/`netsh` chặn IP theo log nếu cần.
 6. **Chống gian lận**: kiểm tra tốc độ di chuyển và khoảng cách nhặt đồ ở server. Đừng đầu tư vào khóa client, server mới là chỗ quyết định.

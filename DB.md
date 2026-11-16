@@ -1,6 +1,6 @@
 # Cấu trúc DB `team10_long`
 
-Lập ngày 30/10/2026 từ `information_schema` và code đọc DB (`database/MrBlue.java` khi đăng nhập, `database/PlayerDAO.java` khi lưu). Số dòng là lúc lập file. Đổi cấu trúc bảng thì cập nhật file này. Tra ID vật phẩm/option/map… xem [ID-GAME.md](ID-GAME.md).
+Lập ngày 30/10/2026 từ `information_schema` và code đọc DB ([`database/MrBlue.java`](Teamobi2026/src/nro/models/database/MrBlue.java) khi đăng nhập, [`database/PlayerDAO.java`](Teamobi2026/src/nro/models/database/PlayerDAO.java) khi lưu). Số dòng là lúc lập file. Đổi cấu trúc bảng thì cập nhật file này. Tra ID vật phẩm/option/map… xem [ID-GAME.md](ID-GAME.md).
 
 **Sửa tay DB phải tắt server trước**: server giữ người chơi, bang, ký gửi… trong bộ nhớ và lúc lưu sẽ ghi đè. Riêng gift code và shop có bảng `*_reload_request` để server đang chạy nạp lại.
 
@@ -36,7 +36,7 @@ Cột JSON chính:
 | `data_card` | thẻ rada |
 | `data_mabu_egg`, `data_duahau_egg` | trứng Mabư, trứng dưa hấu |
 | `dataBadges`, `dataTaskBadges` | huy hiệu |
-| `data_vip`, `data_achievement`, `dailyGift`, `giftcode` (code đã nhập), `data_event`, `data_item_event`, `data_luyentap`, `BoughtSkill`, `LearnSkill` | các dữ liệu tính năng khác |
+| `data_vip`, `data_achievement`, `dailyGift`, `giftcode` (code đã nhập), `data_event`, `data_item_event`, `data_luyentap`, `BoughtSkill`, [`LearnSkill`](Teamobi2026/src/nro/models/player/LearnSkill.java) | các dữ liệu tính năng khác |
 | `bandokhobau`, `conduongrandoc`, `sieuthanthuy`, `vodaisinhtu`, `ruonggo`, `nhanthoivang`, `checkNhanQua`, `thanhTichBang`, `thanhTichKhiGas`, `thanhTichCDRD` | lượt/thời gian phó bản, thành tích |
 | `baovetaikhoan`, `captcha`, `notify`, `masterDoesNotAttack` | mã bảo vệ, captcha, thông báo |
 
@@ -53,14 +53,14 @@ Cột JSON chính:
   UPDATE player SET pet = REPLACE(pet, '[0,813743,43,569,1000,2760,2320,101,45,0,2760,2320]', '[0,5000000000,1000000,569,1000,2760,2320,101,45,0,2760,2320]') WHERE id = <id>;
   ```
   Kiểm tra số dòng báo "Rows matched: 1". Nếu 0 dòng, chuỗi cũ không khớp (đọc lại cột `pet`).
-- **Phải để nhân vật (sư phụ) offline** khi sửa: server giữ bản trong RAM, tự lưu mỗi 5 phút (`Client.saveAll`) và khi thoát sẽ ghi đè lại DB. Nâng HP/KI gốc (vị trí 6, 7) thì đặt HP/KI hiện tại (vị trí 11, 12) không vượt HP/KI tối đa mới.
+- **Phải để nhân vật (sư phụ) offline** khi sửa: server giữ bản trong RAM, tự lưu mỗi 5 phút ([`Client.saveAll`](Teamobi2026/src/nro/models/server/Client.java#L59)) và khi thoát sẽ ghi đè lại DB. Nâng HP/KI gốc (vị trí 6, 7) thì đặt HP/KI hiện tại (vị trí 11, 12) không vượt HP/KI tối đa mới.
 - Đổi loại đệ (`typePet` 0 thường, 1 Mabư, 2 Uub, 3 Kid Beer, 4 Jiren) = số đầu của phần tử 1, kèm tên `$<tên>` (dấu `"` trong chuỗi con có `\` đứng trước). Ví dụ Kid Beer → Mabư (đã thử bằng SELECT với `hoang`):
   ```sql
   UPDATE player SET pet = REPLACE(REPLACE(pet, '["[3,', '["[1,'), '$Kid Beer', '$Mabư') WHERE name = '<tên>';
   ```
   Ngoại hình đệ tính theo `typePet` nên tự đổi. Chỉ số gốc giữ nguyên (Uub/Kid Beer/Jiren tạo mới với HP/KI 400.000, SĐ 20.000; Mabư mới HP/KI 800–2.100, SĐ 50–120, `PetService.getDataPet*`), muốn đổi thì sửa vị trí 6–8 như trên. Chạy từ file SQL UTF-8 hoặc phpMyAdmin (chữ `ư` gõ trong Git Bash bị thành `?`).
-- Mốc ảnh hưởng: sức mạnh đệ ≥ 50 tỷ (5000000000) mới mở được giới hạn sức mạnh (`ToSuKaio.handleLimitPowerPet`); giới hạn theo `limitPower` (vị trí 1) qua `NPoint.getHpMpLimit`/`getDameLimit`.
-- Trong game (đệ đang online): `upp <số>` cộng cùng lúc sức mạnh và tiềm năng cho đệ (`Command` + `Service.addSMTN` type 2), và cộng thêm cho sư phụ (1/12 nếu sư phụ ≥ 40 tỷ, rồi nhân 3). Không có lệnh riêng để chỉ đổi tiềm năng hay sức mạnh, nên đặt giá trị chính xác thì sửa DB.
+- Mốc ảnh hưởng: sức mạnh đệ ≥ 50 tỷ (5000000000) mới mở được giới hạn sức mạnh (`ToSuKaio.handleLimitPowerPet`); giới hạn theo `limitPower` (vị trí 1) qua [`NPoint.getHpMpLimit`](Teamobi2026/src/nro/models/player/NPoint.java#L1887)/`getDameLimit`.
+- Trong game (đệ đang online): `upp <số>` cộng cùng lúc sức mạnh và tiềm năng cho đệ ([`Command`](Teamobi2026/src/nro/models/server/Command.java) + [`Service.addSMTN`](Teamobi2026/src/nro/models/services/Service.java#L946) type 2), và cộng thêm cho sư phụ (1/12 nếu sư phụ ≥ 40 tỷ, rồi nhân 3). Không có lệnh riêng để chỉ đổi tiềm năng hay sức mạnh, nên đặt giá trị chính xác thì sửa DB.
 
 ## Bang hội
 - `clan`: `id`, `NAME`, `NAME_2` (tên viết tắt 4 ký tự), `slogan`, `img_id`, `power_point`, `max_member`, `clan_point`, `LEVEL`, `members` (JSON thành viên: `id`, `name`, `head`, `body`, `leg`, `role`, `donate`, `receive_donate`, `member_point`, `clan_point`, `join_time` giây Unix, `ask_pea_time`, `power`), `tops`, `create_time`, `thanhTichBDKB`, `thongTinLeader`.

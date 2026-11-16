@@ -1,15 +1,15 @@
 # Đánh quái rơi đồ theo map (tài liệu nội bộ, không đưa cho người chơi)
 
-Dò 16/11/2026 từ `Teamobi2026/src/nro/models/mob/Mob.java` hàm `getItemMobReward` (~dòng 613–1088). Sửa tỉ lệ rơi đồ quái thì cập nhật file này. Boss rơi đồ: [BOSS-ROI-DO.md](BOSS-ROI-DO.md).
+Dò 16/11/2026 từ [`Teamobi2026/src/nro/models/mob/Mob.java`](Teamobi2026/src/nro/models/mob/Mob.java) hàm `getItemMobReward` (~dòng 613–1088). Sửa tỉ lệ rơi đồ quái thì cập nhật file này. Boss rơi đồ: [BOSS-ROI-DO.md](BOSS-ROI-DO.md).
 
 ## Cách tính chung
 - Mỗi con quái chết, server tung **từng dòng dưới đây độc lập** (trừ chỗ ghi "không trúng thì"), nên 1 con có thể rơi nhiều món cùng lúc.
-- `Util.isTrue(a, b)` = a/b. Tỉ lệ tính bằng số nguyên nên **Cỏ bốn lá ×1,15 thường bị làm tròn xuống**: 1 → 1 (không tác dụng), 2 → 2, 10 → 11, 20 → 23.
-- Người nhận = ai ra đòn kết liễu (`Mob.injured` → `sendMobDieAffterAttacked(plAtt)`). Đệ tử giết thì tính theo đệ: hành tinh của đệ, đồ đệ mặc, Cỏ bốn lá của đệ.
+- [`Util.isTrue(a, b)`](Teamobi2026/src/nro/models/utils/Util.java#L209) = a/b. Tỉ lệ tính bằng số nguyên nên **Cỏ bốn lá ×1,15 thường bị làm tròn xuống**: 1 → 1 (không tác dụng), 2 → 2, 10 → 11, 20 → 23.
+- Người nhận = ai ra đòn kết liễu ([`Mob.injured`](Teamobi2026/src/nro/models/mob/Mob.java#L117) → `sendMobDieAffterAttacked(plAtt)`). Đệ tử giết thì tính theo đệ: hành tinh của đệ, đồ đệ mặc, Cỏ bốn lá của đệ.
 - Không rơi gì: quái `tempId` 0, người giết là boss.
 - Không có điều kiện tuổi tài khoản (mốc 35 ngày `isNewMember` không dùng ở đây). `active` chỉ ảnh hưởng ngọc rồng 6–7 sao, mảnh Thiên Sứ, bí kíp.
 
-## Nhóm map trong code (`MapService`)
+## Nhóm map trong code ([`MapService`](Teamobi2026/src/nro/models/map/service/MapService.java))
 | Nhóm | Map |
 |---|---|
 | 3 hành tinh (`isMap3Planets`) | 1–6, 8–13, 15–20, 27–38 (≤ 38, trừ làng 0/7/14, nhà 21–23, trạm tàu 24–26) |
@@ -28,7 +28,7 @@ Dò 16/11/2026 từ `Teamobi2026/src/nro/models/mob/Mob.java` hàm `getItemMobRe
 ## 1. Mọi map (kể cả 164, 165+, 186–188)
 | Đồ | Tỉ lệ | Cỏ bốn lá | Ghi chú |
 |---|---|---|---|
-| Sao pha lê 441–447 (đỏ, lam, hồng, tím, cam, vàng, lục; mỗi màu 1/7) | 10% | 11% | `Util.spl` gắn sẵn chỉ số |
+| Sao pha lê 441–447 (đỏ, lam, hồng, tím, cam, vàng, lục; mỗi màu 1/7) | 10% | 11% | [`Util.spl`](Teamobi2026/src/nro/models/utils/Util.java#L560) gắn sẵn chỉ số |
 | Ngọc rồng 4–7 sao (17–20, mỗi loại 1/4) | 1% | 1% | |
 | 1 Ngọc (77) | 1/1.000.000 | | |
 

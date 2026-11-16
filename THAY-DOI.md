@@ -17,7 +17,7 @@ Nhật ký những thay đổi **không tự theo git**: lệnh SQL (DB không t
 
 ### 1. Rađa kho báu (1532) cộng dồn, hiện thời gian
 - Ngày: 30/10/2026, máy làm: nhà.
-- Build: có (`UseItem.java`, `ItemTimeService.java`, `DataGame.vsItem` = 16).
+- Build: có ([`UseItem.java`](Teamobi2026/src/nro/models/services_func/UseItem.java), [`ItemTimeService.java`](Teamobi2026/src/nro/models/services/ItemTimeService.java), [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 16).
 - Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
 - SQL:
 ```sql
@@ -28,31 +28,31 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 2. Đệ tử ăn bùa trí tuệ của sư phụ, bùa x4 về +4
 - Ngày: 30/10/2026, máy làm: nhà.
-- Build: có (`NPoint.calSucManhTiemNang`).
+- Build: có ([`NPoint.calSucManhTiemNang`](Teamobi2026/src/nro/models/player/NPoint.java#L1705)).
 - Client: không.
 - SQL: không.
 
 ### 3. Nâng tiềm năng đệ tử bằng tay, khung đệ tử cập nhật liên tục
 - Ngày: 30/10/2026, máy làm: nhà.
-- Build: có (`Controller.java` sub 18, `NPoint.increasePoint`, `Pet.sendInfoToMaster`, `Player.lastTimeXemDeTu`).
+- Build: có ([`Controller.java`](Teamobi2026/src/nro/models/server/Controller.java) sub 18, [`NPoint.increasePoint`](Teamobi2026/src/nro/models/player/NPoint.java#L2004), [`Pet.sendInfoToMaster`](Teamobi2026/src/nro/models/player/Pet.java#L764), [`Player.lastTimeXemDeTu`](Teamobi2026/src/nro/models/player/Player.java#L83)).
 - Client: không (client mod có sẵn menu nâng điểm cho đệ, chỉ thiếu server).
 - SQL: không.
 
 ### 4. Lệnh admin không bắt nhầm chat "bao ve"; đệ bảo vệ đi theo sư phụ
 - Ngày: 30/10/2026, máy làm: nhà.
-- Build: có (`Command.matchCommand`, `Pet` chế độ PROTECT + `findMobAttackNear`).
+- Build: có ([`Command.matchCommand`](Teamobi2026/src/nro/models/server/Command.java#L272), [`Pet`](Teamobi2026/src/nro/models/player/Pet.java) chế độ PROTECT + `findMobAttackNear`).
 - Client: không.
 - SQL: không.
 
 ### 5. Phó bản không ép tiềm năng về 1 khi người cao hơn quái quá 5 cấp
 - Ngày: 30/10/2026, máy làm: nhà.
-- Build: có (`Mob.getTiemNangForPlayer`).
+- Build: có ([`Mob.getTiemNangForPlayer`](Teamobi2026/src/nro/models/mob/Mob.java#L223)).
 - Client: không.
 - SQL: không.
 
 ### 6. Thiên Sứ và Hủy Diệt yêu cầu 60 tỷ; chế tạo Thiên Sứ nhân đôi cả sức đánh
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`ItemService.DoThienSu` 21:60, `ShopService.buyItemHD` thêm 21:60 cho 650–662, `CheTaoTrangBiThienSu` nhân đôi mọi option trừ 20, 21, 30).
+- Build: có ([`ItemService.DoThienSu`](Teamobi2026/src/nro/models/services/ItemService.java#L1172) 21:60, [`ShopService.buyItemHD`](Teamobi2026/src/nro/models/shop/ShopService.java#L1273) thêm 21:60 cho 650–662, [`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) nhân đôi mọi option trừ 20, 21, 30).
 - Client: không.
 - SQL: không.
 
@@ -64,13 +64,13 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 8. Hành trang tối đa 125 ô (gốc 80), rương 130 ô (gốc 100)
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`Inventory.MAX_ITEMS_BAG/BOX`, `UseItem.getItem` đọc số ô không dấu).
+- Build: có (`Inventory.MAX_ITEMS_BAG/BOX`, [`UseItem.getItem`](Teamobi2026/src/nro/models/services_func/UseItem.java#L95) đọc số ô không dấu).
 - Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-o-ruong.ps1`). Client chưa patch mà rương > 127 ô thì lỗi lúc vào game, nên người chơi phải tải client mới trước khi mở rương quá 127 ô.
 - SQL: không.
 
 ### 9. AutoItem 50ms, dùng theo mã vật phẩm, còn 1 cái thì dừng
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`UseItem.doItem`: gói dùng item với index -1 tìm món theo mã và dùng đúng ô của nó; `where = 9` (AutoItem) mà món còn <= 1 cái thì không dùng).
+- Build: có ([`UseItem.doItem`](Teamobi2026/src/nro/models/services_func/UseItem.java#L156): gói dùng item với index -1 tìm món theo mã và dùng đúng ô của nó; `where = 9` (AutoItem) mà món còn <= 1 cái thì không dùng).
 - Client: có. Đóng game rồi chạy `client-patch\cap-nhat-client.bat` (`patch-auto-item.ps1` bản mới, nâng cấp được từ bản 100ms của mục 7).
 - SQL: không.
 
@@ -82,7 +82,7 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 11. Hộp quà giáng sinh (648): còn 3 nhóm quà, mảnh Thiên Sứ 50–100
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`UseItem.NoelItemBox`).
+- Build: có ([`UseItem.NoelItemBox`](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425)).
 - Client: không.
 - SQL: không.
 
@@ -94,13 +94,13 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 13. Chế tạo Thiên Sứ: bấm Nâng cấp mới chế tạo, nhận công thức thường (50%) hoặc VIP (90%); thỏi vàng khởi đầu 20.000 khóa
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`CheTaoTrangBiThienSu` viết lại, câu hướng dẫn trong `CombineService`, `PlayerDAO.createNewPlayer` thêm option 30 cho 457).
+- Build: có ([`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) viết lại, câu hướng dẫn trong [`CombineService`](Teamobi2026/src/nro/models/combine/CombineService.java), [`PlayerDAO.createNewPlayer`](Teamobi2026/src/nro/models/database/PlayerDAO.java#L37) thêm option 30 cho 457).
 - Client: không.
 - SQL: không.
 
 ### 14. Cộng dồn bùa x2 đệ tử (1628) và đuôi khỉ (1045), bán đuôi khỉ 579 ở Shop thỏi vàng 2 thỏi; khiên không bị quái thường phá; chết không dùng đồ; quái BDKB chỉ đánh sát; KOL 5 tính nhiệm vụ địa ngục
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`UseItem.doItem` chặn khi chết, `Mob.mobAttackPlayer` khiên, `Mob.getPlayerCanAttack` BDKB `BDKB_MOB_RANGE` = 60, `TaskService.paySideTask`, `DataGame.vsItem` = 17).
+- Build: có ([`UseItem.doItem`](Teamobi2026/src/nro/models/services_func/UseItem.java#L156) chặn khi chết, [`Mob.mobAttackPlayer`](Teamobi2026/src/nro/models/mob/Mob.java#L399) khiên, [`Mob.getPlayerCanAttack`](Teamobi2026/src/nro/models/mob/Mob.java#L345) BDKB `BDKB_MOB_RANGE` = 60, [`TaskService.paySideTask`](Teamobi2026/src/nro/models/services/TaskService.java#L1289), [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 17).
 - Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
 - SQL:
 ```sql
@@ -113,7 +113,7 @@ INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec
 
 ### 15. Đuôi khỉ cho đệ, bùa x3 đệ tử (1826) ở Bà Hạt Mít, sư phụ nhận x3 khi đệ đánh, Cải trang Mabư Còm 50%, chết dùng đồ (trừ đổi khu/capsule/ăn đậu), gộp thêm đồ
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có (`NPoint` đuôi khỉ + bùa đệ x3, `Service.addSMTN` x3, `ItemTime`/`ItemTimeService`/`UseItem`/`PlayerDAO`/`MrBlue` bùa 1826, `UseItem`/`ChangeMapService` chặn khi chết, `DataGame.vsItem` = 18).
+- Build: có (`NPoint` đuôi khỉ + bùa đệ x3, [`Service.addSMTN`](Teamobi2026/src/nro/models/services/Service.java#L946) x3, [`ItemTime`](Teamobi2026/src/nro/models/item/ItemTime.java)/[`ItemTimeService`](Teamobi2026/src/nro/models/services/ItemTimeService.java)/[`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java)/[`PlayerDAO`](Teamobi2026/src/nro/models/database/PlayerDAO.java)/[`MrBlue`](Teamobi2026/src/nro/models/database/MrBlue.java) bùa 1826, [`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java)/[`ChangeMapService`](Teamobi2026/src/nro/models/map/service/ChangeMapService.java) chặn khi chết, [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 18).
 - Client: không.
 - SQL (chạy từ file UTF-8, không gõ tiếng Việt qua Git Bash):
 ```sql
@@ -128,7 +128,7 @@ UPDATE item_template SET is_up_to_up=1 WHERE id IN (1233,1703,1717,1537,1775,148
 
 ## 16. Bùa x3 đệ tử 8 giờ (1827) và 1 tháng (1828) — 31/10/2026
 
-- Build lại server (`build.bat`, `bt`); `DataGame.vsItem` = 19 (client tự tải lại dữ liệu vật phẩm, không cần cập nhật client). `ItemTime.lastTimeBuaDeX3` nay là thời điểm hết hạn.
+- Build lại server (`build.bat`, `bt`); [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 19 (client tự tải lại dữ liệu vật phẩm, không cần cập nhật client). [`ItemTime.lastTimeBuaDeX3`](Teamobi2026/src/nro/models/item/ItemTime.java#L69) nay là thời điểm hết hạn.
 - SQL (chạy từ file UTF-8 hoặc phpMyAdmin):
 ```sql
 SET NAMES utf8mb4;
@@ -140,7 +140,7 @@ INSERT INTO item_shop (id,tab_id,temp_id,is_new,is_sell,type_sell,cost,icon_spec
 
 ## 17. Bùa x3 đệ tử thành bùa Bà Hạt Mít (mua là áp dụng, xem thời gian còn lại) — 31/10/2026
 
-- Build lại server (`build.bat`, `bt`); `DataGame.vsItem` = 20. Code: `Charms.addTimeCharms` (case 1826/1827/1828), `ShopService.resolveShopBua`.
+- Build lại server (`build.bat`, `bt`); [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 20. Code: [`Charms.addTimeCharms`](Teamobi2026/src/nro/models/player/Charms.java#L35) (case 1826/1827/1828), [`ShopService.resolveShopBua`](Teamobi2026/src/nro/models/shop/ShopService.java#L116).
 - SQL:
 ```sql
 SET NAMES utf8mb4;
@@ -158,7 +158,7 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 ## 20. Đệ tử tự cộng tiềm năng chỉ vào HP/KI/SĐ (không cộng giáp gốc, chí mạng gốc) — 31/10/2026
 
-- Build lại server (`build.bat`, `bt`). Code: `Pet.increasePoint` (`Util.nextInt(0, 2)`, trước là `0..4`). Không có SQL, client không cần cập nhật.
+- Build lại server (`build.bat`, `bt`). Code: [`Pet.increasePoint`](Teamobi2026/src/nro/models/player/Pet.java#L781) ([`Util.nextInt(0, 2)`](Teamobi2026/src/nro/models/utils/Util.java#L169), trước là `0..4`). Không có SQL, client không cần cập nhật.
 
 ## 21. Client: sửa crash khi mua số lượng (vd 5 món ở Santa) — 31/10/2026
 
@@ -177,11 +177,11 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 ## 23. Bà Hạt Mít (map 5): đổi đồ Thần Linh → Hủy Diệt (10 thỏi vàng), 3 Hủy Diệt → 1 món kích hoạt (20 thỏi vàng) — 31/10/2026
 
-- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `combine/DoiDoBaHatMit.java`, `CombineService` (tab 998/999), `BaHatMit` (2 nút cuối menu map 5), `ItemService.randomItemSKH` (tách bảng món kích hoạt dùng chung, capsule không đổi hành vi), `Item.isHuyDiet`. Chi tiết trong CO-CHE.md mục "Đồ Hủy Diệt".
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: [`combine/DoiDoBaHatMit.java`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java), [`CombineService`](Teamobi2026/src/nro/models/combine/CombineService.java) (tab 998/999), [`BaHatMit`](Teamobi2026/src/nro/models/npc_list/BaHatMit.java) (2 nút cuối menu map 5), [`ItemService.randomItemSKH`](Teamobi2026/src/nro/models/services/ItemService.java#L167) (tách bảng món kích hoạt dùng chung, capsule không đổi hành vi), [`Item.isHuyDiet`](Teamobi2026/src/nro/models/item/Item.java#L323). Chi tiết trong CO-CHE.md mục "Đồ Hủy Diệt".
 
 ## 24. Công thức thiên sứ Namếc/Xayda cộng dồn; gift code `giangsinh` (2000 Hộp quà giáng sinh 648) — 31/10/2026
 
-- Build lại server (`build.bat`, `bt`; `DataGame.vsItem` = 21, client tự tải lại dữ liệu vật phẩm, không cần cập nhật client).
+- Build lại server (`build.bat`, `bt`; [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 21, client tự tải lại dữ liệu vật phẩm, không cần cập nhật client).
 - SQL (Công thức 1072, 1073 và VIP 1085, 1086 trước đây `is_up_to_up = 0` nên mỗi cái chiếm 1 ô; code `giangsinh` id 1267, mỗi nhân vật dùng 1 lần, cần 1 ô trống):
   ```sql
   UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1072, 1073, 1085, 1086);
@@ -201,7 +201,7 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 ## 26. Gọi rồng 3 phút/lần, tắt boss Mặt Trời, `danangcap`: đá 220–224 và Đá bảo vệ giao dịch được — 31/10/2026
 
-- Build lại server (`build.bat`, rồi `bt`). Code: `SummonDragon.timeResummonShenron` 180000 (gốc 600000), `BossManager.loadBoss` comment dòng Mặt Trời. Client không cần cập nhật.
+- Build lại server (`build.bat`, rồi `bt`). Code: [`SummonDragon.timeResummonShenron`](Teamobi2026/src/nro/models/services/shenron/SummonDragon.java#L79) 180000 (gốc 600000), [`BossManager.loadBoss`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java#L154) comment dòng Mặt Trời. Client không cần cập nhật.
 - SQL (chạy sau mục 25; bỏ option 30 khỏi 220–224 và 987, các món khác vẫn khóa):
   ```sql
   UPDATE giftcode SET detail = '[{"id":220,"quantity":9999,"options":[]},{"id":221,"quantity":9999,"options":[]},{"id":222,"quantity":9999,"options":[]},{"id":223,"quantity":9999,"options":[]},{"id":224,"quantity":9999,"options":[]},{"id":674,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":935,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1078,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1083,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":1439,"quantity":9999,"options":[{"id":30,"param":0}]},{"id":987,"quantity":999,"options":[]},{"id":1423,"quantity":999,"options":[{"id":30,"param":0}]},{"id":1438,"quantity":999,"options":[{"id":30,"param":0}]}]' WHERE code = 'danangcap';
@@ -210,7 +210,7 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 ## 27. Giáp tập luyện cho đệ tử tích theo giây, nhận Giáp tập luyện cấp 5 (1869), cho đục lỗ cải trang — 31/10/2026
 
-- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `EffectSkin.updateTrainArmor` (đệ mặc +1/giây khi đệ đánh), `NPoint.setDameTrainArmor` (đệ mặc bị giảm sức đánh; sư phụ chỉ tính giáp còn trong hành trang), `ItemService.isTrainArmor`/`getPercentTrainArmor` (1869 = 50%), `CombineSystem.isTrangBiPhaLeHoa` + `Item.canPhaLeHoa` (thêm type 5). Chi tiết: CO-CHE.md mục "Giáp tập luyện".
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: [`EffectSkin.updateTrainArmor`](Teamobi2026/src/nro/models/player/EffectSkin.java#L447) (đệ mặc +1/giây khi đệ đánh), [`NPoint.setDameTrainArmor`](Teamobi2026/src/nro/models/player/NPoint.java#L781) (đệ mặc bị giảm sức đánh; sư phụ chỉ tính giáp còn trong hành trang), [`ItemService.isTrainArmor`](Teamobi2026/src/nro/models/services/ItemService.java#L358)/`getPercentTrainArmor` (1869 = 50%), [`CombineSystem.isTrangBiPhaLeHoa`](Teamobi2026/src/nro/models/combine/CombineSystem.java#L13) + [`Item.canPhaLeHoa`](Teamobi2026/src/nro/models/item/Item.java#L288) (thêm type 5). Chi tiết: CO-CHE.md mục "Giáp tập luyện".
 
 ## 28. Client: khung hành trang bị lem khi trúng Thái Dương Hạ San — 31/10/2026
 
@@ -218,7 +218,7 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
 
 ## 29. Bí ngô gọi rồng, nhiệm vụ hằng ngày 99 lượt + Bí ngô 1/2 sao — 31/10/2026
 
-- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: `services/shenron/Shenron_BiNgo.java` (mới), `models/ShenronEvent.java`, `Player.shenronBiNgo`, `Client` (mất kết nối), `NpcFactory` (menu Con mèo + menu ước), `ConstNpc.SUMMON_SHENRON_BI_NGO`, `UseItem.controllerCallRongThan`, `ConstTask.MAX_SIDE_TASK` = 99, `TaskService.paySideTask` (địa ngục ra Bí ngô 702–704). Chi tiết: CO-CHE.md mục "Bí ngô" và "Nhiệm vụ hằng ngày".
+- Build lại server (`build.bat`, rồi `bt`). Không có SQL, client không cần cập nhật. Code: [`services/shenron/Shenron_BiNgo.java`](Teamobi2026/src/nro/models/services/shenron/Shenron_BiNgo.java) (mới), [`models/ShenronEvent.java`](Teamobi2026/src/models/ShenronEvent.java), [`Player.shenronBiNgo`](Teamobi2026/src/nro/models/player/Player.java#L251), [`Client`](Teamobi2026/src/nro/models/server/Client.java) (mất kết nối), [`NpcFactory`](Teamobi2026/src/nro/models/npc/NpcFactory.java) (menu Con mèo + menu ước), [`ConstNpc.SUMMON_SHENRON_BI_NGO`](Teamobi2026/src/nro/models/consts/ConstNpc.java#L247), [`UseItem.controllerCallRongThan`](Teamobi2026/src/nro/models/services_func/UseItem.java#L1767), [`ConstTask.MAX_SIDE_TASK`](Teamobi2026/src/nro/models/consts/ConstTask.java#L19) = 99, [`TaskService.paySideTask`](Teamobi2026/src/nro/models/services/TaskService.java#L1289) (địa ngục ra Bí ngô 702–704). Chi tiết: CO-CHE.md mục "Bí ngô" và "Nhiệm vụ hằng ngày".
 
 ## 30. Boss Thiên sứ + Hủy diệt, map Trạm hủy diệt 186–188 — 31/10/2026
 
@@ -233,7 +233,7 @@ UPDATE item_template SET type=13, description='Tăng 3 lần tiềm năng, sức
   UPDATE map_template SET waypoints = '[["Làng Mori",1416,408,1440,432,0,0,7,60,408],["Trạm hủy diệt",0,216,24,240,0,0,187,900,336]]' WHERE id = 43;
   UPDATE map_template SET waypoints = '[["Làng Kakarot",1416,408,1440,432,0,0,14,60,408],["Đại hội võ thuật",936,408,1008,432,1,0,52,620,336],["Trạm hủy diệt",0,240,24,264,0,0,188,900,336]]' WHERE id = 44;
   ```
-- Build lại server (`build.bat`), **tắt hẳn rồi bật lại server** (map mới chỉ nạp lúc khởi động; `bt` cũng được vì `run.bat` tự chạy lại). Code: `boss/thien_su/` (mới), `BossID`, `BossManager.loadBoss`/`createBoss`, `DataGame.vsMap` = 3 (client tự tải lại danh sách map). Client không cần cập nhật `GameAssembly.dll`. Chi tiết: BOSS-ROI-DO.md mục 3b, KE-HOACH-BOSS-THIEN-SU.md.
+- Build lại server (`build.bat`), **tắt hẳn rồi bật lại server** (map mới chỉ nạp lúc khởi động; `bt` cũng được vì `run.bat` tự chạy lại). Code: `boss/thien_su/` (mới), [`BossID`](Teamobi2026/src/nro/models/boss/BossID.java), [`BossManager.loadBoss`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java#L154)/`createBoss`, [`DataGame.vsMap`](Teamobi2026/src/nro/models/data/DataGame.java#L35) = 3 (client tự tải lại danh sách map). Client không cần cập nhật `GameAssembly.dll`. Chi tiết: BOSS-ROI-DO.md mục 3b, KE-HOACH-BOSS-THIEN-SU.md.
 
 ## 31. Client: danh sách server lấy từ `Config.properties`, thêm server `home` — 31/10/2026
 
@@ -308,15 +308,15 @@ WHERE name = 'tata2' AND gender = 2;
 
 ## 36. Ngọc rồng sao đen: sao 5 đổi sang +35% TN/SM, sao 6 KI tối đa còn +20% — 31/10/2026, máy nhà
 
-- Build: có (`NPoint.java`, `RewardBlackBall.java`). Client: không. SQL: không.
+- Build: có ([`NPoint.java`](Teamobi2026/src/nro/models/player/NPoint.java), [`RewardBlackBall.java`](Teamobi2026/src/nro/models/player/RewardBlackBall.java)). Client: không. SQL: không.
 - Sao 5: bỏ SĐ chí mạng +35%, thay bằng tiềm năng và sức mạnh nhận thêm +35% (`tlTNSM`). Sao 6: KI tối đa +40% → +20% (`R6S_1` = 20). Chi tiết: CO-CHE.md mục "Ngọc rồng sao đen". Gốc: GIA-TRI-GOC.md.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc chạy `run.bat`). Hiệu ứng sao đang giữ trên người chơi sẽ tính lại khi họ đăng nhập lại.
 
 ## 37. Chữ NPC sao đen, nhắc boss 15 phút, đệ Mabư của `tata2` đổi sang HP — 31/10/2026, máy nhà
 
-- Build: có (`ConstNpc.HUONG_DAN_BLACK_BALL_WAR`: chữ hướng dẫn Trạm tàu vũ trụ khớp sao 5 = +35% TN/SM, sao 6 = KI+20%; `Boss.remindNotify` 5 phút → 15 phút, `900000`). Client: không.
+- Build: có ([`ConstNpc.HUONG_DAN_BLACK_BALL_WAR`](Teamobi2026/src/nro/models/consts/ConstNpc.java#L24): chữ hướng dẫn Trạm tàu vũ trụ khớp sao 5 = +35% TN/SM, sao 6 = KI+20%; [`Boss.remindNotify`](Teamobi2026/src/nro/models/boss/Boss.java#L527) 5 phút → 15 phút, `900000`). Client: không.
 - (Xem thêm mục 39: đệ tích giáp tập luyện theo thời gian thực 0,1 giây/điểm.)
-- SQL (chạy sau mục 34 và 35, khi `tata2` offline): đệ của `tata2` (Mabư, gender 2). Sao pha lê SĐ → HP trên 7 món (áo, quần, găng, giày, nhẫn, cải trang 584, giáp tập luyện): mỗi lỗ SĐ `[50,3]` → HP `[77,5]`, 7 sao `[50,21]` → `[77,35]`; giày đã có `[77,1]` nên gộp thành `[77,36]`; cải trang 584 `[50,45]` → `[50,24]` (SĐ gốc 24), `[77,24]` → `[77,59]`. Quần Thiên Sứ 1053 lên +8: `[22,260]` → `[22,557]` (260 × 1,1^8, công thức `ChuyenHoaTrangBi_Ngoc`) và thêm `[72,8]`. Giáp tập luyện cấp 1 (529) → cấp 4 (1716), option 9 về 0, 9 sao HP 45% (`[77,35]` + 2 × `[77,5]`), chưa thêm `77:10, 94:3` như bản bán ở Santa.
+- SQL (chạy sau mục 34 và 35, khi `tata2` offline): đệ của `tata2` (Mabư, gender 2). Sao pha lê SĐ → HP trên 7 món (áo, quần, găng, giày, nhẫn, cải trang 584, giáp tập luyện): mỗi lỗ SĐ `[50,3]` → HP `[77,5]`, 7 sao `[50,21]` → `[77,35]`; giày đã có `[77,1]` nên gộp thành `[77,36]`; cải trang 584 `[50,45]` → `[50,24]` (SĐ gốc 24), `[77,24]` → `[77,59]`. Quần Thiên Sứ 1053 lên +8: `[22,260]` → `[22,557]` (260 × 1,1^8, công thức [`ChuyenHoaTrangBi_Ngoc`](Teamobi2026/src/nro/models/combine/ChuyenHoaTrangBi_Ngoc.java)) và thêm `[72,8]`. Giáp tập luyện cấp 1 (529) → cấp 4 (1716), option 9 về 0, 9 sao HP 45% (`[77,35]` + 2 × `[77,5]`), chưa thêm `77:10, 94:3` như bản bán ở Santa.
 ```sql
 SET NAMES utf8mb4;
 SET @p = (SELECT LOCATE('[77,1]', pet) FROM player WHERE name = 'tata2');
@@ -340,7 +340,7 @@ WHERE name = 'tata2' AND gender = 2;
 
 ## 39. Đệ tích giáp tập luyện mỗi 0,1 giây (cộng theo thời gian thực) — 31/10/2026, máy nhà
 
-- Build: có (`EffectSkin.java`, `updateTrainArmor`). Client: không. SQL: không.
+- Build: có ([`EffectSkin.java`](Teamobi2026/src/nro/models/player/EffectSkin.java), `updateTrainArmor`). Client: không. SQL: không.
 - Trước đây đệ +1 mỗi 1 giây khi đang đánh. Bây giờ cộng `elapsed / 100` mỗi lần `update()` (update chạy mỗi giây, cộng tối đa 10 điểm mỗi lần), vẫn giới hạn 1000 và chỉ khi đệ đánh trong 30 giây gần nhất. Gốc: GIA-TRI-GOC.md.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
@@ -356,15 +356,15 @@ UPDATE intrinsic SET param_to_1 = 35 WHERE id = 13 AND gender = 1;
 ## 42. Bỏ sự kiện nước mía; rơi đồ Thiên sứ/Hủy diệt mới; đổi Hủy diệt không trùng món — 31/10/2026, máy nhà
 
 - Build: có (`build.bat` hoặc javac + `jar uf`, xem THAY-DOI mục 36). Client: không cần cập nhật. SQL: không.
-- Bỏ nước mía: xóa `event/XeNuocMia.java`, bỏ case trong `NpcFactory`, `Map.initNpc` bỏ qua NPC id 84, `ChiChi` bỏ nút "Top Nước mía" (menu còn Hộp quà / Kem / Cửa hàng). Ly mía trong túi vẫn dùng được. Bảng top nước mía (`Manager.Topsukien1`) còn trong code nhưng không còn được dùng.
-- Rơi đồ boss Thiên sứ + Hủy diệt (`ThienSuHuyDietReward.drop`): 2% Thần Linh, 30% Hủy Diệt, 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% thỏi vàng (457). Món Hủy Diệt chọn hành tinh ngẫu nhiên, không theo người giết. Bảng ở BOSS-ROI-DO.md mục 3b.
-- Bà Hạt Mít đổi 3 món Hủy Diệt (`DoiDoBaHatMit.checkHuyDiet`): 3 món không được trùng món (cùng id), được khác hành tinh.
+- Bỏ nước mía: xóa `event/XeNuocMia.java`, bỏ case trong [`NpcFactory`](Teamobi2026/src/nro/models/npc/NpcFactory.java), [`Map.initNpc`](Teamobi2026/src/nro/models/map/Map.java#L171) bỏ qua NPC id 84, [`ChiChi`](Teamobi2026/src/nro/models/npc_list/ChiChi.java) bỏ nút "Top Nước mía" (menu còn Hộp quà / Kem / Cửa hàng). Ly mía trong túi vẫn dùng được. Bảng top nước mía ([`Manager.Topsukien1`](Teamobi2026/src/nro/models/server/Manager.java#L112)) còn trong code nhưng không còn được dùng.
+- Rơi đồ boss Thiên sứ + Hủy diệt ([`ThienSuHuyDietReward.drop`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java)): 2% Thần Linh, 30% Hủy Diệt, 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% thỏi vàng (457). Món Hủy Diệt chọn hành tinh ngẫu nhiên, không theo người giết. Bảng ở BOSS-ROI-DO.md mục 3b.
+- Bà Hạt Mít đổi 3 món Hủy Diệt ([`DoiDoBaHatMit.checkHuyDiet`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L155)): 3 món không được trùng món (cùng id), được khác hành tinh.
 - Chữ "10 tỷ": xem mục 43.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
 ## 43. Thiên sứ rơi đồ như cũ (bảng mới chỉ cho Hủy diệt); client: số dưới 10 tỷ hiện đủ dấu chấm — 31/10/2026, máy nhà
 
-- Build: có (`ThienSuHuyDietReward`: `drop` = Thiên sứ bảng cũ, món Hủy Diệt theo hành tinh người giết; `dropHuyDiet` = Hủy diệt bảng mới ở mục 42). SQL: không.
+- Build: có ([`ThienSuHuyDietReward`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java): `drop` = Thiên sứ bảng cũ, món Hủy Diệt theo hành tinh người giết; `dropHuyDiet` = Hủy diệt bảng mới ở mục 42). SQL: không.
 - Client: có. **Đóng hết cửa sổ game** rồi chạy `client-patch\cap-nhat-client.bat` (thêm `patch-ty-10.ps1`, kèm `patch-so-luong-ruong.ps1` của mục 38 nếu máy chưa áp). Chi tiết: `client-patch/CLIENT-UNITY.md` mục "Số dưới 10 tỷ hiện đủ dấu chấm". Máy nhà chưa áp (game đang mở lúc sửa); áp xong thì ghi `38` và `43` vào `.thay-doi-da-chay`.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
@@ -375,13 +375,13 @@ UPDATE intrinsic SET param_to_1 = 35 WHERE id = 13 AND gender = 1;
 
 ## 45. Đệ Uub / Kid Beer / Jiren mặc được đồ cả 3 hành tinh — 31/10/2026, máy nhà
 
-- Build: có (`InventoryService.putItemBody`: đệ `typePet` 2–4 bỏ qua kiểm tra hành tinh của đồ; đệ thường và Mabư vẫn chỉ mặc đồ cùng hành tinh). Client: không. SQL: không.
+- Build: có ([`InventoryService.putItemBody`](Teamobi2026/src/nro/models/services/InventoryService.java#L287): đệ `typePet` 2–4 bỏ qua kiểm tra hành tinh của đồ; đệ thường và Mabư vẫn chỉ mặc đồ cùng hành tinh). Client: không. SQL: không.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
 ## 46. Boss lớn: HP, nhận đủ sát thương, tỉ lệ rơi mới; đổi kích hoạt theo hành tinh người chơi; ô đồ đệ VIP; client: số sát thương có dấu chấm — 31/10/2026, máy nhà
 
 - Build: có. SQL: không.
-- HP (`BossesData`): Cooler 1 tỷ, Cooler 2 1,5 tỷ, Black Goku 1 tỷ, Super Black Goku 3,5 tỷ, Cumber 2 tỷ (Super Cumber, Baby 3 dạng giữ 2 tỷ); Hủy diệt Beerus/Champa 3 tỷ (`HuyDiet.HP`), hồi sinh 20 phút (user sửa). Black Goku, Cumber, Baby, Xên bọ hung, Siêu bọ hung bỏ giảm sát thương. `NPoint.subDameInjureWithDeff` trả `long` (hết tràn số đòn > 2,1 tỷ).
+- HP ([`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java)): Cooler 1 tỷ, Cooler 2 1,5 tỷ, Black Goku 1 tỷ, Super Black Goku 3,5 tỷ, Cumber 2 tỷ (Super Cumber, Baby 3 dạng giữ 2 tỷ); Hủy diệt Beerus/Champa 3 tỷ ([`HuyDiet.HP`](Teamobi2026/src/nro/models/boss/thien_su/HuyDiet.java#L17)), hồi sinh 20 phút (user sửa). Black Goku, Cumber, Baby, Xên bọ hung, Siêu bọ hung bỏ giảm sát thương. [`NPoint.subDameInjureWithDeff`](Teamobi2026/src/nro/models/player/NPoint.java#L1819) trả `long` (hết tràn số đòn > 2,1 tỷ).
 - Rơi đồ: Thần Linh Baby 3/4/5%, Black Goku 5/7%, Cumber 7%, Cooler 5/7%, Siêu bọ hung 3/5%, Mabư 12h 0,15%; ngọc rồng boss lớn 10% x1 (2 sao 70%, 3 sao 30%), Mabư 12h không rơi ngọc rồng. Chi tiết BOSS-ROI-DO.md mục 2.
 - Bà Hạt Mít đổi 3 Hủy Diệt → kích hoạt: hành tinh theo người chơi, loại theo món đặt đầu tiên.
 - Đệ Uub/Kid Beer/Jiren: ô 8 mặc thú cưng (loại 27), đồ đeo lưng ô 9 hiện trên lưng đệ, kiểm tra đệ VIP bằng `typePet` (đổi đệ xong mặc được ngay); đệ không mặc sách tuyệt kỹ nữa. Đệ thường và Mabư vẫn 7 ô.
@@ -398,20 +398,20 @@ UPDATE item_template SET NAME='Hộp đồ đeo lưng', description='Mở ra ng�
 UPDATE item_template SET NAME='Hộp thú cưỡi', description='Mở ra ngẫu nhiên 1 thú cưỡi', icon_id=14514 WHERE id=1397;
 UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộng dồn trong túi
 ```
-- Build: có (`DataGame.vsItem` 21 → 23 để client tải lại tên và cộng dồn). Client: không cần cập nhật.
+- Build: có ([`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) 21 → 23 để client tải lại tên và cộng dồn). Client: không cần cập nhật.
 - Kiểm tra: `SELECT id, NAME, is_up_to_up FROM item_template WHERE id IN (1135, 1136, 1397);` ra 3 tên hộp và `1`.
 
 ## 48. Gói VIP Tori Bot: hết lỗi reset mỗi ngày, mùa 1/11/2026–30/4/2027, bỏ x3 kinh nghiệm — 1/11/2026, máy nhà
 
 - Build: có. SQL: không. Client: không.
-- Trước đây `PlayerService.dailyLogin` lấy mốc hết mùa 5/7 nên từ 6/7 ngày nào cũng xóa lượt mua, cấp VIP và `timevip`. Giờ mùa khai báo một chỗ trong `ToriBot` (`VIP_SEASON_ID` = 1, mở 1/11/2026 đến hết 30/4/2027, ngoài khoảng đó đóng). `data_vip` thêm phần tử thứ 9 là mã mùa; nạp nhân vật thấy khác mã mùa thì reset lượt mua và cấp VIP, giữ `timevip`.
+- Trước đây [`PlayerService.dailyLogin`](Teamobi2026/src/nro/models/services/PlayerService.java#L327) lấy mốc hết mùa 5/7 nên từ 6/7 ngày nào cũng xóa lượt mua, cấp VIP và `timevip`. Giờ mùa khai báo một chỗ trong [`ToriBot`](Teamobi2026/src/nro/models/npc_list/ToriBot.java) (`VIP_SEASON_ID` = 1, mở 1/11/2026 đến hết 30/4/2027, ngoài khoảng đó đóng). `data_vip` thêm phần tử thứ 9 là mã mùa; nạp nhân vật thấy khác mã mùa thì reset lượt mua và cấp VIP, giữ `timevip`.
 - VIP không cộng kinh nghiệm nữa (bỏ +3 của `timevip` và của cột `account.vip` trong `NPoint`), bỏ dòng "X3 Kinh nghiệm" trong menu Tori Bot và thông báo lúc đăng nhập.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
 ## 49. Boss 12h giảm rơi đồ Thần Linh và đồ shop, Mabu rơi Bình 1795, đồ shop boss tối đa 8 sao — 6/11/2026, máy nhà
 
 - Build: có. SQL: không. Client: không.
-- Tỉ lệ nằm ở 1 chỗ, đầu `Teamobi2026/src/nro/models/boss/Boss.java` (số tính trên 10000):
+- Tỉ lệ nằm ở 1 chỗ, đầu [`Teamobi2026/src/nro/models/boss/Boss.java`](Teamobi2026/src/nro/models/boss/Boss.java) (số tính trên 10000):
 
 | Hằng số | Giá trị | Nghĩa | Trước |
 |---|---|---|---|
@@ -420,7 +420,7 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 | `SHOP_BOSS_12H` | 15 = 0,15% | Đồ shop, cả 9 boss 12h | 1% |
 | `BINH_KILIS_MABU_12H` | 500 = 5% | Bình 1795, riêng Mabu | không có |
 
-- `Boss.randSaoDoShop` dùng chung cho 14 boss rơi đồ shop (9 boss 12h, Baby, Black Goku, Cooler, Cumber, Siêu bọ hung): 1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%. Đã mô phỏng 20 triệu lần, ra đúng các tỉ lệ này.
+- [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) dùng chung cho 14 boss rơi đồ shop (9 boss 12h, Baby, Black Goku, Cooler, Cumber, Siêu bọ hung): 1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%. Đã mô phỏng 20 triệu lần, ra đúng các tỉ lệ này.
 - `SHOP_BOSS_12H`: yêu cầu ghi "5%" rồi dòng dưới "0,15%". Đang hiểu là 0,15% vì đồ shop gốc 1% và yêu cầu là giảm. Muốn 5% thì đổi thành `500`.
 - Kiểm tra sau khi build và bật lại server (tỉ lệ thấp nên muốn thấy nhanh thì tạm tăng hằng số, nhớ trả về):
   1. Đánh Mabu 12h nhiều lần: thỉnh thoảng rơi Bình hút năng lượng, nhặt được, xem chi tiết có dòng Kilis.
@@ -444,26 +444,26 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 
 ## 51. Mua số lượng trong shop tối đa 10000 mỗi lần (trước là 1000) — 6/11/2026, máy nhà
 
-- Build: có (`ShopService.buyItemQuantity`, `Math.min(quantity, 10000)`). SQL: không. Client: không.
+- Build: có ([`ShopService.buyItemQuantity`](Teamobi2026/src/nro/models/shop/ShopService.java#L513), `Math.min(quantity, 10000)`). SQL: không. Client: không.
 - Kiểm tra: mua món thường (vd Trang sách cũ) nhập 9999, thấy "Mua thành công x9999" nếu đủ tiền và đủ ô hành trang.
 - **Bổ sung mục 51 (client)**: khung nhập số lượng khi mua ở shop đổi chữ thành "Mua (tối đa 10000)" (`client-patch/patch-nhap-so-luong.ps1`, sửa `global-metadata.dat`). **Client: có**, chạy `client-patch\cap-nhat-client.bat` trên mỗi máy (tắt game trước).
 
 
 ## 52. Chế tạo Cuốn sách cũ cần 999 Trang sách cũ (trước là 9999) — 6/11/2026, máy nhà
 
-- Build: có (`combine/CheTaoCuonSachCu.java`, `REQUIRED_TRANG_SACH_CU` 9999 → 999, user tự sửa). SQL: không. Client: không.
-- Sửa thêm: chế tạo Cuốn sách cũ và Đổi Sách Tuyệt kỹ (`DoiSachTuyetKy`) trước đây **không gửi lại hành trang** sau khi trừ/thêm đồ (hiệu ứng `-81` không kèm hành trang), nên client còn hiện số cũ tới khi vào lại. Đã thêm `InventoryService.gI().sendItemBags(player)` sau hiệu ứng thành công/thất bại ở cả 2 file, giống các combine khác.
+- Build: có ([`combine/CheTaoCuonSachCu.java`](Teamobi2026/src/nro/models/combine/CheTaoCuonSachCu.java), `REQUIRED_TRANG_SACH_CU` 9999 → 999, user tự sửa). SQL: không. Client: không.
+- Sửa thêm: chế tạo Cuốn sách cũ và Đổi Sách Tuyệt kỹ ([`DoiSachTuyetKy`](Teamobi2026/src/nro/models/combine/DoiSachTuyetKy.java)) trước đây **không gửi lại hành trang** sau khi trừ/thêm đồ (hiệu ứng `-81` không kèm hành trang), nên client còn hiện số cũ tới khi vào lại. Đã thêm [`InventoryService.gI().sendItemBags(player)`](Teamobi2026/src/nro/models/services/InventoryService.java#L33) sau hiệu ứng thành công/thất bại ở cả 2 file, giống các combine khác.
 - Các chỗ khác không phải sửa: số cần được hiện từ hằng số này (`formatRequirement`), mô tả item 1281/1282/1283 trong DB không ghi số lượng. Thất bại vẫn mất 99 trang + 1 bìa (`TRANG_SACH_CU_LOSS_ON_FAIL`, chữ "mất 99 trang sách" trong menu ghi cứng, khớp).
 - Kiểm tra: Bà Hạt Mít → chế tạo Cuốn sách cũ, menu hiện `Trang sách cũ x/999`; đủ 999 trang + 1 bìa thì nút Đồng ý sáng.
 
 
 ## 53. Mảnh hồn bông tai rơi 20%, tối đa 500 mỗi ngày, báo khi đủ lượt — 6/11/2026, máy nhà
 
-- Build: có (`mob/Mob.java`, `player/ItemEvent.java`). SQL: không. Client: không.
+- Build: có ([`mob/Mob.java`](Teamobi2026/src/nro/models/mob/Mob.java), [`player/ItemEvent.java`](Teamobi2026/src/nro/models/player/ItemEvent.java)). SQL: không. Client: không.
 - Rơi từ quái map Thánh địa 156–159 (map `isMapUpPorata`). Mỗi quái giết: 10% Mảnh vỡ bông tai (933); nếu không trúng thì **20%** Mảnh hồn bông tai (934, trước 5%) nhưng chỉ khi người đó còn lượt trong ngày; nếu không thì 1/500 Đá xanh lam (935). Cổ Bồn La vẫn cộng +5/+3/+1 (934 thành 23%). Vì chỉ tung 934 khi 933 không trúng nên thực tế ≈ 18% mỗi quái.
 - Giới hạn **500** mảnh hồn mỗi ngày mỗi người (trước 150, `canDropManhVo(500)`), tính lại sau nửa đêm. Sửa luôn lỗi cũ: lần đầu trong ngày không bị trừ lượt nên cho được 151 thay vì 150.
 - Khi đã đủ lượt, **mỗi lần** lẽ ra rơi mảnh hồn (tức mỗi lần tung trúng 20% mà hết lượt) server báo "Hôm nay ngươi đã nhận đủ Mảnh hồn bông tai, hãy quay lại vào ngày mai" (không ghi số), mảnh không rơi. Ra khỏi map hoặc ngừng đánh thì không báo nữa.
-- Chưa sửa: lượt còn lại lưu trong bộ nhớ (`ItemEvent`), không lưu DB, nên đăng xuất rồi đăng nhập lại là reset về đủ 500.
+- Chưa sửa: lượt còn lại lưu trong bộ nhớ ([`ItemEvent`](Teamobi2026/src/nro/models/player/ItemEvent.java)), không lưu DB, nên đăng xuất rồi đăng nhập lại là reset về đủ 500.
 - Kiểm tra (tạm hạ 500 xuống 2 để test): giết quái ở map 156–159 tới khi đủ 2 mảnh hồn thì hiện thông báo, sau đó không rơi thêm.
 
 
@@ -474,28 +474,28 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
   INSERT INTO item_shop_option (item_shop_id, option_id, param) VALUES (911, 31, 1);
   INSERT INTO shop_reload_request () VALUES ();   -- server đang chạy tự nạp lại shop
   ```
-- Lý do: logic nâng bông tai cấp 2 đọc số mảnh vỡ từ option 31 (`InventoryService.getParam`), món mua ở Santa (item_shop 911, 50 ngọc) không có option nên đếm ra 0. Giờ mỗi mảnh mua có `31:1` và tự gộp vào 1 ô như mảnh nhặt từ quái. Đá xanh lam (item_shop 910) đếm theo số lượng ô nên không cần.
+- Lý do: logic nâng bông tai cấp 2 đọc số mảnh vỡ từ option 31 ([`InventoryService.getParam`](Teamobi2026/src/nro/models/services/InventoryService.java#L998)), món mua ở Santa (item_shop 911, 50 ngọc) không có option nên đếm ra 0. Giờ mỗi mảnh mua có `31:1` và tự gộp vào 1 ô như mảnh nhặt từ quái. Đá xanh lam (item_shop 910) đếm theo số lượng ô nên không cần.
 - Chưa sửa: ô Mảnh vỡ/Mảnh hồn **cũ** không có option 31 mà người chơi đang giữ (lúc kiểm tra chỉ có `hoang`, đã sửa tay) vẫn đếm 0; mua thêm vào ô cũ đó thì món mua biến mất (hàm gộp không có option 31 để cộng). Nếu có người khác bị thì đổi ô đó sang dạng `[933,1,option 31 = số mảnh]` như mục chuyển của `hoang`.
 - Kiểm tra: mua 1 Mảnh vỡ bông tai ở Santa, xem chi tiết có dòng "Số lượng 1"; mua thêm thì thành "Số lượng 2" trong cùng 1 ô; vào Bà Hạt Mít nâng bông tai thì đếm đúng.
 
 
 ## 55. Mảnh vỡ bông tai cấp 3 (1820) rơi 30% ở map Thánh địa, không giới hạn mỗi ngày — 6/11/2026, máy nhà
 
-- Build: có (`mob/Mob.java`, cùng khối map 156–159 với mục 53). SQL: không. Client: không.
-- Mỗi quái giết ở Tây/Đông/Bắc/Nam thánh địa: tung **riêng** 30% rơi 1 Mảnh vỡ bông tai cấp 3 (item 1820, option `31:1` nên tự gộp vào 1 ô), không phụ thuộc 3 lần tung của 933/934/935 và không có giới hạn mỗi ngày. Không tính Cổ Bồn La. Dùng để nâng bông tai cấp 2 → 3 (`NangCapBongTai3`: 20000 mảnh, 200 triệu vàng, 1000 ngọc).
+- Build: có ([`mob/Mob.java`](Teamobi2026/src/nro/models/mob/Mob.java), cùng khối map 156–159 với mục 53). SQL: không. Client: không.
+- Mỗi quái giết ở Tây/Đông/Bắc/Nam thánh địa: tung **riêng** 30% rơi 1 Mảnh vỡ bông tai cấp 3 (item 1820, option `31:1` nên tự gộp vào 1 ô), không phụ thuộc 3 lần tung của 933/934/935 và không có giới hạn mỗi ngày. Không tính Cổ Bồn La. Dùng để nâng bông tai cấp 2 → 3 ([`NangCapBongTai3`](Teamobi2026/src/nro/models/combine/NangCapBongTai3.java): 20000 mảnh, 200 triệu vàng, 1000 ngọc).
 - Kiểm tra: giết quái ở map 156–159, nhặt thấy "Mảnh vỡ bông tai cấp 3", giết thêm thì "Số lượng" cộng dồn trong cùng 1 ô; vào Bà Hạt Mít nâng bông tai cấp 2 thì đếm đúng.
 
 
 ## 56. Boss Hủy diệt (Beerus, Champa) rơi 5–20 thỏi vàng — 7/11/2026, máy nhà
 
 - Build: có (`boss/thien_su/ThienSuHuyDietReward.dropHuyDiet`). SQL: không. Client: không.
-- Nhánh 38% Thỏi vàng (457) trước rơi 1, giờ rơi ngẫu nhiên 5–20 (`Util.nextInt(5, 20)`). Thiên sứ Whis/Vados không rơi thỏi vàng nên không đổi. Đã cập nhật BOSS-ROI-DO.md mục 3b.
+- Nhánh 38% Thỏi vàng (457) trước rơi 1, giờ rơi ngẫu nhiên 5–20 ([`Util.nextInt(5, 20)`](Teamobi2026/src/nro/models/utils/Util.java#L169)). Thiên sứ Whis/Vados không rơi thỏi vàng nên không đổi. Đã cập nhật BOSS-ROI-DO.md mục 3b.
 - Kiểm tra: giết Beerus hoặc Champa nhiều lần, khi rơi thỏi vàng thì số lượng nằm trong 5–20.
 
 
 ## 57. Cải trang Hắc Mị Nương trong quà VIP 4: hsd 30 ngày, May mắn → chí mạng 25–30% — 7/11/2026, máy nhà
 
-- Build: có (`npc_list/ToriBot.java`, bản quà VIP 4). SQL: có (2 nick test). Client: không.
+- Build: có ([`npc_list/ToriBot.java`](Teamobi2026/src/nro/models/npc_list/ToriBot.java), bản quà VIP 4). SQL: có (2 nick test). Client: không.
 - Quà VIP 4 của ToriBot: Hắc Mị Nương (1557) từ vĩnh viễn thành **hạn 30 ngày** (option `93:30`, như quà VIP 1/2), option `236:25` (May mắn, server không dùng) đổi thành `5` (+% sức đánh chí mạng) ngẫu nhiên 25–30. Giữ `50:25`, `77:25`, `117:25` (117 là "Đẹp +SĐ", không phải HP; lỗi nhân đôi 117 xem CO-CHE.md). Đã sửa chữ trong menu VIP 4 ("hsd 30 ngày").
 - SQL đã chạy cho 2 nick `tata2` và `hoang` (mỗi nick 2 cải trang 1557 trong hành trang, vẫn vĩnh viễn, không thêm option 93), chạy lại ở máy khác nếu có 2 nick này, lúc không ai đang online: `UPDATE player SET items_bag = REPLACE(items_bag,'[236,25]','[5,30]') WHERE name IN ('tata2','hoang') AND items_bag LIKE '%[1557,%';`
 - Kiểm tra: nâng VIP 4 nick mới, cải trang có "Hạn sử dụng 30 ngày" và chí mạng 25–30%; nick `tata2`/`hoang` thấy dòng sức đánh chí mạng 30%, không còn May mắn.
@@ -511,7 +511,7 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 ## 59. Sổ sưu tầm: Dùng tối đa 3 thẻ cùng lúc (trước 1) — 7/11/2026, máy nhà
 
 - Build: có (`radar/Card.MAX_USED = 3`, `server/Controller` gói 127, `player/NPoint` cộng chỉ số của mọi thẻ đang Dùng). SQL: không. Client: không cần cập nhật (client chỉ hiển thị trạng thái Dùng từng thẻ, server quyết định giới hạn).
-- Cách tính chỉ số của từng thẻ không đổi (vẫn áp dòng có `activeCard` bằng đúng cấp thẻ, chưa cộng dồn, xem CO-CHE.md mục "Sổ sưu tầm"). Aura chỉ lấy của 1 thẻ (`Player.getAura`, không đổi).
+- Cách tính chỉ số của từng thẻ không đổi (vẫn áp dòng có `activeCard` bằng đúng cấp thẻ, chưa cộng dồn, xem CO-CHE.md mục "Sổ sưu tầm"). Aura chỉ lấy của 1 thẻ ([`Player.getAura`](Teamobi2026/src/nro/models/player/Player.java#L736), không đổi).
 - Kiểm tra: bấm Dùng 3 thẻ liên tiếp đều được, thẻ thứ 4 báo "Số thẻ sử dụng đã đạt tối đa"; chỉ số cộng từ cả 3 thẻ (xem sức đánh/HP trước và sau khi Dùng).
 
 
@@ -532,7 +532,7 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 
 ## 62. Cooler rơi Ngọc rồng băng; Rồng băng điều ước 2 cho Vé đổi nội tại tự chọn (1730) — 11/11/2026, máy công ty
 
-- Build: có (`boss/Cold/Cooler.reward`, `shenron/Shenron_Event` điều ước 2, `IntrinsicService.showMenuVeNoiTai/selectVeNoiTai`, `UseItem` case 1730, `NpcFactory` menu `ConstNpc.VE_DOI_NOI_TAI` 31720400, `DataGame.vsItem` = 24). Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
+- Build: có (`boss/Cold/Cooler.reward`, `shenron/Shenron_Event` điều ước 2, `IntrinsicService.showMenuVeNoiTai/selectVeNoiTai`, [`UseItem`](Teamobi2026/src/nro/models/services_func/UseItem.java) case 1730, [`NpcFactory`](Teamobi2026/src/nro/models/npc/NpcFactory.java) menu [`ConstNpc.VE_DOI_NOI_TAI`](Teamobi2026/src/nro/models/consts/ConstNpc.java#L205) 31720400, [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 24). Client: không (đổi `vsItem` thì client tự tải lại dữ liệu vật phẩm).
 - Cooler và Cooler 2 (Hang băng, map 110): mỗi dạng chết rơi thêm 100% 1 Ngọc rồng băng 1–7 sao ngẫu nhiên (925–931), của người giết.
 - Rồng băng điều ước 2 trước là đổi nội tại ngẫu nhiên, giờ cho 1 Vé đổi nội tại tự chọn (1730, khóa giao dịch `30:0`, cộng dồn). Dùng vé (cần 10 tỷ SM): menu Con mèo liệt kê nội tại của hành tinh mình + 3 nội tại chung (23–25), 6 món/trang; chọn là nhận nội tại đó với `param1 = param_to_1`, `param2 = param_to_2`, trừ 1 vé.
 - SQL:
@@ -550,28 +550,28 @@ UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description=
 
 ## 64. Quái rơi đồ: đồ kích hoạt 0,5%, thức ăn chỉ map Tương lai / lạnh — 16/11/2026
 
-- Build: có (`Mob.getItemMobReward`). SQL: không. Client: không.
+- Build: có ([`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613)). SQL: không. Client: không.
 - Đồ kích hoạt ở map up SKH (1, 2, 3, 8, 9, 11, 15, 16, 17) và map 164: 0,5% mỗi con quái (trước 2/9999). Cỏ bốn lá ×1,15 (trước ×1,5), option 236 cộng tối đa +20%; tính trên 1 triệu nên không còn bị làm tròn.
 - Thức ăn 663–667 (mặc đủ set Thần Linh): 5%, chỉ map Tương lai (92–94, 96–100, 102, 103) và map lạnh 105–110 (trước 3/333 mọi map).
 - Kiểm tra: đánh quái map 1 khoảng vài trăm con thấy rơi đồ kích hoạt; mặc set Thần Linh đánh quái map 105 thấy thức ăn, map 1 không thấy.
 
 ## 65. Quái rơi đồ shop làng theo map; tắt đồ sao 3 map đầu — 16/11/2026
 
-- Build: có (`ItemService.randDoShopRoiTuQuai`/`capDoShopTheoMap`, `Mob.getItemMobReward`, `Boss.randSaoDoShop` thành `public`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)/`capDoShopTheoMap`, [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) thành `public`). SQL: không. Client: không.
 - Quái map 1–6, 8–13, 15–20, 27–38, 63–83 rơi đồ shop làng 2%, Tương lai và lạnh 1%, cấp theo vùng; 70% đồ sao, 30% đồ kích hoạt khóa giao dịch. Chi tiết QUAI-ROI-DO.md mục 15.
-- Comment hai khối "Đồ Sao Khác Vải Thô" và "Đồ Sao 3 Map Đầu" trong `Mob.getItemMobReward`.
+- Comment hai khối "Đồ Sao Khác Vải Thô" và "Đồ Sao 3 Map Đầu" trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613).
 - Kiểm tra: nhân vật sức mạnh thấp đánh quái map 1 khoảng 100 con thấy rơi áo/quần/găng/giày/rađa cấp 1–3 có sao hoặc có set kích hoạt.
 
 ## 66. Sửa lỗi chỉ số đồ shop tăng dần khi boss rơi đồ Goku — 16/11/2026
 
-- Build: có (`ItemService.getListOptionItemShop`). SQL: không. Client: không.
+- Build: có ([`ItemService.getListOptionItemShop`](Teamobi2026/src/nro/models/services/ItemService.java#L633)). SQL: không. Client: không.
 - Trước: hàm trả về chính các option của shop; code boss rơi đồ shop (14 boss, `option.param *= 100–115%`) sửa thẳng vào đó, nên mỗi lần boss rơi đồ Goku chỉ số món đó trong shop (và đồ rơi sau) tăng tới 15%, cộng dồn tới khi khởi động lại server. Giờ hàm trả bản sao.
 - Đồ đã mua hoặc nhặt trong lúc lỗi vẫn giữ chỉ số cao; khởi động lại server là shop về đúng giá trị DB.
 - Kiểm tra: xem chỉ số áo cấp 9 (230) trong shop Bunma, giết vài boss rơi đồ Goku, chỉ số trong shop không đổi.
 
 ## 67. Boss Goku SSJ 1/2/3 ở map Cold + option 251 "% sát thương chiêu đặc biệt" — 16/11/2026, máy công ty
 
-- Build: có (`boss/Cold/GokuSSJ.java` mới, `BossID`, `BossesData`, `BossManager`, `RewardService.createCaiTrangGokuSSJ`, `NPoint.tlChieuDacBiet`, `SkillService` Bom, `DataGame.vsItem` = 25). Client: không (client tự tải lại option khi `vsItem` đổi).
+- Build: có ([`boss/Cold/GokuSSJ.java`](Teamobi2026/src/nro/models/boss/Cold/GokuSSJ.java) mới, [`BossID`](Teamobi2026/src/nro/models/boss/BossID.java), [`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java), [`BossManager`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java), [`RewardService.createCaiTrangGokuSSJ`](Teamobi2026/src/nro/models/services/RewardService.java#L60), [`NPoint.tlChieuDacBiet`](Teamobi2026/src/nro/models/player/NPoint.java#L158), [`SkillService`](Teamobi2026/src/nro/models/services/SkillService.java) Bom, [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 25). Client: không (client tự tải lại option khi `vsItem` đổi).
 - 3 boss Goku SSJ/SSJ2/SSJ3 ở 3 map khác nhau trong 105–110, rơi đồ ở BOSS-ROI-DO.md mục 3c, kế hoạch KE-HOACH-BOSS-GOKU-SSJ.md.
 - Option 251 cộng % sát thương Laze, Bom, Quả cầu kênh khi (chỉ tính từ đồ).
 - SQL:
@@ -583,7 +583,7 @@ INSERT INTO item_option_template (id, NAME) VALUES (251, '+#% sát thương chi�
 
 ## 68. Sửa đầu Goku SSJ bị lún (part 1454) — 16/11/2026, máy công ty
 
-- Build: có (`DataGame.vsData` = 10 để client tải lại part). Client: không (tự tải lại khi `vsData` đổi).
+- Build: có ([`DataGame.vsData`](Teamobi2026/src/nro/models/data/DataGame.java#L34) = 10 để client tải lại part). Client: không (tự tải lại khi `vsData` đổi).
 - Đầu Goku SSJ (boss Goku SSJ và cải trang 1589) đặt thấp hơn SSJ2/Blue ~6 px nên lún vào thân. Nâng dy ảnh 13218 từ -1 lên -7, 13219 từ -2 lên -8 (gốc `[[13218,2,-1],[13219,2,-2],[2955,0,0]]`). Server tạo file `data/update_data/part` từ bảng `part` lúc khởi động, nên phải khởi động lại server.
 - SQL:
 ```sql
@@ -593,7 +593,7 @@ UPDATE part SET DATA='[[13218,2,-7],[13219,2,-8],[2955,0,0]]' WHERE id=1454;
 
 ## 69. Mọi boss xuất hiện ở khu ngẫu nhiên — 16/11/2026, máy công ty
 
-- Build: có (`Boss.joinMap`). SQL: không. Client: không.
+- Build: có ([`Boss.joinMap`](Teamobi2026/src/nro/models/boss/Boss.java#L424)). SQL: không. Client: không.
 - Trước: `joinMap` bỏ khu đã chọn và luôn dò từ khu 0 (chỉ Baby có `isZoneRandom`), nên mở server/bảo trì xong boss nào cũng ở khu 0. Giờ mọi boss bắt đầu dò từ khu ngẫu nhiên (0 tới số khu − 1, hiện mọi map 10 khu), vẫn tránh khu > 10 người và khu đã có boss. Boss có khu riêng (Mabư ngoài từ khu 2 `isZone01SpawnDisabled`, boss đặt `zoneFinal`, boss con theo boss cha) không đổi.
 - Boss không bị lạnh nữa (`NPoint` 2 chỗ "map lạnh"/"map cold" thêm `!this.player.isBoss`): trước đó boss ở map 105–110 (Cooler, Goku SSJ) bị /2 HP tối đa và sức đánh mỗi lần tính lại chỉ số (dùng khiên, dính hiệu ứng). Cooler vì vậy cũng trâu hơn trước.
 - Kiểm tra: `bt` vài lần, thông báo boss ra nhiều khu khác nhau.
@@ -601,7 +601,7 @@ UPDATE part SET DATA='[[13218,2,-7],[13219,2,-8],[2955,0,0]]' WHERE id=1454;
 ## 70. Map thường lên 19 khu — 16/11/2026, máy công ty
 
 - Build: không. SQL: có. Client: không (gói 29 gửi số khu thật, client tự hiện).
-- `map_template.zones` 10 → 19 cho cả 172 map. Chỉ map thường (type 0, 119 map) dùng cột này; map offline, doanh trại, kho báu, rắn độc, khí gas, Mabư, ngọc rồng đen tự đặt số khu (`Map.initZone`). Mỗi khu có quái riêng nên số quái map thường tăng ~90%. Server nạp lúc khởi động, phải `bt`.
+- `map_template.zones` 10 → 19 cho cả 172 map. Chỉ map thường (type 0, 119 map) dùng cột này; map offline, doanh trại, kho báu, rắn độc, khí gas, Mabư, ngọc rồng đen tự đặt số khu ([`Map.initZone`](Teamobi2026/src/nro/models/map/Map.java#L129)). Mỗi khu có quái riêng nên số quái map thường tăng ~90%. Server nạp lúc khởi động, phải `bt`.
 - SQL:
 ```sql
 UPDATE map_template SET zones=19 WHERE zones=10;
@@ -610,31 +610,31 @@ UPDATE map_template SET zones=19 WHERE zones=10;
 
 ## 71. Chặn đổi khu ở ngọc rồng đen và Sa mạc hoang vu — 16/11/2026, máy công ty
 
-- Build: có (`MapService.isMapKhongDoiKhu`, `ChangeMapService.openZoneUI`/`changeZone`). SQL: không. Client: không.
+- Build: có ([`MapService.isMapKhongDoiKhu`](Teamobi2026/src/nro/models/map/service/MapService.java#L581), [`ChangeMapService.openZoneUI`](Teamobi2026/src/nro/models/map/service/ChangeMapService.java#L115)/`changeZone`). SQL: không. Client: không.
 - Người thường không đổi khu được ở: map offline, phó bản (doanh trại, kho báu, rắn độc, khí gas), Mabư 12h 114–120, Mabư 2h 127–128, **thêm** ngọc rồng đen 85–91 và Sa mạc hoang vu 165. Admin và boss vẫn đổi được. Mở bảng khu ở các map này giờ báo "Không thể đổi khu vực trong map này" (trước chỉ offline/phó bản báo ngay, Mabư thì mở được bảng rồi mới bị chặn).
 - Kiểm tra: tài khoản thường vào map 85 hoặc 165, mở bảng khu thấy thông báo chặn.
 
 ## 72. Nhặt hộp quà giáng sinh không cần tất vớ; khiên boss có tác dụng; boss đuổi nhanh — 16/11/2026, máy công ty
 
-- Build: có (`Zone.pickItem`, `Boss.injured`, `Boss.attack`). SQL: không. Client: không.
+- Build: có ([`Zone.pickItem`](Teamobi2026/src/nro/models/map/Zone.java#L325), [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773), [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L613)). SQL: không. Client: không.
 - Hộp quà giáng sinh 648: bỏ điều kiện có Tất, vớ giáng sinh (649) khi nhặt và bỏ trừ 1 tất vớ sau khi nhặt.
-- `Boss.injured` (hàm chung) trước bỏ qua khiên năng lượng nên boss bật khiên vẫn mất máu (không liên quan admin). Nay khiên giảm mọi đòn không xuyên còn 1, đòn > HP tối đa thì vỡ khiên (giống Black Goku). Boss có khiên dùng hàm chung: Goku SSJ 1/2/3, Siêu Bojack (2 con này trâu hơn trước). Black Goku, Cumber, Xên… tự xử lý khiên từ trước; Cooler 2 có chiêu khiên nhưng `Cooler.injured` riêng vẫn bỏ qua khiên.
-- `Boss.attack` (hàm chung): mục tiêu cách > 450px thì boss lao 150–250px mỗi lượt (0,1 giây) thay vì 50% nhích 40–60px, nên map dài (Núi tuyết…) boss không còn đứng một đầu map. Boss tự viết `attack()` riêng (Black Goku, Mabư ngoài…) không đổi.
+- [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773) (hàm chung) trước bỏ qua khiên năng lượng nên boss bật khiên vẫn mất máu (không liên quan admin). Nay khiên giảm mọi đòn không xuyên còn 1, đòn > HP tối đa thì vỡ khiên (giống Black Goku). Boss có khiên dùng hàm chung: Goku SSJ 1/2/3, Siêu Bojack (2 con này trâu hơn trước). Black Goku, Cumber, Xên… tự xử lý khiên từ trước; Cooler 2 có chiêu khiên nhưng [`Cooler.injured`](Teamobi2026/src/nro/models/boss/Cold/Cooler.java#L81) riêng vẫn bỏ qua khiên.
+- [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L613) (hàm chung): mục tiêu cách > 450px thì boss lao 150–250px mỗi lượt (0,1 giây) thay vì 50% nhích 40–60px, nên map dài (Núi tuyết…) boss không còn đứng một đầu map. Boss tự viết `attack()` riêng (Black Goku, Mabư ngoài…) không đổi.
 - Kiểm tra: nhặt hộp quà 648 khi không có 649; đứng cuối map Núi tuyết thấy Goku SSJ bay tới; đánh lúc Goku SSJ bật khiên chỉ trừ 1 HP.
 
 ## 73. Bom không còn giảm dần khi trúng nhiều boss — 16/11/2026, máy công ty
 
-- Build: có (`SkillService` `Skill.TU_SAT`). SQL: không. Client: không.
+- Build: có ([`SkillService`](Teamobi2026/src/nro/models/services/SkillService.java) [`Skill.TU_SAT`](Teamobi2026/src/nro/models/skill/Skill.java#L28)). SQL: không. Client: không.
 - Trước: vòng lặp gán đè `dame` (boss /2, khỉ /3) nên mỗi boss trúng bom làm mục tiêu sau nhận ít dần. Nay mỗi mục tiêu tính từ cùng sát thương gốc: boss 1/2 (người nổ đang khỉ 1/3), người chơi nhận đủ (giữ như cũ theo user).
 
 ## 74. Bỏ "Không lạnh" (106) khỏi nhóm chỉ số ẩn — 16/11/2026, máy công ty
 
-- Build: có (`InventoryService.handleOption210`). SQL: không. Client: không.
+- Build: có ([`InventoryService.handleOption210`](Teamobi2026/src/nro/models/services/InventoryService.java#L1186)). SQL: không. Client: không.
 - Option 210 (N dòng chỉ số ẩn, lộ khi mặc) bốc từ `{8, 14, 108, 94, 108, 16, 80, 81, 97, 100, 101, 104}` (bỏ 106). Trước có 106 nên cải trang Goku SSJ (đã có 106) hay ra 2 dòng không lạnh. Đồ đã mặc (đã lộ dòng) giữ nguyên.
 
 ## 75. Thêm dòng chỉ số ẩn; option 252 sát thương lên boss; option 175 giảm thời gian bị mù có tác dụng — 16/11/2026, máy công ty
 
-- Build: có (`InventoryService.handleOption210`, `NPoint.tlDameBoss`/`tlGiamMu`, `SkillService.playerAttackPlayer` + Bom, `EffectSkillService.startStun`, `DataGame.vsItem` = 26). Client: không.
+- Build: có ([`InventoryService.handleOption210`](Teamobi2026/src/nro/models/services/InventoryService.java#L1186), [`NPoint.tlDameBoss`](Teamobi2026/src/nro/models/player/NPoint.java#L159)/`tlGiamMu`, [`SkillService.playerAttackPlayer`](Teamobi2026/src/nro/models/services/SkillService.java#L912) + Bom, [`EffectSkillService.startStun`](Teamobi2026/src/nro/models/services/EffectSkillService.java#L140), [`DataGame.vsItem`](Teamobi2026/src/nro/models/data/DataGame.java#L37) = 26). Client: không.
 - Option 210 (chỉ số ẩn) thêm 9 dòng: 50 SĐ 5–10, 77 HP 3–5, 103 KI 3–5, 5 SĐCM 5–15, 96 biến tấn công thành KI 5–10, 251 chiêu đặc biệt 5–10, 175 giảm thời gian bị mù 10–25, 252 sát thương lên boss 3–5, 19 sát thương lên quái 10–25. Dùng chung cho cải trang Goku SSJ và hộp quà Goku Day.
 - Option 252 mới "+#% sát thương lên boss": cộng vào đòn đánh/chưởng/Laze/QCKK (`playerAttackPlayer`) và Bom khi mục tiêu là boss.
 - Option 175 "Giảm #% thời gian bị mù" trước chỉ có tên, nay giảm thời gian choáng (`startStun`: Thái dương hạ san, boss gây choáng…), tối đa 90%.
@@ -647,16 +647,16 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 ## 76. Mở hộp quà giáng sinh có thông báo và hiệu ứng — 16/11/2026, máy công ty
 
-- Build: có (`UseItem.NoelItemBox`). SQL: không. Client: không.
-- Hộp 648 dùng `UseItem.NoelItemBox` (không phải `ItemService.OpenItem648`): ra 1/3 mỗi nhóm Cuồng nộ/Bổ huyết/Bổ khí/Giáp Xên 381–384 (1–5 cái), ngọc rồng băng 925–931, mảnh thiên sứ 1066–1070 (10–30, trước 50–100). Trước không gửi thông báo / hiệu ứng mở hộp nên trông như không ra gì; nay báo "Bạn đã nhận được xN <tên>" và chạy hiệu ứng mở.
+- Build: có ([`UseItem.NoelItemBox`](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425)). SQL: không. Client: không.
+- Hộp 648 dùng [`UseItem.NoelItemBox`](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425) (không phải [`ItemService.OpenItem648`](Teamobi2026/src/nro/models/services/ItemService.java#L441)): ra 1/3 mỗi nhóm Cuồng nộ/Bổ huyết/Bổ khí/Giáp Xên 381–384 (1–5 cái), ngọc rồng băng 925–931, mảnh thiên sứ 1066–1070 (10–30, trước 50–100). Trước không gửi thông báo / hiệu ứng mở hộp nên trông như không ra gì; nay báo "Bạn đã nhận được xN <tên>" và chạy hiệu ứng mở.
 
 ## 77. Quái rơi đồ shop: giảm tỉ lệ Fide / Tương lai / lạnh; đồ kích hoạt cấp 1 tới cấp cao nhất vùng — 16/11/2026, máy công ty
 
-- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)). SQL: không. Client: không.
 - Tỉ lệ: Fide 63–83 2% → 1%, Tương lai và lạnh 1% → 0,5% (vùng đầu, giữa, xa giữ 2%; Cỏ ×1,15 như cũ).
 - Đồ kích hoạt (30% khi rơi): cấp ngẫu nhiên đều từ 1 tới cấp cao nhất của vùng map (Fide 1–9, Tương lai 1–11, lạnh 1–12). Đồ sao (70%) giữ cấp theo vùng. Chi tiết QUAI-ROI-DO.md mục 15.
 
 ## 78. Quái rơi đồ shop chỉ tới map Fide — 16/11/2026, máy công ty
 
-- Build: có (`ItemService.capDoShopTheoMap`). SQL: không. Client: không.
+- Build: có ([`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672)). SQL: không. Client: không.
 - Tắt rơi đồ shop ở map Tương lai và lạnh: 2 khối trả cấp 9–11 / 11–12 bị comment (giữ lại để bật lại khi cần, tỉ lệ 0,5% vẫn để sẵn). Vùng đầu, giữa, xa 2%, Fide 1% như mục 77.

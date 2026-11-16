@@ -1,6 +1,6 @@
 # Kế hoạch: boss Thiên Sứ + boss Hủy Diệt (ĐÃ LÀM 31/10/2026)
 
-Đã code theo mục "Đã chốt". 2 điểm user chưa chốt dùng mặc định: Whis bản NPC (505), Beerus bản Hủy Diệt (1983), sức đánh 100.000 mỗi con (đổi ở `HuyDiet.DAME`, hình ở `HuyDiet.data`/`ThienSu.data`). Kết quả: BOSS-ROI-DO.md mục 3b, THAY-DOI.md mục 30.
+Đã code theo mục "Đã chốt". 2 điểm user chưa chốt dùng mặc định: Whis bản NPC (505), Beerus bản Hủy Diệt (1983), sức đánh 100.000 mỗi con (đổi ở [`HuyDiet.DAME`](Teamobi2026/src/nro/models/boss/thien_su/HuyDiet.java#L16), hình ở [`HuyDiet.data`](Teamobi2026/src/nro/models/boss/thien_su/HuyDiet.java#L31)/[`ThienSu.data`](Teamobi2026/src/nro/models/boss/thien_su/ThienSu.java#L25)). Kết quả: BOSS-ROI-DO.md mục 3b, THAY-DOI.md mục 30.
 
 Lập 31/10/2026. User duyệt / sửa các mục "Cần chốt" rồi mới code.
 
@@ -11,7 +11,7 @@ Lập 31/10/2026. User duyệt / sửa các mục "Cần chốt" rồi mới cod
 | Nhân vật | head / body / leg | Ghi chú |
 |---|---|---|
 | Whis (thiên sứ) | 505 / 506 / 507 | NPC Whis 56 |
-| Whis (bản khác) | 838 / 839 / 840 | đang dùng cho boss luyện tập `BossesData.WHIS` |
+| Whis (bản khác) | 838 / 839 / 840 | đang dùng cho boss luyện tập [`BossesData.WHIS`](Teamobi2026/src/nro/models/boss/BossesData.java#L2540) |
 | Vados (thiên sứ) | 530 / 531 / 532 | NPC Vados 58 |
 | Bill / Beerus (hủy diệt) | 508 / 509 / 510 | NPC Bill 55 |
 | Beerus Hủy Diệt | 1983 / 1986 / 1987 | cải trang 1999 |
@@ -20,17 +20,17 @@ Lập 31/10/2026. User duyệt / sửa các mục "Cần chốt" rồi mới cod
 
 Đề xuất 2 cặp: **Whis + Beerus** và **Vados + Champa** (đúng cặp trong truyện).
 
-**Gamma**: không có. Không có boss, NPC, cải trang hay vật phẩm nào tên Gamma (đã tìm trong `BossesData`, `BossID`, `item_template`, `npc_template`).
+**Gamma**: không có. Không có boss, NPC, cải trang hay vật phẩm nào tên Gamma (đã tìm trong [`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java), [`BossID`](Teamobi2026/src/nro/models/boss/BossID.java), `item_template`, `npc_template`).
 
 **Map vách núi**: 42 Vách núi Aru (sau Làng Aru 0), 43 Vách núi Moori (sau Làng Mori 7), 44 Vách núi Kakarot (sau Làng Kakarot 14). Cả 3 chỉ có cổng bên phải về làng, mép trái đang trống. (39/40 cũng tên Vách núi nhưng là map sau nhà Gôhan/Moori, không phải sau làng.)
 
-**Map mới làm được ở server**: client nhận dữ liệu vẽ map từ server (`DataGame.sendMapTemp`, file `data/map/tile_map_data/<id>`) và danh sách tên map (`DataGame.updateMap`, tăng `vsMap` để client tải lại). Map lớn nhất hiện là 185 → 3 map mới 186, 187, 188. Không cần sửa `GameAssembly.dll`.
+**Map mới làm được ở server**: client nhận dữ liệu vẽ map từ server ([`DataGame.sendMapTemp`](Teamobi2026/src/nro/models/data/DataGame.java#L370), file `data/map/tile_map_data/<id>`) và danh sách tên map ([`DataGame.updateMap`](Teamobi2026/src/nro/models/data/DataGame.java#L101), tăng `vsMap` để client tải lại). Map lớn nhất hiện là 185 → 3 map mới 186, 187, 188. Không cần sửa `GameAssembly.dll`.
 
 ## Kế hoạch làm
 
-1. **3 map mới** (186 TĐ, 187 Namếc, 188 Xayda): thêm dòng `map_template` (chép từ 42/43/44: tileset, nền, 10 khu, không quái, không NPC), chép `tile_map_data/42..44` sang `186..188`. Thêm cổng mép trái 42/43/44 → map mới, và cổng mép phải map mới → về vách núi. Tăng `DataGame.vsMap`.
-2. **Boss** (`boss/thien_su/`): 4 lớp `Whis`/`Beerus`/`Vados`/`Champa` (tên tạm), `BossesData` + `BossID` mới. Mỗi hành tinh tạo 2 cặp trong `BossManager.loadBoss` (tổng 12 con). Thiên sứ và hủy diệt cùng cặp xuất hiện cùng map, cùng khu; 2 cặp được phép vào cùng 1 khu.
-3. **Thiên sứ hồi máu cho hủy diệt cùng cặp**: trong `update()` của thiên sứ, mỗi 10 giây nếu hủy diệt còn sống và cùng khu thì hồi 10% HP tối đa (gói hồi máu như `PlayerService.hoiPhuc`). Còn lại đánh như boss thường. Hồi sinh theo cặp: lớp quản lý cặp đếm 10 phút khi cả 2 con đã chết rồi cho cả cặp vào lại map (khu ngẫu nhiên).
+1. **3 map mới** (186 TĐ, 187 Namếc, 188 Xayda): thêm dòng `map_template` (chép từ 42/43/44: tileset, nền, 10 khu, không quái, không NPC), chép `tile_map_data/42..44` sang `186..188`. Thêm cổng mép trái 42/43/44 → map mới, và cổng mép phải map mới → về vách núi. Tăng [`DataGame.vsMap`](Teamobi2026/src/nro/models/data/DataGame.java#L35).
+2. **Boss** (`boss/thien_su/`): 4 lớp `Whis`/`Beerus`/[`Vados`](Teamobi2026/src/nro/models/npc_list/Vados.java)/`Champa` (tên tạm), [`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java) + [`BossID`](Teamobi2026/src/nro/models/boss/BossID.java) mới. Mỗi hành tinh tạo 2 cặp trong [`BossManager.loadBoss`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java#L154) (tổng 12 con). Thiên sứ và hủy diệt cùng cặp xuất hiện cùng map, cùng khu; 2 cặp được phép vào cùng 1 khu.
+3. **Thiên sứ hồi máu cho hủy diệt cùng cặp**: trong `update()` của thiên sứ, mỗi 10 giây nếu hủy diệt còn sống và cùng khu thì hồi 10% HP tối đa (gói hồi máu như [`PlayerService.hoiPhuc`](Teamobi2026/src/nro/models/services/PlayerService.java#L109)). Còn lại đánh như boss thường. Hồi sinh theo cặp: lớp quản lý cặp đếm 10 phút khi cả 2 con đã chết rồi cho cả cặp vào lại map (khu ngẫu nhiên).
 4. **Rơi đồ** (`reward()` dùng chung cho cả 2 con): xem mục "Đã chốt".
 5. Thông báo dùng đúng câu `BOSS <tên> vừa xuất hiện tại <tên map>` (để mod client nhận). Cập nhật `BOSS-ROI-DO.md`, `ID-GAME.md` (map mới), `THAY-DOI.md` (SQL + build).
 

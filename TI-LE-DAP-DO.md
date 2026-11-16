@@ -2,7 +2,7 @@
 
 Sửa ngày 30/10/2026. Code ở `Teamobi2026/src/nro/models/combine/`.
 
-## 1. Pha lê hóa (`PhaLeHoaTrangBi.java`, hàm `getRatio`)
+## 1. Pha lê hóa ([`PhaLeHoaTrangBi.java`](Teamobi2026/src/nro/models/combine/PhaLeHoaTrangBi.java), hàm `getRatio`)
 Trước đây NPC báo tỉ lệ `getFakeRatio` nhưng kết quả tính bằng bảng `getRatio` thấp hơn. Nay `getRatio` trả về đúng `getFakeRatio`.
 
 | Lên sao | Mới (= NPC báo) | Cũ (thật trước khi sửa) |
@@ -32,12 +32,12 @@ switch (star) {
 }
 return 0;
 ```
-(`CombineSystem.getRatioPhaLeHoa` là bảng trùng không ai gọi, không đổi.)
+([`CombineSystem.getRatioPhaLeHoa`](Teamobi2026/src/nro/models/combine/CombineSystem.java#L162) là bảng trùng không ai gọi, không đổi.)
 
-## 2. Nâng cấp đồ +1..+8 (`NangCapVatPham.java`)
-Không đổi. NPC báo đúng tỉ lệ thật (`CombineSystem.getTileNangCapDo`).
+## 2. Nâng cấp đồ +1..+8 ([`NangCapVatPham.java`](Teamobi2026/src/nro/models/combine/NangCapVatPham.java))
+Không đổi. NPC báo đúng tỉ lệ thật ([`CombineSystem.getTileNangCapDo`](Teamobi2026/src/nro/models/combine/CombineSystem.java#L293)).
 
-## 3. Cường hóa lỗ sao pha lê thứ 9 (`CuongHoaLoSaoPhaLe.java`)
-- Mới: `Util.isTrue(50, 100)` = 50%, đúng như NPC báo.
-- Cũ: `Util.isTrue(50, 200)` = 25%. Rollback: đổi lại `100` thành `200`.
+## 3. Cường hóa lỗ sao pha lê thứ 9 ([`CuongHoaLoSaoPhaLe.java`](Teamobi2026/src/nro/models/combine/CuongHoaLoSaoPhaLe.java))
+- Mới: [`Util.isTrue(50, 100)`](Teamobi2026/src/nro/models/utils/Util.java#L209) = 50%, đúng như NPC báo.
+- Cũ: [`Util.isTrue(50, 200)`](Teamobi2026/src/nro/models/utils/Util.java#L209) = 25%. Rollback: đổi lại `100` thành `200`.
 - Lỗ thứ 8 vẫn luôn thành công (không có xác suất).

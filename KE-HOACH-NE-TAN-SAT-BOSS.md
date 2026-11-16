@@ -12,9 +12,9 @@ Thêm 2 ô vào tab BOSS của menu mod (phím X). Chỉ sửa client, **server 
 | Né siêu quái | `PickMob.neSieuQuai` (`+12h`) | Chỉ bỏ qua quái siêu cấp, không né boss |
 | Nhận diện boss | Lọc của `AutoFocusBoss` `0x3D4280`: `charID` (+90h) < 0, `cTypePk` (+295h) == 5, tên (+190h) không bắt đầu bằng "Đ" | Dùng chung cho cả 2 tính năng |
 | Quét nhân vật trong khu | `GameScr.vCharInMap` (static `+0F0h`), cách làm giống phím Q | Né boss |
-| Đổi khu | `Service.requestChangeZone(zoneId, indexUI)` `0x4908E0`; khu hiện tại `TileMap.zoneID` (static `+84h`) | Né boss |
+| Đổi khu | [`Service.requestChangeZone(zoneId, indexUI)`](Teamobi2026/src/nro/models/services/Service.java) `0x4908E0`; khu hiện tại `TileMap.zoneID` (static `+84h`) | Né boss |
 
-**Giới hạn server:** `ChangeMapService.changeZone` chặn đổi khu **5 giây** một lần (`getLastTimeChangeZone`, admin không bị). Vừa đổi khu xong mà khu mới cũng có boss thì phải chờ đủ 5 giây mới né tiếp.
+**Giới hạn server:** [`ChangeMapService.changeZone`](Teamobi2026/src/nro/models/map/service/ChangeMapService.java#L164) chặn đổi khu **5 giây** một lần (`getLastTimeChangeZone`, admin không bị). Vừa đổi khu xong mà khu mới cũng có boss thì phải chờ đủ 5 giây mới né tiếp.
 
 Lưu ý: "Focus BOSS" và phím Q đã có sẵn, nhưng chúng chỉ nhắm hoặc bay tới boss, không tự đánh và không né.
 
