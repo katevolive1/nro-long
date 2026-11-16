@@ -727,7 +727,23 @@ public class ItemService {
         if (!Util.isTrue(tiLe, 1000000)) {
             return null;
         }
-        boolean doSao = Util.isTrue(85, 100); // 85% đồ sao, 15% đồ kích hoạt (trước 70/30, đổi 16/11/2026)
+        // Đồ kích hoạt gốc 15% (trước 30%), còn lại đồ sao. Từ 16/11/2026 nhân may mắn (option 236 trên đồ đang mặc,
+        // tối đa 100 → +(n/100)^1,5 × 20%, giống Mob map up SKH) và Cỏ bốn lá ×1,15: tối đa 15% × 1,2 × 1,15 = 20,7%
+        int mayMan = 0;
+        for (Item itBody : chu.inventory.itemsBody) {
+            if (itBody != null && itBody.itemOptions != null) {
+                for (ItemOption op : itBody.itemOptions) {
+                    if (op.optionTemplate.id == 236) {
+                        mayMan += op.param;
+                    }
+                }
+            }
+        }
+        double tlKichHoat = 15.0 * (1 + Math.pow(Math.min(mayMan, 100) / 100.0, 1.5) * 0.2);
+        if (chu.itemTime != null && chu.itemTime.isUseCoBonLa) {
+            tlKichHoat *= 1.15;
+        }
+        boolean doSao = !Util.isTrue((long) (tlKichHoat * 10000), 1000000);
         int level;
         if (doSao) {
             // Cấp trong vùng: thấp nhất 50%, kế 35%, cao 15% (vùng chỉ 2 cấp thì cấp cao 50%)

@@ -102,7 +102,7 @@ for (const f of files) {
     if (/^\s*```/.test(line)) { inFence = !inFence; out.push(line); continue; }
     if (inFence) { out.push(line); continue; }
     const src = refresh ? line.replace(/\[(`[^`\n]+`)\]\([^)\s]*Teamobi2026\/src\/[^)\s]*\)/g, '$1') : line;
-    out.push(src.replace(/(?<!\[)`([^`\n]+)`(?!\]\()/g, (all, tok) => {
+    out.push(src.replace(/(?<!\[)`(?!\]\()([^`\n]+)`(?!\]\()/g, (all, tok) => {
       const r = resolve(tok);
       if (!r) return all;
       let rel = path.relative(path.dirname(abs), r.p).replace(/\\/g, '/');

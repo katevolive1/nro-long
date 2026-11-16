@@ -52,7 +52,7 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 6. Thiên Sứ và Hủy Diệt yêu cầu 60 tỷ; chế tạo Thiên Sứ nhân đôi cả sức đánh
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có ([`ItemService.DoThienSu`](Teamobi2026/src/nro/models/services/ItemService.java#L1172) 21:60, [`ShopService.buyItemHD`](Teamobi2026/src/nro/models/shop/ShopService.java#L1273) thêm 21:60 cho 650–662, [`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) nhân đôi mọi option trừ 20, 21, 30).
+- Build: có ([`ItemService.DoThienSu`](Teamobi2026/src/nro/models/services/ItemService.java#L1199) 21:60, [`ShopService.buyItemHD`](Teamobi2026/src/nro/models/shop/ShopService.java#L1273) thêm 21:60 cho 650–662, [`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) nhân đôi mọi option trừ 20, 21, 30).
 - Client: không.
 - SQL: không.
 
@@ -557,7 +557,7 @@ UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description=
 
 ## 65. Quái rơi đồ shop làng theo map; tắt đồ sao 3 map đầu — 16/11/2026
 
-- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)/`capDoShopTheoMap`, [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) thành `public`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)/[`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L672), [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) thành `public`). SQL: không. Client: không.
 - Quái map 1–6, 8–13, 15–20, 27–38, 63–83 rơi đồ shop làng 2%, Tương lai và lạnh 1%, cấp theo vùng; 70% đồ sao, 30% đồ kích hoạt khóa giao dịch. Chi tiết QUAI-ROI-DO.md mục 15.
 - Comment hai khối "Đồ Sao Khác Vải Thô" và "Đồ Sao 3 Map Đầu" trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613).
 - Kiểm tra: nhân vật sức mạnh thấp đánh quái map 1 khoảng 100 con thấy rơi áo/quần/găng/giày/rađa cấp 1–3 có sao hoặc có set kích hoạt.
@@ -663,10 +663,15 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 ## 79. Quái rơi đồ shop: 85% đồ sao / 15% đồ kích hoạt — 16/11/2026, máy công ty
 
-- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)). SQL: không. Client: không.
 - Khi quái rơi đồ shop: đồ sao 70% → 85%, đồ kích hoạt 30% → 15%. Tỉ lệ rơi và cấp giữ như mục 77–78.
 
 ## 80. Quái rơi đồ shop: tỉ lệ theo vùng 5% / 2% / 1% / 0,5% — 16/11/2026, máy công ty
 
-- Build: có (`ItemService.randDoShopRoiTuQuai`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)). SQL: không. Client: không.
 - Tỉ lệ mỗi con quái: đầu 5%, giữa 2%, xa 1%, Fide 0,5%, Tương lai / lạnh 0,3% (2 vùng này vẫn tắt, mục 78). Cỏ ×1,15 như cũ. Thay cho mục 77 (2% / Fide 1% / Tương lai lạnh 0,5%).
+
+## 81. Quái rơi đồ shop: phần đồ kích hoạt nhân may mắn và Cỏ bốn lá — 16/11/2026, máy công ty
+
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L703)). SQL: không. Client: không.
+- Khi đã rơi đồ shop: đồ kích hoạt = 15% × (1 + (may mắn/100)^1,5 × 20%) × Cỏ 1,15; may mắn là tổng option 236 trên đồ đang mặc, tối đa 100 (cùng công thức map up SKH). Tối đa 20,7%, còn lại là đồ sao. Bảng ở QUAI-ROI-DO.md mục 15.

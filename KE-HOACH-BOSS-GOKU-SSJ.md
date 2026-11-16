@@ -13,7 +13,7 @@ Trạng thái: **đã làm 16/11/2026** (THAY-DOI mục 67, rơi đồ BOSS-ROI-
 
 | Tỉ lệ | Đồ |
 |---|---|
-| 2% | 1 món đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1040)) |
+| 2% | 1 món đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1067)) |
 | 25% | Hộp quà giáng sinh (648) |
 | 20% | Ngọc rồng 2 sao (15) |
 | 10% | Ngọc rồng 3 sao (16) |
