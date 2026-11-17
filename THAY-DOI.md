@@ -744,3 +744,7 @@ UPDATE map_template SET zones=14 WHERE zones=19;
 
 - Build: có ([Controller.createChar](Teamobi2026/src/nro/models/server/Controller.java#L872): tên 2–10 ký tự, gốc 5–10; [Manager.loadProperties](Teamobi2026/src/nro/models/server/Manager.java#L1032) đọc `Config.properties` bằng UTF-8). SQL: không. Client: không.
 - Lỗi phông: `Properties.load(InputStream)` đọc ISO-8859-1 nên `server.name` (UTF-8) thành chữ lỗi trong câu "Chào Mừng … Đến Với: …" ở nhiệm vụ đầu. Trong file chỉ `server.name` có chữ không phải ASCII.
+## 94. Quà gói VIP Tori Bot: chỉ số random (mức cũ − 7) đến mức cũ — 17/11/2026, máy nhà
+
+- Build: có ([ToriBot](Teamobi2026/src/nro/models/npc_list/ToriBot.java), hàm `chiSoVip`). SQL: không. Client: không.
+- Mọi chỉ số % (SĐ 50, HP 77, KI 103, option 117, SĐ chí mạng 5, chí mạng 14, kháng 236) của thú cưỡi, búa, tàu ngầm, pet rồng nhí, Hắc Mị Nương (cải trang thỏ Bunma 584 giữ cố định 24/24/117:15): random từng dòng từ mức cũ − 7 đến mức cũ (vd 15 → 8–15, 10 → 3–10). Chí mạng Hắc Mị 25–30 → 23–30. Hạn dùng (93) không đổi. Đồ đã phát giữ nguyên.

@@ -151,6 +151,11 @@ public class ToriBot extends Npc {
         openBaseMenu(pl);
     }
 
+    // Chỉ số quà VIP random từ (mức cũ - 7) đến mức cũ (17/11/2026; trước cố định, riêng chí mạng Hắc Mị 25-30)
+    private static int chiSoVip(int max) {
+        return nro.models.utils.Util.nextInt(Math.max(1, max - 7), max);
+    }
+
     private void VIP1(Player pl) {
         long currentTime = System.currentTimeMillis();
         long time = 30L * 24 * 60 * 60 * 1000;
@@ -166,15 +171,15 @@ public class ToriBot extends Npc {
         Item coupon = ItemService.gI().createNewItem((short) 459, 10);
 
         Item mount = ItemService.gI().createNewItem((short) 1252);
-        mount.itemOptions.add(new ItemOption(50, 10));
-        mount.itemOptions.add(new ItemOption(77, 10));
-        mount.itemOptions.add(new ItemOption(103, 10));
+        mount.itemOptions.add(new ItemOption(50, chiSoVip(10)));
+        mount.itemOptions.add(new ItemOption(77, chiSoVip(10)));
+        mount.itemOptions.add(new ItemOption(103, chiSoVip(10)));
         mount.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item hammer = ItemService.gI().createNewItem((short) 1256);
-        hammer.itemOptions.add(new ItemOption(50, 10));
-        hammer.itemOptions.add(new ItemOption(77, 10));
-        hammer.itemOptions.add(new ItemOption(103, 10));
+        hammer.itemOptions.add(new ItemOption(50, chiSoVip(10)));
+        hammer.itemOptions.add(new ItemOption(77, chiSoVip(10)));
+        hammer.itemOptions.add(new ItemOption(103, chiSoVip(10)));
         hammer.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 5);
@@ -206,22 +211,22 @@ public class ToriBot extends Npc {
         Item coupon = ItemService.gI().createNewItem((short) 459, 10);
 
         Item mount = ItemService.gI().createNewItem((short) 1252);
-        mount.itemOptions.add(new ItemOption(50, 12));
-        mount.itemOptions.add(new ItemOption(77, 12));
-        mount.itemOptions.add(new ItemOption(103, 12));
+        mount.itemOptions.add(new ItemOption(50, chiSoVip(12)));
+        mount.itemOptions.add(new ItemOption(77, chiSoVip(12)));
+        mount.itemOptions.add(new ItemOption(103, chiSoVip(12)));
         mount.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item hammer = ItemService.gI().createNewItem((short) 1254);
-        hammer.itemOptions.add(new ItemOption(50, 12));
-        hammer.itemOptions.add(new ItemOption(77, 12));
-        hammer.itemOptions.add(new ItemOption(103, 12));
+        hammer.itemOptions.add(new ItemOption(50, chiSoVip(12)));
+        hammer.itemOptions.add(new ItemOption(77, chiSoVip(12)));
+        hammer.itemOptions.add(new ItemOption(103, chiSoVip(12)));
         hammer.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 10);
 
         // Bỏ quà tặng đệ tử trong gói VIP (17/11/2026)
         Item CaiTrang = ItemService.gI().createNewItem((short) 584);
-        CaiTrang.itemOptions.add(new ItemOption(50, 24));
+        CaiTrang.itemOptions.add(new ItemOption(50, 24)); // thỏ Bunma: cố định, không random
         CaiTrang.itemOptions.add(new ItemOption(77, 24));
         CaiTrang.itemOptions.add(new ItemOption(117, 15));
         CaiTrang.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
@@ -251,20 +256,20 @@ public class ToriBot extends Npc {
         Item coupon = ItemService.gI().createNewItem((short) 459, 10);
 
         Item mount = ItemService.gI().createNewItem((short) 1252);
-        mount.itemOptions.add(new ItemOption(50, 12));
-        mount.itemOptions.add(new ItemOption(77, 12));
-        mount.itemOptions.add(new ItemOption(103, 12));
+        mount.itemOptions.add(new ItemOption(50, chiSoVip(12)));
+        mount.itemOptions.add(new ItemOption(77, chiSoVip(12)));
+        mount.itemOptions.add(new ItemOption(103, chiSoVip(12)));
 
         Item hammer = ItemService.gI().createNewItem((short) 1254);
-        hammer.itemOptions.add(new ItemOption(50, 12));
-        hammer.itemOptions.add(new ItemOption(77, 12));
-        hammer.itemOptions.add(new ItemOption(103, 12));
+        hammer.itemOptions.add(new ItemOption(50, chiSoVip(12)));
+        hammer.itemOptions.add(new ItemOption(77, chiSoVip(12)));
+        hammer.itemOptions.add(new ItemOption(103, chiSoVip(12)));
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 30);
 
         // Bỏ quà tặng đệ tử trong gói VIP (17/11/2026)
         Item CaiTrang = ItemService.gI().createNewItem((short) 584);
-        CaiTrang.itemOptions.add(new ItemOption(50, 24));
+        CaiTrang.itemOptions.add(new ItemOption(50, 24)); // thỏ Bunma: cố định, không random
         CaiTrang.itemOptions.add(new ItemOption(77, 24));
         CaiTrang.itemOptions.add(new ItemOption(117, 15));
 
@@ -304,29 +309,29 @@ public class ToriBot extends Npc {
         Item protectStone = ItemService.gI().createNewItem((short) 987, 50);
 
         Item submarine = ItemService.gI().createNewItem((short) 1554); // tàu ngầm cam 19 vĩnh viễn
-        submarine.itemOptions.add(new ItemOption(50, 15));
-        submarine.itemOptions.add(new ItemOption(77, 15));
-        submarine.itemOptions.add(new ItemOption(103, 15));
-        submarine.itemOptions.add(new ItemOption(14, 10));
+        submarine.itemOptions.add(new ItemOption(50, chiSoVip(15)));
+        submarine.itemOptions.add(new ItemOption(77, chiSoVip(15)));
+        submarine.itemOptions.add(new ItemOption(103, chiSoVip(15)));
+        submarine.itemOptions.add(new ItemOption(14, chiSoVip(10)));
 
         Item petDragon = ItemService.gI().createNewItem((short) 1771); // pet rồng nhí vĩnh viễn
-        petDragon.itemOptions.add(new ItemOption(50, 18));
-        petDragon.itemOptions.add(new ItemOption(77, 18));
-        petDragon.itemOptions.add(new ItemOption(5, 18)); // Chí mạng
-        petDragon.itemOptions.add(new ItemOption(14, 10)); // Sức mạnh
-        petDragon.itemOptions.add(new ItemOption(236, 15)); // Kháng tất cả
+        petDragon.itemOptions.add(new ItemOption(50, chiSoVip(18)));
+        petDragon.itemOptions.add(new ItemOption(77, chiSoVip(18)));
+        petDragon.itemOptions.add(new ItemOption(5, chiSoVip(18))); // Chí mạng
+        petDragon.itemOptions.add(new ItemOption(14, chiSoVip(10))); // Sức mạnh
+        petDragon.itemOptions.add(new ItemOption(236, chiSoVip(15))); // Kháng tất cả
 
         Item hammer = ItemService.gI().createNewItem((short) 1772); // búa vĩnh viễn
-        hammer.itemOptions.add(new ItemOption(50, 15));
-        hammer.itemOptions.add(new ItemOption(77, 15));
-        hammer.itemOptions.add(new ItemOption(103, 15));
-        hammer.itemOptions.add(new ItemOption(236, 15)); // Kháng tất cả
+        hammer.itemOptions.add(new ItemOption(50, chiSoVip(15)));
+        hammer.itemOptions.add(new ItemOption(77, chiSoVip(15)));
+        hammer.itemOptions.add(new ItemOption(103, chiSoVip(15)));
+        hammer.itemOptions.add(new ItemOption(236, chiSoVip(15))); // Kháng tất cả
 
         Item CaiTrang = ItemService.gI().createNewItem((short) 1557);
-        CaiTrang.itemOptions.add(new ItemOption(50, 25));
-        CaiTrang.itemOptions.add(new ItemOption(77, 25));
-        CaiTrang.itemOptions.add(new ItemOption(117, 25)); // Đẹp +#% SĐ (không phải HP)
-        CaiTrang.itemOptions.add(new ItemOption(5, nro.models.utils.Util.nextInt(25, 30))); // Sức đánh chí mạng 25-30%
+        CaiTrang.itemOptions.add(new ItemOption(50, chiSoVip(25)));
+        CaiTrang.itemOptions.add(new ItemOption(77, chiSoVip(25)));
+        CaiTrang.itemOptions.add(new ItemOption(117, chiSoVip(25))); // Đẹp +#% SĐ (không phải HP)
+        CaiTrang.itemOptions.add(new ItemOption(5, chiSoVip(30))); // Sức đánh chí mạng 23-30%
         CaiTrang.itemOptions.add(new ItemOption(93, 30)); // HSD 30 ngày
 
         Item capsule = ItemService.gI().createNewItem((short) 1655, 5); // 5 viên capsule kích hoạt
