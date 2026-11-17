@@ -2498,10 +2498,12 @@ public class UseItem {
                 }
                 InventoryService.gI().subQuantityItemsBag(pl, item, 1);
                 icon[1] = it.template.iconID;
+                // Lưu số lượng trước: addItemBag (addItemList) luôn đặt it.quantity = 0 sau khi cho vào túi → từng báo "x0" (sửa 17/11/2026)
+                int soLuongNhan = it.quantity;
                 InventoryService.gI().addItemBag(pl, it);
                 InventoryService.gI().sendItemBags(pl);
                 // Trước 16/11/2026 không báo gì nên mở hộp tưởng không ra đồ
-                Service.gI().sendThongBao(pl, "Bạn đã nhận được x" + it.quantity + " " + it.template.name);
+                Service.gI().sendThongBao(pl, "Bạn đã nhận được x" + soLuongNhan + " " + it.template.name);
                 CombineService.gI().sendEffectOpenItem(pl, icon[0], icon[1]);
             }
         } else {

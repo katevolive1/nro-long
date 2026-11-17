@@ -143,13 +143,14 @@ public class Input {
                 }
 
                 case TRADE_GOLD -> {
+                    // Bò Mộng "Đổi Thỏi vàng" (17/11/2026): logic như TRADE_GEM, 10.000đ = 1.000 thỏi vàng
                     int cuantity1 = Integer.parseInt(text[0]);
-                    if (!player.getSession().actived) {
-                        Service.gI().sendThongBao(player, "Vui lòng kích hoạt tài khoản!");
-                        break;
-                    }
                     if (cuantity1 < 10000 || cuantity1 > 5_000_000) {
                         Service.gI().sendThongBao(player, "Tối thiểu 10.000Đ và tối đa 5.000.000Đ");
+                        break;
+                    }
+                    if (InventoryService.gI().getCountEmptyBag(player) < 2) {
+                        Service.gI().sendThongBao(player, "Cần ít nhất 2 ô trống trong hành trang");
                         break;
                     }
                     if (player.getSession().vnd < cuantity1) {
@@ -157,7 +158,7 @@ public class Input {
                     } else {
                         PlayerDAO.subvnd(player, cuantity1);
 
-                        int soLuongThoiVang = (cuantity1 / 1000) * 4;
+                        int soLuongThoiVang = cuantity1 / 10;
                         Item item457 = ItemService.gI().createNewItem((short) 457, soLuongThoiVang);
                         InventoryService.gI().addItemBag(player, item457);
 
@@ -665,7 +666,7 @@ public class Input {
     }
 
     public void createFormTradeGold(Player pl) {
-        createForm(pl, TRADE_GOLD, "Tỉ lệ quy đổi: 10.000 vnđ = 40 Thỏi vàng \n Số dư hiện tại: " + pl.getSession().vnd, new SubInput("Số lượng", NUMERIC));
+        createForm(pl, TRADE_GOLD, "Tỉ lệ quy đổi: 10.000 vnđ = 1.000 Thỏi vàng \n Số dư hiện tại: " + pl.getSession().vnd, new SubInput("Số lượng", NUMERIC));
     }
 
     public void createFormTradeGem(Player pl) {

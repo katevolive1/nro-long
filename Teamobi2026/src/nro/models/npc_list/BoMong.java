@@ -32,7 +32,7 @@ public class BoMong extends Npc {
             if (canOpenNpc(player)) {
                 if (this.mapId == 47 || this.mapId == 84) {
                     this.createOtherMenu(player, ConstNpc.BASE_MENU,
-                            "Ngươi muốn có thêm ngọc thì chịu khó làm vài nhiệm vụ sẽ được ngọc thưởng", "Nhiệm vụ\nhàng ngày", "Nhiệm vụ\nthành tích", "Nạp Ngọc", "Điểm danh", "Từ chối");
+                            "Ngươi muốn có thêm ngọc thì chịu khó làm vài nhiệm vụ sẽ được ngọc thưởng", "Nhiệm vụ\nhàng ngày", "Nhiệm vụ\nthành tích", "Nạp Ngọc", "Điểm danh", "Đổi\nThỏi vàng", "Từ chối");
                 }
             }
         }
@@ -86,6 +86,9 @@ public class BoMong extends Npc {
                             InventoryService.gI().sendItemBags(player);
 
                             Service.gI().sendThongBao(player, "Điểm danh thành công! Bạn nhận được 10.000 ngọc và 100 thỏi vàng.");
+                        }
+                        case 4 -> {
+                            Input.gI().createFormTradeGold(player);
                         }
 
                     }

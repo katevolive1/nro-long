@@ -35,7 +35,8 @@ pushd "%CLIENT%"
 "%RAREXE%" a -r -m5 -idq -x*.int-backup -x*.truoc-* -x*.bak "%OUT%.moi" * || ( popd & goto loi )
 popd
 "%RAREXE%" t -idq "%OUT%.moi" || goto loi
-move /y "%OUT%.moi" "%OUT%" >nul
+rem Doi ten loi (file .rar dang bi giu: dang tai qua web, dang mo WinRAR) thi bao LOI nhung giu .moi de doi ten tay
+move /y "%OUT%.moi" "%OUT%" >nul || ( echo LOI: khong thay duoc %OUT% - file dang bi giu. File moi van o %OUT%.moi, doi ten tay sau. & pause & exit /b 1 )
 echo XONG: client da cap nhat, file tai moi o %OUT%
 pause
 exit /b 0

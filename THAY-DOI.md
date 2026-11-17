@@ -698,3 +698,13 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 - Pha lê hóa: 0→1 60%, 1→2 30%, 2→3 20%, 3→4 15%, 4→5 10%, 5→6 5%, 6→7 1%, 7→8 0,5%, 8→9 0,2%.
 - Cường hóa lỗ sao thứ 9: 25% thật, NPC vẫn báo 50% (cố ý).
 - Bảng cũ ở TI-LE-DAP-DO.md mục 1 và 3.
+
+## 85. Bò Mộng thêm nút "Đổi Thỏi vàng": 10.000đ = 1.000 thỏi — 17/11/2026, máy nhà
+
+- Build: có ([`BoMong`](Teamobi2026/src/nro/models/npc_list/BoMong.java), [`Input.createFormTradeGold`](Teamobi2026/src/nro/models/services_func/Input.java#L667) / `TRADE_GOLD`). SQL: không. Client: không.
+- Logic như Nạp Ngọc (10.000–5.000.000đ, vé tặng ngọc 718, điểm sự kiện), bỏ yêu cầu kích hoạt tài khoản, cần ≥ 2 ô trống. Chi tiết CO-CHE.md mục "Đổi VNĐ".
+
+## 86. Hộp quà giáng sinh báo "x0" khi nhận đồ — 17/11/2026, máy nhà
+
+- Build: có ([UseItem.NoelItemBox](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425)). SQL: không. Client: không.
+- Lỗi chỉ ở chữ thông báo: đồ vẫn vào túi đủ số lượng. Nguyên nhân: `InventoryService.addItemList` luôn đặt `quantity = 0` cho món vừa thêm, thông báo lại đọc số sau đó. Nay lưu số lượng trước khi cho vào túi.
