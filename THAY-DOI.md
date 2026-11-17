@@ -708,3 +708,12 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 - Build: có ([UseItem.NoelItemBox](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425)). SQL: không. Client: không.
 - Lỗi chỉ ở chữ thông báo: đồ vẫn vào túi đủ số lượng. Nguyên nhân: `InventoryService.addItemList` luôn đặt `quantity = 0` cho món vừa thêm, thông báo lại đọc số sau đó. Nay lưu số lượng trước khi cho vào túi.
+## 87. Số khu 19 → 14, exp toàn server ×5 → ×3 — 17/11/2026, máy nhà
+
+- Build: không. SQL: có. Client: không (client đọc số khu từ server). Config: `server.expserver=3` trong `Teamobi2026/Config.properties` (theo git). Áp dụng: gõ `bt` (server nạp `map_template` và Config lúc khởi động).
+- SQL (đã chạy ở máy nhà):
+```sql
+UPDATE map_template SET zones=14 WHERE zones=19;
+```
+- Kiểm tra: `SELECT zones, COUNT(*) FROM map_template GROUP BY zones;` ra `14 | 172`; trong game danh sách khu 0–13.
+- Exp ×3: thời gian lên sức mạnh dài gấp 5/3 so với ×5 (ước tính 40 → 70 tỷ ở CO-CHE.md mục Tiềm năng sức mạnh).
