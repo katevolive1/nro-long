@@ -1,6 +1,7 @@
 package nro.models.combine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import nro.models.consts.ConstNpc;
 import nro.models.item.Item;
@@ -19,7 +20,10 @@ import nro.models.utils.Util;
  *    thêm 21:60 (yêu cầu 60 tỷ sức mạnh) và 30 (không giao dịch) giống ShopService.buyItemHD.
  * 2. Hủy Diệt -> Kích hoạt: đặt 3 món Hủy Diệt (650-662, không trùng món, có thể khác hành tinh) + 20 thỏi vàng trong hành trang ->
  *    1 món kích hoạt ngẫu nhiên như capsule kích hoạt (ItemService.randomItemSKH), loại theo món đặt đầu tiên,
- *    hành tinh theo người chơi. Cả hai đều thành công 100%.
+ *    hành tinh theo người chơi.
+ * 3. Kích hoạt cuối shop -> Kích hoạt: đặt 3 món kích hoạt cấp 12 (ID_CUOI_SHOP, không trùng món) + 2 tỷ vàng ->
+ *    TI_LE_THAN_LINH % ra Thần Linh kích hoạt (ItemService.createItemTLKichHoat), còn lại như capsule (randomItemSKH);
+ *    loại theo món đặt đầu tiên, hành tinh theo người chơi. Cả ba đều thành công 100%.
  */
 public class DoiDoBaHatMit {
 
@@ -211,6 +215,105 @@ public class DoiDoBaHatMit {
         }
 
         subThoiVang(player, THOI_VANG_KICH_HOAT);
+        for (Item it : items) {
+            InventoryService.gI().subQuantityItemsBag(player, it, 1);
+        }
+        InventoryService.gI().addItemBag(player, kichHoat);
+        InventoryService.gI().sendItemBags(player);
+        Service.gI().sendThongBao(player, "Bạn nhận được " + kichHoat.template.name);
+        CombineService.gI().sendEffectSuccessCombine(player);
+        player.combineNew.clearItemCombine();
+        CombineService.gI().reOpenItemCombine(player);
+    }
+
+    // ===== 3. Kích hoạt cuối shop (c12) -> Kích hoạt =====
+    // Đồ cuối shop (cấp 12): TĐ jean Calic, Namek vàng Zealot, Xayda lưỡng long, Rada cấp 12
+    private static final List<Integer> ID_CUOI_SHOP = Arrays.asList(
+            233, 245, 257, 269, // Trái đất: áo, quần, găng, giày
+            237, 249, 261, 273, // Namek
+            241, 253, 265, 277, // Xayda
+            281); // Rada cấp 12
+    private static final int SO_MON_CUOI_SHOP = 3;
+    private static final long VANG_CUOI_SHOP = 2_000_000_000L;
+    // Tỉ lệ ra Thần Linh kích hoạt (%), còn lại ra kích hoạt cấp 1-12 như capsule. Không ghi ra cho người chơi.
+    private static final int TI_LE_THAN_LINH = 3;
+
+    private static boolean isKichHoat(Item it) {
+        for (ItemOption io : it.itemOptions) {
+            if (ItemService.gI().isOptionSKH(io.optionTemplate.id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Trả câu báo lỗi hoặc null nếu đặt đúng 3 món kích hoạt cuối shop khác nhau.
+     */
+    private static String checkCuoiShop(Player player) {
+        List<Item> items = getItems(player);
+        if (items.size() != SO_MON_CUOI_SHOP) {
+            return "Hãy đặt đúng " + SO_MON_CUOI_SHOP + " món đồ kích hoạt cuối shop";
+        }
+        for (int i = 0; i < items.size(); i++) {
+            Item it = items.get(i);
+            if (!ID_CUOI_SHOP.contains((int) it.template.id)) {
+                return "Chỉ đổi được đồ cuối shop (Calic, Zealot, Lưỡng long, Rada cấp 12)";
+            }
+            if (!isKichHoat(it)) {
+                return "Chỉ đổi được đồ kích hoạt";
+            }
+            for (int j = 0; j < i; j++) {
+                if (items.get(j).template.id == it.template.id) {
+                    return "3 món không được trùng nhau";
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void showInfoCuoiShop(Player player) {
+        String error = checkCuoiShop(player);
+        if (error != null) {
+            showError(player, error);
+            return;
+        }
+        Item dau = getItems(player).get(0);
+        String npcSay = "|2|Đổi " + SO_MON_CUOI_SHOP + " món kích hoạt cuối shop thành 1 món kích hoạt ngẫu nhiên\n"
+                + "|2|Có thể ra đồ Thần Linh kích hoạt\n"
+                + "|2|Loại đồ theo món đặt đầu tiên (" + dau.template.name + ")\n"
+                + "|2|Cần: " + Util.numberToMoney(VANG_CUOI_SHOP) + " vàng\n";
+        if (player.inventory.gold < VANG_CUOI_SHOP) {
+            showError(player, npcSay + "|7|Còn thiếu " + Util.numberToMoney(VANG_CUOI_SHOP - player.inventory.gold) + " vàng");
+            return;
+        }
+        CombineService.gI().baHatMit.createOtherMenu(player, ConstNpc.MENU_START_COMBINE, npcSay,
+                "Đổi\n" + Util.numberToMoney(VANG_CUOI_SHOP) + " vàng", "Từ chối");
+    }
+
+    public static void doiCuoiShop(Player player) {
+        String error = checkCuoiShop(player);
+        if (error != null) {
+            Service.gI().sendThongBao(player, error);
+            return;
+        }
+        if (player.inventory.gold < VANG_CUOI_SHOP) {
+            Service.gI().sendThongBao(player, "Không đủ vàng");
+            return;
+        }
+        List<Item> items = getItems(player);
+        // loại đồ theo món đầu tiên (type 0 áo, 1 quần, 2 găng, 3 giày, 4 rada); hành tinh theo người chơi
+        int select = items.get(0).template.type;
+        Item kichHoat = Util.isTrue(TI_LE_THAN_LINH, 100)
+                ? ItemService.gI().createItemTLKichHoat(player.gender, select)
+                : ItemService.gI().randomItemSKH(player.gender, select);
+        if (kichHoat == null) {
+            Service.gI().sendThongBao(player, "Không thể thực hiện");
+            return;
+        }
+
+        player.inventory.gold -= VANG_CUOI_SHOP;
+        Service.gI().sendMoney(player);
         for (Item it : items) {
             InventoryService.gI().subQuantityItemsBag(player, it, 1);
         }

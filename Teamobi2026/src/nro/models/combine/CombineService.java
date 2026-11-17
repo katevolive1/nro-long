@@ -38,6 +38,7 @@ public class CombineService {
     public static final int TAI_TAO_CAPSULE_KH = 997;
     public static final int DOI_THAN_LINH_HUY_DIET = 998;
     public static final int DOI_HUY_DIET_KICH_HOAT = 999;
+    public static final int DOI_CUOI_SHOP_KICH_HOAT = 1000;
     public static final int NANG_CAP_SAO_PHA_LE = 100;
     public static final int DANH_BONG_SAO_PHA_LE = 101;
     public static final int CUONG_HOA_LO_SAO_PHA_LE = 102;
@@ -115,6 +116,9 @@ public class CombineService {
                 break;
             case DOI_HUY_DIET_KICH_HOAT:
                 DoiDoBaHatMit.showInfoHuyDiet(player);
+                break;
+            case DOI_CUOI_SHOP_KICH_HOAT:
+                DoiDoBaHatMit.showInfoCuoiShop(player);
                 break;
             case NHAP_NGOC_RONG:
                 NhapNgocRong.showInfoCombine(player);
@@ -203,6 +207,9 @@ public class CombineService {
                 break;
             case DOI_HUY_DIET_KICH_HOAT:
                 DoiDoBaHatMit.doiHuyDiet(player);
+                break;
+            case DOI_CUOI_SHOP_KICH_HOAT:
+                DoiDoBaHatMit.doiCuoiShop(player);
                 break;
             case NHAP_NGOC_RONG:
                 NhapNgocRong.nhapNgocRong(player);
@@ -635,6 +642,8 @@ public class CombineService {
                 return "Ta sẽ phù phép\nđồ Thần Linh thành\nđồ Hủy Diệt cùng loại";
             case DOI_HUY_DIET_KICH_HOAT:
                 return "Ta sẽ phù phép\n3 món đồ Hủy Diệt thành\n1 món đồ kích hoạt";
+            case DOI_CUOI_SHOP_KICH_HOAT:
+                return "Ta sẽ phù phép\n3 món kích hoạt cuối shop thành\n1 món đồ kích hoạt";
             case NHAP_NGOC_RONG:
                 return "Ta sẽ phù phép\ncho 7 viên Ngọc Rồng\nthành 1 viên Ngọc Rồng cấp cao";
             case NANG_CAP_VAT_PHAM:
@@ -697,6 +706,8 @@ public class CombineService {
                 return "Vào hành trang\nChọn 1 món đồ Thần Linh\nCần 10 thỏi vàng trong hành trang\nSau đó chọn 'Đổi'";
             case DOI_HUY_DIET_KICH_HOAT:
                 return "Vào hành trang\nChọn 3 món đồ Hủy Diệt\nMón chọn đầu tiên quyết định loại đồ nhận\nCần 20 thỏi vàng trong hành trang\nSau đó chọn 'Đổi'";
+            case DOI_CUOI_SHOP_KICH_HOAT:
+                return "Vào hành trang\nChọn 3 món kích hoạt cuối shop khác nhau\n(Calic, Zealot, Lưỡng long, Rada cấp 12)\nMón chọn đầu tiên quyết định loại đồ nhận\nCần 2 tỷ vàng\nSau đó chọn 'Đổi'";
             case CHUYEN_HOA_TRANG_BI_NGOC:
             case CHUYEN_HOA_TRANG_BI_VANG:
                 return "Vào hành trang\nChọn trang bị gốc\n(Áo,quần,găng,giày hoặc rada)\ntừ cấp[+4] trở lên\nChọn tiếp trang bị mới\nchưa nâng cấp cần nhập thể\nsau đó chọn 'Nâng cấp'";

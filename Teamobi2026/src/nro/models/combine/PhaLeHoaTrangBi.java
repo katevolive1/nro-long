@@ -67,26 +67,26 @@ public class PhaLeHoaTrangBi {
         return getFakeRatio(star);
     }
 
-    private static int getFakeRatio(int star) {
+    private static float getFakeRatio(int star) {
         return switch (star) {
             case 0 ->
-                80;
+                60;
             case 1 ->
-                40;
-            case 2 ->
                 30;
-            case 3 ->
+            case 2 ->
                 20;
+            case 3 ->
+                15;
             case 4 ->
                 10;
             case 5 ->
                 5;
             case 6 ->
-                3;
-            case 7 ->
-                2;
-            case 8 ->
                 1;
+            case 7 ->
+                0.5f;
+            case 8 ->
+                0.2f;
             default ->
                 0;
         };

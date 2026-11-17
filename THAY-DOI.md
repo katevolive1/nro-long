@@ -684,3 +684,17 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 - [`NPoint.tlGold`](Teamobi2026/src/nro/models/player/NPoint.java#L149) (option 100 "+#% vàng từ quái", set Gohan) trước được cộng nhưng không dùng; nay nhân số vàng quái rơi (item loại 9).
 - Set kích hoạt trước chỉ đếm lúc đăng nhập ([`Controller`](Teamobi2026/src/nro/models/server/Controller.java)), mặc/tháo set phải vào lại; nay đếm lại mỗi lần tính chỉ số (bỏ qua boss).
 - Kiểm tra: mặc đủ 5 món set Gohan (không cần thoát vào lại), đánh quái thấy vàng rơi nhiều hơn ~30%.
+
+## 83. Bà Hạt Mít: đổi 3 món kích hoạt cuối shop → 1 món kích hoạt (3% ra Thần Linh kích hoạt) — 17/11/2026, máy nhà
+
+- Build: có ([`DoiDoBaHatMit.showInfoCuoiShop`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L275), [`ItemService.createItemTLKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L1245), [`ItemService.getOptionGocDoTL`](Teamobi2026/src/nro/models/services/ItemService.java#L1133), `CombineService`, `BaHatMit`). SQL: không. Client: không.
+- Nút thứ 8 ở Bà Hạt Mít (map 5). 3 món kích hoạt cấp 12 khác nhau (Calic / Zealot / Lưỡng long / Rada cấp 12) + 2 tỷ vàng → loại theo món đầu, hành tinh theo người chơi; 3% Thần Linh kích hoạt, còn lại kích hoạt cấp 1–12 như capsule. Chi tiết CO-CHE.md mục Bà Hạt Mít.
+- Phần chỉ số đồ Thần Linh trong `randDoTLBoss` tách ra hàm `getOptionGocDoTL`, boss rơi TL không đổi.
+- Kiểm tra: đặt 3 món kích hoạt c12 khác nhau, có 2 tỷ vàng → đổi được; đặt món không kích hoạt / trùng món / thiếu vàng → báo lỗi.
+
+## 84. Pha lê hóa (đục lỗ sao) và cường hóa lỗ 9 đổi tỉ lệ — 17/11/2026, máy nhà
+
+- Build: có ([`PhaLeHoaTrangBi.getRatio`](Teamobi2026/src/nro/models/combine/PhaLeHoaTrangBi.java#L66), `getFakeRatio` đổi `int` → `float`; [`CuongHoaLoSaoPhaLe.java`](Teamobi2026/src/nro/models/combine/CuongHoaLoSaoPhaLe.java) dòng 137). SQL: không. Client: không.
+- Pha lê hóa: 0→1 60%, 1→2 30%, 2→3 20%, 3→4 15%, 4→5 10%, 5→6 5%, 6→7 1%, 7→8 0,5%, 8→9 0,2%.
+- Cường hóa lỗ sao thứ 9: 25% thật, NPC vẫn báo 50% (cố ý).
+- Bảng cũ ở TI-LE-DAP-DO.md mục 1 và 3.

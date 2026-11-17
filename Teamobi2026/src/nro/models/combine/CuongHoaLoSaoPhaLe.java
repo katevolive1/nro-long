@@ -134,7 +134,7 @@ public class CuongHoaLoSaoPhaLe {
             return;
         }
 
-        boolean success = Util.isTrue(50, 100); // 50% đúng như NPC báo (cũ: isTrue(50, 200) = 25%, xem TI-LE-DAP-DO.md)
+        boolean success = Util.isTrue(25, 100); // 25% thật, NPC vẫn báo 50% (dòng 55, cố ý giữ, user chốt 17/11/2026). Lịch sử: TI-LE-DAP-DO.md mục 3
         player.inventory.gold -= COST;
 
         if (star == 8) {

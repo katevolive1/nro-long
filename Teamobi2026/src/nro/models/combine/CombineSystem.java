@@ -308,16 +308,17 @@ public class CombineSystem {
                 return 1;
             case 7: // 7 sao
                 return 0.3;
-            case 8:
-                return 5;
-            case 9:
-                return 1;
-            case 10: // 7 sao
-                return 0.3;
-            case 11: // 7 sao
-                return 0.3;
-            case 12: // 7 sao
-                return 0.3;
+            // Không dùng: đồ tối đa +8 (CombineService.MAX_LEVEL_ITEM = 8), NangCapVatPham chỉ gọi khi level < 8
+            // case 8:
+            //     return 5;
+            // case 9:
+            //     return 1;
+            // case 10: // 7 sao
+            //     return 0.3;
+            // case 11: // 7 sao
+            //     return 0.3;
+            // case 12: // 7 sao
+            //     return 0.3;
         }
         return 0;
     }

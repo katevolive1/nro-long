@@ -1109,6 +1109,28 @@ public class ItemService {
         }
 
         int tiLe = Util.nextInt(100, 115);
+        List<ItemOption> itemoptions = getOptionGocDoTL(idTempTL, tiLe);
+
+        // OPtion thêm
+        if (Util.isTrue(30, 100)) {
+            itemoptions.add(new ItemOption(options[Util.nextInt(options.length)], 0));
+        }
+
+        // Thêm chỉ số mặc định
+        itemoptions.add(new ItemOption(21, Util.nextInt(15, 17)));
+
+        // Tạo ItemMap và trả về
+        ItemMap it = new ItemMap(zone, idTempTL, quantity, x, y, id);
+        it.options.clear();
+        it.options.addAll(itemoptions);
+        return it;
+    }
+
+    /**
+     * Chỉ số gốc đồ Thần Linh (555-567) theo mức tiLe % (boss rơi 100-115, trên 100 thêm option 207).
+     * Dùng chung cho randDoTLBoss và createItemTLKichHoat.
+     */
+    public List<ItemOption> getOptionGocDoTL(short idTempTL, int tiLe) {
         List<ItemOption> itemoptions = new ArrayList<>();
 
         // Tùy chỉnh chỉ số cho từng ID trang bị cụ thể
@@ -1203,20 +1225,58 @@ public class ItemService {
             default:
                 break;
         }
+        return itemoptions;
+    }
 
-        // OPtion thêm
-        if (Util.isTrue(30, 100)) {
-            itemoptions.add(new ItemOption(options[Util.nextInt(options.length)], 0));
+    // Đồ Thần Linh theo [hành tinh][loại: áo, quần, găng, giày, rada]; ô rada là Nhẫn Thần Linh chung 3 hành tinh
+    private static final short[][] TL_ITEM_IDS = {
+        {555, 556, 562, 563, 561}, // Trái đất
+        {557, 558, 564, 565, 561}, // Namek
+        {559, 560, 566, 567, 561} // Xayda
+    };
+
+    /**
+     * Tạo 1 món Thần Linh kích hoạt (Bà Hạt Mít đổi 3 món kích hoạt cuối shop): chỉ số gốc Thần Linh mức 100%
+     * (getOptionGocDoTL), yêu cầu 15 tỷ sức mạnh, set ngẫu nhiên theo hành tinh như randomItemSKH.
+     *
+     * @param gender hành tinh (0 Trái Đất, 1 Namếc, 2 Xayda; lớn hơn 2 tính như Xayda)
+     * @param select loại món: 0 áo, 1 quần, 2 găng, 3 giày, 4 rada (ra Nhẫn Thần Linh)
+     */
+    public Item createItemTLKichHoat(int gender, int select) {
+        if (gender > 2) {
+            gender = 2;
         }
+        if (select < 0 || select > 4) {
+            return null;
+        }
+        short itemId = TL_ITEM_IDS[gender][select];
+        int[] possibleOptions = SKH_OPTION_IDS[gender];
+        int skhId = possibleOptions[Util.nextInt(possibleOptions.length)];
+        Item item = createItemSetKichHoat(itemId, 1);
+        if (item != null) {
+            item.itemOptions.addAll(getOptionGocDoTL(itemId, 100));
+            item.itemOptions.add(new ItemOption(21, 15));
+            item.itemOptions.add(new ItemOption(skhId, 1));
+            for (int subId : getOptionIdsBySKH(skhId)) {
+                item.itemOptions.add(new ItemOption(subId, 1));
+            }
+            item.itemOptions.add(new ItemOption(30, 1));
+        }
+        return item;
+    }
 
-        // Thêm chỉ số mặc định
-        itemoptions.add(new ItemOption(21, Util.nextInt(15, 17)));
-
-        // Tạo ItemMap và trả về
-        ItemMap it = new ItemMap(zone, idTempTL, quantity, x, y, id);
-        it.options.clear();
-        it.options.addAll(itemoptions);
-        return it;
+    /**
+     * Option set kích hoạt của cả 3 hành tinh (gồm cả 233/237/241/245, Item.isSKH chỉ xét 127-135).
+     */
+    public boolean isOptionSKH(int optionId) {
+        for (int[] list : SKH_OPTION_IDS) {
+            for (int id : list) {
+                if (id == optionId) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public Item DoThienSu(int itemId, int gender) {
