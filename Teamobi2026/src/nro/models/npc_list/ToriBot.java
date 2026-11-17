@@ -6,7 +6,6 @@ import nro.models.npc.Npc;
 import nro.models.player.Player;
 import nro.models.services.InventoryService;
 import nro.models.services.ItemService;
-import nro.models.services.PetService;
 import nro.models.services.Service;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -83,19 +82,19 @@ public class ToriBot extends Npc {
             case 0 -> {
                 switch (select) {
                     case 0 ->
-                        createOtherMenu(pl, 1, "Nâng cấp VIP 1 bạn sẽ nhận được\n200 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 5 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày",
+                        createOtherMenu(pl, 1, "Nâng cấp VIP 1 bạn sẽ nhận được\n200 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\n5 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày",
                                 "50.000\nđiểm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 1 ->
-                        createOtherMenu(pl, 2, "Nâng cấp VIP 2 bạn sẽ nhận được\n500 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\nTặng 1 đệ tử, 10 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày\nCải trang thỏ buma hsd 30 ngày",
+                        createOtherMenu(pl, 2, "Nâng cấp VIP 2 bạn sẽ nhận được\n500 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên hsd 30 ngày\n10 viên đá bảo vệ\nBúa hắc hường hsd 30 ngày\nCải trang thỏ buma hsd 30 ngày",
                                 "100.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 2 ->
-                        createOtherMenu(pl, 3, "Nâng cấp VIP 3 bạn sẽ nhận được\n700 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên vĩnh viễn\nTặng 1 đệ tử, 30 viên đá bảo vệ\nBúa hắc hường vĩnh viễn\n2 viên capsule kích hoạt\n10 thẻ đội trưởng vàng\nCải trang thỏ buma vĩnh viễn",
+                        createOtherMenu(pl, 3, "Nâng cấp VIP 3 bạn sẽ nhận được\n700 thỏi vàng, 10 phiếu giảm giá 80%\nThú cưỡi ve sầu xên vĩnh viễn\n30 viên đá bảo vệ\nBúa hắc hường vĩnh viễn\n2 viên capsule kích hoạt\n10 thẻ đội trưởng vàng\nCải trang thỏ buma vĩnh viễn",
                                 "150.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                     case 3 ->
-                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nCải trang hắc mị hsd 30 ngày\nTặng 1 đệ tử mabu, 50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
+                        createOtherMenu(pl, 4, "Nâng cấp VIP 4 bạn sẽ nhận được\n1000 thỏi vàng, 10 phiếu giảm giá 80%\nCải trang hắc mị hsd 30 ngày\n50 viên đá bảo vệ\nTàu ngầm cam 19 vĩnh viễn\nPet rồng nhí vĩnh viễn\n5 viên capsule kích hoạt\n20 thẻ rồng thần",
                                 "200.000\nđiềm mùa [" + pl.getSession().vnd + "]",
                                 "Đóng");
                 }
@@ -180,9 +179,7 @@ public class ToriBot extends Npc {
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 5);
 
-        if (pl.pet == null) {
-            PetService.gI().createNormalPet(pl);
-        }
+        // Bỏ quà tặng đệ tử trong gói VIP (17/11/2026)
 
         // Thêm toàn bộ vật phẩm vào túi đồ của người chơi
         InventoryService.gI().addItemBag(pl, gold);
@@ -222,9 +219,7 @@ public class ToriBot extends Npc {
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 10);
 
-        if (pl.pet == null) {
-            PetService.gI().createNormalPet(pl);
-        }
+        // Bỏ quà tặng đệ tử trong gói VIP (17/11/2026)
         Item CaiTrang = ItemService.gI().createNewItem((short) 584);
         CaiTrang.itemOptions.add(new ItemOption(50, 24));
         CaiTrang.itemOptions.add(new ItemOption(77, 24));
@@ -267,9 +262,7 @@ public class ToriBot extends Npc {
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 30);
 
-        if (pl.pet == null) {
-            PetService.gI().createNormalPet(pl);
-        }
+        // Bỏ quà tặng đệ tử trong gói VIP (17/11/2026)
         Item CaiTrang = ItemService.gI().createNewItem((short) 584);
         CaiTrang.itemOptions.add(new ItemOption(50, 24));
         CaiTrang.itemOptions.add(new ItemOption(77, 24));
@@ -306,7 +299,7 @@ public class ToriBot extends Npc {
 
         Item coupon = ItemService.gI().createNewItem((short) 459, 10);
 
-        Item mabuSidekick = ItemService.gI().createNewItem((short) 568, 1); // Tặng 1 đệ tử mabu
+        // Bỏ trứng đệ tử Mabư 568 (17/11/2026)
 
         Item protectStone = ItemService.gI().createNewItem((short) 987, 50);
 
@@ -343,7 +336,6 @@ public class ToriBot extends Npc {
 
         InventoryService.gI().addItemBag(pl, gold);
         InventoryService.gI().addItemBag(pl, coupon);
-        InventoryService.gI().addItemBag(pl, mabuSidekick);
         InventoryService.gI().addItemBag(pl, protectStone);
         InventoryService.gI().addItemBag(pl, submarine);
         InventoryService.gI().addItemBag(pl, petDragon);

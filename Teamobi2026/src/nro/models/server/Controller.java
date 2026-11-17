@@ -877,7 +877,7 @@ public class Controller implements IMessageHandler {
                 String name = msg.reader().readUTF();
                 int gender = msg.reader().readByte();
                 int hair = msg.reader().readByte();
-                if (name.length() >= 5 && name.length() <= 10) {
+                if (name.length() >= 2 && name.length() <= 10) { // tối thiểu 2 ký tự (gốc 5, đổi 17/11/2026)
                     rs = LocalManager.executeQuery("select * from player where name = ?", name);
                     if (rs.first()) {
                         Service.gI().sendThongBaoOK(session, "Tên nhân vật đã tồn tại");
@@ -899,7 +899,7 @@ public class Controller implements IMessageHandler {
                         }
                     }
                 } else {
-                    Service.gI().sendThongBaoOK(session, "Tên nhân vật chỉ đồng ý các ký tự a-z, 0-9 và chiều dài từ 5 đến 10 ký tự");
+                    Service.gI().sendThongBaoOK(session, "Tên nhân vật chỉ đồng ý các ký tự a-z, 0-9 và chiều dài từ 2 đến 10 ký tự");
                 }
             } catch (Exception e) {
                 Logger.logException(Controller.class, e);

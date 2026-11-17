@@ -27,6 +27,8 @@ echo === patch-port
 powershell -NoProfile -ExecutionPolicy Bypass -File "patch-port.ps1" "%CLIENT%" || goto loi
 echo === patch-nhap-so-luong
 powershell -NoProfile -ExecutionPolicy Bypass -File "patch-nhap-so-luong.ps1" "%CLIENT%" || goto loi
+echo === patch-tao-nhan-vat
+powershell -NoProfile -ExecutionPolicy Bypass -File "patch-tao-nhan-vat.ps1" "%CLIENT%" || goto loi
 
 echo === Nen %OUT%
 if not exist "%RAREXE%" ( echo Khong thay WinRAR & goto loi )

@@ -717,3 +717,30 @@ UPDATE map_template SET zones=14 WHERE zones=19;
 ```
 - Kiểm tra: `SELECT zones, COUNT(*) FROM map_template GROUP BY zones;` ra `14 | 172`; trong game danh sách khu 0–13.
 - Exp ×3: thời gian lên sức mạnh dài gấp 5/3 so với ×5 (ước tính 40 → 70 tỷ ở CO-CHE.md mục Tiềm năng sức mạnh).
+## 88. Gói VIP Tori Bot bỏ quà tặng đệ tử — 17/11/2026, máy nhà
+
+- Build: có ([ToriBot](Teamobi2026/src/nro/models/npc_list/ToriBot.java), [ToriBot.BuyVip](Teamobi2026/src/nro/models/npc_list/ToriBot.java#L114)). SQL: không. Client: không.
+- VIP 1–3 không còn tạo đệ thường cho người chưa có đệ; VIP 4 không còn tặng trứng đệ Mabư 568. Chữ giới thiệu gói bỏ dòng "Tặng 1 đệ tử". Các quà khác giữ nguyên (Pet rồng nhí 1771 là thú cưng, vẫn tặng).
+## 89. Bà Hạt Mít "Tạo đá Hematite": sửa chữ "5 sao pha lê cấp 2" → "cấp 1 cùng màu" — 17/11/2026, máy nhà
+
+- Build: có ([TaoDaHematite](Teamobi2026/src/nro/models/combine/TaoDaHematite.java), 3 dòng chữ). SQL: không. Client: không.
+- Code vốn đã lấy 5 sao pha lê cấp 1 (441–447), chỉ chữ NPC ghi sai.
+## 90. Sao pha lê cấp 2 +1 chỉ số (lấp lánh thành cấp 1 +2) — 17/11/2026, máy nhà
+
+- Build: có ([NangCapSaoPhaLe](Teamobi2026/src/nro/models/combine/NangCapSaoPhaLe.java), dòng chép option). SQL: không. Client: không.
+- Nâng cấp sao pha lê cấp 1 → cấp 2: mỗi option +1 (trước chép nguyên). Đánh bóng vẫn +1, nên lấp lánh = cấp 1 +2: đỏ/lam/hồng/vàng/lục 5 → 6 → 7%, tím/cam 3 → 4 → 5%. Sao cấp 2 và lấp lánh đã có giữ nguyên.
+## 91. Màn tạo nhân vật: hiện áo/quần cấp 1 như trong game + server gửi sẵn dữ liệu part — 17/11/2026, máy nhà
+
+- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi `DataGame.updateData` (-87) trước `switchToCreateChar`). SQL: không. **Client: có** (`client-patch/patch-tao-nhan-vat.ps1`, đã thêm vào `cap-nhat-client.bat`; chạy `client-patch\cap-nhat-client.bat` trên mỗi máy).
+- Lỗi cũ: client mới giải nén vào màn tạo nhân vật không thấy người (chỉ có bóng), bấm đổi tóc chỉ hiện đầu. Do server mở màn tạo trước khi client có dữ liệu part. Giờ server gửi sẵn.
+- Màn tạo nhân vật trước vẽ bộ đồ minh họa (thân 157/149/151, chân 158/150/152), vào game lại mặc áo/quần cấp 1. Script đổi `CreateCharScr.defaultBody`/`defaultLeg` trong `global-metadata.dat` (offset `0x16CCA0`, `0x16D2D8`) thành 14/10/16 và 15/11/17. Sao lưu `*.truoc-tao-nhan-vat`.
+- Kiểm tra: giải nén client mới, tạo tài khoản mới, màn tạo nhân vật thấy nhân vật mặc áo/quần cấp 1 ngay, đổi hành tinh thấy đúng bộ của hành tinh đó.
+## 92. Màn tạo nhân vật: 1 kiểu tóc mỗi hành tinh làm mất cả nhân vật — 17/11/2026, máy nhà
+
+- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi `DataGame.sendSmallVersion` (-77) trước `switchToCreateChar`). SQL: không. Client: không.
+- Tóc thứ 3 của mỗi hành tinh (part 127 Trái Đất ảnh 1471, 128 Namek 1454, 126 Xayda 1450) có ảnh ngoài ảnh ghép (bảng `image` ghi x ≥ 256 → client lấy ảnh lẻ `SmallImage.imgNew`). Mảng `imgNew` chỉ được tạo khi nhận gói -77, mà server trước chỉ gửi -77 lúc đăng nhập tài khoản đã có nhân vật ([MySession](Teamobi2026/src/nro/models/network/MySession.java) ~dòng 126) → ở màn tạo nhân vật `imgNew` = null, vẽ tóc đó ném NullReference, mất cả nhân vật.
+- Kiểm tra: tài khoản mới, màn tạo nhân vật, bấm đổi tóc qua đủ 3 kiểu ở cả 3 hành tinh đều thấy nhân vật.
+## 93. Tên nhân vật tối thiểu 2 ký tự; sửa lỗi phông "Ngọc Rồng Online" trong câu chào — 17/11/2026, máy nhà
+
+- Build: có ([Controller.createChar](Teamobi2026/src/nro/models/server/Controller.java#L872): tên 2–10 ký tự, gốc 5–10; [Manager.loadProperties](Teamobi2026/src/nro/models/server/Manager.java#L1032) đọc `Config.properties` bằng UTF-8). SQL: không. Client: không.
+- Lỗi phông: `Properties.load(InputStream)` đọc ISO-8859-1 nên `server.name` (UTF-8) thành chữ lỗi trong câu "Chào Mừng … Đến Với: …" ở nhiệm vụ đầu. Trong file chỉ `server.name` có chữ không phải ASCII.

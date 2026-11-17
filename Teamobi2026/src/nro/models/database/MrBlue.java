@@ -112,6 +112,12 @@ public class MrBlue {
                             DataGame.sendVersionGame(session);
                             //-31 data item background
                             DataGame.sendDataItemBG(session);
+                            // Gửi sẵn dữ liệu part (-87) trước màn tạo nhân vật: client mới cài chưa có part, tự xin sau khi màn đã dựng
+                            // nên thân/chân trống, chỉ đầu hiện khi bấm đổi (17/11/2026)
+                            DataGame.updateData(session);
+                            // Gửi -77 (client tạo SmallImage.imgNew): trước chỉ gửi khi đã có nhân vật (MySession.login), nên ở màn tạo
+                            // nhân vật mảng ảnh lẻ = null, tóc có ảnh ngoài ảnh ghép (part 126/127/128) ném NullReference, mất cả nhân vật
+                            DataGame.sendSmallVersion(session);
                             Service.gI().switchToCreateChar(session);
                         } else {
                             if ((player = loadPlayer(rs, false)) != null) {

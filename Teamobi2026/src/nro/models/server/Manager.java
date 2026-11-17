@@ -1031,7 +1031,10 @@ public final class Manager {
 
     public void loadProperties() throws IOException {
         Properties properties = new Properties();
-        properties.load(new FileInputStream("Config.properties"));
+        // Đọc UTF-8: load(InputStream) đọc ISO-8859-1 nên server.name "Ngọc Rồng Online" bị lỗi phông trong câu chào (sửa 17/11/2026)
+        try (java.io.Reader reader = new java.io.InputStreamReader(new FileInputStream("Config.properties"), java.nio.charset.StandardCharsets.UTF_8)) {
+            properties.load(reader);
+        }
         Object value;
         if ((value = properties.get("server.sv")) != null) {
             SERVER = Byte.parseByte(String.valueOf(value));

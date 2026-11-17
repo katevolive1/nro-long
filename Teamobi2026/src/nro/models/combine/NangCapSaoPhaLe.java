@@ -104,7 +104,8 @@ public class NangCapSaoPhaLe {
                     newItem.itemOptions.clear();
                     
                     for (Item.ItemOption option : saoPhaLe.itemOptions) {
-                        newItem.itemOptions.add(new Item.ItemOption(option.optionTemplate.id, option.param));
+                        // Cấp 2 = cấp 1 +1 (trước 17/11/2026 chép nguyên, không tăng); đánh bóng lấp lánh +1 nữa = cấp 1 +2
+                        newItem.itemOptions.add(new Item.ItemOption(option.optionTemplate.id, option.param + 1));
                     }
 
                     InventoryService.gI().addItemBag(player, newItem);
