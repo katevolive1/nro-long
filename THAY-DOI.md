@@ -52,7 +52,7 @@ UPDATE item_template SET is_up_to_up=1, description='Trong 30 phút, tăng tiề
 
 ### 6. Thiên Sứ và Hủy Diệt yêu cầu 60 tỷ; chế tạo Thiên Sứ nhân đôi cả sức đánh
 - Ngày: 31/10/2026, máy làm: nhà.
-- Build: có ([`ItemService.DoThienSu`](Teamobi2026/src/nro/models/services/ItemService.java#L1222) 21:60, [`ShopService.buyItemHD`](Teamobi2026/src/nro/models/shop/ShopService.java#L1273) thêm 21:60 cho 650–662, [`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) nhân đôi mọi option trừ 20, 21, 30).
+- Build: có ([`ItemService.DoThienSu`](Teamobi2026/src/nro/models/services/ItemService.java#L1282) 21:60, [`ShopService.buyItemHD`](Teamobi2026/src/nro/models/shop/ShopService.java#L1273) thêm 21:60 cho 650–662, [`CheTaoTrangBiThienSu`](Teamobi2026/src/nro/models/combine/CheTaoTrangBiThienSu.java) nhân đôi mọi option trừ 20, 21, 30).
 - Client: không.
 - SQL: không.
 
@@ -314,7 +314,7 @@ WHERE name = 'tata2' AND gender = 2;
 
 ## 37. Chữ NPC sao đen, nhắc boss 15 phút, đệ Mabư của `tata2` đổi sang HP — 31/10/2026, máy nhà
 
-- Build: có ([`ConstNpc.HUONG_DAN_BLACK_BALL_WAR`](Teamobi2026/src/nro/models/consts/ConstNpc.java#L24): chữ hướng dẫn Trạm tàu vũ trụ khớp sao 5 = +35% TN/SM, sao 6 = KI+20%; [`Boss.remindNotify`](Teamobi2026/src/nro/models/boss/Boss.java#L527) 5 phút → 15 phút, `900000`). Client: không.
+- Build: có ([`ConstNpc.HUONG_DAN_BLACK_BALL_WAR`](Teamobi2026/src/nro/models/consts/ConstNpc.java#L24): chữ hướng dẫn Trạm tàu vũ trụ khớp sao 5 = +35% TN/SM, sao 6 = KI+20%; [`Boss.remindNotify`](Teamobi2026/src/nro/models/boss/Boss.java) 5 phút → 15 phút, `900000`). Client: không.
 - (Xem thêm mục 39: đệ tích giáp tập luyện theo thời gian thực 0,1 giây/điểm.)
 - SQL (chạy sau mục 34 và 35, khi `tata2` offline): đệ của `tata2` (Mabư, gender 2). Sao pha lê SĐ → HP trên 7 món (áo, quần, găng, giày, nhẫn, cải trang 584, giáp tập luyện): mỗi lỗ SĐ `[50,3]` → HP `[77,5]`, 7 sao `[50,21]` → `[77,35]`; giày đã có `[77,1]` nên gộp thành `[77,36]`; cải trang 584 `[50,45]` → `[50,24]` (SĐ gốc 24), `[77,24]` → `[77,59]`. Quần Thiên Sứ 1053 lên +8: `[22,260]` → `[22,557]` (260 × 1,1^8, công thức [`ChuyenHoaTrangBi_Ngoc`](Teamobi2026/src/nro/models/combine/ChuyenHoaTrangBi_Ngoc.java)) và thêm `[72,8]`. Giáp tập luyện cấp 1 (529) → cấp 4 (1716), option 9 về 0, 9 sao HP 45% (`[77,35]` + 2 × `[77,5]`), chưa thêm `77:10, 94:3` như bản bán ở Santa.
 ```sql
@@ -358,7 +358,7 @@ UPDATE intrinsic SET param_to_1 = 35 WHERE id = 13 AND gender = 1;
 - Build: có (`build.bat` hoặc javac + `jar uf`, xem THAY-DOI mục 36). Client: không cần cập nhật. SQL: không.
 - Bỏ nước mía: xóa `event/XeNuocMia.java`, bỏ case trong [`NpcFactory`](Teamobi2026/src/nro/models/npc/NpcFactory.java), [`Map.initNpc`](Teamobi2026/src/nro/models/map/Map.java#L171) bỏ qua NPC id 84, [`ChiChi`](Teamobi2026/src/nro/models/npc_list/ChiChi.java) bỏ nút "Top Nước mía" (menu còn Hộp quà / Kem / Cửa hàng). Ly mía trong túi vẫn dùng được. Bảng top nước mía ([`Manager.Topsukien1`](Teamobi2026/src/nro/models/server/Manager.java#L112)) còn trong code nhưng không còn được dùng.
 - Rơi đồ boss Thiên sứ + Hủy diệt ([`ThienSuHuyDietReward.drop`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java)): 2% Thần Linh, 30% Hủy Diệt, 20% Ngọc rồng 2 sao, 10% Ngọc rồng 3 sao, 38% thỏi vàng (457). Món Hủy Diệt chọn hành tinh ngẫu nhiên, không theo người giết. Bảng ở BOSS-ROI-DO.md mục 3b.
-- Bà Hạt Mít đổi 3 món Hủy Diệt ([`DoiDoBaHatMit.checkHuyDiet`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L155)): 3 món không được trùng món (cùng id), được khác hành tinh.
+- Bà Hạt Mít đổi 3 món Hủy Diệt ([`DoiDoBaHatMit.checkHuyDiet`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L159)): 3 món không được trùng món (cùng id), được khác hành tinh.
 - Chữ "10 tỷ": xem mục 43.
 - Sau khi build, tắt rồi bật lại server (`bt` hoặc `run.bat`).
 
@@ -420,7 +420,7 @@ UPDATE item_template SET is_up_to_up = 1 WHERE id IN (1135, 1136, 1397); -- cộ
 | `SHOP_BOSS_12H` | 15 = 0,15% | Đồ shop, cả 9 boss 12h | 1% |
 | `BINH_KILIS_MABU_12H` | 500 = 5% | Bình 1795, riêng Mabu | không có |
 
-- [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) dùng chung cho 14 boss rơi đồ shop (9 boss 12h, Baby, Black Goku, Cooler, Cumber, Siêu bọ hung): 1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%. Đã mô phỏng 20 triệu lần, ra đúng các tỉ lệ này.
+- [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L692) dùng chung cho 14 boss rơi đồ shop (9 boss 12h, Baby, Black Goku, Cooler, Cumber, Siêu bọ hung): 1–3 sao 79,49%, 4–5 sao 17%, 6 sao 3%, 7 sao 0,5%, 8 sao 0,01%. Đã mô phỏng 20 triệu lần, ra đúng các tỉ lệ này.
 - `SHOP_BOSS_12H`: yêu cầu ghi "5%" rồi dòng dưới "0,15%". Đang hiểu là 0,15% vì đồ shop gốc 1% và yêu cầu là giảm. Muốn 5% thì đổi thành `500`.
 - Kiểm tra sau khi build và bật lại server (tỉ lệ thấp nên muốn thấy nhanh thì tạm tăng hằng số, nhớ trả về):
   1. Đánh Mabu 12h nhiều lần: thỉnh thoảng rơi Bình hút năng lượng, nhặt được, xem chi tiết có dòng Kilis.
@@ -557,7 +557,7 @@ UPDATE item_template SET NAME='Vé đổi nội tại tự chọn', description=
 
 ## 65. Quái rơi đồ shop làng theo map; tắt đồ sao 3 map đầu — 16/11/2026
 
-- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L736)/[`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L705), [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699) thành `public`). SQL: không. Client: không.
+- Build: có ([`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/ItemService.java#L736)/[`ItemService.capDoShopTheoMap`](Teamobi2026/src/nro/models/services/ItemService.java#L705), [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613), [`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L692) thành `public`). SQL: không. Client: không.
 - Quái map 1–6, 8–13, 15–20, 27–38, 63–83 rơi đồ shop làng 2%, Tương lai và lạnh 1%, cấp theo vùng; 70% đồ sao, 30% đồ kích hoạt khóa giao dịch. Chi tiết QUAI-ROI-DO.md mục 15.
 - Comment hai khối "Đồ Sao Khác Vải Thô" và "Đồ Sao 3 Map Đầu" trong [`Mob.getItemMobReward`](Teamobi2026/src/nro/models/mob/Mob.java#L613).
 - Kiểm tra: nhân vật sức mạnh thấp đánh quái map 1 khoảng 100 con thấy rơi áo/quần/găng/giày/rađa cấp 1–3 có sao hoặc có set kích hoạt.
@@ -593,7 +593,7 @@ UPDATE part SET DATA='[[13218,2,-7],[13219,2,-8],[2955,0,0]]' WHERE id=1454;
 
 ## 69. Mọi boss xuất hiện ở khu ngẫu nhiên — 16/11/2026, máy công ty
 
-- Build: có ([`Boss.joinMap`](Teamobi2026/src/nro/models/boss/Boss.java#L424)). SQL: không. Client: không.
+- Build: có ([`Boss.joinMap`](Teamobi2026/src/nro/models/boss/Boss.java#L423)). SQL: không. Client: không.
 - Trước: `joinMap` bỏ khu đã chọn và luôn dò từ khu 0 (chỉ Baby có `isZoneRandom`), nên mở server/bảo trì xong boss nào cũng ở khu 0. Giờ mọi boss bắt đầu dò từ khu ngẫu nhiên (0 tới số khu − 1, hiện mọi map 10 khu), vẫn tránh khu > 10 người và khu đã có boss. Boss có khu riêng (Mabư ngoài từ khu 2 `isZone01SpawnDisabled`, boss đặt `zoneFinal`, boss con theo boss cha) không đổi.
 - Boss không bị lạnh nữa (`NPoint` 2 chỗ "map lạnh"/"map cold" thêm `!this.player.isBoss`): trước đó boss ở map 105–110 (Cooler, Goku SSJ) bị /2 HP tối đa và sức đánh mỗi lần tính lại chỉ số (dùng khiên, dính hiệu ứng). Cooler vì vậy cũng trâu hơn trước.
 - Kiểm tra: `bt` vài lần, thông báo boss ra nhiều khu khác nhau.
@@ -616,10 +616,10 @@ UPDATE map_template SET zones=19 WHERE zones=10;
 
 ## 72. Nhặt hộp quà giáng sinh không cần tất vớ; khiên boss có tác dụng; boss đuổi nhanh — 16/11/2026, máy công ty
 
-- Build: có ([`Zone.pickItem`](Teamobi2026/src/nro/models/map/Zone.java#L325), [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773), [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L613)). SQL: không. Client: không.
+- Build: có ([`Zone.pickItem`](Teamobi2026/src/nro/models/map/Zone.java#L325), [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L766), [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L606)). SQL: không. Client: không.
 - Hộp quà giáng sinh 648: bỏ điều kiện có Tất, vớ giáng sinh (649) khi nhặt và bỏ trừ 1 tất vớ sau khi nhặt.
-- [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773) (hàm chung) trước bỏ qua khiên năng lượng nên boss bật khiên vẫn mất máu (không liên quan admin). Nay khiên giảm mọi đòn không xuyên còn 1, đòn > HP tối đa thì vỡ khiên (giống Black Goku). Boss có khiên dùng hàm chung: Goku SSJ 1/2/3, Siêu Bojack (2 con này trâu hơn trước). Black Goku, Cumber, Xên… tự xử lý khiên từ trước; Cooler 2 có chiêu khiên nhưng [`Cooler.injured`](Teamobi2026/src/nro/models/boss/Cold/Cooler.java#L81) riêng vẫn bỏ qua khiên.
-- [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L613) (hàm chung): mục tiêu cách > 450px thì boss lao 150–250px mỗi lượt (0,1 giây) thay vì 50% nhích 40–60px, nên map dài (Núi tuyết…) boss không còn đứng một đầu map. Boss tự viết `attack()` riêng (Black Goku, Mabư ngoài…) không đổi.
+- [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L766) (hàm chung) trước bỏ qua khiên năng lượng nên boss bật khiên vẫn mất máu (không liên quan admin). Nay khiên giảm mọi đòn không xuyên còn 1, đòn > HP tối đa thì vỡ khiên (giống Black Goku). Boss có khiên dùng hàm chung: Goku SSJ 1/2/3, Siêu Bojack (2 con này trâu hơn trước). Black Goku, Cumber, Xên… tự xử lý khiên từ trước; Cooler 2 có chiêu khiên nhưng [`Cooler.injured`](Teamobi2026/src/nro/models/boss/Cold/Cooler.java#L81) riêng vẫn bỏ qua khiên.
+- [`Boss.attack`](Teamobi2026/src/nro/models/boss/Boss.java#L606) (hàm chung): mục tiêu cách > 450px thì boss lao 150–250px mỗi lượt (0,1 giây) thay vì 50% nhích 40–60px, nên map dài (Núi tuyết…) boss không còn đứng một đầu map. Boss tự viết `attack()` riêng (Black Goku, Mabư ngoài…) không đổi.
 - Kiểm tra: nhặt hộp quà 648 khi không có 649; đứng cuối map Núi tuyết thấy Goku SSJ bay tới; đánh lúc Goku SSJ bật khiên chỉ trừ 1 HP.
 
 ## 73. Bom không còn giảm dần khi trúng nhiều boss — 16/11/2026, máy công ty
@@ -687,7 +687,7 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 ## 83. Bà Hạt Mít: đổi 3 món kích hoạt cuối shop → 1 món kích hoạt (3% ra Thần Linh kích hoạt) — 17/11/2026, máy nhà
 
-- Build: có ([`DoiDoBaHatMit.showInfoCuoiShop`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L275), [`ItemService.createItemTLKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L1245), [`ItemService.getOptionGocDoTL`](Teamobi2026/src/nro/models/services/ItemService.java#L1133), `CombineService`, `BaHatMit`). SQL: không. Client: không.
+- Build: có ([`DoiDoBaHatMit.showInfoCuoiShop`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java#L275), [`ItemService.createItemTLKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L1245), [`ItemService.getOptionGocDoTL`](Teamobi2026/src/nro/models/services/ItemService.java#L1133), [`CombineService`](Teamobi2026/src/nro/models/combine/CombineService.java), [`BaHatMit`](Teamobi2026/src/nro/models/npc_list/BaHatMit.java)). SQL: không. Client: không.
 - Nút thứ 8 ở Bà Hạt Mít (map 5). 3 món kích hoạt cấp 12 khác nhau (Calic / Zealot / Lưỡng long / Rada cấp 12) + 2 tỷ vàng → loại theo món đầu, hành tinh theo người chơi; 3% Thần Linh kích hoạt, còn lại kích hoạt cấp 1–12 như capsule. Chi tiết CO-CHE.md mục Bà Hạt Mít.
 - Phần chỉ số đồ Thần Linh trong `randDoTLBoss` tách ra hàm `getOptionGocDoTL`, boss rơi TL không đổi.
 - Kiểm tra: đặt 3 món kích hoạt c12 khác nhau, có 2 tỷ vàng → đổi được; đặt món không kích hoạt / trùng món / thiếu vàng → báo lỗi.
@@ -701,13 +701,13 @@ INSERT INTO item_option_template (id, NAME) VALUES (252, '+#% sát thương lên
 
 ## 85. Bò Mộng thêm nút "Đổi Thỏi vàng": 10.000đ = 1.000 thỏi — 17/11/2026, máy nhà
 
-- Build: có ([`BoMong`](Teamobi2026/src/nro/models/npc_list/BoMong.java), [`Input.createFormTradeGold`](Teamobi2026/src/nro/models/services_func/Input.java#L667) / `TRADE_GOLD`). SQL: không. Client: không.
+- Build: có ([`BoMong`](Teamobi2026/src/nro/models/npc_list/BoMong.java), [`Input.createFormTradeGold`](Teamobi2026/src/nro/models/services_func/Input.java#L668) / `TRADE_GOLD`). SQL: không. Client: không.
 - Logic như Nạp Ngọc (10.000–5.000.000đ, vé tặng ngọc 718, điểm sự kiện), bỏ yêu cầu kích hoạt tài khoản, cần ≥ 2 ô trống. Chi tiết CO-CHE.md mục "Đổi VNĐ".
 
 ## 86. Hộp quà giáng sinh báo "x0" khi nhận đồ — 17/11/2026, máy nhà
 
 - Build: có ([UseItem.NoelItemBox](Teamobi2026/src/nro/models/services_func/UseItem.java#L2425)). SQL: không. Client: không.
-- Lỗi chỉ ở chữ thông báo: đồ vẫn vào túi đủ số lượng. Nguyên nhân: `InventoryService.addItemList` luôn đặt `quantity = 0` cho món vừa thêm, thông báo lại đọc số sau đó. Nay lưu số lượng trước khi cho vào túi.
+- Lỗi chỉ ở chữ thông báo: đồ vẫn vào túi đủ số lượng. Nguyên nhân: [`InventoryService.addItemList`](Teamobi2026/src/nro/models/services/InventoryService.java#L858) luôn đặt `quantity = 0` cho món vừa thêm, thông báo lại đọc số sau đó. Nay lưu số lượng trước khi cho vào túi.
 ## 87. Số khu 19 → 14, exp toàn server ×5 → ×3 — 17/11/2026, máy nhà
 
 - Build: không. SQL: có. Client: không (client đọc số khu từ server). Config: `server.expserver=3` trong `Teamobi2026/Config.properties` (theo git). Áp dụng: gõ `bt` (server nạp `map_template` và Config lúc khởi động).
@@ -731,13 +731,13 @@ UPDATE map_template SET zones=14 WHERE zones=19;
 - Nâng cấp sao pha lê cấp 1 → cấp 2: mỗi option +1 (trước chép nguyên). Đánh bóng vẫn +1, nên lấp lánh = cấp 1 +2: đỏ/lam/hồng/vàng/lục 5 → 6 → 7%, tím/cam 3 → 4 → 5%. Sao cấp 2 và lấp lánh đã có giữ nguyên.
 ## 91. Màn tạo nhân vật: hiện áo/quần cấp 1 như trong game + server gửi sẵn dữ liệu part — 17/11/2026, máy nhà
 
-- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi `DataGame.updateData` (-87) trước `switchToCreateChar`). SQL: không. **Client: có** (`client-patch/patch-tao-nhan-vat.ps1`, đã thêm vào `cap-nhat-client.bat`; chạy `client-patch\cap-nhat-client.bat` trên mỗi máy).
+- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi [`DataGame.updateData`](Teamobi2026/src/nro/models/data/DataGame.java#L68) (-87) trước `switchToCreateChar`). SQL: không. **Client: có** (`client-patch/patch-tao-nhan-vat.ps1`, đã thêm vào `cap-nhat-client.bat`; chạy `client-patch\cap-nhat-client.bat` trên mỗi máy).
 - Lỗi cũ: client mới giải nén vào màn tạo nhân vật không thấy người (chỉ có bóng), bấm đổi tóc chỉ hiện đầu. Do server mở màn tạo trước khi client có dữ liệu part. Giờ server gửi sẵn.
 - Màn tạo nhân vật trước vẽ bộ đồ minh họa (thân 157/149/151, chân 158/150/152), vào game lại mặc áo/quần cấp 1. Script đổi `CreateCharScr.defaultBody`/`defaultLeg` trong `global-metadata.dat` (offset `0x16CCA0`, `0x16D2D8`) thành 14/10/16 và 15/11/17. Sao lưu `*.truoc-tao-nhan-vat`.
 - Kiểm tra: giải nén client mới, tạo tài khoản mới, màn tạo nhân vật thấy nhân vật mặc áo/quần cấp 1 ngay, đổi hành tinh thấy đúng bộ của hành tinh đó.
 ## 92. Màn tạo nhân vật: 1 kiểu tóc mỗi hành tinh làm mất cả nhân vật — 17/11/2026, máy nhà
 
-- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi `DataGame.sendSmallVersion` (-77) trước `switchToCreateChar`). SQL: không. Client: không.
+- Build: có ([MrBlue](Teamobi2026/src/nro/models/database/MrBlue.java) gửi [`DataGame.sendSmallVersion`](Teamobi2026/src/nro/models/data/DataGame.java#L319) (-77) trước `switchToCreateChar`). SQL: không. Client: không.
 - Tóc thứ 3 của mỗi hành tinh (part 127 Trái Đất ảnh 1471, 128 Namek 1454, 126 Xayda 1450) có ảnh ngoài ảnh ghép (bảng `image` ghi x ≥ 256 → client lấy ảnh lẻ `SmallImage.imgNew`). Mảng `imgNew` chỉ được tạo khi nhận gói -77, mà server trước chỉ gửi -77 lúc đăng nhập tài khoản đã có nhân vật ([MySession](Teamobi2026/src/nro/models/network/MySession.java) ~dòng 126) → ở màn tạo nhân vật `imgNew` = null, vẽ tóc đó ném NullReference, mất cả nhân vật.
 - Kiểm tra: tài khoản mới, màn tạo nhân vật, bấm đổi tóc qua đủ 3 kiểu ở cả 3 hành tinh đều thấy nhân vật.
 ## 93. Tên nhân vật tối thiểu 2 ký tự; sửa lỗi phông "Ngọc Rồng Online" trong câu chào — 17/11/2026, máy nhà
@@ -747,4 +747,15 @@ UPDATE map_template SET zones=14 WHERE zones=19;
 ## 94. Quà gói VIP Tori Bot: chỉ số random (mức cũ − 7) đến mức cũ — 17/11/2026, máy nhà
 
 - Build: có ([ToriBot](Teamobi2026/src/nro/models/npc_list/ToriBot.java), hàm `chiSoVip`). SQL: không. Client: không.
-- Mọi chỉ số % (SĐ 50, HP 77, KI 103, option 117, SĐ chí mạng 5, chí mạng 14, kháng 236) của thú cưỡi, búa, tàu ngầm, pet rồng nhí, Hắc Mị Nương (cải trang thỏ Bunma 584 giữ cố định 24/24/117:15): random từng dòng từ mức cũ − 7 đến mức cũ (vd 15 → 8–15, 10 → 3–10). Chí mạng Hắc Mị 25–30 → 23–30. Hạn dùng (93) không đổi. Đồ đã phát giữ nguyên.
+- Mọi chỉ số % (SĐ 50, HP 77, KI 103, option 117, SĐ chí mạng 5, chí mạng 14, kháng 236) của thú cưỡi, búa, tàu ngầm, pet rồng nhí, Hắc Mị Nương (cải trang thỏ Bunma 584 giữ cố định 24/24/117:15): random từng dòng từ mức cũ − 7 đến mức cũ (vd 15 → 8–15, 10 → 3–10). Chí mạng Hắc Mị 25–30 → 23–30. Hạn dùng (93) không đổi. Đồ đã phát giữ nguyên.## 95. Bỏ thông báo boss nhắc lại 15 phút, chỉ thông báo lúc boss xuất hiện — 18/11/2026
+
+- Build: có ([`Boss.notifyJoinMap`](Teamobi2026/src/nro/models/boss/Boss.java#L519); bỏ hàm [`Boss.remindNotify`](Teamobi2026/src/nro/models/boss/Boss.java) và lời gọi trong [`Boss.update`](Teamobi2026/src/nro/models/boss/Boss.java#L340)). SQL: không. Client: không.
+- Lúc đăng nhập vẫn gửi riêng các boss đang sống ([`BossManager.sendBossAlive`](Teamobi2026/src/nro/models/boss/Boss_Manager/BossManager.java#L146) → [`Boss.notifyTo`](Teamobi2026/src/nro/models/boss/Boss.java#L528)) nên tab Thông báo boss của mod vẫn đủ danh sách.
+## 96. Broly thường có thông báo vào tab Thông báo boss — 18/11/2026
+
+- Build: có ([`Broly.joinMap2`](Teamobi2026/src/nro/models/boss/Broly/Broly.java#L66) gửi `"\tBOSS <tên> vừa xuất hiện tại <map>"`; [Controller](Teamobi2026/src/nro/models/server/Controller.java) lúc đăng nhập gọi thêm `BrolyManager.gI().sendBossAlive`). SQL: không. Client: không (dùng lại patch `\t` của `patch-thong-bao-boss.ps1`).
+- Câu có `\t` ở đầu: vào tab Thông báo boss và khung góc phải, không chạy chữ dưới màn hình (có 30 con Broly). Super Broly vẫn thông báo như cũ, có chạy chữ, và từ nay cũng có trong danh sách gửi lúc đăng nhập.
+## 97. Broly / Super Broly bỏ số trong tên, tab Thông báo boss gom chung 1 mục — 18/11/2026
+
+- Build: có (`Broly.joinMap`, `SuperBroly.joinMap`: tên cố định "Broly" / "Super Broly"). SQL: không. Client: không.
+- Mod gom tab Thông báo boss theo tên (`BossCustom.bosses` là Dictionary theo tên, xem `client-patch/CLIENT-UNITY.md`). Trước đây "Broly 57", "Broly 23"… mỗi con một mục; giờ vào chung mục "Broly", trong đó là danh sách map + giờ.

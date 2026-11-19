@@ -62,7 +62,7 @@ public class SuperBroly extends Boss {
 
     @Override
     public void joinMap() {
-        this.name = "Super Broly " + Util.nextInt(10, 100);
+        this.name = "Super Broly"; // không đánh số, để tab Thông báo boss gom chung 1 mục (xem Broly.joinMap)
         this.nPoint.hpMax = Util.nextInt(1_500_000, 16_070_777);
         this.nPoint.hp = this.nPoint.hpMax;
         this.nPoint.dame = Util.toInt(this.nPoint.hpMax / 100);

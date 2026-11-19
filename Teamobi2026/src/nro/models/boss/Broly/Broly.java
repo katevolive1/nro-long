@@ -8,6 +8,7 @@ import static nro.models.consts.BossType.BROLY;
 import nro.models.consts.ConstPlayer;
 import nro.models.map.Zone;
 import nro.models.player.Player;
+import nro.models.server.ServerNotify;
 import nro.models.services.SkillService;
 import nro.models.map.service.ChangeMapService;
 import nro.models.skill.Skill;
@@ -53,7 +54,8 @@ public class Broly extends Boss {
 
     @Override
     public void joinMap() {
-        this.name = "Broly " + Util.nextInt(10, 100);
+        // Không đánh số: tab Thông báo boss của mod gom theo tên (Dictionary<tên, danh sách>), cùng tên thì vào chung 1 mục
+        this.name = "Broly";
         this.nPoint.hpMax = Util.nextInt(500, 100000);
         this.nPoint.hp = this.nPoint.hpMax;
         this.nPoint.dame = Util.toInt(this.nPoint.hpMax / 100);
@@ -97,6 +99,9 @@ public class Broly extends Boss {
 
                 ChangeMapService.gI().changeMap(this, this.zone, -1, -1);
                 this.changeStatus(BossStatus.CHAT_S);
+                // 30 con nên chỉ đưa vào tab Thông báo boss + góc phải của mod, không chạy chữ dưới màn hình ("\t" ở đầu)
+                ServerNotify.gI().notify("\tBOSS " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
+                this.lastTimeNotify = System.currentTimeMillis();
             } catch (Exception e) {
                 this.changeStatus(BossStatus.REST);
             }

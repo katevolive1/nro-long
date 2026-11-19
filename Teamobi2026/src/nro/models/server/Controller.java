@@ -5,6 +5,7 @@ import nro.models.services.IntrinsicService;
 import nro.models.database.SuperRankDAO;
 import nro.models.boss.Boss;
 import nro.models.boss.Boss_Manager.BossManager;
+import nro.models.boss.Boss_Manager.BrolyManager;
 import nro.models.consts.ConstAchievement;
 import nro.models.services.ClanService;
 import nro.models.services.ChatGlobalService;
@@ -940,6 +941,7 @@ public class Controller implements IMessageHandler {
             }
             ServerNotify.gI().sendNotifyTab(player);
             BossManager.gI().sendBossAlive(player);
+            BrolyManager.gI().sendBossAlive(player); // Broly, Super Broly nằm ở BrolyManager riêng
             player.setClothes.setup();
             if (player.pet != null) {
                 player.pet.setClothes.setup();

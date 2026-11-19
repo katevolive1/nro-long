@@ -349,7 +349,6 @@ public class Boss extends Player implements IBoss {
         switch (this.bossStatus) {
             case CHAT_S, AFK, ACTIVE -> {
                 this.autoLeaveMap();
-                this.remindNotify();
             }
         }
         switch (this.bossStatus) {
@@ -515,18 +514,12 @@ public class Boss extends Player implements IBoss {
         }
     }
 
+    // Chỉ thông báo 1 lần lúc boss xuất hiện (đã bỏ nhắc lại 15 phút, 18/11/2026). Giữ đúng câu "BOSS <tên> vừa xuất hiện tại <map>":
+    // mod client (BossCustom.addBoss, ShowBoss.HandleChatVip) chỉ nhận câu này vào tab Thông báo và góc phải
     protected void notifyJoinMap() {
         if (canSendNotify()) {
             ServerNotify.gI().notify("BOSS " + this.name + " vừa xuất hiện tại " + this.zone.map.mapName);
             this.lastTimeNotify = System.currentTimeMillis();
-        }
-    }
-
-    // Boss còn sống thì 15 phút thông báo lại 1 lần. Giữ đúng câu "BOSS <tên> vừa xuất hiện tại <map>":
-    // mod client (BossCustom.addBoss, ShowBoss.HandleChatVip) chỉ nhận câu này vào tab Thông báo và góc phải
-    private void remindNotify() {
-        if (this.lastTimeNotify > 0 && this.zone != null && Util.canDoWithTime(this.lastTimeNotify, 900000)) {
-            this.notifyJoinMap();
         }
     }
 

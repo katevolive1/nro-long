@@ -174,7 +174,7 @@ Code: [`ItemService.randDoShopRoiTuQuai`](Teamobi2026/src/nro/models/services/It
 |---|---|---|
 | Tỉ lệ | Phần còn lại (73–85%) | 15% × may mắn × Cỏ (15–27%, bảng dưới) |
 | Chọn cấp | Thấp nhất vùng 50%, kế 35%, cao 15% (lạnh: 11 và 12 mỗi cấp 50%) | Ngẫu nhiên đều từ cấp 1 tới cấp cao nhất vùng |
-| Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), bảng dưới) | Set theo [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L883) (tỉ lệ set như mục 4) |
+| Thêm option | 107 sao pha lê ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L692), bảng dưới) | Set theo [`ItemService.randOptionItemKichHoat`](Teamobi2026/src/nro/models/services/ItemService.java#L883) (tỉ lệ set như mục 4) |
 | Giao dịch | Được | Không (option 30), không có lỗ sao |
 
 **Phần đồ kích hoạt khi đã rơi** (từ 16/11/2026; điểm may mắn và hệ số xem mục 4, tối đa 200 điểm)

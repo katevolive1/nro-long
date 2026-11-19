@@ -28,9 +28,9 @@ Android 13/14/15/19, Dr.Kore, King Kong, Pic, Poc, Xên con 1–7, Xên bọ hun
 | Mabu (12h) | 100% | 0,3% | 0,15% | không rơi | 5% Bình hút năng lượng (1795, `250:0`); điểm Mabu +25 |
 
 - Cập nhật 7/11/2026: Baby, Black Goku, Cumber, Cooler, Siêu bọ hung cùng thêm 20% rơi 2–5 Thỏi vàng (id 457), đặt trước `dropNgocRong23`; Cumber đổi Thần Linh từ 7% sang dạng 1 5%, dạng 2 7%.
-- Cập nhật 31/10/2026: Thần Linh theo dạng ([`Boss.isDropDoTL`](Teamobi2026/src/nro/models/boss/Boss.java#L726), mỗi dạng chết đều gọi `reward`), ngọc rồng chung [`Boss.dropNgocRong23`](Teamobi2026/src/nro/models/boss/Boss.java#L718) (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ ([`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java)).
+- Cập nhật 31/10/2026: Thần Linh theo dạng ([`Boss.isDropDoTL`](Teamobi2026/src/nro/models/boss/Boss.java#L719), mỗi dạng chết đều gọi `reward`), ngọc rồng chung [`Boss.dropNgocRong23`](Teamobi2026/src/nro/models/boss/Boss.java#L711) (bỏ 4–7 sao và Nhẫn thời không 992). HP: Cooler 1 tỷ / Cooler 2 1,5 tỷ, Black Goku 1 tỷ / Super 3,5 tỷ, Cumber 2 tỷ / Super 2 tỷ, Baby 3 dạng 2 tỷ ([`BossesData`](Teamobi2026/src/nro/models/boss/BossesData.java)).
 - Đồ Thần Linh ([`ItemService.randDoTLBoss`](Teamobi2026/src/nro/models/services/ItemService.java#L1090), id 555–567): tỉ lệ thực tế Nhẫn 10%, Găng 22,5%, Quần 30,4%, Áo 27,8%, Giày 9,3%; chỉ số ×100–115%. (Comment trong code ghi sai tỉ lệ.)
-- Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115% (trước 16/11/2026 nhân thẳng vào option shop nên shop tăng dần, đã sửa ở `getListOptionItemShop`); sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L699), 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở [`Boss.java`](Teamobi2026/src/nro/models/boss/Boss.java): `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
+- Đồ Goku (id 230–280): 70% Áo/Quần/Giày, 30% Găng/Rada; chỉ số shop ×100–115% (trước 16/11/2026 nhân thẳng vào option shop nên shop tăng dần, đã sửa ở `getListOptionItemShop`); sao pha lê 1–3 (79,49%), 4–5 (17%), 6 (3%), 7 (0,5%), 8 (0,01%) ([`Boss.randSaoDoShop`](Teamobi2026/src/nro/models/boss/Boss.java#L692), 6/11/2026, dùng chung mọi boss rơi đồ shop). Tỉ lệ boss 12h là hằng số ở [`Boss.java`](Teamobi2026/src/nro/models/boss/Boss.java): `TL_BOSS_12H`, `TL_MABU_12H`, `SHOP_BOSS_12H`, `BINH_KILIS_MABU_12H` (tính trên 10000).
 
 ## 3. Doanh trại
 | Boss | NR 4 hoặc 5 sao (17/18, mỗi loại 50%) | Bản đồ kho báu (611) |
@@ -80,7 +80,7 @@ Trung úy Xanh Lơ (Bản đồ kho báu): 100% Bí ngô 4 sao (705).
 
 (Cập nhật 7/11/2026: đồ Hủy Diệt 30% → 25%, thêm 5% Cuồng nộ/Bổ khí/Bổ huyết/Giáp Xên 2, thỏi vàng 5–20 → 2–10.)
 
-**Thiên sứ Whis / Vados**: từ 7/11/2026 không rơi đồ riêng (đã bỏ [`ThienSuHuyDietReward.drop`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java)), chỉ còn phần thưởng chung của [`Boss.reward`](Teamobi2026/src/nro/models/boss/Boss.java#L688).
+**Thiên sứ Whis / Vados**: từ 7/11/2026 không rơi đồ riêng (đã bỏ [`ThienSuHuyDietReward.drop`](Teamobi2026/src/nro/models/boss/thien_su/ThienSuHuyDietReward.java)), chỉ còn phần thưởng chung của [`Boss.reward`](Teamobi2026/src/nro/models/boss/Boss.java#L681).
 
 **Đổi đồ:** 3 món Hủy Diệt đổi lấy 1 món kích hoạt ở Bà Hạt Mít ([`DoiDoBaHatMit`](Teamobi2026/src/nro/models/combine/DoiDoBaHatMit.java)).
 - 3 món không được trùng món (cùng id), nhưng được khác hành tinh.
@@ -163,7 +163,7 @@ Broly thường, Super Broly (chỉ tặng đệ tử nếu chưa có), Mabu 14h
 ## Giáp boss = cách giảm sát thương nhận trong `injured()` (dò 31/10/2026)
 
 [`BossData`](Teamobi2026/src/nro/models/boss/BossData.java) không có chỉ số giáp; `nPoint.def` của boss = 0 nên `subDameInjureWithDeff` không trừ gì. "Giáp" thực tế nằm trong `injured()` từng boss. Né `tlNeDon` = 0% (mục trên). "Khiên": đang khiên năng lượng thì sát thương chia thêm (ghi trong ngoặc). Xuyên giáp (`piercing`) bỏ qua né, khiên và phần lớn giới hạn.
-- **Nhận đủ** (không override, [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L773)): Fide, Kuku, Mập đầu đinh, Rambo, Tiểu đội trưởng, Bojack, Super Bojack, King Kong, Android 13/14/15… Android 19: Kamejoko/Masenko/Antomic bị hấp thụ (hồi 80% sát thương, nhận 0). Dr Kore: 3 chiêu đó hồi 100%.
+- **Nhận đủ** (không override, [`Boss.injured`](Teamobi2026/src/nro/models/boss/Boss.java#L766)): Fide, Kuku, Mập đầu đinh, Rambo, Tiểu đội trưởng, Bojack, Super Bojack, King Kong, Android 13/14/15… Android 19: Kamejoko/Masenko/Antomic bị hấp thụ (hồi 80% sát thương, nhận 0). Dr Kore: 3 chiêu đó hồi 100%.
 - Broly: tối đa **1% HP**/đòn (trừ Tự sát). Super Broly, Mabư ngoài map: tối đa **10% HP**/đòn.
 - Cooler: né 1%, nhận đủ. Golden Frieza: tối đa **50 triệu**/đòn.
 - Black Goku, Cumber, Baby: **nhận đủ** từ 31/10/2026 (trước: Black Goku/Cumber dạng 2 ½ rồi trừ 0–100.000; Baby ×0,7 rồi ½). Khiên giữ như cũ (Black Goku/Cumber thành 1, Baby ÷4). Hủy diệt (Beerus/Champa) HP 3 tỷ, nhận đủ. Xên bọ hung, Siêu bọ hung: **nhận đủ** từ 31/10/2026 (trước ½ và ⅓; khiên vẫn ÷4).

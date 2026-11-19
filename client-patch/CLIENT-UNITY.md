@@ -131,6 +131,7 @@ Ghi chú IL2CPP: chuỗi literal khởi tạo lười ở đầu mỗi hàm bằ
 ### Thông báo boss lúc vào game không chạy chữ (`patch-thong-bao-boss.ps1`, chỉ Game1)
 - Gói 93 → `GameScr.chatVip` Game1 `0x35F400`: đoạn `0x35F468`–`0x35F567` là chữ chạy dưới màn hình (khởi động khi `[rdi+2A4h]`=0, thêm vào vector static `+580h`), sau đó gọi `BossCustom.addBoss` `0x4E45E0` (tab Thông báo của mod, `Panel.setTabInfoBoss`/`setTabBossNotification`) và `ShowBoss.HandleChatVip` `0x4CFD10` (khung góc phải).
 - Mod chỉ nhận câu `BOSS <tên> vừa xuất hiện tại <tên map>` (`getBossXuatHien` cắt chữ đầu tới dấu cách, thay " vừa xuất hiện tại " bằng `|`, tách tên/map; mapId tra `TileMap.mapNames`, giờ xuất hiện = lúc nhận). Câu giết: `<người>: Đã tiêu diệt được <boss> mọi người đều ngưỡng mộ.`
+- Tab Thông báo boss gom theo **tên boss** (dò 18/11/2026): `BossCustom.bosses` (`+10h`) là `Dictionary<string, List<CustomBossNotification>>`. `getBossXuatHien` (Game1 `0x4E4CC0`) tạo khóa = tên nếu `ContainsKey` sai, rồi `Insert(0, …)` (mới nhất lên đầu). `CustomBossNotification`: `name +10h`, `map +18h`, `mapId +20h`, `timeStart +28h`, `timeEnd +38h`, `player +48h`. Muốn nhiều con chung 1 mục thì server đặt cùng tên (Broly, Super Broly đã bỏ số ngẫu nhiên).
 - Patch: `0x35F468` → `jmp` cave `0xA52DC8`; chuỗi có ký tự đầu `\t` (`[rbx+14h]`=9) thì nhảy thẳng `0x35F568`. Server gửi `\t` + câu xuất hiện cho người vừa đăng nhập (`BossManager.sendBossAlive`).
 
 ### Auto Item (`patch-auto-item.ps1`, chỉ Game1)
