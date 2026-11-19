@@ -95,3 +95,14 @@ Boss lấy hình bằng `outfit {head, body, leg}` = id dòng bảng `part` (c�
 Lỗi: 1593 CT Goku SSJ God có body part 1470 toàn ảnh trống và leg part 1471 có 16/17 ảnh trống, không dùng cho boss được. 1145 Black goku ssj 3 White không có head/body/leg.
 
 Part lưu ở bảng `part` (DB), server ghi ra `data/update_data/part` lúc khởi động và gửi cho client theo [`DataGame.vsData`](Teamobi2026/src/nro/models/data/DataGame.java#L34). Sửa part: `UPDATE part`, tăng `vsData`, khởi động lại server. dx/dy tính theo pixel x1 (ảnh x2 chia 2). Part 1454 (đầu Goku SSJ) gốc bị lún, đã nâng dy 16/11/2026 (THAY-DOI mục 68).
+
+## Cải trang mới bằng Gemini (làm thử Gamma 19/11/2026)
+
+AI tạo ảnh không vẽ được 31 khung khớp nhau từ chữ. Cách chạy được: lấy part của một cải trang có sẵn làm khung, cho Gemini vẽ lại từng ô, rồi cắt lại theo đúng toạ độ cũ.
+
+1. `tools/kho-anh/khung-mau.ps1 -Ids <ảnh trong DATA của part> -Cols 4 -Out kho-anh/<tên>/2-than.png`: xếp ảnh x4 phóng 2 lần vào lưới, nền `#00FF00`. Làm riêng đầu (`-Cols 2`), thân, chân.
+2. Trên Gemini, đính kèm khung mẫu và ảnh nhân vật, rồi viết prompt: "Image 1 is a sprite sheet of 2D game body parts (torso + arms only…) in a 4x4 grid on a pure green #00FF00 background. Image 2 is the character reference. Redraw EVERY cell as this character's … Keep each cell's exact pose, size, position and facing direction. Same hand-drawn chibi sprite style, thick dark outline, cel shading. Keep the same canvas size, grid lines and #00FF00 background. No text." Gemini giữ đúng tư thế và vị trí các ô (thân và chân Gamma khớp gần như tuyệt đối). Đầu thì vẽ to, script sẽ tự thu nhỏ lại.
+3. `tools/kho-anh/gemini-part.ps1 -Sheet <ảnh Gemini> -Part '<DATA của part gốc>' -Cols 4 -Out <thư mục> [-Head]`: xoá nền xanh, bỏ watermark ✦ và vạch kẻ (giữ các mảng ≥ 3% mảng lớn nhất), ra `x2/x3/x4/<idGốc>.png`, `part.txt` (`idGốc dx dy` mới) và `so-sanh.png` (gốc | mới | chồng). `-Head` co theo chiều cao ảnh gốc, căn đáy và giữa. Ảnh `2954`/`2955` (trống) bỏ qua, giữ nguyên ở cuối DATA.
+4. Đổi tên ảnh sang ID icon mới, thêm dòng `part` với `dx/dy` từ `part.txt`, rồi thêm `item_template` (head/body/leg).
+
+Bộ Gamma: khung lấy từ Goku SSJ (part 1454/1450/1451), ảnh Gemini và kết quả ở `kho-anh/gamma/` (gitignore, chưa gắn ID).
